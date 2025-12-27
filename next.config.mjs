@@ -72,6 +72,10 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: false,
   },
+  // Disable static optimization for error pages to avoid Html import issues
+  experimental: {
+    missingSuspenseWithCSRBailout: false,
+  },
   env: {
     NEXT_PUBLIC_SITE_URL:
       process.env.NEXT_PUBLIC_SITE_URL || "https://airbear.me",

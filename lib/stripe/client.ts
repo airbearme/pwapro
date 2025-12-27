@@ -27,9 +27,7 @@ export const getStripe = () => {
   if (!stripePromise) {
     stripePromise = loadStripe(publishableKey)
       .then((stripe) => {
-        if (stripe) {
-          console.log("✅ Stripe client initialized successfully")
-        } else {
+        if (!stripe) {
           console.error("❌ Failed to load Stripe")
         }
         return stripe

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { getSupabaseClient } from "@/lib/supabase/client"
 import type { User } from "@supabase/supabase-js"
 import type { Database } from "@/lib/types/database"
@@ -12,6 +12,22 @@ export function useAuth() {
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
   const supabase = getSupabaseClient()
+
+  const loadProfile = useCallback(async (userId: string) => {
+    try {
+      const { data, error } = await supabase.from("users").select("*").eq("id", userId).single()
+
+      if (error) {
+        console.error("[v0] Error loading profile:", error)
+      } else {
+        setProfile(data)
+      }
+    } catch (error) {
+      console.error("[v0] Error loading profile:", error)
+    } finally {
+      setLoading(false)
+    }
+  }, [supabase])
 
   useEffect(() => {
     // Get initial session
@@ -38,23 +54,7 @@ export function useAuth() {
     })
 
     return () => subscription.unsubscribe()
-  }, [supabase])
-
-  const loadProfile = async (userId: string) => {
-    try {
-      const { data, error } = await supabase.from("users").select("*").eq("id", userId).single()
-
-      if (error) {
-        console.error("[v0] Error loading profile:", error)
-      } else {
-        setProfile(data)
-      }
-    } catch (error) {
-      console.error("[v0] Error loading profile:", error)
-    } finally {
-      setLoading(false)
-    }
-  }
+  }, [supabase, loadProfile])
 
   const signOut = async () => {
     await supabase.auth.signOut()

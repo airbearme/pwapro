@@ -41,7 +41,6 @@ export function getSupabaseClient() {
       },
     })
 
-    console.log("✅ Supabase client initialized successfully")
     return supabaseClient
   } catch (error) {
     console.error("❌ Failed to create Supabase client:", error)

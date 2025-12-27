@@ -35,18 +35,14 @@ const nextConfig = {
     ],
     formats: ["image/avif", "image/webp"],
   },
-  typescript: { ignoreBuildErrors: true },
-  eslint: { ignoreDuringBuilds: true },
+  typescript: { ignoreBuildErrors: false },
+  eslint: { ignoreDuringBuilds: false },
   env: {
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || "https://airbear.me",
   },
   compress: true,
   poweredByHeader: false,
   generateEtags: true,
-  // Skip static generation for error pages
-  experimental: {
-    missingSuspenseWithCSRBailout: false,
-  },
 };
 
 export default nextConfig;

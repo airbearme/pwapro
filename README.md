@@ -1,0 +1,181 @@
+# AirBear PWA - Solar-Powered Rideshare & Mobile Bodega
+
+Production-ready Next.js PWA for sustainable rideshare services with integrated mobile bodega functionality.
+
+🌐 **Live at: https://airbear.me**
+
+## Features
+
+- **Real-Time Map Tracking**: Live location updates for AirBears using Leaflet and Supabase Realtime
+- **OAuth Authentication**: One-click sign-in with Google and Apple via Supabase Auth
+- **Stripe Payments**: Secure payments with Apple Pay, Google Pay, Credit Card, and Cash options
+- **Mobile Bodega**: Browse and purchase products during rides
+- **Push Notifications**: Get notified when AirBears become available
+- **PWA Support**: Installable progressive web app with offline capabilities
+- **Real-Time Database**: Supabase with Row Level Security for data protection
+
+## Tech Stack
+
+- **Framework**: Next.js 15 with App Router
+- **Database**: Supabase (PostgreSQL with RLS)
+- **Payments**: Stripe with Apple Pay/Google Pay
+- **Maps**: Leaflet with real-time tracking
+- **Auth**: Supabase Auth with OAuth providers
+- **Styling**: Tailwind CSS with shadcn/ui
+- **Deployment**: Vercel with GitHub Actions CI/CD
+
+## Quick Start
+
+### Prerequisites
+
+- Node.js 20.x or higher
+- npm or pnpm
+- Supabase account
+- Stripe account
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/airbearme/pwapro.git
+   cd pwapro
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env.local
+   # Fill in your environment variables
+   ```
+
+4. **Validate environment variables**
+   ```bash
+   npm run validate:env
+   ```
+
+5. **Start development server**
+   ```bash
+   npm run dev
+   ```
+
+6. **Open http://localhost:3000**
+
+## Environment Variables
+
+Required environment variables (see `.env.example`):
+
+```bash
+# Supabase
+NEXT_PUBLIC_SUPABASE_PWA4_URL=
+NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=
+SUPABASE_PWA4_SERVICE_ROLE_KEY=
+
+# Stripe
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+
+# Site
+NEXT_PUBLIC_SITE_URL=https://airbear.me
+NODE_ENV=production
+```
+
+See `docs/ENVIRONMENT_VARIABLES.md` for complete documentation.
+
+## CI/CD Pipeline
+
+This project uses GitHub Actions for continuous integration and deployment:
+
+- **Validate**: Type checking, linting, and build verification
+- **Deploy**: Automatic deployment to Vercel on push to main branch
+
+### GitHub Actions Secrets Required
+
+Add these secrets in GitHub repository settings:
+
+- `VERCEL_TOKEN` - Vercel deployment token
+- `VERCEL_ORG_ID` - Vercel organization ID
+- `VERCEL_PROJECT_ID` - Vercel project ID
+- All environment variables from `.env.local`
+
+## Scripts
+
+```bash
+# Development
+npm run dev              # Start development server
+npm run build            # Build for production
+npm run start            # Start production server
+
+# Validation
+npm run validate:env    # Validate environment variables
+npm run type-check       # TypeScript type checking
+npm run lint             # ESLint
+
+# Deployment
+npm run deploy           # Deploy to Vercel
+npm run deploy:production  # Production deployment
+```
+
+## Project Structure
+
+```
+├── app/                 # Next.js app router pages
+│   ├── api/            # API routes
+│   ├── auth/           # Authentication pages
+│   ├── map/            # Map page
+│   └── products/       # Products page
+├── components/          # React components
+│   ├── ui/             # shadcn/ui components
+│   └── ...
+├── lib/                # Utility libraries
+│   ├── supabase/       # Supabase clients
+│   ├── stripe/         # Stripe clients
+│   └── hooks/          # Custom React hooks
+├── scripts/            # Build and deployment scripts
+└── .github/workflows/  # GitHub Actions workflows
+```
+
+## Deployment
+
+### Vercel (Recommended)
+
+1. Connect your GitHub repository to Vercel
+2. Add environment variables in Vercel dashboard
+3. Deploy automatically via GitHub Actions or manually:
+
+```bash
+npm run deploy:vercel
+```
+
+### Manual Deployment
+
+```bash
+npm run build
+npm run start
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+MIT License - see LICENSE file for details
+
+## Support
+
+For issues and questions:
+- GitHub Issues: https://github.com/airbearme/pwapro/issues
+- Documentation: See `docs/` directory
+
+---
+
+Built with ❤️ for sustainable transportation in Binghamton, NY

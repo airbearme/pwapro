@@ -50,9 +50,7 @@ const nextConfig = {
   poweredByHeader: false,
   generateEtags: true,
   // Exclude client directory from build (it's a separate Vite app)
-  experimental: {
-    serverComponentsExternalPackages: [],
-  },
+  serverExternalPackages: [],
 };
 
 export default nextConfig;

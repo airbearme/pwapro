@@ -8,6 +8,9 @@ import { useAirbearNotifications } from "@/lib/hooks/use-airbear-notifications";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { Battery, MapPin, Navigation } from "lucide-react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import MapComponent from "@/components/map-view-beautiful";
 import type { Spot } from "@/components/map-view";
 import type { AirbearLocation } from "@/lib/supabase/realtime";
@@ -15,6 +18,7 @@ import type { AirbearLocation } from "@/lib/supabase/realtime";
 export default function MapPage() {
   const { loading: authLoading } = useAuthContext();
   const { toast } = useToast();
+  const router = useRouter();
   const [spots, setSpots] = useState<Spot[]>([]);
   const [airbears, setAirbears] = useState<AirbearLocation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -186,8 +190,25 @@ export default function MapPage() {
 
         {/* Map */}
         <Card className="p-6">
-          <MapComponent spots={spots} airbears={airbears} />
+          <MapComponent 
+            spots={spots} 
+            airbears={airbears}
+            onSpotSelect={(spot) => {
+              router.push(`/book?pickup=${spot.id}`);
+            }}
+          />
         </Card>
+        
+        {/* Quick Book Button */}
+        <div className="mt-6 text-center">
+          <Button 
+            asChild
+            size="lg"
+            className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700"
+          >
+            <Link href="/book">Book a Ride</Link>
+          </Button>
+        </div>
 
         {/* Legend */}
         <Card className="mt-6 p-4">

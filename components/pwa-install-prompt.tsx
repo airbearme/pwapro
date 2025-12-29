@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { X, Download, Smartphone } from "lucide-react";
 import AirbearWheel from "@/components/airbear-wheel";
@@ -16,6 +16,19 @@ export default function PWAInstallPrompt() {
   const [showPrompt, setShowPrompt] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
 
+  // Use refs to track state without causing re-renders
+  const deferredPromptRef = useRef<BeforeInstallPromptEvent | null>(null);
+  const isInstalledRef = useRef(false);
+
+  // Update refs when state changes
+  useEffect(() => {
+    deferredPromptRef.current = deferredPrompt;
+  }, [deferredPrompt]);
+
+  useEffect(() => {
+    isInstalledRef.current = isInstalled;
+  }, [isInstalled]);
+
   useEffect(() => {
     // Check if already installed
     if (
@@ -23,6 +36,7 @@ export default function PWAInstallPrompt() {
       (window.navigator as any).standalone === true
     ) {
       setIsInstalled(true);
+      isInstalledRef.current = true;
       return;
     }
 
@@ -35,21 +49,21 @@ export default function PWAInstallPrompt() {
     // Listen for beforeinstallprompt event
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
+      const promptEvent = e as BeforeInstallPromptEvent;
+      setDeferredPrompt(promptEvent);
+      deferredPromptRef.current = promptEvent;
       // Show prompt after a short delay for better UX
       setTimeout(() => {
         setShowPrompt(true);
       }, 2000);
     };
 
-    window.addEventListener(
-      "beforeinstallprompt",
-      handleBeforeInstallPrompt
-    );
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
     // Also show prompt if no event fires (for iOS/Safari)
+    // Use refs in closure to avoid dependency issues
     const timer = setTimeout(() => {
-      if (!deferredPrompt && !isInstalled) {
+      if (!deferredPromptRef.current && !isInstalledRef.current) {
         setShowPrompt(true);
       }
     }, 3000);
@@ -61,7 +75,7 @@ export default function PWAInstallPrompt() {
       );
       clearTimeout(timer);
     };
-  }, [deferredPrompt, isInstalled]);
+  }, []); // Empty dependency array - only run once on mount
 
   const handleInstall = async () => {
     if (deferredPrompt) {
@@ -98,7 +112,7 @@ export default function PWAInstallPrompt() {
       <div className="glass-morphism border-2 border-emerald-400/50 rounded-2xl p-6 shadow-2xl relative overflow-hidden">
         {/* Background gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/20 via-lime-900/10 to-amber-900/20 pointer-events-none"></div>
-        
+
         {/* Spinning wheel decoration */}
         <div className="absolute top-2 right-2 opacity-20">
           <AirbearWheel size="sm" glowing animated />
@@ -151,4 +165,3 @@ export default function PWAInstallPrompt() {
     </div>
   );
 }
-

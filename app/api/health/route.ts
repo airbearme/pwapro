@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 export async function GET() {
   try {
     const supabase = await createClient();
-    
+
     // Check database connectivity
     const { error: dbError } = await supabase
       .from("spots")

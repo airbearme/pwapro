@@ -1,0 +1,21 @@
+[7] AirBear PWA — full-stack quality/security/perf pass
+[i] Repo: /home/coden809/Projects/pwa5
+[i] Reports: /home/coden809/Projects/pwa5/reports/quality/20251228-230231
+
+[  5%] Ensuring base deps (git/curl/jq/ca-certs)...
+Hit:1 http://apt.pop-os.org/proprietary jammy InRelease
+Hit:2 https://download.docker.com/linux/ubuntu jammy InRelease
+Hit:3 http://apt.pop-os.org/release jammy InRelease
+Hit:4 https://brave-browser-apt-release.s3.brave.com stable InRelease
+Hit:5 https://repo.protonvpn.com/debian unstable InRelease
+Hit:6 https://deb.nodesource.com/node_20.x nodistro InRelease
+Hit:7 http://apt.pop-os.org/ubuntu jammy InRelease
+Hit:8 https://windsurf-stable.codeiumdata.com/wVxQEIWkwPUEAGf3/apt stable InRelease
+Hit:9 http://apt.pop-os.org/ubuntu jammy-security InRelease
+Hit:10 https://ppa.launchpadcontent.net/git-core/ppa/ubuntu jammy InRelease
+Hit:11 http://apt.pop-os.org/ubuntu jammy-updates InRelease
+Hit:12 http://apt.pop-os.org/ubuntu jammy-backports InRelease
+Hit:13 https://us-central1-apt.pkg.dev/projects/antigravity-auto-updater-dev antigravity-debian InRelease
+Reading package lists...
+E: dpkg was interrupted, you must manually run 'sudo dpkg --configure -a' to correct the problem. 
+[!] Error on line 4

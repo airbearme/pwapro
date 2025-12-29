@@ -1,3 +1,13 @@
+/**
+ * 🎨 CORE UI/UX FOUNDATION - PERMANENT & PROTECTED
+ * 
+ * ⚠️ CRITICAL: This config defines AirBear's visual identity.
+ * DO NOT remove safelist entries or animation definitions.
+ * 
+ * See: CORE_UI_FOUNDATION.md for documentation
+ * Validate: npm run validate:ui
+ */
+
 import type { Config } from "tailwindcss";
 
 export default {

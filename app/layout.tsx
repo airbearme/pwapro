@@ -12,7 +12,7 @@ import { validateRuntimeEnv } from "@/lib/auto-load-env";
 import "./globals.css";
 
 // Validate environment variables on app load
-if (typeof window === 'undefined') {
+if (typeof window === "undefined") {
   validateRuntimeEnv();
 }
 
@@ -105,7 +105,16 @@ export const metadata: Metadata = {
   ],
 };
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
+
+/**
+ * 🎨 CORE UI/UX FOUNDATION - PERMANENT & PROTECTED
+ *
+ * ⚠️ CRITICAL: Dark mode is the default brand experience.
+ * DO NOT change defaultTheme or enableSystem without approval.
+ *
+ * See: CORE_UI_FOUNDATION.md for documentation
+ */
 
 export default function RootLayout({
   children,
@@ -117,6 +126,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased`}
       >
+        {/* 🎨 CORE: Dark mode permanently enabled - DO NOT CHANGE */}
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

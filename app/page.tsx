@@ -1,3 +1,12 @@
+/**
+ * 🎨 CORE UI/UX FOUNDATION - PERMANENT & PROTECTED
+ * 
+ * ⚠️ CRITICAL: This homepage showcases AirBear's visual identity.
+ * MUST include: animate-float, animate-pulse-glow, hover-lift, particle effects
+ * 
+ * See: CORE_UI_FOUNDATION.md for documentation
+ */
+
 "use client";
 
 import Link from "next/link";

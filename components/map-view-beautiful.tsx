@@ -35,11 +35,24 @@ export default function MapView({
           const link = document.createElement("link");
           link.rel = "stylesheet";
           link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+          link.integrity = "sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=";
+          link.crossOrigin = "anonymous";
           document.head.appendChild(link);
+          
+          // Wait for CSS to load
+          await new Promise((resolve) => {
+            link.onload = resolve;
+            link.onerror = resolve; // Continue even if CSS fails
+            setTimeout(resolve, 100); // Timeout fallback
+          });
         }
 
         // Dynamically import Leaflet
         const L = (await import("leaflet")).default;
+        
+        if (!L || !L.map) {
+          throw new Error("Leaflet failed to load");
+        }
         LeafletRef.current = L;
 
         // Fix default marker icons
@@ -53,6 +66,11 @@ export default function MapView({
             "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
         });
 
+        // Ensure map container has dimensions
+        if (!mapRef.current || mapRef.current.offsetHeight === 0) {
+          throw new Error("Map container has no height");
+        }
+
         // Create map centered on Binghamton, NY
         const binghamtonCenter: [number, number] = [42.0987, -75.9179];
         const map = L.map(mapRef.current!, {
@@ -61,6 +79,11 @@ export default function MapView({
           zoomControl: true,
           preferCanvas: true,
         });
+        
+        // Invalidate size to ensure map renders
+        setTimeout(() => {
+          map.invalidateSize();
+        }, 100);
 
         // Use beautiful CartoDB Positron tiles (free, beautiful, no API key needed)
         L.tileLayer(
@@ -82,8 +105,23 @@ export default function MapView({
 
         mapInstanceRef.current = map;
         setMapLoaded(true);
+        
+        // Setup global booking function
+        if (typeof window !== "undefined" && onSpotSelect) {
+          (window as any).selectSpotForBooking = (spotId: string) => {
+            const spot = spots.find(s => s.id === spotId);
+            if (spot) {
+              onSpotSelect(spot);
+            }
+          };
+        }
       } catch (error) {
         console.error("❌ Error initializing map:", error);
+        setMapLoaded(false);
+        // Show error to user
+        if (typeof window !== "undefined") {
+          alert(`Map loading error: ${error instanceof Error ? error.message : String(error)}`);
+        }
       }
     };
 
@@ -255,14 +293,43 @@ export default function MapView({
         </div>
       `;
 
-      marker.bindPopup(popupContent, {
+      // Add booking button to popup
+      const bookingButton = `
+        <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #e5e7eb;">
+          <button 
+            onclick="window.selectSpotForBooking('${spot.id}')"
+            style="
+              width: 100%;
+              padding: 10px 16px;
+              background: linear-gradient(135deg, #10b981, #059669);
+              color: white;
+              border: none;
+              border-radius: 8px;
+              font-weight: 600;
+              font-size: 14px;
+              cursor: pointer;
+              transition: all 0.2s;
+              box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+            "
+            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(16, 185, 129, 0.5)'"
+            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(16, 185, 129, 0.3)'"
+          >
+            📍 Book from Here
+          </button>
+        </div>
+      `;
+
+      marker.bindPopup(popupContent + bookingButton, {
         maxWidth: 300,
         className: "beautiful-popup",
       });
 
-      if (onSpotSelect) {
-        marker.on("click", () => onSpotSelect(spot));
-      }
+      // Setup click handler for booking
+      marker.on("click", () => {
+        if (onSpotSelect) {
+          onSpotSelect(spot);
+        }
+      });
 
       markersRef.current.set(`spot-${spot.id}`, marker);
     });

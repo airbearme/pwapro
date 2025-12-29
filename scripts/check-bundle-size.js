@@ -98,3 +98,4 @@ if (fs.existsSync(chunksDir)) {
 console.log('\n✅ Bundle size check complete!');
 process.exit(0);
 
+

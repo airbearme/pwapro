@@ -4,6 +4,18 @@ Production-ready Next.js PWA for sustainable rideshare services with integrated 
 
 🌐 **Live at: https://airbear.me**
 
+## 🎨 Beautiful UI/UX Foundation
+
+**The beautiful UI/UX is permanently embedded in the codebase and loads by default.**
+
+- ✨ **12+ Custom Animations** - Pulse glow, float, shimmer, particle effects, and more
+- 🎨 **Special Effects** - Glass morphism, holographic text, plasma flows, solar rays
+- 🌙 **Dark Mode** - Permanently enabled by default
+- 🐻 **Animated Mascot** - AirBear mascot with floating animations
+- 🎯 **Validated** - Run `npm run validate:ui` to verify all features
+
+**See:** `CORE_UI_FOUNDATION.md` and `README_UI_FOUNDATION.md` for complete documentation.
+
 ## Features
 
 - **Real-Time Map Tracking**: Live location updates for AirBears using Leaflet and Supabase Realtime
@@ -135,6 +147,10 @@ npm run setup:testing    # Install all testing dependencies
 # Deployment
 npm run deploy           # Deploy to Vercel
 npm run deploy:production  # Production deployment
+
+# Auto-Deploy Setup (GitHub Actions)
+npm run setup:secrets    # Guide for setting up GitHub secrets
+# See: SETUP_GITHUB_SECRETS.md and AUTO_DEPLOY_SETUP.md
 ```
 
 ## Testing

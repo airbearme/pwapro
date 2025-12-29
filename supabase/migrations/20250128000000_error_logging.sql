@@ -152,3 +152,4 @@ CREATE TRIGGER track_error_pattern_trigger
   FOR EACH ROW
   EXECUTE FUNCTION track_error_pattern();
 
+

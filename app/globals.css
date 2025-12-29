@@ -1,3 +1,13 @@
+/**
+ * 🎨 CORE UI/UX FOUNDATION - PERMANENT & PROTECTED
+ * 
+ * ⚠️ CRITICAL: This file contains the core visual identity of AirBear.
+ * DO NOT remove animations, effects, or utility classes without approval.
+ * 
+ * See: CORE_UI_FOUNDATION.md for documentation
+ * Validate: npm run validate:ui
+ */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -366,6 +376,114 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+@keyframes pulse-glow {
+  0% {
+    opacity: 1;
+    filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.5));
+  }
+  50% {
+    opacity: 0.9;
+    filter: drop-shadow(0 0 16px rgba(16, 185, 129, 0.8)) drop-shadow(0 0 24px rgba(16, 185, 129, 0.4));
+  }
+  100% {
+    opacity: 1;
+    filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.5));
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes particle {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(50vw) scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes rickshaw-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-5px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  75% {
+    transform: translateY(-2px);
+  }
+}
+
+/* Animation utility classes - These are also defined in Tailwind config but kept here for compatibility */
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 2s linear infinite;
+}
+
+.animate-particle {
+  animation: particle 4s ease-in-out infinite;
+}
+
+.animate-rickshaw-bounce {
+  animation: rickshaw-bounce 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+}
+
+.animate-wheel-spin {
+  animation: wheel-spin 1s linear infinite;
+}
+
+.animate-neon-glow {
+  animation: neon-glow 1.5s ease-in-out infinite alternate;
+}
+
+.animate-holographic {
+  animation: holographic-shift 3s ease infinite;
+}
+
+.animate-plasma {
+  animation: plasma-flow 4s ease infinite;
+}
+
+.animate-solar-rays {
+  animation: solar-rays 6s linear infinite;
+}
+
+.animate-eco-breeze {
+  animation: eco-breeze 4s ease-in-out infinite;
+}
+
+.animate-god-rays {
+  animation: god-rays 8s ease-in-out infinite;
 }
 
 /* Reduced Motion Support */

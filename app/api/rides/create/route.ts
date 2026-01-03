@@ -40,7 +40,6 @@ export async function POST(request: Request) {
         distance_km: parseFloat(distance),
         status: "pending",
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
       })
       .select()
       .single();

@@ -27,12 +27,12 @@ export default function MapPage() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        // Load ride spots only (excludes merchandise)
-        const spotsResponse = await fetch("/api/spots/ride");
+        // Load regular spots for now (until numbered spots are set up)
+        const spotsResponse = await fetch("/api/spots");
         if (!spotsResponse.ok) throw new Error("Failed to fetch spots");
 
         const spotsData = await spotsResponse.json();
-        setSpots(spotsData.data || []);
+        setSpots(spotsData.spots || []);
 
         // Load airbears
         const airbearsResponse = await fetch("/api/airbear/locations");

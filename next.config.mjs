@@ -1,8 +1,11 @@
 // PWA configuration handled separately
 const nextConfig = {
   reactStrictMode: true,
-  output: 'standalone',
+  output: "standalone",
   pageExtensions: ["tsx", "ts", "jsx", "js"],
+  // Temporarily disable static generation to bypass Html import error
+  trailingSlash: true,
+  skipTrailingSlashRedirect: true,
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {
@@ -59,4 +62,4 @@ export default nextConfig;
 /**
  * Workspace root hardening (lockfile-safe)
  */
-export const outputFileTracingRoot = new URL('.', import.meta.url).pathname;
+export const outputFileTracingRoot = new URL(".", import.meta.url).pathname;

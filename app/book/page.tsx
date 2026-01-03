@@ -4,12 +4,25 @@ import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthContext } from "@/components/auth-provider";
 import { getSupabaseClient } from "@/lib/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { MapPin, Navigation, DollarSign, Clock, ArrowRight, Loader2 } from "lucide-react";
+import {
+  MapPin,
+  Navigation,
+  DollarSign,
+  Clock,
+  ArrowRight,
+  Loader2,
+} from "lucide-react";
 import Link from "next/link";
 import type { Spot } from "@/components/map-view";
 
@@ -23,6 +36,7 @@ export default function BookRidePage() {
   const [destinationSpot, setDestinationSpot] = useState<Spot | null>(null);
   const [loading, setLoading] = useState(true);
   const [booking, setBooking] = useState(false);
+  const [bookingSuccess, setBookingSuccess] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -33,20 +47,23 @@ export default function BookRidePage() {
   useEffect(() => {
     const loadSpots = async () => {
       try {
-        const supabase = getSupabaseClient();
-        const { data, error } = await supabase
+        // Remove client-side Supabase calls
+        const supabase = getSupabaseServer();
+
+        // Fetch all active spots
+        const { data: spots, error } = await supabase
           .from("spots")
           .select("*")
           .eq("is_active", true)
           .order("name");
 
         if (error) throw error;
-        setSpots(data || []);
+        setSpots(spots || []);
 
         // Check for pickup spot from URL
         const pickupId = searchParams.get("pickup");
-        if (pickupId && data) {
-          const spot = data.find((s) => s.id === pickupId);
+        if (pickupId && spots) {
+          const spot = spots.find((s) => s.id === pickupId);
           if (spot) setPickupSpot(spot);
         }
       } catch (error) {
@@ -138,13 +155,26 @@ export default function BookRidePage() {
         description: `Your ride from ${pickupSpot.name} to ${destinationSpot.name} has been booked.`,
       });
 
-      // Redirect to checkout
-      router.push(`/checkout?rideId=${ride.id}&amount=${fare}`);
-    } catch (error: any) {
-      console.error("Booking error:", error);
+      // Show success message and update local state
       toast({
-        title: "Booking Failed",
-        description: error.message || "Failed to book ride. Please try again.",
+        title: "🎉 Ride Booked Successfully!",
+        description: `Your ride from ${pickupSpot.name} to ${destinationSpot.name} is confirmed.`,
+        variant: "default",
+      });
+
+      // Update local ride state for UI updates
+      // This could integrate with a context provider
+      setBookingSuccess(true);
+
+      // Add a small delay before allowing further actions
+      setTimeout(() => {
+        setBookingSuccess(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Error booking ride:", error);
+      toast({
+        title: "Error",
+        description: "Failed to book ride",
         variant: "destructive",
       });
     } finally {
@@ -152,9 +182,10 @@ export default function BookRidePage() {
     }
   };
 
-  const distance = pickupSpot && destinationSpot
-    ? calculateDistance(pickupSpot, destinationSpot)
-    : 0;
+  const distance =
+    pickupSpot && destinationSpot
+      ? calculateDistance(pickupSpot, destinationSpot)
+      : 0;
   const fare = estimateFare(distance);
 
   if (authLoading || loading) {
@@ -353,7 +384,9 @@ export default function BookRidePage() {
                   <div className="flex items-center gap-3">
                     <DollarSign className="w-6 h-6 text-emerald-600" />
                     <div>
-                      <p className="text-sm text-muted-foreground">Total Fare</p>
+                      <p className="text-sm text-muted-foreground">
+                        Total Fare
+                      </p>
                       <p className="text-2xl font-bold text-emerald-600">
                         ${fare.toFixed(2)}
                       </p>
@@ -368,13 +401,13 @@ export default function BookRidePage() {
                 className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 h-12 text-lg"
               >
                 {booking ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Booking...
-                </>
-              ) : (
-                "Book Ride & Continue to Payment"
-              )}
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Booking...
+                  </>
+                ) : (
+                  "Book Ride & Continue to Payment"
+                )}
               </Button>
             </CardContent>
           </Card>
@@ -390,4 +423,3 @@ export default function BookRidePage() {
     </div>
   );
 }
-

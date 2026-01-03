@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
-import { Apple, Chrome } from "lucide-react";
+import { Apple, Chrome, Car, Shield } from "lucide-react";
 
 // Feature flag: Set to true when Apple Sign In is configured in Supabase
 const ENABLE_APPLE_SIGN_IN = false;
@@ -277,6 +277,26 @@ export default function SignUpPage() {
             >
               Sign in
             </a>
+          </div>
+
+          <div className="border-t pt-4">
+            <p className="text-center text-sm text-muted-foreground mb-3">
+              Sign up as:
+            </p>
+            <div className="flex justify-center gap-4">
+              <Button variant="outline" size="sm" asChild>
+                <a href="/driver/signup" className="flex items-center gap-2">
+                  <Car className="w-4 h-4" />
+                  Driver
+                </a>
+              </Button>
+              <Button variant="outline" size="sm" asChild>
+                <a href="/admin/signup" className="flex items-center gap-2">
+                  <Shield className="w-4 h-4" />
+                  Admin
+                </a>
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>

@@ -47,17 +47,11 @@ export default function BookRidePage() {
   useEffect(() => {
     const loadSpots = async () => {
       try {
-        // Remove client-side Supabase calls
-        const supabase = getSupabaseServer();
+        // Use API endpoint instead of direct Supabase calls
+        const response = await fetch("/api/spots");
+        if (!response.ok) throw new Error("Failed to fetch spots");
 
-        // Fetch all active spots
-        const { data: spots, error } = await supabase
-          .from("spots")
-          .select("*")
-          .eq("is_active", true)
-          .order("name");
-
-        if (error) throw error;
+        const { data: spots } = await response.json();
         setSpots(spots || []);
 
         // Check for pickup spot from URL
@@ -117,19 +111,8 @@ export default function BookRidePage() {
     setBooking(true);
 
     try {
-      const supabase = getSupabaseClient();
       const distance = calculateDistance(pickupSpot, destinationSpot);
       const fare = estimateFare(distance);
-
-      // Find available AirBear
-      const { data: availableAirbears } = await supabase
-        .from("airbears")
-        .select("id")
-        .eq("is_available", true)
-        .eq("is_charging", false)
-        .limit(1);
-
-      const airbearId = availableAirbears?.[0]?.id || null;
 
       // Create ride booking via API
       const response = await fetch("/api/rides/create", {
@@ -155,26 +138,22 @@ export default function BookRidePage() {
         description: `Your ride from ${pickupSpot.name} to ${destinationSpot.name} has been booked.`,
       });
 
-      // Show success message and update local state
       toast({
-        title: "🎉 Ride Booked Successfully!",
+        title: " Ride Booked Successfully!",
         description: `Your ride from ${pickupSpot.name} to ${destinationSpot.name} is confirmed.`,
         variant: "default",
       });
 
-      // Update local ride state for UI updates
-      // This could integrate with a context provider
       setBookingSuccess(true);
 
-      // Add a small delay before allowing further actions
       setTimeout(() => {
         setBookingSuccess(false);
       }, 2000);
-    } catch (error) {
-      console.error("Error booking ride:", error);
+    } catch (error: any) {
+      console.error("Booking error:", error);
       toast({
-        title: "Error",
-        description: "Failed to book ride",
+        title: "Booking Failed",
+        description: error.message || "Failed to book ride. Please try again.",
         variant: "destructive",
       });
     } finally {

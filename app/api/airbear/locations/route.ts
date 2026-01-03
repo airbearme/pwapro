@@ -5,28 +5,10 @@ export async function GET(request: Request) {
   try {
     const supabase = await getSupabaseServer();
 
-    // Fetch all AirBear locations with their assigned spots
+    // Fetch all AirBear locations
     const { data: airbears, error } = await supabase
       .from("airbears")
-      .select(
-        `
-        *,
-        pickup_spot:spots (
-          id,
-          name,
-          description,
-          latitude,
-          longitude
-        ),
-        destination_spot:spots (
-          id,
-          name,
-          description,
-          latitude,
-          longitude
-        )
-      `
-      )
+      .select("*")
       .order("created_at");
 
     if (error) {
@@ -35,7 +17,7 @@ export async function GET(request: Request) {
     }
 
     return NextResponse.json({
-      airbears: airbears || [],
+      data: airbears || [],
       count: airbears?.length || 0,
     });
   } catch (error: any) {

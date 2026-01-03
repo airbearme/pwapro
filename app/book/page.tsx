@@ -22,9 +22,14 @@ import {
   Clock,
   ArrowRight,
   Loader2,
+  Map,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import Link from "next/link";
 import type { Spot } from "@/components/map-view";
+import MapComponent from "@/components/map-view-beautiful";
+import type { AirbearLocation } from "@/lib/supabase/realtime";
 
 export default function BookRidePage() {
   const { user, loading: authLoading } = useAuthContext();
@@ -32,11 +37,16 @@ export default function BookRidePage() {
   const searchParams = useSearchParams();
   const { toast } = useToast();
   const [spots, setSpots] = useState<Spot[]>([]);
+  const [airbears, setAirbears] = useState<AirbearLocation[]>([]);
   const [pickupSpot, setPickupSpot] = useState<Spot | null>(null);
   const [destinationSpot, setDestinationSpot] = useState<Spot | null>(null);
   const [loading, setLoading] = useState(true);
   const [booking, setBooking] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [showMap, setShowMap] = useState(false);
+  const [selectingMode, setSelectingMode] = useState<
+    "pickup" | "destination" | null
+  >(null);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -53,6 +63,13 @@ export default function BookRidePage() {
 
         const { data: spots } = await response.json();
         setSpots(spots || []);
+
+        // Load AirBears for map display
+        const airbearsResponse = await fetch("/api/airbear/locations");
+        if (airbearsResponse.ok) {
+          const airbearsData = await airbearsResponse.json();
+          setAirbears(airbearsData.data || []);
+        }
 
         // Check for pickup spot from URL
         const pickupId = searchParams.get("pickup");
@@ -96,6 +113,29 @@ export default function BookRidePage() {
   const estimateFare = (distance: number): number => {
     // Flat rate $4.00 for all rides
     return 4.0;
+  };
+
+  const handleSpotSelect = (spot: Spot) => {
+    if (selectingMode === "pickup") {
+      setPickupSpot(spot);
+      setSelectingMode(null);
+      toast({
+        title: "Pickup Selected",
+        description: `Pickup location set to ${spot.name}`,
+      });
+    } else if (selectingMode === "destination") {
+      setDestinationSpot(spot);
+      setSelectingMode(null);
+      toast({
+        title: "Destination Selected",
+        description: `Destination set to ${spot.name}`,
+      });
+    }
+  };
+
+  const startMapSelection = (mode: "pickup" | "destination") => {
+    setSelectingMode(mode);
+    setShowMap(true);
   };
 
   const handleBookRide = async () => {
@@ -210,6 +250,85 @@ export default function BookRidePage() {
           </p>
         </div>
 
+        {/* Map Selection Interface */}
+        <Card className="mb-6 hover-lift">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <Map className="w-5 h-5 text-blue-600" />
+                  Visual Location Selection
+                </CardTitle>
+                <CardDescription>
+                  Click on the map to select your pickup and destination
+                  locations
+                </CardDescription>
+              </div>
+              <Button
+                variant="outline"
+                onClick={() => setShowMap(!showMap)}
+                className="flex items-center gap-2"
+              >
+                {showMap ? (
+                  <EyeOff className="w-4 h-4" />
+                ) : (
+                  <Eye className="w-4 h-4" />
+                )}
+                {showMap ? "Hide Map" : "Show Map"}
+              </Button>
+            </div>
+          </CardHeader>
+          {showMap && (
+            <CardContent>
+              {selectingMode && (
+                <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-2 border-blue-200 dark:border-blue-800">
+                  <p className="text-blue-800 dark:text-blue-200 font-medium">
+                    📍 Click on a location on the map to set as your{" "}
+                    <span className="font-bold">
+                      {selectingMode === "pickup" ? "pickup" : "destination"}
+                    </span>
+                  </p>
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <Button
+                  onClick={() => startMapSelection("pickup")}
+                  variant={selectingMode === "pickup" ? "default" : "outline"}
+                  className="flex items-center gap-2"
+                  disabled={selectingMode === "destination"}
+                >
+                  <MapPin className="w-4 h-4" />
+                  {pickupSpot
+                    ? `📍 ${pickupSpot.name}`
+                    : "Select Pickup on Map"}
+                </Button>
+                <Button
+                  onClick={() => startMapSelection("destination")}
+                  variant={
+                    selectingMode === "destination" ? "default" : "outline"
+                  }
+                  className="flex items-center gap-2"
+                  disabled={selectingMode === "pickup"}
+                >
+                  <Navigation className="w-4 h-4" />
+                  {destinationSpot
+                    ? `📍 ${destinationSpot.name}`
+                    : "Select Destination on Map"}
+                </Button>
+              </div>
+
+              <div className="h-96 rounded-lg overflow-hidden border-2 border-muted">
+                <MapComponent
+                  spots={spots}
+                  airbears={airbears}
+                  onSpotSelect={handleSpotSelect}
+                />
+              </div>
+            </CardContent>
+          )}
+        </Card>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Pickup Location */}
           <Card className="p-6 hover-lift">
@@ -238,6 +357,14 @@ export default function BookRidePage() {
                     onClick={() => setPickupSpot(null)}
                   >
                     Change
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="mt-2 ml-2"
+                    onClick={() => startMapSelection("pickup")}
+                  >
+                    🗺️ Select on Map
                   </Button>
                 </div>
               ) : (
@@ -288,6 +415,14 @@ export default function BookRidePage() {
                     onClick={() => setDestinationSpot(null)}
                   >
                     Change
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="mt-2 ml-2"
+                    onClick={() => startMapSelection("destination")}
+                  >
+                    🗺️ Select on Map
                   </Button>
                 </div>
               ) : (

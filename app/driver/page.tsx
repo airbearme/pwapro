@@ -4,11 +4,27 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/components/auth-provider";
 import { getSupabaseClient } from "@/lib/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Navigation, Battery, MapPin, Activity, Clock, CheckCircle, X } from "lucide-react";
+import {
+  Navigation,
+  Battery,
+  MapPin,
+  Activity,
+  Clock,
+  CheckCircle,
+  X,
+  RefreshCw,
+  User,
+} from "lucide-react";
 import Link from "next/link";
 
 interface Ride {
@@ -24,6 +40,18 @@ interface Ride {
   dropoff_spot?: { name: string };
 }
 
+interface AirBear {
+  id: string;
+  current_spot_id?: string;
+  latitude: number;
+  longitude: number;
+  battery_level: number;
+  is_available: boolean;
+  is_charging: boolean;
+  heading: number;
+  updated_at: string;
+}
+
 export default function DriverDashboardPage() {
   const { user, loading: authLoading } = useAuthContext();
   const router = useRouter();
@@ -32,6 +60,8 @@ export default function DriverDashboardPage() {
   const [activeRide, setActiveRide] = useState<Ride | null>(null);
   const [loading, setLoading] = useState(true);
   const [spots, setSpots] = useState<Record<string, { name: string }>>({});
+  const [driverAirbear, setDriverAirbear] = useState<AirBear | null>(null);
+  const [updatingLocation, setUpdatingLocation] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -57,6 +87,24 @@ export default function DriverDashboardPage() {
             spotsMap[spot.id] = { name: spot.name };
           });
           setSpots(spotsMap);
+        }
+
+        // Load driver's profile to get assigned AirBear
+        const { data: userProfile } = await supabase
+          .from("users")
+          .select("assigned_airbear_id")
+          .eq("id", user.id)
+          .single();
+
+        // Load driver's assigned AirBear
+        if (userProfile?.assigned_airbear_id) {
+          const { data: airbearData } = await supabase
+            .from("airbears")
+            .select("*")
+            .eq("id", userProfile.assigned_airbear_id)
+            .single();
+
+          setDriverAirbear(airbearData);
         }
 
         // Load pending rides
@@ -177,6 +225,57 @@ export default function DriverDashboardPage() {
     }
   };
 
+  const handleUpdateLocation = async () => {
+    if (!driverAirbear) return;
+
+    setUpdatingLocation(true);
+    try {
+      // Get current location
+      const position = await new Promise<GeolocationPosition>(
+        (resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0,
+          });
+        }
+      );
+
+      const response = await fetch("/api/airbear/update-location", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          airbear_id: driverAirbear.id,
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to update location");
+      }
+
+      toast({
+        title: "Location Updated!",
+        description: "Your AirBear location has been updated.",
+      });
+
+      // Reload data to show updated location
+      window.location.reload();
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to update location",
+        variant: "destructive",
+      });
+    } finally {
+      setUpdatingLocation(false);
+    }
+  };
+
   if (authLoading || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-950 via-lime-950 to-amber-950">
@@ -224,6 +323,99 @@ export default function DriverDashboardPage() {
           </p>
         </div>
 
+        {/* AirBear Status */}
+        {driverAirbear && (
+          <Card className="mb-6 p-6 border-2 border-blue-500 hover-lift">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <User className="w-5 h-5 text-blue-600" />
+                Your AirBear: {driverAirbear.id.toUpperCase()}
+              </CardTitle>
+              <CardDescription>
+                Vehicle status and location information
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="text-center">
+                  <div className="flex items-center justify-center gap-2 mb-1">
+                    <Battery className="w-4 h-4 text-blue-600" />
+                    <span className="text-sm text-muted-foreground">
+                      Battery
+                    </span>
+                  </div>
+                  <p className="text-lg font-bold text-blue-600">
+                    {driverAirbear.battery_level}%
+                  </p>
+                </div>
+                <div className="text-center">
+                  <div className="flex items-center justify-center gap-2 mb-1">
+                    <MapPin className="w-4 h-4 text-green-600" />
+                    <span className="text-sm text-muted-foreground">
+                      Status
+                    </span>
+                  </div>
+                  <Badge
+                    className={
+                      driverAirbear.is_available
+                        ? "bg-green-100 text-green-800"
+                        : driverAirbear.is_charging
+                        ? "bg-yellow-100 text-yellow-800"
+                        : "bg-red-100 text-red-800"
+                    }
+                  >
+                    {driverAirbear.is_charging
+                      ? "Charging"
+                      : driverAirbear.is_available
+                      ? "Available"
+                      : "In Use"}
+                  </Badge>
+                </div>
+                <div className="text-center">
+                  <div className="flex items-center justify-center gap-2 mb-1">
+                    <Navigation className="w-4 h-4 text-purple-600" />
+                    <span className="text-sm text-muted-foreground">
+                      Heading
+                    </span>
+                  </div>
+                  <p className="text-lg font-bold text-purple-600">
+                    {driverAirbear.heading.toFixed(0)}°
+                  </p>
+                </div>
+                <div className="text-center">
+                  <div className="flex items-center justify-center gap-2 mb-1">
+                    <Activity className="w-4 h-4 text-orange-600" />
+                    <span className="text-sm text-muted-foreground">
+                      Location
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    {driverAirbear.latitude.toFixed(4)},{" "}
+                    {driverAirbear.longitude.toFixed(4)}
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  onClick={handleUpdateLocation}
+                  disabled={updatingLocation}
+                  className="bg-gradient-to-r from-blue-500 to-blue-600"
+                >
+                  <RefreshCw
+                    className={`w-4 h-4 mr-2 ${
+                      updatingLocation ? "animate-spin" : ""
+                    }`}
+                  />
+                  {updatingLocation ? "Updating..." : "Update Location"}
+                </Button>
+                <Button asChild variant="outline">
+                  <Link href="/map">View on Map</Link>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Active Ride */}
         {activeRide && (
           <Card className="mb-6 p-6 border-2 border-emerald-500 hover-lift">
@@ -244,7 +436,8 @@ export default function DriverDashboardPage() {
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Clock className="w-4 h-4" />
-                  Requested: {new Date(activeRide.requested_at).toLocaleString()}
+                  Requested:{" "}
+                  {new Date(activeRide.requested_at).toLocaleString()}
                 </div>
                 <div className="flex items-center gap-2">
                   <Badge
@@ -287,9 +480,7 @@ export default function DriverDashboardPage() {
         <Card className="p-6">
           <CardHeader>
             <CardTitle>Pending Ride Requests</CardTitle>
-            <CardDescription>
-              Accept rides to start earning
-            </CardDescription>
+            <CardDescription>Accept rides to start earning</CardDescription>
           </CardHeader>
           <CardContent>
             {pendingRides.length === 0 ? (
@@ -322,7 +513,8 @@ export default function DriverDashboardPage() {
                             <MapPin className="w-4 h-4 text-emerald-600" />
                             <span>
                               {spots[ride.pickup_spot_id]?.name || "Pickup"} →{" "}
-                              {spots[ride.dropoff_spot_id]?.name || "Destination"}
+                              {spots[ride.dropoff_spot_id]?.name ||
+                                "Destination"}
                             </span>
                           </div>
                           {ride.distance && (
@@ -363,4 +555,3 @@ export default function DriverDashboardPage() {
     </div>
   );
 }
-

@@ -1,9 +1,9 @@
 /**
  * 🎨 CORE UI/UX FOUNDATION - PERMANENT & PROTECTED
- * 
+ *
  * ⚠️ CRITICAL: This homepage showcases AirBear's visual identity.
  * MUST include: animate-float, animate-pulse-glow, hover-lift, particle effects
- * 
+ *
  * See: CORE_UI_FOUNDATION.md for documentation
  */
 
@@ -159,7 +159,7 @@ export default function HomePage() {
               size="lg"
               className="bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-500 text-white hover-lift ripple-effect px-8 py-4 text-lg font-semibold animate-pulse-glow shadow-xl"
             >
-              <Link href="/products">
+              <Link href="/merchandise">
                 <Crown className="mr-2 h-5 w-5" />
                 CEO T-Shirt $100
               </Link>
@@ -171,9 +171,9 @@ export default function HomePage() {
               variant="outline"
               className="border-2 border-emerald-500 text-emerald-600 hover:bg-emerald-50 px-8 py-4 text-lg font-semibold hover-lift ripple-effect shadow-lg"
             >
-              <Link href="/products">
+              <Link href="/merchandise">
                 <ShoppingBag className="mr-2 h-5 w-5" />
-                Shop Bodega
+                Shop Merchandise
               </Link>
             </Button>
           </div>

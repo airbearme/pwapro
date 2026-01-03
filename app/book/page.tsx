@@ -57,8 +57,8 @@ export default function BookRidePage() {
   useEffect(() => {
     const loadSpots = async () => {
       try {
-        // Use API endpoint instead of direct Supabase calls
-        const response = await fetch("/api/spots");
+        // Use API endpoint for ride spots only (excludes merchandise)
+        const response = await fetch("/api/spots/ride");
         if (!response.ok) throw new Error("Failed to fetch spots");
 
         const { data: spots } = await response.json();

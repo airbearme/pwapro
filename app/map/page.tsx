@@ -27,40 +27,28 @@ export default function MapPage() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const supabase = getSupabaseClient();
+        // Load ride spots only (excludes merchandise)
+        const spotsResponse = await fetch("/api/spots/ride");
+        if (!spotsResponse.ok) throw new Error("Failed to fetch spots");
 
-        // Load spots
-        const { data: spotsData, error: spotsError } = await supabase
-          .from("spots")
-          .select("*")
-          .eq("is_active", true)
-          .order("name");
-
-        if (spotsError) {
-          console.error("Error loading spots:", spotsError);
-          throw spotsError;
-        }
-
-        setSpots(spotsData || []);
+        const spotsData = await spotsResponse.json();
+        setSpots(spotsData.data || []);
 
         // Load airbears
-        const { data: airbearsData, error: airbearsError } = await supabase
-          .from("airbears")
-          .select("*");
-
-        if (airbearsError) {
-          throw airbearsError;
+        const airbearsResponse = await fetch("/api/airbear/locations");
+        if (airbearsResponse.ok) {
+          const airbearsData = await airbearsResponse.json();
+          setAirbears(airbearsData.data || []);
         }
 
-        setAirbears(airbearsData || []);
+        setLoading(false);
       } catch (err) {
         console.error("Error loading map data:", err);
         toast({
           title: "Error loading map",
-          description: "Unable to load map data. Please try refreshing.",
+          description: "Failed to load locations. Please try again.",
           variant: "destructive",
         });
-      } finally {
         setLoading(false);
       }
     };
@@ -190,18 +178,18 @@ export default function MapPage() {
 
         {/* Map */}
         <Card className="p-6">
-          <MapComponent 
-            spots={spots} 
+          <MapComponent
+            spots={spots}
             airbears={airbears}
             onSpotSelect={(spot) => {
               router.push(`/book?pickup=${spot.id}`);
             }}
           />
         </Card>
-        
+
         {/* Quick Book Button */}
         <div className="mt-6 text-center">
-          <Button 
+          <Button
             asChild
             size="lg"
             className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700"

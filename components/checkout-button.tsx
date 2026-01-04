@@ -257,8 +257,14 @@ export function CheckoutButton({ items, onSuccess }: CheckoutButtonProps) {
                 disabled={walletLoading.apple || loading}
               >
                 <div className="text-center">
-                  <Apple className="h-6 w-6 mx-auto mb-1" />
-                  <span className="text-xs">Apple Pay</span>
+                  {walletLoading.apple ? (
+                    <div className="w-6 h-6 border-2 border-gray-400 border-t-transparent rounded-full animate-spin mx-auto mb-1"></div>
+                  ) : (
+                    <Apple className="h-6 w-6 mx-auto mb-1" />
+                  )}
+                  <span className="text-xs">
+                    {walletLoading.apple ? "Processing..." : "Apple Pay"}
+                  </span>
                 </div>
               </Button>
               <Button
@@ -268,8 +274,14 @@ export function CheckoutButton({ items, onSuccess }: CheckoutButtonProps) {
                 disabled={walletLoading.google || loading}
               >
                 <div className="text-center">
-                  <Wallet className="h-6 w-6 mx-auto mb-1" />
-                  <span className="text-xs">Google Pay</span>
+                  {walletLoading.google ? (
+                    <div className="w-6 h-6 border-2 border-gray-400 border-t-transparent rounded-full animate-spin mx-auto mb-1"></div>
+                  ) : (
+                    <Wallet className="h-6 w-6 mx-auto mb-1" />
+                  )}
+                  <span className="text-xs">
+                    {walletLoading.google ? "Processing..." : "Google Pay"}
+                  </span>
                 </div>
               </Button>
             </div>
@@ -288,8 +300,17 @@ export function CheckoutButton({ items, onSuccess }: CheckoutButtonProps) {
               disabled={loading}
               className="w-full"
             >
-              <CreditCard className="mr-2 h-4 w-4" />
-              {loading ? "Processing..." : "Pay with Credit Card"}
+              {loading ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                  Processing...
+                </>
+              ) : (
+                <>
+                  <CreditCard className="mr-2 h-4 w-4" />
+                  Pay with Credit Card
+                </>
+              )}
             </Button>
           </TabsContent>
 

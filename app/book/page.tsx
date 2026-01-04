@@ -71,6 +71,11 @@ export default function BookRidePage() {
         if (airbearsResponse.ok) {
           const airbearsData = await airbearsResponse.json();
           setAirbears(airbearsData.data || []);
+          
+          // Show driver-specific message if applicable
+          if (airbearsData.isDriverView) {
+            console.log("Driver view: Showing only assigned AirBear");
+          }
         }
 
         // Check for pickup spot from URL

@@ -324,15 +324,15 @@ export default function DriverDashboardPage() {
         </div>
 
         {/* AirBear Status */}
-        {driverAirbear && (
+        {driverAirbear ? (
           <Card className="mb-6 p-6 border-2 border-blue-500 hover-lift">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <User className="w-5 h-5 text-blue-600" />
-                Your AirBear: {driverAirbear.id.toUpperCase()}
+                Your Assigned AirBear: {driverAirbear.id.toUpperCase()}
               </CardTitle>
               <CardDescription>
-                Vehicle status and location information
+                This is your personal vehicle for ride requests
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -410,6 +410,28 @@ export default function DriverDashboardPage() {
                 </Button>
                 <Button asChild variant="outline">
                   <Link href="/map">View on Map</Link>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ) : (
+          <Card className="mb-6 p-6 border-2 border-orange-500 hover-lift">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <User className="w-5 h-5 text-orange-600" />
+                No AirBear Assigned
+              </CardTitle>
+              <CardDescription>
+                You need an assigned AirBear to accept ride requests
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center py-6">
+                <p className="text-muted-foreground mb-4">
+                  Please contact an administrator to get your AirBear vehicle assignment.
+                </p>
+                <Button variant="outline" disabled>
+                  Contact Admin
                 </Button>
               </div>
             </CardContent>

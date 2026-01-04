@@ -4,7 +4,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "NODE_ENV=production next build",
+    "build": "npm run codemaps:generate && NODE_ENV=production next build",
     "db:push": "drizzle-kit push",
     "deploy": "npm run verify && npm run deploy:vercel",
     "deploy:production": "bash deploy.sh",
@@ -35,7 +35,8 @@
     "codemaps:optimize": "node scripts/intelligent-codemaps-optimizer.cjs",
     "codemaps:all": "npm run codemaps:generate && npm run codemaps:analyze && npm run codemaps:optimize",
     "codemaps:deploy": "npm run codemaps:generate && npm run deploy",
-    "verify": "npm run lint && npm run test:unit && npm run codemaps:validate",
+    "verify": "npm run type-check && npm run lint && npm run codemaps:validate && npm run build",
+    "validate:comprehensive": "node scripts/comprehensive-validator.cjs",
     "test:bundle": "node scripts/check-bundle-size.js",
     "test:all": "npm run test && npm run test:e2e && npm run test:performance && npm run test:accessibility",
     "test:workflows": "node scripts/test-complete-workflows.js",

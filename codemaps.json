@@ -1,0 +1,75 @@
+{
+  "name": "airbear-pwa-codemaps",
+  "version": "1.0.0",
+  "description": "CodeMaps configuration for AirBear PWA development",
+  "enabled": true,
+  "sourceMaps": true,
+  "inlineSources": true,
+  "exclude": [
+    "node_modules/**",
+    ".next/**",
+    "out/**",
+    "coverage/**",
+    "dist/**"
+  ],
+  "include": [
+    "app/**/*.{ts,tsx,js,jsx}",
+    "components/**/*.{ts,tsx,js,jsx}",
+    "lib/**/*.{ts,tsx,js,jsx}",
+    "hooks/**/*.{ts,tsx,js,jsx}",
+    "utils/**/*.{ts,tsx,js,jsx}",
+    "scripts/**/*.{js,ts}",
+    "types/**/*.{ts,tsx}"
+  ],
+  "outputDir": ".next/codemaps",
+  "publicPath": "/_next/codemaps",
+  "devtool": "source-map",
+  "generators": {
+    "components": {
+      "enabled": true,
+      "includeTests": false,
+      "includeStories": false,
+      "groupByType": true
+    },
+    "api": {
+      "enabled": true,
+      "includeMethods": true,
+      "includeMiddleware": true
+    },
+    "utilities": {
+      "enabled": true,
+      "groupByType": true,
+      "includeDependencies": false
+    },
+    "sourceMaps": {
+      "enabled": true,
+      "includeSources": true,
+      "compress": false
+    }
+  },
+  "validation": {
+    "strict": true,
+    "checkReferences": true,
+    "checkIntegrity": true,
+    "maxFileSize": "10MB"
+  },
+  "deployment": {
+    "includeInBuild": true,
+    "publicAccess": true,
+    "cacheHeaders": true
+  },
+  "integrations": {
+    "vscode": {
+      "enabled": true,
+      "sourceMapPath": "/_next/codemaps"
+    },
+    "chrome": {
+      "enabled": true,
+      "sourceMapPath": "/_next/codemaps"
+    },
+    "playwright": {
+      "enabled": true,
+      "sourceMapPath": "/_next/codemaps"
+    }
+  }
+}

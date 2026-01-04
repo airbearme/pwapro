@@ -30,6 +30,7 @@ import Link from "next/link";
 import type { Spot } from "@/components/map-view";
 import MapComponent from "@/components/map-view-beautiful";
 import type { AirbearLocation } from "@/lib/supabase/realtime";
+import { RidePayment } from "@/components/ride-payment";
 
 export default function BookRidePage() {
   const { user, loading: authLoading } = useAuthContext();
@@ -43,6 +44,7 @@ export default function BookRidePage() {
   const [loading, setLoading] = useState(true);
   const [booking, setBooking] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [confirmedRide, setConfirmedRide] = useState<any>(null);
   const [showMap, setShowMap] = useState(false);
   const [selectingMode, setSelectingMode] = useState<
     "pickup" | "destination" | null
@@ -173,22 +175,13 @@ export default function BookRidePage() {
 
       const { ride } = await response.json();
 
+      setConfirmedRide(ride);
+      setBookingSuccess(true);
+
       toast({
         title: "Ride Booked!",
         description: `Your ride from ${pickupSpot.name} to ${destinationSpot.name} has been booked.`,
       });
-
-      toast({
-        title: " Ride Booked Successfully!",
-        description: `Your ride from ${pickupSpot.name} to ${destinationSpot.name} is confirmed.`,
-        variant: "default",
-      });
-
-      setBookingSuccess(true);
-
-      setTimeout(() => {
-        setBookingSuccess(false);
-      }, 2000);
     } catch (error: any) {
       console.error("Booking error:", error);
       toast({
@@ -199,6 +192,23 @@ export default function BookRidePage() {
     } finally {
       setBooking(false);
     }
+  };
+
+  const handlePaymentComplete = () => {
+    // Payment is complete, ride is confirmed
+    console.log("Payment completed");
+  };
+
+  const handleRideComplete = () => {
+    // Reset the booking flow for a new ride
+    setConfirmedRide(null);
+    setBookingSuccess(false);
+    setPickupSpot(null);
+    setDestinationSpot(null);
+    toast({
+      title: "Ready for Next Ride",
+      description: "Book your next AirBear ride!",
+    });
   };
 
   const distance =
@@ -525,6 +535,17 @@ export default function BookRidePage() {
               </Button>
             </CardContent>
           </Card>
+        )}
+
+        {/* Ride Payment Screen */}
+        {bookingSuccess && confirmedRide && pickupSpot && destinationSpot && (
+          <RidePayment
+            ride={confirmedRide}
+            pickupSpot={pickupSpot}
+            destinationSpot={destinationSpot}
+            estimatedArrival={`${Math.round(distance * 3)} min`}
+            onPaymentComplete={handlePaymentComplete}
+          />
         )}
 
         {/* Back to Map */}

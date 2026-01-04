@@ -50,6 +50,7 @@
     "setup:environment": "bash scripts/setup-environment.sh",
     "clean:env": "bash scripts/clean-env.sh",
     "deploy:production": "bash scripts/deploy-production.sh",
+    "fix:database": "bash scripts/fix-database-schema.sh",
     "setup:secrets": "bash scripts/setup-github-secrets.sh",
     "deploy:prep": "bash scripts/deploy-production.sh",
     "verify:full": "npm run type-check && npm run lint && npm run build",

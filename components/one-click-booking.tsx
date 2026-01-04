@@ -43,43 +43,24 @@ export function OneClickBooking({
     try {
       setLoading(true);
 
-      const supabase = getSupabaseClient();
-
-      // Find available AirBear
-      const { data: availableAirbears } = await supabase
-        .from("airbears")
-        .select("*")
-        .eq("is_available", true)
-        .eq("is_charging", false)
-        .limit(1);
-
-      if (!availableAirbears || availableAirbears.length === 0) {
-        toast({
-          title: "No AirBears Available",
-          description: "All AirBears are currently in use. Please try again later.",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      const airbear = availableAirbears[0];
-
-      // Create ride booking
-      const { error: rideError } = await supabase
-        .from("rides")
-        .insert({
-          user_id: user.id,
+      // Create ride booking via API
+      const response = await fetch("/api/rides/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
           pickup_spot_id: pickupSpotId,
           dropoff_spot_id: destinationSpotId,
-          airbear_id: airbear.id,
           fare,
           distance,
-          status: "pending",
-        })
-        .select()
-        .single();
+        }),
+      });
 
-      if (rideError) throw rideError;
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to create ride");
+      }
+
+      const { ride } = await response.json();
 
       // Show payment options
       setShowPayment(true);

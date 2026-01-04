@@ -30,6 +30,10 @@
     "test:error-logger": "node scripts/test-error-logger.js",
     "codemaps:generate": "node scripts/generate-codemaps.cjs",
     "codemaps:validate": "node scripts/validate-codemaps.cjs",
+    "codemaps:analyze": "node scripts/advanced-codemaps-analyzer.cjs",
+    "codemaps:monitor": "node scripts/realtime-codemaps-monitor.cjs",
+    "codemaps:optimize": "node scripts/intelligent-codemaps-optimizer.cjs",
+    "codemaps:all": "npm run codemaps:generate && npm run codemaps:analyze && npm run codemaps:optimize",
     "codemaps:deploy": "npm run codemaps:generate && npm run deploy",
     "verify": "npm run lint && npm run test:unit && npm run codemaps:validate",
     "test:bundle": "node scripts/check-bundle-size.js",
@@ -44,7 +48,7 @@
     "validate:ui": "node scripts/validate-ui-foundation.js",
     "setup:secrets": "bash scripts/setup-github-secrets.sh",
     "deploy:prep": "bash scripts/deploy-production.sh",
-    "verify": "npm run type-check && npm run lint && npm run build",
+    "verify:full": "npm run type-check && npm run lint && npm run build",
     "setup:testing": "bash scripts/setup-testing.sh"
   },
   "dependencies": {

@@ -71,5 +71,67 @@
       "enabled": true,
       "sourceMapPath": "/_next/codemaps"
     }
+  },
+  "features": {
+    "checkoutFlow": {
+      "enabled": true,
+      "description": "Checkout and payment processing flow",
+      "components": [
+        "components/checkout-button.tsx",
+        "app/checkout/page.tsx",
+        "app/api/stripe/create-payment-intent.ts",
+        "app/api/stripe/checkout/route.ts"
+      ],
+      "loadingStates": {
+        "authLoading": "Authentication state loading",
+        "paymentLoading": "Payment processing state",
+        "stripeLoading": "Stripe initialization",
+        "walletLoading": "Apple/Google Pay processing"
+      }
+    },
+    "driverAirbearManagement": {
+      "enabled": true,
+      "description": "Driver-specific AirBear assignment and tracking",
+      "components": [
+        "app/driver/page.tsx",
+        "app/api/airbear/locations/route.ts",
+        "app/api/airbear/update-location/route.ts"
+      ],
+      "apiEndpoints": {
+        "locations": "GET /api/airbear/locations - Filters by driver assignment",
+        "updateLocation": "POST /api/airbear/update-location - Updates GPS coordinates"
+      },
+      "databaseRelations": {
+        "users": "assigned_airbear_id links to airbears.id",
+        "airbears": "Vehicle status and location data",
+        "drivers": "role='driver' with assigned vehicle"
+      }
+    },
+    "bookingSystem": {
+      "enabled": true,
+      "description": "Ride booking and AirBear availability",
+      "components": [
+        "app/book/page.tsx",
+        "components/map-view-beautiful.tsx",
+        "app/api/rides/create.ts"
+      ],
+      "airbearFiltering": {
+        "driverView": "Shows only assigned AirBear",
+        "customerView": "Shows all available AirBears",
+        "availabilityCheck": "is_available = true filter"
+      }
+    }
+  },
+  "debugging": {
+    "checkoutIssues": {
+      "loadingStates": "Check useState loading variables in checkout components",
+      "apiCalls": "Verify Stripe API responses and error handling",
+      "paymentFlow": "Monitor payment intent creation and confirmation"
+    },
+    "driverAssignment": {
+      "userProfile": "Check users.assigned_airbear_id field",
+      "apiFiltering": "Verify role-based filtering in airbear locations API",
+      "dashboardDisplay": "Ensure proper AirBear status display"
+    }
   }
 }

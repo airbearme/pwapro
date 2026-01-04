@@ -12,15 +12,17 @@ import {
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import {
-  ShoppingBag,
+  ShoppingCart,
+  Star,
+  Heart,
+  Shirt,
+  Coffee,
+  Crown,
+  Package,
   MapPin,
   Clock,
-  Star,
   Truck,
-  Package,
-  Shirt,
-  Mug,
-  Hat,
+  ShoppingBag,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -55,7 +57,7 @@ export default function MerchandisePage() {
       price: 14.99,
       description: "Ceramic mug with AirBear mascot design",
       category: "Drinkware",
-      icon: <Mug className="w-6 h-6" />,
+      icon: <Coffee className="w-6 h-6" />,
       inStock: true,
     },
     {
@@ -64,7 +66,7 @@ export default function MerchandisePage() {
       price: 19.99,
       description: "Adjustable baseball cap with AirBear logo",
       category: "Apparel",
-      icon: <Hat className="w-6 h-6" />,
+      icon: <Crown className="w-6 h-6" />,
       inStock: true,
     },
     {

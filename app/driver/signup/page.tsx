@@ -76,8 +76,9 @@ export default function DriverSignupPage() {
       }
 
       // Create user profile
+      const userId = (authData as any)?.user?.id || (user as any)?.id || '';
       const { error: profileError } = await supabase.from("users").upsert({
-        id: authData.user?.id || user?.id,
+        id: userId,
         email: `${formData.username}@airbear.me`,
         username: formData.username,
         full_name: formData.full_name,

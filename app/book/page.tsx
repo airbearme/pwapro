@@ -74,7 +74,7 @@ export default function BookRidePage() {
         // Check for pickup spot from URL
         const pickupId = searchParams.get("pickup");
         if (pickupId && spots) {
-          const spot = spots.find((s) => s.id === pickupId);
+          const spot = spots.find((s: any) => s.id === pickupId);
           if (spot) setPickupSpot(spot);
         }
       } catch (error) {

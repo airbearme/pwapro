@@ -39,14 +39,14 @@ export async function POST(request: Request) {
     const { data: profile } = await supabase
       .from("users")
       .select("role, full_name, eco_points, total_rides")
-      .eq("id", user.id)
+      .eq("id", user?.id)
       .single();
 
     return NextResponse.json({
       success: true,
       user: {
-        id: user.id,
-        email: user.email,
+        id: user?.id,
+        email: user?.email,
         ...profile,
       },
     });

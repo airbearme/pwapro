@@ -131,7 +131,7 @@ class CodeMapsGenerator {
       console.log("✅ Next.js source maps generated");
     } catch (error) {
       console.error("❌ Error generating Next.js source maps:", error.message);
-      throw error;
+throw new Error(error);
     }
   }
 

@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
-import { Apple, Chrome } from "lucide-react";
+import { Apple, Chrome, Loader2 } from "lucide-react";
 
 // Feature flag: Set to true when Apple Sign In is configured in Supabase
 const ENABLE_APPLE_SIGN_IN = false;
@@ -143,7 +143,11 @@ export default function LoginPage() {
               onClick={handleGoogleSignIn}
               disabled={loading}
             >
-              <Chrome className="mr-2 h-5 w-5 text-red-500" />
+              {loading ? (
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+              ) : (
+                <Chrome className="mr-2 h-5 w-5 text-red-500" />
+              )}
               Continue with Google
             </Button>
 
@@ -155,7 +159,11 @@ export default function LoginPage() {
                 onClick={handleAppleSignIn}
                 disabled={loading}
               >
-                <Apple className="mr-2 h-5 w-5" />
+                {loading ? (
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                ) : (
+                  <Apple className="mr-2 h-5 w-5" />
+                )}
                 Continue with Apple
               </Button>
             )}

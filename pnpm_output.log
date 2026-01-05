@@ -1,0 +1,113 @@
+
+> airbear-pwa@2.0.0 dev /app
+> next dev
+
+ ⚠ You are using a non-standard "NODE_ENV" value in your environment. This creates inconsistencies in the project and is strongly advised against. Read more: https://nextjs.org/docs/messages/non-standard-node-env
+ ⚠ Port 3000 is in use by an unknown process, using available port 3001 instead.
+   ▲ Next.js 15.5.9
+   - Local:        http://localhost:3001
+   - Network:      http://192.168.0.2:3001
+
+ ✓ Starting...
+ ✓ Ready in 5.6s
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 1943ms (164 modules)
+ ⨯ EvalError: Code generation from strings disallowed for this context
+    at <unknown> (.next/server/middleware.js:556)
+    at (middleware)/./node_modules/.pnpm/next@15.5.9_@babel+core@7.28.5_@playwright+test@1.57.0_react-dom@19.2.3_react@19.2.3__react@19.2.3_sass@1.97.1/node_modules/next/dist/build/webpack/loaders/next-middleware-loader.js?absolutePagePath=%2Fapp%2Fmiddleware.ts&page=%2Fmiddleware&rootDir=%2Fapp&matchers=&preferredRegion=&middlewareConfig=e30%3D! (.next/server/middleware.js:556:1)
+    at __webpack_require__ (.next/server/edge-runtime-webpack.js:37:33)
+    at __webpack_exec__ (.next/server/middleware.js:1647:48)
+    at <unknown> (.next/server/middleware.js:1648:37)
+    at webpackJsonpCallback (.next/server/edge-runtime-webpack.js:1128:39)
+    at <unknown> (.next/server/middleware.js:9:61)
+ ○ Compiling /_error ...
+<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (130kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+ ✓ Compiled /_error in 3.6s (370 modules)
+ GET /auth/login 404 in 7ms
+ ○ Compiling /_not-found ...
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⨯ EvalError: Code generation from strings disallowed for this context
+    at <unknown> (.next/server/middleware.js:556)
+    at (middleware)/./node_modules/.pnpm/next@15.5.9_@babel+core@7.28.5_@playwright+test@1.57.0_react-dom@19.2.3_react@19.2.3__react@19.2.3_sass@1.97.1/node_modules/next/dist/build/webpack/loaders/next-middleware-loader.js?absolutePagePath=%2Fapp%2Fmiddleware.ts&page=%2Fmiddleware&rootDir=%2Fapp&matchers=&preferredRegion=&middlewareConfig=e30%3D! (.next/server/middleware.js:556:1)
+    at __webpack_require__ (.next/server/edge-runtime-webpack.js:37:33)
+    at __webpack_exec__ (.next/server/middleware.js:1647:48)
+    at <unknown> (.next/server/middleware.js:1648:37)
+    at webpackJsonpCallback (.next/server/edge-runtime-webpack.js:1128:39)
+    at <unknown> (.next/server/middleware.js:9:61)
+ ⨯ ./app/globals.css
+Module parse failed: Unexpected character '@' (11:0)
+|  */
+|
+> @tailwind base;
+| @tailwind components;
+| @tailwind utilities;
+
+Import trace for requested module:
+./app/globals.css
+./app/layout.tsx
+[Error: ENOENT: no such file or directory, open '/app/.next/required-server-files.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/app/.next/required-server-files.json'
+}
+[Error: ENOENT: no such file or directory, open '/app/.next/required-server-files.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/app/.next/required-server-files.json'
+}
+[Error: ENOENT: no such file or directory, open '/app/.next/required-server-files.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/app/.next/required-server-files.json'
+}
+[Error: ENOENT: no such file or directory, open '/app/.next/required-server-files.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/app/.next/required-server-files.json'
+}
+ ⨯ EvalError: Code generation from strings disallowed for this context
+    at <unknown> (.next/server/middleware.js:556)
+    at (middleware)/./node_modules/.pnpm/next@15.5.9_@babel+core@7.28.5_@playwright+test@1.57.0_react-dom@19.2.3_react@19.2.3__react@19.2.3_sass@1.97.1/node_modules/next/dist/build/webpack/loaders/next-middleware-loader.js?absolutePagePath=%2Fapp%2Fmiddleware.ts&page=%2Fmiddleware&rootDir=%2Fapp&matchers=&preferredRegion=&middlewareConfig=e30%3D! (.next/server/middleware.js:556:1)
+    at __webpack_require__ (.next/server/edge-runtime-webpack.js:37:33)
+    at __webpack_exec__ (.next/server/middleware.js:1647:48)
+    at <unknown> (.next/server/middleware.js:1648:37)
+    at webpackJsonpCallback (.next/server/edge-runtime-webpack.js:1128:39)
+    at <unknown> (.next/server/middleware.js:9:61)
+[Error: ENOENT: no such file or directory, open '/app/.next/required-server-files.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/app/.next/required-server-files.json'
+}
+[Error: ENOENT: no such file or directory, open '/app/.next/required-server-files.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/app/.next/required-server-files.json'
+}
+ GET /auth/login 500 in 29ms
+ ⨯ EvalError: Code generation from strings disallowed for this context
+    at <unknown> (.next/server/middleware.js:556)
+    at (middleware)/./node_modules/.pnpm/next@15.5.9_@babel+core@7.28.5_@playwright+test@1.57.0_react-dom@19.2.3_react@19.2.3__react@19.2.3_sass@1.97.1/node_modules/next/dist/build/webpack/loaders/next-middleware-loader.js?absolutePagePath=%2Fapp%2Fmiddleware.ts&page=%2Fmiddleware&rootDir=%2Fapp&matchers=&preferredRegion=&middlewareConfig=e30%3D! (.next/server/middleware.js:556:1)
+    at __webpack_require__ (.next/server/edge-runtime-webpack.js:37:33)
+    at __webpack_exec__ (.next/server/middleware.js:1647:48)
+    at <unknown> (.next/server/middleware.js:1648:37)
+    at webpackJsonpCallback (.next/server/edge-runtime-webpack.js:1128:39)
+    at <unknown> (.next/server/middleware.js:9:61)
+[Error: ENOENT: no such file or directory, open '/app/.next/required-server-files.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/app/.next/required-server-files.json'
+}
+[Error: ENOENT: no such file or directory, open '/app/.next/required-server-files.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/app/.next/required-server-files.json'
+}
+ GET /auth/login 500 in 34ms

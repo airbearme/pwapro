@@ -26,3 +26,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env*.local
+
+# logs
+*.log
+
+# lockfiles
+pnpm-lock.yaml

@@ -1,10 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import Link from "next/link";
 import AirbearWheel from "@/components/airbear-wheel";
 
-export default function FloatingMascot() {
+// Wrapped with React.memo to prevent unnecessary re-renders.
+// This component has no props and its state is self-contained,
+// so it doesn't need to re-render when its parent does.
+const FloatingMascot = memo(function FloatingMascot() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -59,5 +62,7 @@ export default function FloatingMascot() {
       </div>
     </Link>
   );
-}
+});
+
+export default FloatingMascot;
 

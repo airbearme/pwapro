@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr"
 import { NextResponse, type NextRequest } from "next/server"
+import { SECURITY_HEADERS } from "./lib/security-headers"
 
 /**
  * Production-grade middleware for:
@@ -65,6 +66,10 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  // Add security headers
+  for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
+    supabaseResponse.headers.set(key, value)
+  }
   return supabaseResponse
 }
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import { cn } from "@/lib/utils";
 
 interface AirbearWheelProps {
@@ -10,13 +11,14 @@ interface AirbearWheelProps {
   effectType?: "solar" | "eco" | string;
 }
 
-export default function AirbearWheel({
-  size = "md",
-  className = "",
-  glowing = false,
-  animated = true,
-  effectType,
-}: AirbearWheelProps) {
+const AirbearWheel = memo(
+  ({
+    size = "md",
+    className = "",
+    glowing = false,
+    animated = true,
+    effectType,
+  }: AirbearWheelProps) => {
   const sizeClasses = {
     sm: "w-6 h-6",
     md: "w-10 h-10",
@@ -78,15 +80,22 @@ export default function AirbearWheel({
         </div>
       )}
 
-      {/* Eco effect */}
-      {effectType === "eco" && (
-        <div className="absolute inset-0 rounded-full animate-pulse-glow">
-          <div className="absolute inset-0 bg-radial-gradient from-emerald-400/30 to-transparent"></div>
-        </div>
-      )}
-    </div>
+        {/* Eco effect */}
+        {effectType === "eco" && (
+          <div className="absolute inset-0 rounded-full animate-pulse-glow">
+            <div className="absolute inset-0 bg-radial-gradient from-emerald-400/30 to-transparent"></div>
+          </div>
+        )}
+      </div>
+    );
+  }
   );
-}
+
+AirbearWheel.displayName = "AirbearWheel";
+
+// ⚡ Bolt: Memoized AirbearWheel to prevent unnecessary re-renders on the animation-heavy homepage.
+// This is a purely presentational component, so it's a perfect candidate for memoization.
+export default AirbearWheel;
 
 
 

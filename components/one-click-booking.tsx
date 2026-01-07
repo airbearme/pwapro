@@ -6,7 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useToast } from "@/hooks/use-toast";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import { useAuthContext } from "@/components/auth-provider";
-import { MapPin, Zap } from "lucide-react";
+import { MapPin } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 import { CheckoutButton } from "@/components/checkout-button";
 import errorLogger from "@/lib/error-logger";
 
@@ -126,7 +127,7 @@ export function OneClickBooking({
     >
       {loading ? (
         <>
-          <Zap className="mr-2 h-5 w-5 animate-spin" />
+          <Spinner className="mr-2 h-5 w-5" />
           Booking...
         </>
       ) : (

@@ -19,7 +19,7 @@
     "test:api": "jest --testPathPattern=tests/api",
     "test:e2e": "playwright test",
     "test:performance": "node scripts/test-performance.js",
-    "test:security": "node scripts/test-security-headers.js",
+    "test:security": "node scripts/test-security-headers.cjs",
     "test:accessibility": "node scripts/test-accessibility.js",
     "test:database": "node scripts/test-database.js",
     "test:stripe": "node scripts/test-stripe.js",
@@ -152,7 +152,7 @@
     "@types/leaflet": "^1.9.15",
     "@types/minimatch": "^5.1.2",
     "@types/node": "^22.10.6",
-    "@types/react": "^18.3.17",
+    "@types/react": "18.3.27",
     "@types/react-dom": "^18.3.0",
     "@types/ssh2": "^1.15.1",
     "@types/ssh2-sftp-client": "^9.0.3",
@@ -163,7 +163,7 @@
     "eslint-config-next": "^15.1.6",
     "postcss": "^8.5.1",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5.7.2",
+    "typescript": "5.9.3",
     "vercel": "^25.2.0"
   }
 }

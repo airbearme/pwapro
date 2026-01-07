@@ -1,7 +1,7 @@
 import type React from "react";
 import type { Metadata, Viewport } from "next";
+import Script from 'next/script';
 import { Inter, Space_Grotesk } from "next/font/google";
-import { Analytics } from "@vercel/analytics/react";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/components/auth-provider";
 import { Toaster } from "@/components/ui/toaster";
@@ -9,6 +9,7 @@ import PWAInstallPrompt from "@/components/pwa-install-prompt";
 import FloatingMascot from "@/components/floating-mascot";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { validateRuntimeEnv } from "@/lib/auto-load-env";
+import { headers } from 'next/headers';
 import "./globals.css";
 
 // Validate environment variables on app load
@@ -121,6 +122,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const nonce = headers().get('x-nonce') || '';
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -138,9 +140,13 @@ export default function RootLayout({
               <FloatingMascot />
               <PWAInstallPrompt />
               <Toaster />
-              <Analytics />
           </AuthProvider>
         </ThemeProvider>
+        <Script
+          src="/_vercel/insights/script.js"
+          strategy="afterInteractive"
+          nonce={nonce}
+        />
       </body>
     </html>
   );

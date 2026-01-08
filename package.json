@@ -10,7 +10,7 @@
     "deploy:now": "bash scripts/deploy-production-now.sh",
     "deploy:vercel": "vercel --prod",
     "dev": "next dev",
-    "lint": "next lint",
+    "lint": "eslint . --max-warnings 0",
     "start": "next start",
     "sync:github": "bash scripts/sync-github.sh",
     "test": "jest",

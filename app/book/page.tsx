@@ -27,8 +27,7 @@ import {
   EyeOff,
 } from "lucide-react";
 import Link from "next/link";
-import type { Spot } from "@/components/map-view";
-import MapComponent from "@/components/map-view-beautiful";
+import MapComponent, { type Spot } from "@/components/map-view-beautiful";
 import type { AirbearLocation } from "@/lib/supabase/realtime";
 import { RidePayment } from "@/components/ride-payment";
 

@@ -11,8 +11,7 @@ import { Battery, MapPin, Navigation } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import MapComponent from "@/components/map-view-beautiful";
-import type { Spot } from "@/components/map-view";
+import MapComponent, { type Spot } from "@/components/map-view-beautiful";
 import type { AirbearLocation } from "@/lib/supabase/realtime";
 
 export default function MapPage() {

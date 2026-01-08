@@ -1,0 +1,29 @@
+# Auto-assign reviewers configuration
+addReviewers: true
+addAssignees: false
+reviewers:
+  - airbearme
+
+numberOfReviewers: 1
+
+# Options for filtering reviewers
+filterLabels:
+  exclude:
+    - dependencies
+    - documentation
+
+# Skip auto-assignment for these users
+skipKeywords:
+  - wip
+  - draft
+
+# Use reviewers from different groups
+useReviewGroups: false
+reviewGroups:
+  group1:
+    - airbearme
+  group2:
+    - airbearme
+
+# Allow self-assignment
+allowSelfAssign: false

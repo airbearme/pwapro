@@ -172,7 +172,7 @@ chmod +x upload-deploy.sh
 
 ### Step 2: Push Code (1 minute)
 ```bash
-cd /home/coden809/Projects/pwa5
+cd /home/coden809/Projects/pwapro
 git push -u origin main
 ```
 

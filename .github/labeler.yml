@@ -1,0 +1,109 @@
+# PR Labeler Configuration
+# Automatically adds labels to PRs based on files changed
+
+# Frontend
+frontend:
+  - app/**/*
+  - components/**/*
+  - hooks/**/*
+  - lib/**/*
+  - styles/**/*
+
+# Backend/API
+backend:
+  - app/api/**/*
+  - lib/supabase/**/*
+  - lib/stripe/**/*
+
+# Configuration
+configuration:
+  - *.config.js
+  - *.config.ts
+  - *.config.mjs
+  - next.config.*
+  - tailwind.config.*
+  - postcss.config.*
+  - vercel.json
+  - .env*
+
+# Documentation
+documentation:
+  - docs/**/*
+  - *.md
+  - README*
+
+# Dependencies
+dependencies:
+  - package.json
+  - package-lock.json
+  - yarn.lock
+
+# Testing
+testing:
+  - **/*.test.*
+  - **/*.spec.*
+  - __tests__/**/*
+  - tests/**/*
+  - playwright-report/**/*
+  - test.*
+
+# CI/CD
+ci-cd:
+  - .github/workflows/**/*
+  - scripts/**/*
+  - docker*
+
+# Security
+security:
+  - lib/security-headers.ts
+  - lib/csp.ts
+  - lib/captcha.ts
+  - middleware.ts
+
+# Database
+database:
+  - lib/supabase/**/*
+  - **/*.sql
+  - drizzle.config.*
+
+# PWA
+pwa:
+  - public/manifest.json
+  - public/sw.js
+  - public/icon*
+  - next-pwa.config.*
+
+# UI/UX
+ui-ux:
+  - components/ui/**/*
+  - styles/**/*
+  - app/globals.css
+
+# Payments
+payments:
+  - lib/stripe/**/*
+  - app/checkout/**/*
+  - components/ride-payment.tsx
+
+# Maps
+maps:
+  - components/map*
+  - lib/map*
+
+# Authentication
+auth:
+  - app/auth/**/*
+  - lib/auth*
+  - components/auth*
+
+# Breaking changes
+breaking-change:
+  - package.json
+  - app/api/**/*
+  - lib/**/*
+
+# Performance
+performance:
+  - app/**/*
+  - components/**/*
+  - lib/**/*

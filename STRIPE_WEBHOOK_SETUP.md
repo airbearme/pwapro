@@ -146,7 +146,7 @@ Your webhook won't work until you have a backend server running. Here's how:
 
 2. Deploy backend:
    \`\`\`bash
-   cd /home/steve/Projects/pwa4
+   cd /home/coden809/Projects/pwapro
    vercel
    \`\`\`
 

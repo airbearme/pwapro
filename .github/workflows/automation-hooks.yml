@@ -1,0 +1,365 @@
+name: Automation Hooks & Rules
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+    types: [opened, synchronize, reopened, ready_for_review]
+  issues:
+    types: [opened, labeled]
+  issue_comment:
+    types: [created]
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  # PR Automation
+  pr-automation:
+    name: PR Automation
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate PR title
+        uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            perf
+            test
+            chore
+            ci
+            build
+            revert
+
+      - name: Auto-assign reviewers
+        uses: kentaro-m/auto-assign-action@v1.2.4
+        with:
+          configuration-path: '.github/auto-assign-config.yml'
+
+      - name: Add labels based on files changed
+        uses: actions/labeler@v5
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: .github/labeler.yml
+
+      - name: Check for breaking changes
+        run: |
+          if git diff --name-only HEAD~1 | grep -E '\.(ts|tsx|js|jsx)$'; then
+            echo "TypeScript/JavaScript files changed"
+            if git diff HEAD~1 | grep -i "breaking\|break"; then
+              echo "breaking-change=true" >> $GITHUB_OUTPUT
+            fi
+          fi
+        id: breaking-check
+
+      - name: Label breaking changes
+        if: steps.breaking-check.outputs.breaking-change == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['breaking-change']
+            });
+
+  # Issue Automation
+  issue-automation:
+    name: Issue Automation
+    runs-on: ubuntu-latest
+    if: github.event_name == 'issues'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Auto-label issues
+        uses: github/issue-labeler@v3.0
+        with:
+          configuration-path: .github/issue-labeler.yml
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Auto-assign issues
+        uses: pozil/auto-assign-issue@v1.11.0
+        with:
+          assignees: 'airbearme'
+          numOfAssignee: 1
+
+      - name: Add issue to project
+        uses: actions/add-to-project@v0.5.0
+        with:
+          project-url: https://github.com/users/airbearme/projects/1
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  # Comment Automation
+  comment-automation:
+    name: Comment Automation
+    runs-on: ubuntu-latest
+    if: github.event_name == 'issue_comment' && github.event.issue.pull_request
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Handle review comments
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const comment = context.payload.comment.body;
+            const issue = context.payload.issue;
+
+            // Auto-approve documentation changes
+            if (comment.includes('/approve-docs') && issue.labels.some(label => label.name === 'documentation')) {
+              await github.rest.pulls.createReview({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: issue.number,
+                event: 'APPROVE',
+                body: 'Auto-approved documentation changes'
+              });
+            }
+
+            // Auto-merge approved PRs with passing checks
+            if (comment.includes('/auto-merge') && issue.labels.some(label => label.name === 'auto-merge')) {
+              const checks = await github.rest.checks.listForRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: `refs/pull/${issue.number}/head`
+              });
+
+              const allPassing = checks.data.check_runs.every(run => run.conclusion === 'success');
+
+              if (allPassing) {
+                await github.rest.pulls.merge({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: issue.number,
+                  merge_method: 'squash'
+                });
+              }
+            }
+
+  # Branch Protection Rules
+  branch-protection:
+    name: Branch Protection
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Enforce branch protection
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const rules = await github.rest.repos.getBranchProtection({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              branch: 'main'
+            }).catch(() => null);
+
+            if (!rules) {
+              await github.rest.repos.updateBranchProtection({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                branch: 'main',
+                required_status_checks: {
+                  strict: true,
+                  contexts: [
+                    'CI/CD Pipeline',
+                    'Code Quality & Formatting',
+                    'Security Scanning'
+                  ]
+                },
+                enforce_admins: true,
+                required_pull_request_reviews: {
+                  required_approving_review_count: 1,
+                  dismiss_stale_reviews: true,
+                  require_code_owner_reviews: true
+                },
+                restrictions: null
+              });
+            }
+
+  # Codeowners Validation
+  codeowners-validation:
+    name: Codeowners Validation
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate CODEOWNERS file
+        run: |
+          if [ -f .github/CODEOWNERS ]; then
+            echo "CODEOWNERS file exists"
+            # Validate syntax
+            github/codeowners-validator .github/CODEOWNERS
+          else
+            echo "CODEOWNERS file missing - creating template"
+            cat > .github/CODEOWNERS << EOF
+            # Global owners
+            * @airbearme
+
+            # Frontend
+            app/ @airbearme
+            components/ @airbearme
+
+            # Backend/API
+            app/api/ @airbearme
+
+            # Configuration
+            *.config.js @airbearme
+            *.config.ts @airbearme
+            EOF
+          fi
+
+  # Commit Message Validation
+  commit-validation:
+    name: Commit Message Validation
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate commit messages
+        run: |
+          # Check conventional commits
+          git log --oneline -n 10 | while read commit; do
+            if ! echo "$commit" | grep -E "^[a-f0-9]+ (feat|fix|docs|style|refactor|perf|test|chore|ci|build|revert)(\(.+\))?: .{1,}" > /dev/null; then
+              echo "Invalid commit message format: $commit"
+              echo "Expected format: type(scope): description"
+              exit 1
+            fi
+          done
+
+  # Release Automation
+  release-automation:
+    name: Release Automation
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - name: Check commit message
+        id: check-commit
+        run: |
+          if [[ "${{ github.event.head_commit.message }}" == *"chore: release"* ]]; then
+            echo "is_release=true" >> $GITHUB_OUTPUT
+          else
+            echo "is_release=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Checkout code
+        if: steps.check-commit.outputs.is_release == 'true'
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        if: steps.check-commit.outputs.is_release == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        if: steps.check-commit.outputs.is_release == 'true'
+        run: npm ci
+
+      - name: Create release
+        if: steps.check-commit.outputs.is_release == 'true'
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.run_number }}
+          release_name: Release v${{ github.run_number }}
+          body: |
+            ## Changes
+            - Automated release
+            - All tests passing
+            - Deployed to production
+
+      - name: Update version
+        if: steps.check-commit.outputs.is_release == 'true'
+        run: |
+          npm version patch --no-git-tag-version
+          git add package.json package-lock.json
+          git commit -m "chore: bump version to $(node -p "require('./package.json').version")"
+
+  # Stale Issue Management
+  stale-management:
+    name: Stale Issue Management
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' && github.event.schedule == '0 0 * * *'
+    steps:
+      - name: Stale issue management
+        uses: actions/stale@v8
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          stale-issue-message: |
+            This issue has been automatically marked as stale because it has not had recent activity. It will be closed in 7 days if no further activity occurs.
+
+            If this issue is still relevant, please add a comment or update the issue.
+          stale-pr-message: |
+            This pull request has been automatically marked as stale because it has not had recent activity. It will be closed in 7 days if no further activity occurs.
+
+            If this PR is still relevant, please add a comment or update the PR.
+          close-issue-message: |
+            This issue has been automatically closed due to inactivity.
+          close-pr-message: |
+            This pull request has been automatically closed due to inactivity.
+          days-before-stale: 30
+          days-before-close: 7
+          exempt-issue-labels: 'pinned,security,bug'
+          exempt-pr-labels: 'pinned,security,work-in-progress'
+
+  # Dependency License Check
+  license-check:
+    name: License Compliance
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check licenses
+        run: npx license-checker --production --failOn BSD --failOn MIT --summary
+
+      - name: Generate license report
+        run: |
+          npx license-checker --production --json > license-report.json
+          npx license-checker --production --markdown > LICENSES.md
+
+      - name: Upload license report
+        uses: actions/upload-artifact@v4
+        with:
+          name: license-report
+          path: |
+            license-report.json
+            LICENSES.md

@@ -3,9 +3,9 @@
 ## Prerequisites Checklist
 
 - [ ] Vercel account connected
-- [ ] GitHub repository ready (github.com/airbearme/pwa4)
+- [ ] GitHub repository ready (github.com/airbearme/pwapro)
 - [ ] Environment variables set (see below)
-- [ ] Supabase PWA4 project created
+- [ ] Supabase PWAPRO project created
 - [ ] Stripe account configured
 
 ## 1. Deploy to Vercel (5 minutes)
@@ -13,7 +13,7 @@
 ### Option A: Deploy via Vercel Dashboard
 
 1. Go to [vercel.com/new](https://vercel.com/new)
-2. Import git repository: `github.com/airbearme/pwa4`
+2. Import git repository: `github.com/airbearme/pwapro`
 3. Configure project:
    - **Framework Preset**: Next.js
    - **Root Directory**: ./

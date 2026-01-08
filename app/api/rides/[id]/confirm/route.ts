@@ -3,11 +3,11 @@ import { NextResponse } from "next/server";
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const supabase = await getSupabaseServer();
-    const rideId = params.id;
+    const { id: rideId } = await params;
 
     // Get authenticated user
     const {

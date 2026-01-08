@@ -441,7 +441,7 @@ throw new Error(error);
         components: "components.json",
         api: "api-routes.json",
         utilities: "utilities.json",
-        sourceMaps: "sourcemaps/",
+        sourceMaps: ".",
       },
       stats: {
         totalFiles: 0,

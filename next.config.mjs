@@ -13,6 +13,15 @@ const nextConfig = {
         fs: false,
       };
     }
+    config.cache = false;
+    config.infrastructureLogging = {
+      level: "error",
+    };
+    config.ignoreWarnings = [
+      ...(config.ignoreWarnings ?? []),
+      /Serializing big strings/,
+      /A Node\.js API is used .* Edge Runtime/,
+    ];
     return config;
   },
   async headers() {

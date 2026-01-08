@@ -17,7 +17,7 @@ interface Ride {
   status: string;
   fare: number;
   distance: number;
-  requested_at: string;
+  created_at: string;
   completed_at?: string;
 }
 
@@ -46,7 +46,7 @@ export default function DashboardPage() {
           .from("rides")
           .select("*")
           .eq("user_id", user.id)
-          .order("requested_at", { ascending: false })
+          .order("created_at", { ascending: false })
           .limit(10);
 
         if (ridesError) throw ridesError;
@@ -271,7 +271,7 @@ export default function DashboardPage() {
                               {ride.status.replace("_", " ").toUpperCase()}
                             </Badge>
                             <span className="text-sm text-muted-foreground">
-                              {new Date(ride.requested_at).toLocaleDateString()}
+                              {new Date(ride.created_at).toLocaleDateString()}
                             </span>
                           </div>
                           <div className="space-y-1">

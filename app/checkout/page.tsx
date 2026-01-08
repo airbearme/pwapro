@@ -60,20 +60,29 @@ function CheckoutForm({ clientSecret, rideId, amount, onSuccess }: CheckoutFormP
           variant: "destructive",
         });
       } else if (paymentIntent && paymentIntent.status === "succeeded") {
-        // Update ride status
+        // Update ride status to confirmed
         const supabase = getSupabaseClient();
-        await supabase
+        const { error } = await supabase
           .from("rides")
-          .update({ status: "accepted" })
+          .update({ 
+            status: "confirmed",
+            payment_method: "card",
+            paid_at: new Date().toISOString()
+          })
           .eq("id", rideId);
+
+        if (error) {
+          console.error("Error updating ride status:", error);
+        }
 
         toast({
           title: "Payment Successful!",
-          description: "Your ride has been confirmed.",
+          description: "Your ride has been confirmed and paid for.",
         });
 
+        // Redirect to success page
         setTimeout(() => {
-          onSuccess();
+          window.location.href = `/order/success?session_id=${paymentIntent.id}`;
         }, 2000);
       }
     } catch (error: any) {

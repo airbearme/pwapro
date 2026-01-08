@@ -9,12 +9,24 @@
 
 "use client";
 
+import React, { useMemo } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { MapPin, ShoppingBag, Leaf, Zap, Crown } from "lucide-react";
 import AirbearWheel from "@/components/airbear-wheel";
 
 export default function HomePage() {
+  // ⚡ Bolt: Memoize particle arrays to prevent re-creation on every render.
+  // This improves performance by reducing unnecessary computations.
+  const particleArray = useMemo(
+    () => Array.from({ length: 12 }, (_, i) => i),
+    [],
+  );
+  const holographicArray = useMemo(
+    () => Array.from({ length: 8 }, (_, i) => i),
+    [],
+  );
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-emerald-950 via-lime-950 to-amber-950 dark:from-emerald-950 dark:via-lime-950 dark:to-amber-950 relative overflow-hidden">
       {/* Animated Background with Solar Rays & Spinning Wheels */}
@@ -70,7 +82,7 @@ export default function HomePage() {
 
       {/* Enhanced Particle effects background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {Array.from({ length: 12 }, (_, i) => (
+        {particleArray.map(i => (
           <div
             key={i}
             className={`absolute w-2 h-2 rounded-full animate-particle opacity-60`}
@@ -108,7 +120,7 @@ export default function HomePage() {
 
               {/* Holographic overlay effect */}
               <div className="absolute inset-0 pointer-events-none">
-                {Array.from({ length: 8 }, (_, i) => (
+                {holographicArray.map(i => (
                   <div
                     key={i}
                     className="absolute w-2 h-2 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 rounded-full opacity-60 animate-pulse-glow"

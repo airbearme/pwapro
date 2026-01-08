@@ -24,7 +24,7 @@ Your AirBear mobile bodega rideshare app is **fully configured and ready for pro
 - ✅ OAuth token handling via Supabase
 - ✅ Input validation and sanitization
 
-### 🗄️ Database (Supabase PWA4)
+### 🗄️ Database (Supabase pwapro)
 All tables ready with RLS policies:
 - ✅ `profiles` - User profiles with OAuth data
 - ✅ `airbear_locations` - Real-time driver/vehicle tracking
@@ -61,10 +61,10 @@ All tables ready with RLS policies:
 Your environment variables are already configured. Verify they're set in Vercel Dashboard:
 
 ```bash
-# Supabase PWA4
-NEXT_PUBLIC_SUPABASE_PWA4_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=your-anon-key
-SUPABASE_PWA4_SERVICE_ROLE_KEY=your-service-role-key
+# Supabase pwapro
+NEXT_PUBLIC_SUPABASE_PWAPRO_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_PWAPRO_ANON_KEY=your-anon-key
+SUPABASE_PWAPRO_SERVICE_ROLE_KEY=your-service-role-key
 
 # Stripe
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...
@@ -228,7 +228,7 @@ Deploy with confidence! 🐻🚗🛒
 - **Vercel Dashboard**: https://vercel.com/dashboard
 - **Supabase Dashboard**: https://supabase.com/dashboard
 - **Stripe Dashboard**: https://dashboard.stripe.com
-- **GitHub Repository**: https://github.com/airbearme/pwa4
+- **GitHub Repository**: https://github.com/airbearme/pwapro
 
 ---
 

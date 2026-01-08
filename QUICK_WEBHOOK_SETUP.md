@@ -48,7 +48,7 @@ After clicking "Add endpoint", you'll be redirected to a new page showing your w
 
 ## Step 5: Add to Your .env File
 
-Open `/home/steve/Projects/pwa4/.env` and add this line:
+Open `/home/steve/Projects/pwapro/.env` and add this line:
 
 \`\`\`bash
 STRIPE_WEBHOOK_SECRET=whsec_paste_your_secret_here

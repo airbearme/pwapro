@@ -31,7 +31,7 @@ npm run sync:github
 
 This will:
 - Commit all changes
-- Push to GitHub (pwa4 or pwa5)
+- Push to GitHub (pwapro or pwa5)
 - Trigger GitHub Actions workflow
 - Auto-deploy to Vercel
 

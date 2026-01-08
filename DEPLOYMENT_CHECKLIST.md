@@ -5,7 +5,7 @@ Complete this checklist before deploying to airbear.me.
 ## Pre-Deployment
 
 ### Environment Setup
-- [ ] Supabase PWA4 project created and configured
+- [ ] Supabase pwapro project created and configured
 - [ ] All environment variables added to Vercel
 - [ ] Custom domain airbear.me configured in Vercel
 - [ ] SSL certificate active for airbear.me
@@ -49,8 +49,8 @@ Complete this checklist before deploying to airbear.me.
 # Create new repo (if using pwa5)
 gh repo create airbearme/pwa5 --public
 
-# Or push to existing pwa4
-git remote add origin https://github.com/airbearme/pwa4.git
+# Or push to existing pwapro
+git remote add origin https://github.com/airbearme/pwapro.git
 git add .
 git commit -m "Production-ready deployment"
 git push -u origin main

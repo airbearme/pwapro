@@ -54,13 +54,13 @@ if ! git remote | grep -q "origin"; then
     echo ""
     echo -e "${YELLOW}No remote repository configured.${NC}"
     echo -e "Choose repository:"
-    echo "1. github.com/airbearme/pwa4 (existing)"
+    echo "1. github.com/airbearme/pwapro (existing)"
     echo "2. github.com/airbearme/pwa5 (new)"
     echo -e "${YELLOW}Enter choice (1 or 2):${NC}"
     read REPO_CHOICE
     
     if [ "$REPO_CHOICE" = "1" ]; then
-        git remote add origin https://github.com/airbearme/pwa4.git
+        git remote add origin https://github.com/airbearme/pwapro.git
     elif [ "$REPO_CHOICE" = "2" ]; then
         git remote add origin https://github.com/airbearme/pwa5.git
     else
@@ -95,5 +95,5 @@ echo ""
 echo -e "${GREEN}✓ Successfully synced to GitHub!${NC}"
 echo ""
 echo -e "${BLUE}GitHub Actions will now automatically deploy to production.${NC}"
-echo -e "${BLUE}Monitor deployment at: https://github.com/airbearme/pwa4/actions${NC}"
+echo -e "${BLUE}Monitor deployment at: https://github.com/airbearme/pwapro/actions${NC}"
 echo ""

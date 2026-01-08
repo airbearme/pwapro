@@ -6,7 +6,7 @@
 set -e
 
 ENVIRONMENT=${1:-production}
-REPO_URL="https://github.com/airbearme/pwa4.git"
+REPO_URL="https://github.com/airbearme/pwapro.git"
 
 echo "🚀 Starting AirBear PWA deployment to $ENVIRONMENT..."
 

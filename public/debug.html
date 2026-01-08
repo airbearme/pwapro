@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AirBear Debug</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        .debug {
+            border: 2px solid #0f0;
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug">
+        <h1>AirBear Mobile Debug</h1>
+        <p>✅ HTML loads</p>
+        <p>✅ CSS loads</p>
+        <p id="js-test">Testing JavaScript...</p>
+    </div>
+    
+    <script>
+        document.getElementById('js-test').innerHTML = '✅ JavaScript works';
+        console.log('Debug page loaded successfully');
+    </script>
+</body>
+</html>

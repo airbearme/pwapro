@@ -7,19 +7,11 @@ import { AuthProvider } from "@/components/auth-provider";
 import { Toaster } from "@/components/ui/toaster";
 import PWAInstallPrompt from "@/components/pwa-install-prompt";
 import FloatingMascot from "@/components/floating-mascot";
-import { ErrorBoundary } from "@/components/error-boundary";
-import { validateRuntimeEnv } from "@/lib/auto-load-env";
 import "./globals.css";
-
-// Validate environment variables on app load
-if (typeof window === "undefined") {
-  validateRuntimeEnv();
-}
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
-  display: "swap",
 });
 
 const spaceGrotesk = Space_Grotesk({

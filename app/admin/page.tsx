@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/components/auth-provider";
 import { getSupabaseClient } from "@/lib/supabase/client";
@@ -49,18 +49,7 @@ export default function AdminDashboard() {
   });
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!authLoading && (!user || user.user_metadata?.role !== "admin")) {
-      router.push("/auth/login");
-      return;
-    }
-
-    if (user && user.user_metadata?.role === "admin") {
-      loadAdminStats();
-    }
-  }, [user, authLoading, router]);
-
-  const loadAdminStats = async () => {
+  const loadAdminStats = useCallback(async () => {
     try {
       const supabase = getSupabaseClient();
 
@@ -110,7 +99,18 @@ export default function AdminDashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [toast]);
+
+  useEffect(() => {
+    if (!authLoading && (!user || user.user_metadata?.role !== "admin")) {
+      router.push("/auth/login");
+      return;
+    }
+
+    if (user && user.user_metadata?.role === "admin") {
+      loadAdminStats();
+    }
+  }, [user, authLoading, router, loadAdminStats]);
 
   const handleLogout = async () => {
     try {

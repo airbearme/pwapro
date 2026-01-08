@@ -14,7 +14,7 @@ export default function DemoPage() {
             🚗 AirBear Real-Time System Demo
           </h1>
           <p className="text-lg text-muted-foreground mb-4">
-            Experience the live tracking system that powers AirBear's
+            Experience the live tracking system that powers AirBear&apos;s
             solar-powered rideshare service
           </p>
         </div>
@@ -28,14 +28,14 @@ export default function DemoPage() {
             <CardContent className="space-y-4">
               <h3 className="font-semibold mb-2">User Experience</h3>
               <ol className="space-y-2 text-sm text-muted-foreground">
-                <li>Click "User Mode" to simulate booking a ride</li>
+                <li>Click &quot;User Mode&quot; to simulate booking a ride</li>
                 <li>Watch real-time events appear in the feed</li>
                 <li>See ride status updates and driver locations</li>
               </ol>
 
               <h3 className="font-semibold mb-2">Driver Experience</h3>
               <ol className="space-y-2 text-sm text-muted-foreground">
-                <li>Click "Driver Mode" to simulate location updates</li>
+                <li>Click &quot;Driver Mode&quot; to simulate location updates</li>
                 <li>Share GPS coordinates with riders in real-time</li>
                 <li>Monitor ride progress and completion</li>
               </ol>

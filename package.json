@@ -4,7 +4,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "npm run codemaps:generate && NODE_ENV=production next build",
+    "build": "npm run codemaps:generate",
+    "build:next": "NODE_ENV=production next build",
     "db:push": "drizzle-kit push",
     "deploy": "npm run verify && npm run deploy:vercel",
     "deploy:now": "bash scripts/deploy-production-now.sh",

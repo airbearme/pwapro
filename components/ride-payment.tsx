@@ -161,7 +161,7 @@ export function RidePayment({
         <CardHeader>
           <CardTitle className="text-lg">Choose Payment Method</CardTitle>
           <CardDescription>
-            Select how you'd like to pay for your ride
+            Select how you&apos;d like to pay for your ride
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

@@ -92,7 +92,7 @@ export default function OrderSuccessPage() {
             </div>
 
             <div className="space-y-2">
-              <h3 className="font-semibold">What's Next?</h3>
+              <h3 className="font-semibold">What&apos;s Next?</h3>
               <p className="text-muted-foreground">
                 Your AirBear driver will arrive at your pickup location. You can
                 track your ride in real-time on the map.

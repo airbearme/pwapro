@@ -21,7 +21,17 @@ export default function MapView({
   const mapInstanceRef = useRef<any>(null);
   const markersRef = useRef<Map<string, any>>(new Map());
   const LeafletRef = useRef<any>(null);
+  const spotsRef = useRef(spots);
+  const onSpotSelectRef = useRef(onSpotSelect);
   const [mapLoaded, setMapLoaded] = useState(false);
+
+  useEffect(() => {
+    spotsRef.current = spots;
+  }, [spots]);
+
+  useEffect(() => {
+    onSpotSelectRef.current = onSpotSelect;
+  }, [onSpotSelect]);
 
   useEffect(() => {
     if (!mapRef.current || mapInstanceRef.current) {
@@ -107,11 +117,12 @@ export default function MapView({
         setMapLoaded(true);
         
         // Setup global booking function
-        if (typeof window !== "undefined" && onSpotSelect) {
+        const handleSpotSelect = onSpotSelectRef.current;
+        if (typeof window !== "undefined" && handleSpotSelect) {
           (window as any).selectSpotForBooking = (spotId: string) => {
-            const spot = spots.find(s => s.id === spotId);
+            const spot = spotsRef.current.find((s) => s.id === spotId);
             if (spot) {
-              onSpotSelect(spot);
+              handleSpotSelect(spot);
             }
           };
         }

@@ -15,12 +15,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
-import { Apple, Chrome } from "lucide-react";
+import { Apple, Chrome, Car } from "lucide-react";
 
-// Feature flag: Set to true when Apple Sign In is configured in Supabase
 const ENABLE_APPLE_SIGN_IN = false;
+const EXPECTED_ROLE = "driver";
 
-export default function LoginPage() {
+export default function DriverLoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -36,7 +36,7 @@ export default function LoginPage() {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback?role=user`,
+          redirectTo: `${window.location.origin}/auth/callback?role=driver`,
           queryParams: {
             access_type: "offline",
             prompt: "consent",
@@ -51,7 +51,6 @@ export default function LoginPage() {
         );
         setLoading(false);
       } else if (data?.url) {
-        // Redirect will happen automatically
         window.location.href = data.url;
       }
     } catch (err: any) {
@@ -69,7 +68,7 @@ export default function LoginPage() {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "apple",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback?role=user`,
+          redirectTo: `${window.location.origin}/auth/callback?role=driver`,
         },
       });
 
@@ -80,7 +79,6 @@ export default function LoginPage() {
         );
         setLoading(false);
       } else if (data?.url) {
-        // Redirect will happen automatically
         window.location.href = data.url;
       }
     } catch (err: any) {
@@ -103,9 +101,33 @@ export default function LoginPage() {
     if (error) {
       setError(error.message);
       setLoading(false);
-    } else {
-      router.push("/dashboard");
+      return;
     }
+
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    if (userError || !userData.user) {
+      setError("Unable to verify your account. Please try again.");
+      setLoading(false);
+      return;
+    }
+
+    const { data: profile } = await supabase
+      .from("users")
+      .select("role")
+      .eq("id", userData.user.id)
+      .single();
+
+    const effectiveRole =
+      profile?.role ?? userData.user.user_metadata?.role ?? "user";
+
+    if (effectiveRole !== EXPECTED_ROLE) {
+      await supabase.auth.signOut();
+      setError("This account is not a driver.");
+      setLoading(false);
+      return;
+    }
+
+    router.push("/driver");
   };
 
   return (
@@ -121,11 +143,12 @@ export default function LoginPage() {
               />
             </div>
           </div>
-          <CardTitle className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-green-600 bg-clip-text text-transparent">
-            Welcome to AirBear
+          <CardTitle className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-lime-500 bg-clip-text text-transparent flex items-center justify-center gap-2">
+            <Car className="h-6 w-6 text-emerald-500" />
+            Driver Login
           </CardTitle>
           <CardDescription className="text-base">
-            Sign in to book your solar-powered ride
+            Sign in to manage your AirBear rides
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -178,7 +201,7 @@ export default function LoginPage() {
               <Input
                 id="email"
                 type="email"
-                placeholder="you@example.com"
+                placeholder="you@airbear.me"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -203,36 +226,29 @@ export default function LoginPage() {
 
             <Button
               type="submit"
-              className="w-full h-11 text-base font-medium bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
+              className="w-full h-11 text-base font-medium bg-gradient-to-r from-emerald-500 to-lime-600 hover:from-emerald-600 hover:to-lime-700"
               disabled={loading}
             >
-              {loading ? "Signing in..." : "Sign In"}
+              {loading ? "Signing in..." : "Driver Sign In"}
             </Button>
           </form>
 
           <div className="text-center text-sm text-muted-foreground">
-            Don&apos;t have an account?{" "}
+            Need a driver account?{" "}
             <a
-              href="/auth/signup"
-              className="text-orange-600 hover:text-orange-700 font-medium"
+              href="/driver/signup"
+              className="text-emerald-600 hover:text-emerald-700 font-medium"
             >
-              Sign up
+              Driver sign up
             </a>
           </div>
           <div className="text-center text-sm text-muted-foreground">
-            Driver?{" "}
+            Not a driver?{" "}
             <a
-              href="/driver/login"
-              className="text-emerald-600 hover:text-emerald-700 font-medium"
+              href="/auth/login"
+              className="text-orange-600 hover:text-orange-700 font-medium"
             >
-              Driver login
-            </a>{" "}
-            · Admin?{" "}
-            <a
-              href="/admin/login"
-              className="text-amber-600 hover:text-amber-700 font-medium"
-            >
-              Admin login
+              Rider login
             </a>
           </div>
         </CardContent>

@@ -536,8 +536,7 @@
 
 /* Mobile Performance Optimizations */
 @media (max-width: 768px) {
-  /* Reduce animations on mobile for better performance */
-  .animate-float,
+  /* Reduce heavy animations on mobile for better performance */
   .animate-pulse-glow,
   .animate-wheel-spin,
   .animate-ping,
@@ -548,20 +547,20 @@
   .animate-holographic,
   .animate-plasma,
   .animate-solar-rays {
-    animation: none !important;
+    animation-duration: 3s !important;
   }
   
   /* Reduce blur effects on mobile */
   .backdrop-blur-sm,
   .backdrop-blur-md,
   .backdrop-blur-lg {
-    backdrop-filter: none !important;
+    backdrop-filter: blur(4px) !important;
   }
   
   /* Optimize shadows for mobile */
   .shadow-2xl,
   .shadow-lg {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
   }
   
   /* Disable hover effects on touch devices */

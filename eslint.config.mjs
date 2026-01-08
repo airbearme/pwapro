@@ -17,7 +17,17 @@ export default [
       "**/playwright-report/**",
       "**/coverage/**",
       "**/dist/**",
+      "**/eslint.config.mjs",
+      "**/postcss.config.js",
+      "**/next.config.*",
+      "**/tailwind.config.ts",
     ],
+  },
+  {
+    rules: {
+      "@next/next/no-img-element": "off",
+      "import/no-anonymous-default-export": "off",
+    },
   },
   ...compat.extends("next/core-web-vitals", "next"),
 ];

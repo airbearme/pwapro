@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthContext } from "@/components/auth-provider";
 import { getSupabaseClient } from "@/lib/supabase/client";
@@ -110,7 +110,7 @@ function CheckoutForm({ clientSecret, rideId, amount, onSuccess }: CheckoutFormP
   );
 }
 
-export default function CheckoutPage() {
+function CheckoutPageContent() {
   const { user, loading: authLoading } = useAuthContext();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -336,6 +336,14 @@ export default function CheckoutPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-black text-white flex items-center justify-center">Loading checkout...</div>}>
+      <CheckoutPageContent />
+    </Suspense>
   );
 }
 

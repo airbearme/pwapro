@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthContext } from "@/components/auth-provider";
 import { getSupabaseClient } from "@/lib/supabase/client";
@@ -31,7 +31,7 @@ import MapComponent, { type Spot } from "@/components/map-view-beautiful";
 import type { AirbearLocation } from "@/lib/supabase/realtime";
 import { RidePayment } from "@/components/ride-payment";
 
-export default function BookRidePage() {
+function BookRidePageContent() {
   const { user, loading: authLoading } = useAuthContext();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -560,5 +560,13 @@ export default function BookRidePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function BookRidePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-black text-white flex items-center justify-center">Loading booking...</div>}>
+      <BookRidePageContent />
+    </Suspense>
   );
 }

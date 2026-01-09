@@ -83,7 +83,7 @@ export default function DriverDashboardPage() {
 
         if (spotsData) {
           const spotsMap: Record<string, { name: string }> = {};
-          spotsData.forEach((spot) => {
+          spotsData.forEach((spot: any) => {
             spotsMap[spot.id] = { name: spot.name };
           });
           setSpots(spotsMap);

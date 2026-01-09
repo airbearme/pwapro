@@ -45,7 +45,7 @@ jobs:
         run: npm run codemaps:generate
 
       - name: Build application
-        run: npm run build:next
+        run: npm run build
 
       - name: Upload npm logs (on failure)
         if: failure()

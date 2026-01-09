@@ -24,6 +24,7 @@ export default function MapView({
   const spotsRef = useRef(spots);
   const onSpotSelectRef = useRef(onSpotSelect);
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [mapError, setMapError] = useState<string | null>(null);
 
   useEffect(() => {
     spotsRef.current = spots;
@@ -40,21 +41,35 @@ export default function MapView({
 
     const initMap = async () => {
       try {
-        // Preload Leaflet CSS
-        if (!document.querySelector('link[href*="leaflet.css"]')) {
-          const link = document.createElement("link");
-          link.rel = "stylesheet";
-          link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
-          link.integrity = "sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=";
-          link.crossOrigin = "anonymous";
-          document.head.appendChild(link);
-          
-          // Wait for CSS to load
-          await new Promise((resolve) => {
-            link.onload = resolve;
-            link.onerror = resolve; // Continue even if CSS fails
-            setTimeout(resolve, 100); // Timeout fallback
+        setMapError(null);
+
+        const waitForContainer = async () => {
+          let attempts = 0;
+          return new Promise<boolean>((resolve) => {
+            const check = () => {
+              if (!mapRef.current) {
+                resolve(false);
+                return;
+              }
+              const { offsetHeight, offsetWidth } = mapRef.current;
+              if (offsetHeight > 0 && offsetWidth > 0) {
+                resolve(true);
+                return;
+              }
+              if (attempts > 30) {
+                resolve(false);
+                return;
+              }
+              attempts += 1;
+              requestAnimationFrame(check);
+            };
+            check();
           });
+        };
+
+        const containerReady = await waitForContainer();
+        if (!containerReady) {
+          throw new Error("Map container is not visible yet");
         }
 
         // Dynamically import Leaflet
@@ -76,11 +91,6 @@ export default function MapView({
             "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
         });
 
-        // Ensure map container has dimensions
-        if (!mapRef.current || mapRef.current.offsetHeight === 0) {
-          throw new Error("Map container has no height");
-        }
-
         // Create map centered on Binghamton, NY
         const binghamtonCenter: [number, number] = [42.0987, -75.9179];
         const map = L.map(mapRef.current!, {
@@ -91,9 +101,18 @@ export default function MapView({
         });
         
         // Invalidate size to ensure map renders
-        setTimeout(() => {
-          map.invalidateSize();
-        }, 100);
+        map.invalidateSize();
+        let resizeObserver: ResizeObserver | null = null;
+        let resizeHandler: (() => void) | null = null;
+        if (typeof ResizeObserver !== "undefined") {
+          resizeObserver = new ResizeObserver(() => {
+            map.invalidateSize();
+          });
+          resizeObserver.observe(mapRef.current!);
+        } else if (typeof window !== "undefined") {
+          resizeHandler = () => map.invalidateSize();
+          window.addEventListener("resize", resizeHandler);
+        }
 
         // Use beautiful CartoDB Positron tiles (free, beautiful, no API key needed)
         L.tileLayer(
@@ -114,6 +133,8 @@ export default function MapView({
         });
 
         mapInstanceRef.current = map;
+        mapInstanceRef.current.__resizeObserver = resizeObserver;
+        mapInstanceRef.current.__resizeHandler = resizeHandler;
         setMapLoaded(true);
         
         // Setup global booking function
@@ -129,10 +150,9 @@ export default function MapView({
       } catch (error) {
         console.error("❌ Error initializing map:", error);
         setMapLoaded(false);
-        // Show error to user
-        if (typeof window !== "undefined") {
-          alert(`Map loading error: ${error instanceof Error ? error.message : String(error)}`);
-        }
+        setMapError(
+          error instanceof Error ? error.message : "Map failed to load"
+        );
       }
     };
 
@@ -140,6 +160,15 @@ export default function MapView({
 
     return () => {
       if (mapInstanceRef.current) {
+        if (mapInstanceRef.current.__resizeObserver) {
+          mapInstanceRef.current.__resizeObserver.disconnect();
+        }
+        if (mapInstanceRef.current.__resizeHandler) {
+          window.removeEventListener(
+            "resize",
+            mapInstanceRef.current.__resizeHandler
+          );
+        }
         mapInstanceRef.current.remove();
         mapInstanceRef.current = null;
       }
@@ -197,6 +226,7 @@ export default function MapView({
                   ? "pulse-glow 2s ease-in-out infinite"
                   : "none"
               };
+              overflow: hidden;
             " 
             onmouseover="this.style.transform='scale(1.15)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.4), 0 0 0 5px ${
               hasAvailableAirbears
@@ -208,7 +238,7 @@ export default function MapView({
                 ? "rgba(16, 185, 129, 0.3)"
                 : "rgba(107, 114, 128, 0.3)"
             }'">
-              🐻
+              <img src="/airbear-mascot.png" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;" alt="AirBear" />
             </div>
             ${
               hasAvailableAirbears
@@ -230,7 +260,7 @@ export default function MapView({
                 border: 4px solid white;
                 box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
                 animation: pulse 1.5s ease-in-out infinite;
-              ">${airbearsAtSpot.length}</div>
+              "><img src="/airbear-mascot.png" style="width: 16px; height: 16px; border-radius: 50%; object-fit: cover;" alt="AirBear" /></div>
             `
                 : ""
             }
@@ -396,7 +426,7 @@ export default function MapView({
                 ? "rgba(16, 185, 129, 0.25)"
                 : "rgba(107, 114, 128, 0.25)"
             }'">
-              🚲
+              <img src="/airbear-mascot.png" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover;" alt="AirBear" />
             </div>
             ${
               airbear.is_charging
@@ -525,8 +555,7 @@ export default function MapView({
     <div className="relative">
       <div
         ref={mapRef}
-        className="w-full h-[600px] rounded-xl overflow-hidden shadow-2xl border-4 border-emerald-200/50 bg-gradient-to-br from-emerald-50 to-lime-50"
-        style={{ minHeight: "600px" }}
+        className="w-full h-[60vh] min-h-[360px] max-h-[720px] rounded-xl overflow-hidden shadow-2xl border-4 border-emerald-200/50 bg-gradient-to-br from-emerald-50 to-lime-50"
       />
       {!mapLoaded && (
         <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-emerald-950/50 to-lime-950/50 dark:from-emerald-950/50 dark:to-lime-950/50 rounded-xl z-10 backdrop-blur-sm">
@@ -541,8 +570,15 @@ export default function MapView({
               </div>
             </div>
             <p className="text-lg font-semibold text-emerald-400 dark:text-emerald-300 animate-pulse">
-              Loading beautiful Binghamton map...
+              {mapError
+                ? "Map failed to load."
+                : "Loading beautiful Binghamton map..."}
             </p>
+            {mapError && (
+              <p className="mt-2 text-sm text-emerald-200/80">
+                {mapError}
+              </p>
+            )}
           </div>
         </div>
       )}

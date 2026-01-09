@@ -5,6 +5,11 @@
  * Ensures all required environment variables are set
  */
 
+import { config } from 'dotenv';
+
+// Load environment variables from .env.local
+config({ path: '.env.local' });
+
 const requiredEnvVars = [
 	"NEXT_PUBLIC_SUPABASE_PWA4_URL",
 	"NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY",

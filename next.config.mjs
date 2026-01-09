@@ -6,6 +6,7 @@ const nextConfig = {
   // Temporarily disable static generation to bypass Html import error
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
+  turbopack: {}, // Silence Turbopack warning
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {
@@ -54,7 +55,6 @@ const nextConfig = {
     formats: ["image/avif", "image/webp"],
   },
   typescript: { ignoreBuildErrors: true },
-  eslint: { ignoreDuringBuilds: true },
   env: {
     NEXT_PUBLIC_SITE_URL:
       process.env.NEXT_PUBLIC_SITE_URL || "https://airbear.me",

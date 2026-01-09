@@ -7,16 +7,18 @@ import { subscribeToAirbearLocations } from "@/lib/supabase/realtime";
 import { useAirbearNotifications } from "@/lib/hooks/use-airbear-notifications";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Battery, MapPin, Navigation } from "lucide-react";
+import { Battery, MapPin, Navigation, Moon, Sun } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useTheme } from "next-themes";
 import MapComponent, { type Spot } from "@/components/map-view-beautiful";
 import type { AirbearLocation } from "@/lib/supabase/realtime";
 
 export default function MapPage() {
   const { loading: authLoading } = useAuthContext();
   const { toast } = useToast();
+  const { theme, setTheme } = useTheme();
   const router = useRouter();
   const [spots, setSpots] = useState<Spot[]>([]);
   const [airbears, setAirbears] = useState<AirbearLocation[]>([]);
@@ -105,14 +107,24 @@ export default function MapPage() {
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
-            <div className="w-24 h-24 rounded-full border-4 border-emerald-400/50 dark:border-emerald-500/50 bg-gradient-to-br from-emerald-500/20 to-lime-500/20 backdrop-blur-sm shadow-2xl hover-lift animate-float overflow-hidden">
-              <img
-                src="/airbear-mascot.png"
-                alt="AirBear Mascot"
-                className="w-full h-full object-cover rounded-full animate-pulse-glow"
-              />
+          <div className="flex justify-between items-center mb-4 max-w-4xl mx-auto">
+            <div className="flex items-center gap-4">
+              <div className="w-24 h-24 rounded-full border-4 border-emerald-400/50 dark:border-emerald-500/50 bg-gradient-to-br from-emerald-500/20 to-lime-500/20 backdrop-blur-sm shadow-2xl hover-lift animate-float overflow-hidden">
+                <img
+                  src="/airbear-mascot.png"
+                  alt="AirBear Mascot"
+                  className="w-full h-full object-cover rounded-full animate-pulse-glow"
+                />
+              </div>
             </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="glass-morphism hover-lift"
+            >
+              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </Button>
           </div>
           <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-emerald-600 via-lime-500 to-amber-500 bg-clip-text text-transparent animate-pulse-glow">
             Real-Time AirBear Tracking

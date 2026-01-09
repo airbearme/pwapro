@@ -53,7 +53,7 @@ export function CheckoutButton({ items, onSuccess }: CheckoutButtonProps) {
         throw new Error("Stripe not initialized")
       }
 
-      await stripe.redirectToCheckout({ sessionId })
+      await (stripe as any).redirectToCheckout({ sessionId })
     } catch (error: any) {
       toast({
         title: "Checkout Error",

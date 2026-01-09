@@ -55,7 +55,7 @@ export function useAuth(): AuthState {
       }
 
       const { data: listener } = supabase.auth.onAuthStateChange(
-        async (_event, session) => {
+        async (_event: string, session: any) => {
           if (!isMounted) return;
           const nextUser = session?.user ?? null;
           setUser(nextUser);

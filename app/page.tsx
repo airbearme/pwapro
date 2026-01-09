@@ -17,9 +17,9 @@ import AirbearWheel from "@/components/airbear-wheel";
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-emerald-950 via-lime-950 to-amber-950 dark:from-emerald-950 dark:via-lime-950 dark:to-amber-950 relative overflow-hidden">
-      {/* DEBUG: Dark Mode & Beautiful UI - Version 2.0.2 */}
+      {/* DEBUG: Dark Mode & Beautiful UI - Version 2.0.3 - 2026-01-09T12:52:00Z */}
       <div className="fixed top-4 right-4 bg-black/80 text-white px-4 py-2 rounded-lg z-50 glass-morphism">
-        🌙 Dark Mode Active
+        🌙 Dark Mode Active - v2.0.3
       </div>
       {/* Animated Background with Solar Rays & Spinning Wheels */}
       <div className="absolute inset-0 opacity-30 dark:opacity-40 pointer-events-none">

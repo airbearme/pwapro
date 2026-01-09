@@ -5,8 +5,8 @@
  * Validates security headers are properly configured
  */
 
-const https = require("https");
-const http = require("http");
+import https from "https";
+import http from "http";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://airbear.me";
 
@@ -14,7 +14,7 @@ const requiredHeaders = {
 	"strict-transport-security": "HSTS header should be present",
 	"x-content-type-options": "X-Content-Type-Options should be nosniff",
 	"x-frame-options": "X-Frame-Options should be present",
-	"x-xss-protection": "X-XSS-Protection should be present",
+	"content-security-policy": "Content-Security-Policy should be present",
 	"referrer-policy": "Referrer-Policy should be present",
 };
 

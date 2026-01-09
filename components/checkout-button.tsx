@@ -13,6 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Spinner } from "@/components/ui/spinner"
 
 interface CheckoutButtonProps {
   items: Array<{ name: string; price: number; quantity: number }>
@@ -26,6 +27,7 @@ export function CheckoutButton({ items, onSuccess }: CheckoutButtonProps) {
     apple: false,
     google: false,
   })
+  const [isCashPaymentLoading, setIsCashPaymentLoading] = useState(false)
   const { toast } = useToast()
 
   const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
@@ -221,12 +223,17 @@ export function CheckoutButton({ items, onSuccess }: CheckoutButtonProps) {
     }
   }
 
-  const handleCashPayment = () => {
+  const handleCashPayment = async () => {
+    setIsCashPaymentLoading(true)
+    // Simulate an async operation
+    await new Promise((resolve) => setTimeout(resolve, 1000))
     toast({
       title: "Cash Payment",
-      description: "Please pay with cash when you receive your order. A QR code will be provided for verification.",
+      description:
+        "Please pay with cash when you receive your order. A QR code will be provided for verification.",
     })
     onSuccess?.()
+    setIsCashPaymentLoading(false)
   }
 
   return (
@@ -320,8 +327,20 @@ export function CheckoutButton({ items, onSuccess }: CheckoutButtonProps) {
               <p className="text-sm text-muted-foreground mb-4">
                 Pay with cash when you receive your order. A QR code will be provided for order verification.
               </p>
-              <Button onClick={handleCashPayment} variant="outline" className="w-full">
-                Continue with Cash Payment
+              <Button
+                onClick={handleCashPayment}
+                variant="outline"
+                className="w-full"
+                disabled={isCashPaymentLoading}
+              >
+                {isCashPaymentLoading ? (
+                  <>
+                    <Spinner className="mr-2 h-4 w-4" />
+                    Processing...
+                  </>
+                ) : (
+                  "Continue with Cash Payment"
+                )}
               </Button>
             </div>
           </TabsContent>

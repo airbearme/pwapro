@@ -1,4 +1,4 @@
-// PWA configuration handled separately
+// PWA configuration handled separately - CSP FIX v2.0.4
 const nextConfig = {
   reactStrictMode: true,
   output: "standalone",

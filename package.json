@@ -6,7 +6,6 @@
   "scripts": {
     "build": "NODE_ENV=production next build",
     "postbuild": "npm run codemaps:generate",
-    "build:next": "NODE_ENV=production next build",
     "auto:run": "bash scripts/auto-run.sh",
     "auto:deploy": "bash scripts/auto-deploy.sh",
     "db:push": "drizzle-kit push",

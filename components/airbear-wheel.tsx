@@ -79,17 +79,10 @@ const AirbearWheel = memo(
           <div className="absolute inset-0 bg-conic-gradient from-amber-400/40 via-yellow-300/30 to-amber-400/40"></div>
         </div>
       )}
-
-        {/* Eco effect */}
-        {effectType === "eco" && (
-          <div className="absolute inset-0 rounded-full animate-pulse-glow">
-            <div className="absolute inset-0 bg-radial-gradient from-emerald-400/30 to-transparent"></div>
-          </div>
-        )}
-      </div>
-    );
-  }
+    </div>
   );
+}
+);
 
 AirbearWheel.displayName = "AirbearWheel";
 

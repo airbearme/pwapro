@@ -1,9 +1,13 @@
 #!/usr/bin/env node
 
+import dotenv from "dotenv";
+
 /**
  * Supabase Configuration Diagnostic Script
  * Checks if Supabase is properly configured
  */
+
+dotenv.config({ path: ".env.local" });
 
 console.log("🔍 Checking Supabase Configuration...\n");
 
@@ -89,5 +93,3 @@ console.log("   - https://airbear.me/auth/callback");
 console.log("   - http://localhost:3000/auth/callback");
 
 process.exit(0);
-
-

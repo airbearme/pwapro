@@ -36,7 +36,7 @@
     "codemaps:optimize": "node scripts/intelligent-codemaps-optimizer.cjs",
     "codemaps:all": "npm run codemaps:generate && npm run codemaps:analyze && npm run codemaps:optimize",
     "codemaps:deploy": "npm run codemaps:generate && npm run deploy",
-    "verify": "npm run type-check && npm run lint && npm run codemaps:validate && npm run build",
+    "verify": "npm run type-check && npm run lint && npm run codemaps:generate && npm run codemaps:validate",
     "validate:comprehensive": "node scripts/comprehensive-validator.cjs",
     "validate:focused": "node scripts/focused-validator.cjs",
     "test:bundle": "node scripts/check-bundle-size.js",

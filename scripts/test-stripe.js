@@ -1,9 +1,14 @@
 #!/usr/bin/env node
 
+import dotenv from "dotenv";
+import Stripe from "stripe";
+
 /**
  * Stripe Configuration Testing Script
  * Validates Stripe API keys and configuration
  */
+
+dotenv.config({ path: ".env.local" });
 
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 const STRIPE_PUBLISHABLE_KEY =
@@ -38,7 +43,6 @@ console.log("✅ Stripe key formats are valid");
 // Test Stripe API connection
 async function testStripe() {
 	try {
-		const Stripe = require("stripe");
 		const stripe = new Stripe(STRIPE_SECRET_KEY);
 
 		console.log("📡 Testing Stripe API connection...");
@@ -68,5 +72,4 @@ async function testStripe() {
 }
 
 testStripe();
-
 

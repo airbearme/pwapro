@@ -1,7 +1,8 @@
 import type React from "react";
 import type { Metadata, Viewport } from "next";
+import { headers } from "next/headers";
 import { Inter, Space_Grotesk } from "next/font/google";
-import { Analytics } from "@vercel/analytics/react";
+import Script from "next/script";
 import { AuthProvider } from "@/components/auth-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import ClientErrorLogger from "@/components/client-error-logger";
@@ -89,10 +90,15 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const nonce = headers().get("x-nonce") || "";
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <script
+        <Script
+          id="theme-switcher"
+          strategy="beforeInteractive"
+          nonce={nonce}
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
@@ -125,7 +131,11 @@ export default function RootLayout({
             </AuthProvider>
           </div>
         </ThemeProvider>
-        <Analytics />
+        <Script
+          src="/_vercel/insights/script.js"
+          strategy="afterInteractive"
+          nonce={nonce}
+        />
       </body>
     </html>
   );

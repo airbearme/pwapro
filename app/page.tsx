@@ -15,7 +15,48 @@ import { Button } from "@/components/ui/button";
 import { MapPin, ShoppingBag, Leaf, Zap, Crown } from "lucide-react";
 import AirbearWheel from "@/components/airbear-wheel";
 
-export default function HomePage() {
+const HomePage = () => {
+  // ⚡ Bolt: Memoize particle effects to prevent re-calculation on every render.
+  // These decorative elements are static and can be calculated once.
+  const particleEffects = React.useMemo(() => {
+    return Array.from({ length: 24 }, (_, i) => (
+      <div
+        key={i}
+        className="absolute rounded-full animate-particle opacity-70"
+        style={{
+          left: `${(i * 8) % 100}%`,
+          top: `${(i * 15) % 100}%`,
+          animationDelay: `${i * 0.5}s`,
+          width: `${2 + (i % 3)}px`,
+          height: `${2 + (i % 3)}px`,
+          backgroundColor:
+            i % 3 === 0
+              ? "rgb(34, 197, 94)"
+              : i % 3 === 1
+              ? "rgb(56, 189, 248)"
+              : "rgb(251, 191, 36)",
+        }}
+      />
+    ));
+  }, []);
+
+  // ⚡ Bolt: Memoize sparkle ring effects for the same reason as above.
+  const sparkleRings = React.useMemo(() => {
+    return Array.from({ length: 10 }, (_, i) => (
+      <div
+        key={`ring-${i}`}
+        className="absolute border border-emerald-400/20 rounded-full animate-pulse-glow"
+        style={{
+          left: `${10 + i * 8}%`,
+          top: `${15 + ((i * 13) % 70)}%`,
+          width: `${40 + (i % 4) * 16}px`,
+          height: `${40 + (i % 4) * 16}px`,
+          animationDelay: `${i * 0.4}s`,
+        }}
+      />
+    ));
+  }, []);
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-emerald-950 via-lime-950 to-amber-950 dark:from-emerald-950 dark:via-lime-950 dark:to-amber-950 bg-[radial-gradient(1200px_circle_at_20%_10%,rgba(34,197,94,0.28),transparent_55%),radial-gradient(900px_circle_at_80%_20%,rgba(56,189,248,0.22),transparent_55%),radial-gradient(700px_circle_at_50%_90%,rgba(236,72,153,0.2),transparent_60%)] relative overflow-hidden">
       {/* DEBUG: Dark Mode & Beautiful UI - Version 2.0.5 - FORCED REDEPLOY */}
@@ -82,42 +123,12 @@ export default function HomePage() {
 
       {/* Enhanced Particle effects background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {Array.from({ length: 24 }, (_, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full animate-particle opacity-70"
-            style={{
-              left: `${(i * 8) % 100}%`,
-              top: `${(i * 15) % 100}%`,
-              animationDelay: `${i * 0.5}s`,
-              width: `${2 + (i % 3)}px`,
-              height: `${2 + (i % 3)}px`,
-              backgroundColor:
-                i % 3 === 0
-                  ? "rgb(34, 197, 94)"
-                  : i % 3 === 1
-                    ? "rgb(56, 189, 248)"
-                    : "rgb(251, 191, 36)",
-            }}
-          />
-        ))}
+        {particleEffects}
       </div>
 
       {/* Sparkle rings */}
       <div className="absolute inset-0 pointer-events-none">
-        {Array.from({ length: 10 }, (_, i) => (
-          <div
-            key={`ring-${i}`}
-            className="absolute border border-emerald-400/20 rounded-full animate-pulse-glow"
-            style={{
-              left: `${10 + i * 8}%`,
-              top: `${15 + ((i * 13) % 70)}%`,
-              width: `${40 + (i % 4) * 16}px`,
-              height: `${40 + (i % 4) * 16}px`,
-              animationDelay: `${i * 0.4}s`,
-            }}
-          />
-        ))}
+        {sparkleRings}
       </div>
 
       <div className="container mx-auto px-4 py-16 relative z-10">
@@ -352,4 +363,12 @@ export default function HomePage() {
       </div>
     </main>
   );
-}
+};
+
+HomePage.displayName = "HomePage";
+
+// ⚡ Bolt: Memoize the HomePage component to prevent unnecessary re-renders.
+// Since the HomePage is a static component with no props, it will only render once.
+const MemoizedHomePage = React.memo(HomePage);
+
+export default MemoizedHomePage;

@@ -12,6 +12,12 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import MapComponent, { type Spot } from "@/components/map-view-beautiful";
 import type { AirbearLocation } from "@/lib/supabase/realtime";
 
@@ -117,14 +123,26 @@ export default function MapPage() {
                 />
               </div>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="glass-morphism hover-lift"
-            >
-              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                    className="glass-morphism hover-lift"
+                    aria-label="Toggle theme"
+                  >
+                    <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                    <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                    <span className="sr-only">Toggle theme</span>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Toggle theme</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
           <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-emerald-600 via-lime-500 to-amber-500 bg-clip-text text-transparent animate-pulse-glow">
             Real-Time AirBear Tracking

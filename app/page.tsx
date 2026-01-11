@@ -14,8 +14,15 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { MapPin, ShoppingBag, Leaf, Zap, Crown } from "lucide-react";
 import AirbearWheel from "@/components/airbear-wheel";
+import ParticleEffects from "@/components/ui/particle-effects";
+import SparkleRings from "@/components/ui/sparkle-rings";
+import HolographicOverlay from "@/components/ui/holographic-overlay";
 
 export default function HomePage() {
+  // Performance Optimization:
+  // Memoized components (ParticleEffects, SparkleRings, HolographicOverlay)
+  // are used to prevent unnecessary re-renders of complex animations,
+  // improving the overall rendering performance of the homepage.
   return (
     <main className="min-h-screen bg-gradient-to-br from-emerald-950 via-lime-950 to-amber-950 dark:from-emerald-950 dark:via-lime-950 dark:to-amber-950 bg-[radial-gradient(1200px_circle_at_20%_10%,rgba(34,197,94,0.28),transparent_55%),radial-gradient(900px_circle_at_80%_20%,rgba(56,189,248,0.22),transparent_55%),radial-gradient(700px_circle_at_50%_90%,rgba(236,72,153,0.2),transparent_60%)] relative overflow-hidden">
       {/* DEBUG: Dark Mode & Beautiful UI - Version 2.0.5 - FORCED REDEPLOY */}
@@ -80,45 +87,11 @@ export default function HomePage() {
         <div className="absolute bottom-10 left-1/2 h-40 w-[120%] -translate-x-1/2 rotate-3 bg-gradient-to-r from-amber-300/10 via-rose-400/20 to-purple-400/10 blur-2xl animate-float"></div>
       </div>
 
-      {/* Enhanced Particle effects background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {Array.from({ length: 24 }, (_, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full animate-particle opacity-70"
-            style={{
-              left: `${(i * 8) % 100}%`,
-              top: `${(i * 15) % 100}%`,
-              animationDelay: `${i * 0.5}s`,
-              width: `${2 + (i % 3)}px`,
-              height: `${2 + (i % 3)}px`,
-              backgroundColor:
-                i % 3 === 0
-                  ? "rgb(34, 197, 94)"
-                  : i % 3 === 1
-                    ? "rgb(56, 189, 248)"
-                    : "rgb(251, 191, 36)",
-            }}
-          />
-        ))}
-      </div>
+      {/* Memoized Particle effects background */}
+      <ParticleEffects />
 
-      {/* Sparkle rings */}
-      <div className="absolute inset-0 pointer-events-none">
-        {Array.from({ length: 10 }, (_, i) => (
-          <div
-            key={`ring-${i}`}
-            className="absolute border border-emerald-400/20 rounded-full animate-pulse-glow"
-            style={{
-              left: `${10 + i * 8}%`,
-              top: `${15 + ((i * 13) % 70)}%`,
-              width: `${40 + (i % 4) * 16}px`,
-              height: `${40 + (i % 4) * 16}px`,
-              animationDelay: `${i * 0.4}s`,
-            }}
-          />
-        ))}
-      </div>
+      {/* Memoized Sparkle rings */}
+      <SparkleRings />
 
       <div className="container mx-auto px-4 py-16 relative z-10">
         <div className="flex flex-col items-center justify-center text-center space-y-8">
@@ -147,20 +120,8 @@ export default function HomePage() {
 
               <div className="mt-4 mx-auto h-1 w-48 rounded-full bg-gradient-to-r from-cyan-400 via-emerald-400 to-amber-400 animate-shimmer"></div>
 
-              {/* Holographic overlay effect */}
-              <div className="absolute inset-0 pointer-events-none">
-                {Array.from({ length: 8 }, (_, i) => (
-                  <div
-                    key={i}
-                    className="absolute w-2 h-2 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 rounded-full opacity-60 animate-pulse-glow"
-                    style={{
-                      left: `${20 + i * 10}%`,
-                      top: `${30 + Math.sin(i) * 20}%`,
-                      animationDelay: `${i * 0.3}s`,
-                    }}
-                  />
-                ))}
-              </div>
+              {/* Memoized Holographic overlay effect */}
+              <HolographicOverlay />
             </h1>
 
             <p className="text-xl md:text-2xl text-muted-foreground text-pretty max-w-3xl mx-auto leading-relaxed airbear-eco-breeze">

@@ -9,13 +9,18 @@
 
 "use client";
 
-import React from "react";
+import React, { useMemo, memo } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { MapPin, ShoppingBag, Leaf, Zap, Crown } from "lucide-react";
 import AirbearWheel from "@/components/airbear-wheel";
 
-export default function HomePage() {
+const HomePageContent = () => {
+  // ⚡ Bolt: Memoize particle and sparkle ring arrays to prevent re-computation on every render.
+  // This avoids unnecessary array creation and iteration, improving rendering performance.
+  const particles = useMemo(() => Array.from({ length: 24 }), []);
+  const sparkleRings = useMemo(() => Array.from({ length: 10 }), []);
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-emerald-950 via-lime-950 to-amber-950 dark:from-emerald-950 dark:via-lime-950 dark:to-amber-950 bg-[radial-gradient(1200px_circle_at_20%_10%,rgba(34,197,94,0.28),transparent_55%),radial-gradient(900px_circle_at_80%_20%,rgba(56,189,248,0.22),transparent_55%),radial-gradient(700px_circle_at_50%_90%,rgba(236,72,153,0.2),transparent_60%)] relative overflow-hidden">
       {/* DEBUG: Dark Mode & Beautiful UI - Version 2.0.5 - FORCED REDEPLOY */}
@@ -82,7 +87,7 @@ export default function HomePage() {
 
       {/* Enhanced Particle effects background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {Array.from({ length: 24 }, (_, i) => (
+        {particles.map((_, i) => (
           <div
             key={i}
             className="absolute rounded-full animate-particle opacity-70"
@@ -105,7 +110,7 @@ export default function HomePage() {
 
       {/* Sparkle rings */}
       <div className="absolute inset-0 pointer-events-none">
-        {Array.from({ length: 10 }, (_, i) => (
+        {sparkleRings.map((_, i) => (
           <div
             key={`ring-${i}`}
             className="absolute border border-emerald-400/20 rounded-full animate-pulse-glow"
@@ -352,4 +357,10 @@ export default function HomePage() {
       </div>
     </main>
   );
-}
+};
+
+// ⚡ Bolt: Wrap the HomePage component with React.memo to prevent unnecessary re-renders.
+// Since the homepage is static, this ensures it only renders once.
+const HomePage = memo(HomePageContent);
+
+export default HomePage;

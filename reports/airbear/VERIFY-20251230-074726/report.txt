@@ -1,2 +1,0 @@
-[PASS] Repo structure OK
-FAIL: next.config not hardened

@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
-import { CheckoutButton } from "@/components/checkout-button";
 import { MapPin, Clock, DollarSign, CreditCard, Smartphone, QrCode, Banknote } from "lucide-react";
 
 interface RidePaymentProps {
@@ -38,19 +37,58 @@ export function RidePayment({
 
   const handleCardPayment = async () => {
     setProcessing(true);
-    // This will be handled by the CheckoutButton component
-    setTimeout(() => {
+    try {
+      // Navigate to checkout with ride information
+      const params = new URLSearchParams({
+        rideId: ride.id,
+        amount: ride.fare.toString(),
+        pickupSpot: pickupSpot.name,
+        destinationSpot: destinationSpot.name,
+      });
+
+      // This will be handled by redirecting to checkout page
+      window.location.href = `/checkout?${params.toString()}`;
+    } catch (error) {
+      console.error("Payment navigation error:", error);
+      toast({
+        title: "Payment Error",
+        description: "Failed to proceed to payment. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setProcessing(false);
-      onPaymentComplete?.();
-    }, 2000);
+    }
   };
 
-  const handleCashPayment = () => {
-    toast({
-      title: "Cash Payment Selected",
-      description: "Please pay $4.00 to your AirBear driver when they arrive.",
-    });
-    onPaymentComplete?.();
+  const handleCashPayment = async () => {
+    setProcessing(true);
+    try {
+      // Update ride status to confirmed for cash payment
+      const response = await fetch(`/api/rides/${ride.id}/confirm`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paymentMethod: 'cash' })
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Cash Payment Confirmed",
+          description: `Please pay $${ride.fare.toFixed(2)} to your AirBear driver when they arrive.`,
+        });
+        onPaymentComplete?.();
+      } else {
+        throw new Error("Failed to confirm ride");
+      }
+    } catch (error) {
+      console.error("Cash payment error:", error);
+      toast({
+        title: "Payment Error",
+        description: "Failed to confirm cash payment. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setProcessing(false);
+    }
   };
 
   return (
@@ -123,7 +161,7 @@ export function RidePayment({
         <CardHeader>
           <CardTitle className="text-lg">Choose Payment Method</CardTitle>
           <CardDescription>
-            Select how you'd like to pay for your ride
+            Select how you&apos;d like to pay for your ride
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -171,35 +209,62 @@ export function RidePayment({
           {/* Payment Action */}
           <div className="pt-4 border-t">
             {paymentMethod === "card" && (
-              <CheckoutButton
-                items={[
-                  {
-                    name: "AirBear Ride",
-                    price: ride.fare,
-                    quantity: 1,
-                  },
-                ]}
-                onSuccess={handleCardPayment}
-              />
+              <Button
+                onClick={handleCardPayment}
+                disabled={processing}
+                className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 h-12 text-lg"
+              >
+                {processing ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <CreditCard className="mr-2 h-4 w-4" />
+                    Pay with Card - ${ride.fare.toFixed(2)}
+                  </>
+                )}
+              </Button>
             )}
 
             {paymentMethod === "digital" && (
-              <CheckoutButton
-                items={[
-                  {
-                    name: "AirBear Ride",
-                    price: ride.fare,
-                    quantity: 1,
-                  },
-                ]}
-                onSuccess={handleCardPayment}
-              />
+              <Button
+                onClick={handleCardPayment}
+                disabled={processing}
+                className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 h-12 text-lg"
+              >
+                {processing ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <Smartphone className="mr-2 h-4 w-4" />
+                    Pay with Digital Wallet - ${ride.fare.toFixed(2)}
+                  </>
+                )}
+              </Button>
             )}
 
             {paymentMethod === "cash" && (
-              <Button onClick={handleCashPayment} className="w-full" size="lg">
-                <Banknote className="mr-2 h-4 w-4" />
-                Confirm Cash Payment
+              <Button
+                onClick={handleCashPayment}
+                disabled={processing}
+                className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 h-12 text-lg"
+              >
+                {processing ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                    Confirming...
+                  </>
+                ) : (
+                  <>
+                    <Banknote className="mr-2 h-4 w-4" />
+                    Confirm Cash Payment - ${ride.fare.toFixed(2)}
+                  </>
+                )}
               </Button>
             )}
           </div>

@@ -35,7 +35,7 @@ interface Ride {
   status: string;
   fare: number;
   distance: number;
-  requested_at: string;
+  created_at: string;
   pickup_spot?: { name: string };
   dropoff_spot?: { name: string };
 }
@@ -83,7 +83,7 @@ export default function DriverDashboardPage() {
 
         if (spotsData) {
           const spotsMap: Record<string, { name: string }> = {};
-          spotsData.forEach((spot) => {
+          spotsData.forEach((spot: any) => {
             spotsMap[spot.id] = { name: spot.name };
           });
           setSpots(spotsMap);
@@ -112,7 +112,7 @@ export default function DriverDashboardPage() {
           .from("rides")
           .select("*")
           .eq("status", "pending")
-          .order("requested_at", { ascending: true });
+          .order("created_at", { ascending: true });
 
         if (error) throw error;
         setPendingRides(ridesData || []);
@@ -459,7 +459,7 @@ export default function DriverDashboardPage() {
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Clock className="w-4 h-4" />
                   Requested:{" "}
-                  {new Date(activeRide.requested_at).toLocaleString()}
+                  {new Date(activeRide.created_at).toLocaleString()}
                 </div>
                 <div className="flex items-center gap-2">
                   <Badge
@@ -527,7 +527,7 @@ export default function DriverDashboardPage() {
                             PENDING
                           </Badge>
                           <span className="text-sm text-muted-foreground">
-                            {new Date(ride.requested_at).toLocaleString()}
+                            {new Date(ride.created_at).toLocaleString()}
                           </span>
                         </div>
                         <div className="space-y-1">

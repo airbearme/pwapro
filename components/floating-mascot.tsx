@@ -1,27 +1,41 @@
 "use client";
 
-import { useState, useEffect, memo } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import AirbearWheel from "@/components/airbear-wheel";
 
-// Wrapped with React.memo to prevent unnecessary re-renders.
-// This component has no props and its state is self-contained,
-// so it doesn't need to re-render when its parent does.
-const FloatingMascot = memo(function FloatingMascot() {
+export default function FloatingMascot() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+    // Check if mobile device
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
 
-  // Calculate position based on mouse (subtle follow effect)
-  const followX = mousePosition.x * 0.01;
-  const followY = mousePosition.y * 0.01;
+    // Only add mouse tracking on desktop
+    if (!isMobile) {
+      const handleMouseMove = (e: MouseEvent) => {
+        setMousePosition({ x: e.clientX, y: e.clientY });
+      };
+
+      window.addEventListener("mousemove", handleMouseMove);
+      return () => {
+        window.removeEventListener("mousemove", handleMouseMove);
+        window.removeEventListener('resize', checkMobile);
+      };
+    }
+
+    return () => window.removeEventListener('resize', checkMobile);
+  }, [isMobile]);
+
+  // Reduce mouse follow effect on mobile
+  const followX = isMobile ? 0 : mousePosition.x * 0.01;
+  const followY = isMobile ? 0 : mousePosition.y * 0.01;
 
   return (
         <Link
@@ -36,7 +50,7 @@ const FloatingMascot = memo(function FloatingMascot() {
         <div className="absolute inset-0 bg-emerald-500/20 rounded-full blur-2xl animate-pulse-glow group-hover:bg-emerald-500/40 transition-colors"></div>
         
         {/* Mascot container */}
-        <div className="relative w-20 h-20 rounded-full border-4 border-emerald-400/50 dark:border-emerald-500/50 bg-gradient-to-br from-emerald-500/20 to-lime-500/20 backdrop-blur-sm shadow-2xl hover-lift group-hover:scale-110 transition-transform duration-300 overflow-hidden">
+        <div className="relative w-16 h-16 md:w-20 md:h-20 rounded-full border-4 border-emerald-400/50 dark:border-emerald-500/50 bg-gradient-to-br from-emerald-500/20 to-lime-500/20 backdrop-blur-sm shadow-2xl hover-lift group-hover:scale-110 transition-transform duration-300 overflow-hidden">
           {/* Spinning wheel in background */}
           <div className="absolute inset-0 flex items-center justify-center opacity-20 group-hover:opacity-40 transition-opacity">
             <AirbearWheel size="lg" glowing animated className="opacity-50" />
@@ -62,7 +76,5 @@ const FloatingMascot = memo(function FloatingMascot() {
       </div>
     </Link>
   );
-});
-
-export default FloatingMascot;
+}
 

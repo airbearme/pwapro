@@ -21,7 +21,7 @@
 Once the repository is created, run:
 
 ```bash
-cd /home/coden809/Projects/pwa5
+cd /home/coden809/Projects/pwapro
 git push -u origin main
 ```
 

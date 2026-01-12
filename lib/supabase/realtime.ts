@@ -29,7 +29,7 @@ export function subscribeToAirbearLocations(callback: (payload: AirbearLocation)
         schema: "public",
         table: "airbears",
       },
-      (payload) => {
+      (payload: any) => {
         if (payload.new) {
           callback(payload.new as AirbearLocation)
         }

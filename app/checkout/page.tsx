@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthContext } from "@/components/auth-provider";
 import { getSupabaseClient } from "@/lib/supabase/client";
@@ -60,20 +60,29 @@ function CheckoutForm({ clientSecret, rideId, amount, onSuccess }: CheckoutFormP
           variant: "destructive",
         });
       } else if (paymentIntent && paymentIntent.status === "succeeded") {
-        // Update ride status
+        // Update ride status to confirmed
         const supabase = getSupabaseClient();
-        await supabase
+        const { error } = await supabase
           .from("rides")
-          .update({ status: "accepted" })
+          .update({
+            status: "confirmed",
+            payment_method: "card",
+            paid_at: new Date().toISOString()
+          })
           .eq("id", rideId);
+
+        if (error) {
+          console.error("Error updating ride status:", error);
+        }
 
         toast({
           title: "Payment Successful!",
-          description: "Your ride has been confirmed.",
+          description: "Your ride has been confirmed and paid for.",
         });
 
+        // Redirect to success page
         setTimeout(() => {
-          onSuccess();
+          window.location.href = `/order/success?session_id=${paymentIntent.id}`;
         }, 2000);
       }
     } catch (error: any) {
@@ -101,7 +110,7 @@ function CheckoutForm({ clientSecret, rideId, amount, onSuccess }: CheckoutFormP
   );
 }
 
-export default function CheckoutPage() {
+function CheckoutPageContent() {
   const { user, loading: authLoading } = useAuthContext();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -330,3 +339,10 @@ export default function CheckoutPage() {
   );
 }
 
+export default function CheckoutPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-black text-white flex items-center justify-center">Loading checkout...</div>}>
+      <CheckoutPageContent />
+    </Suspense>
+  );
+}

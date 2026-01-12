@@ -4,17 +4,17 @@ This guide will walk you through deploying the AirBear PWA to production at airb
 
 ## Prerequisites
 
-- GitHub account with access to github.com/airbearme/pwa4 (or pwa5)
+- GitHub account with access to github.com/airbearme/pwapro
 - Vercel account connected to your GitHub
 - Domain airbear.me configured and pointing to Vercel
-- Supabase PWA4 instance with database initialized
+- Supabase PWAPRO instance with database initialized
 - Stripe account for payment processing
 
 ## Step 1: Verify Environment Variables
 
 Ensure all environment variables are set in Vercel:
 
-### Supabase (PWA4 Instance)
+### Supabase (PWAPRO Instance)
 \`\`\`bash
 NEXT_PUBLIC_SUPABASE_PWA4_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=your_anon_key

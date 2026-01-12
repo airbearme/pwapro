@@ -1,1 +1,48 @@
-* @airbearme/core
+# Global owners - all changes require review
+* @airbearme
+
+# Frontend components and pages
+app/ @airbearme
+components/ @airbearme
+hooks/ @airbearme
+lib/ @airbearme
+styles/ @airbearme
+
+# Backend/API routes
+app/api/ @airbearme
+lib/supabase/ @airbearme
+lib/stripe/ @airbearme
+
+# Configuration files
+*.config.js @airbearme
+*.config.ts @airbearme
+*.config.mjs @airbearme
+next.config.* @airbearme
+tailwind.config.* @airbearme
+postcss.config.* @airbearme
+vercel.json @airbearme
+.env* @airbearme
+
+# CI/CD and automation
+.github/ @airbearme
+scripts/ @airbearme
+
+# Documentation
+docs/ @airbearme
+*.md @airbearme
+README* @airbearme
+
+# Database
+**/*.sql @airbearme
+drizzle.config.* @airbearme
+
+# PWA assets
+public/manifest.json @airbearme
+public/sw.js @airbearme
+public/icon* @airbearme
+
+# Security-related files
+lib/security-headers.ts @airbearme
+lib/csp.ts @airbearme
+lib/captcha.ts @airbearme
+middleware.ts @airbearme

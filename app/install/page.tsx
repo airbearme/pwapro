@@ -281,7 +281,7 @@ export default function InstallPage() {
             <div className="bg-black dark:bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm h-64 overflow-y-auto">
               {logs.length === 0 ? (
                 <div className="text-center text-muted-foreground py-8">
-                  Click "Start Installation" to see setup logs...
+                  Click &quot;Start Installation&quot; to see setup logs...
                 </div>
               ) : (
                 logs.map((log, index) => (
@@ -334,7 +334,7 @@ export default function InstallPage() {
               </div>
 
               <div className="mt-4 p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
-                <h4 className="font-semibold mb-2">What's Included:</h4>
+                <h4 className="font-semibold mb-2">What&apos;s Included:</h4>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div>✅ 16 Pickup Locations</div>
                   <div>✅ Real-time Tracking</div>

@@ -7,8 +7,12 @@ export function getSupabaseClient() {
     return supabaseClient
   }
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_PWA4_URL
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY
+  const supabaseUrl =
+    process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    process.env.NEXT_PUBLIC_SUPABASE_PWA4_URL
+  const supabaseAnonKey =
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY
 
   if (!supabaseUrl || !supabaseAnonKey) {
     console.error("❌ Supabase configuration error:", {
@@ -16,7 +20,7 @@ export function getSupabaseClient() {
       hasKey: !!supabaseAnonKey,
     })
     throw new Error(
-      "Missing Supabase environment variables. Please set NEXT_PUBLIC_SUPABASE_PWA4_URL and NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY",
+      "Missing Supabase environment variables. Please set NEXT_PUBLIC_SUPABASE_URL/NEXT_PUBLIC_SUPABASE_PWA4_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY/NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY",
     )
   }
 

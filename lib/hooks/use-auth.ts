@@ -1,70 +1,111 @@
-"use client"
+import { useEffect, useMemo, useState } from "react";
+import type { User } from "@supabase/supabase-js";
+import { getSupabaseClient } from "@/lib/supabase/client";
+import type { Database } from "@/lib/types/database";
 
-import { useState, useEffect, useCallback } from "react"
-import { getSupabaseClient } from "@/lib/supabase/client"
-import type { User } from "@supabase/supabase-js"
-import type { Database } from "@/lib/types/database"
+type UserProfile = Database["public"]["Tables"]["users"]["Row"];
 
-type UserProfile = Database["public"]["Tables"]["users"]["Row"]
+type AuthState = {
+  user: User | null;
+  profile: UserProfile | null;
+  loading: boolean;
+  signOut: () => Promise<void>;
+  isAuthenticated: boolean;
+};
 
-export function useAuth() {
-  const [user, setUser] = useState<User | null>(null)
-  const [profile, setProfile] = useState<UserProfile | null>(null)
-  const [loading, setLoading] = useState(true)
-  const supabase = getSupabaseClient()
-
-  const loadProfile = useCallback(async (userId: string) => {
-    try {
-      const { data, error } = await supabase.from("users").select("*").eq("id", userId).single()
-
-      if (error) {
-        console.error("[v0] Error loading profile:", error)
-      } else {
-        setProfile(data)
-      }
-    } catch (error) {
-      console.error("[v0] Error loading profile:", error)
-    } finally {
-      setLoading(false)
-    }
-  }, [supabase])
+export function useAuth(): AuthState {
+  const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null)
-      if (session?.user) {
-        loadProfile(session.user.id)
-      } else {
-        setLoading(false)
-      }
-    })
+    let isMounted = true;
+    let unsubscribe: (() => void) | null = null;
 
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
-      if (session?.user) {
-        loadProfile(session.user.id)
-      } else {
-        setProfile(null)
-        setLoading(false)
+    const init = async () => {
+      let supabase;
+      try {
+        supabase = getSupabaseClient();
+      } catch {
+        if (isMounted) {
+          setLoading(false);
+        }
+        return;
       }
-    })
 
-    return () => subscription.unsubscribe()
-  }, [supabase, loadProfile])
+      const sessionResult = await supabase.auth.getSession();
+      const sessionUser = sessionResult.data.session?.user ?? null;
+
+      if (isMounted) {
+        setUser(sessionUser);
+      }
+
+      if (sessionUser) {
+        const { data } = await supabase
+          .from("users")
+          .select("*")
+          .eq("id", sessionUser.id)
+          .single();
+
+        if (isMounted) {
+          setProfile(data ?? null);
+        }
+      } else if (isMounted) {
+        setProfile(null);
+      }
+
+      const { data: listener } = supabase.auth.onAuthStateChange(
+        async (_event: string, session: any) => {
+          if (!isMounted) return;
+          const nextUser = session?.user ?? null;
+          setUser(nextUser);
+
+          if (nextUser) {
+            const { data } = await supabase
+              .from("users")
+              .select("*")
+              .eq("id", nextUser.id)
+              .single();
+            if (isMounted) {
+              setProfile(data ?? null);
+            }
+          } else {
+            setProfile(null);
+          }
+        },
+      );
+
+      unsubscribe = listener.subscription.unsubscribe;
+
+      if (isMounted) {
+        setLoading(false);
+      }
+    };
+
+    init();
+
+    return () => {
+      isMounted = false;
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, []);
 
   const signOut = async () => {
-    await supabase.auth.signOut()
-  }
+    const supabase = getSupabaseClient();
+    await supabase.auth.signOut();
+    setUser(null);
+    setProfile(null);
+  };
+
+  const isAuthenticated = useMemo(() => Boolean(user), [user]);
 
   return {
     user,
     profile,
     loading,
     signOut,
-    isAuthenticated: !!user,
-  }
+    isAuthenticated,
+  };
 }

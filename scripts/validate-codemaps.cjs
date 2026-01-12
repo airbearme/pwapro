@@ -252,6 +252,7 @@ class CodeMapsValidator {
    */
   async validateSourceMapIntegrity() {
     const sourceMapFiles = this.findSourceMapFiles();
+    const ignoredPrefixes = ["webpack://", "node:", "external "];
 
     for (const sourceMapFile of sourceMapFiles) {
       try {
@@ -275,7 +276,11 @@ class CodeMapsValidator {
         // Check if sources exist
         if (sourceMap.sources) {
           for (const source of sourceMap.sources) {
-            if (source && !source.startsWith("http")) {
+            if (
+              source &&
+              !source.startsWith("http") &&
+              !ignoredPrefixes.some((prefix) => source.startsWith(prefix))
+            ) {
               const sourcePath = path.resolve(this.projectRoot, source);
               if (!fs.existsSync(sourcePath)) {
                 this.warnings.push(`Source file not found: ${source}`);

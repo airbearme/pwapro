@@ -6,7 +6,7 @@ Complete guide for deploying AirBear to production at airbear.me
 
 - GitHub account
 - Vercel account
-- Supabase account (PWA4 project)
+- Supabase account (PWAPRO project)
 - Stripe account
 - Domain configured: airbear.me
 
@@ -14,7 +14,7 @@ Complete guide for deploying AirBear to production at airbear.me
 
 1. **Create/Update GitHub Repository**
    \`\`\`bash
-   git remote add origin https://github.com/airbearme/pwa4.git
+   git remote add origin https://github.com/airbearme/pwapro.git
    git branch -M main
    git push -u origin main
    \`\`\`
@@ -29,7 +29,7 @@ Complete guide for deploying AirBear to production at airbear.me
 1. **Connect Repository**
    - Go to vercel.com
    - Import Git Repository
-   - Select airbearme/pwa4
+   - Select airbearme/pwapro
    - Configure project settings
 
 2. **Add Environment Variables**

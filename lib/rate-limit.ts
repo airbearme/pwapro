@@ -1,6 +1,35 @@
-const buckets = new Map<string,{c:number,t:number}>();
-export function rateLimit(k:string,l=60,w=60000){
-  const n=Date.now(); const b=buckets.get(k)||{c:0,t:n};
-  if(n-b.t>w){b.c=0;b.t=n}
-  b.c++; buckets.set(k,b); return b.c<=l;
+type RateEntry = {
+  count: number;
+  resetAt: number;
+};
+
+const DEFAULT_LIMIT = 10;
+const DEFAULT_WINDOW_MS = 60_000;
+
+const store: Map<string, RateEntry> =
+  (globalThis as typeof globalThis & { __rateLimitStore?: Map<string, RateEntry> })
+    .__rateLimitStore ?? new Map();
+
+(globalThis as typeof globalThis & { __rateLimitStore?: Map<string, RateEntry> })
+  .__rateLimitStore = store;
+
+export function rateLimit(
+  key: string,
+  limit = DEFAULT_LIMIT,
+  windowMs = DEFAULT_WINDOW_MS,
+): boolean {
+  const now = Date.now();
+  const entry = store.get(key);
+
+  if (!entry || now > entry.resetAt) {
+    store.set(key, { count: 1, resetAt: now + windowMs });
+    return true;
+  }
+
+  if (entry.count >= limit) {
+    return false;
+  }
+
+  entry.count += 1;
+  return true;
 }

@@ -2,24 +2,15 @@ import type React from "react";
 import type { Metadata, Viewport } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
-import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/components/auth-provider";
-import { Toaster } from "@/components/ui/toaster";
-import PWAInstallPrompt from "@/components/pwa-install-prompt";
-import FloatingMascot from "@/components/floating-mascot";
-import { ErrorBoundary } from "@/components/error-boundary";
-import { validateRuntimeEnv } from "@/lib/auto-load-env";
+import { ThemeProvider } from "@/components/theme-provider";
+import ClientErrorLogger from "@/components/client-error-logger";
+import "leaflet/dist/leaflet.css";
 import "./globals.css";
-
-// Validate environment variables on app load
-if (typeof window === "undefined") {
-  validateRuntimeEnv();
-}
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
-  display: "swap",
 });
 
 const spaceGrotesk = Space_Grotesk({
@@ -31,8 +22,8 @@ const spaceGrotesk = Space_Grotesk({
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  maximumScale: 5,
+  userScalable: true,
   themeColor: "#0a0a0a",
 };
 
@@ -58,17 +49,16 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "default",
     title: "AirBear",
+    statusBarStyle: "default",
   },
-  applicationName: "AirBear",
   formatDetection: {
     telephone: false,
   },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://airbear.me",
+    url: "https://airbear.me/",
     siteName: "AirBear",
     title: "AirBear - Solar-Powered Rideshare & Mobile Bodega",
     description: "Experience sustainable transportation with AirBear",
@@ -88,33 +78,11 @@ export const metadata: Metadata = {
     images: ["/og-image.png"],
   },
   icons: {
-    icon: [
-      { url: "/icon.svg", sizes: "any", type: "image/svg+xml" },
-      { url: "/icon-192x192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icon-512x512.png", sizes: "512x512", type: "image/png" },
-    ],
+    icon: "/icon.svg",
     shortcut: "/icon.svg",
-    apple: [
-      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
-    ],
+    apple: "/apple-touch-icon.png",
   },
-  generator: "v0.app",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ff6b35" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
-  ],
 };
-
-export const dynamic = "force-dynamic";
-
-/**
- * 🎨 CORE UI/UX FOUNDATION - PERMANENT & PROTECTED
- *
- * ⚠️ CRITICAL: Dark mode is the default brand experience.
- * DO NOT change defaultTheme or enableSystem without approval.
- *
- * See: CORE_UI_FOUNDATION.md for documentation
- */
 
 export default function RootLayout({
   children,
@@ -123,24 +91,41 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased`}
-      >
-        {/* 🎨 CORE: Dark mode permanently enabled - DO NOT CHANGE */}
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+              })();
+            `,
+          }}
+        />
+      </head>
+      <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased relative overflow-x-hidden`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
-          enableSystem={false}
+          enableSystem
           disableTransitionOnChange
         >
-          <AuthProvider>
+          <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+            <div className="absolute -top-24 left-1/2 h-72 w-[140%] -translate-x-1/2 rotate-6 bg-gradient-to-r from-cyan-400/10 via-fuchsia-400/25 to-amber-400/10 blur-3xl animate-float"></div>
+            <div className="absolute top-1/4 -left-10 h-56 w-[120%] rotate-[-8deg] bg-gradient-to-r from-emerald-400/10 via-lime-300/20 to-sky-400/10 blur-3xl animate-float"></div>
+            <div className="absolute bottom-10 left-1/2 h-48 w-[120%] -translate-x-1/2 rotate-3 bg-gradient-to-r from-amber-300/10 via-rose-400/20 to-purple-400/10 blur-3xl animate-float"></div>
+            <div className="absolute top-20 right-10 h-36 w-36 rounded-full border border-emerald-400/20 animate-pulse-glow"></div>
+            <div className="absolute bottom-24 left-12 h-44 w-44 rounded-full border border-cyan-400/20 animate-pulse-glow"></div>
+            <div className="absolute top-1/2 right-1/3 h-28 w-28 rounded-full bg-emerald-400/10 blur-2xl animate-pulse-glow"></div>
+          </div>
+          <div className="relative z-10 min-h-screen">
+            <ClientErrorLogger />
+            <AuthProvider>
               {children}
-              <FloatingMascot />
-              <PWAInstallPrompt />
-              <Toaster />
-              <Analytics />
-          </AuthProvider>
+            </AuthProvider>
+          </div>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );

@@ -6,6 +6,7 @@ export async function GET(request: Request) {
   const code = requestUrl.searchParams.get("code")
   const error = requestUrl.searchParams.get("error")
   const errorDescription = requestUrl.searchParams.get("error_description")
+  const requestedRole = requestUrl.searchParams.get("role")
   const origin = requestUrl.origin
 
   // Handle OAuth errors
@@ -64,14 +65,36 @@ export async function GET(request: Request) {
       }
     }
 
+    if (requestedRole && requestedRole !== "user") {
+      const { data: profile } = await supabase
+        .from("users")
+        .select("role")
+        .eq("id", user.id)
+        .single()
+
+      const effectiveRole =
+        profile?.role ?? user.user_metadata?.role ?? "user"
+
+      if (effectiveRole !== requestedRole) {
+        await supabase.auth.signOut()
+        return NextResponse.redirect(`${origin}/auth/login?error=role_mismatch`)
+      }
+    }
+
+    const redirectPath =
+      requestedRole === "admin"
+        ? "/admin"
+        : requestedRole === "driver"
+          ? "/driver"
+          : "/dashboard"
+
     // Redirect to dashboard on success
-    return NextResponse.redirect(`${origin}/dashboard`)
+    return NextResponse.redirect(`${origin}${redirectPath}`)
   } catch (err: any) {
     console.error("Unexpected callback error:", err)
     return NextResponse.redirect(`${origin}/auth/login?error=${encodeURIComponent(err.message || "oauth_failed")}`)
   }
 }
-
 
 
 

@@ -1,0 +1,277 @@
+name: Dependency Updates
+
+on:
+  schedule:
+    - cron: '0 2 * * 1'  # Weekly on Mondays at 2 AM
+  workflow_dispatch:
+    inputs:
+      update_type:
+        description: 'Type of update to perform'
+        required: true
+        default: 'minor'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  # Update Dependencies
+  update-deps:
+    name: Update Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Update patch versions
+        if: github.event.inputs.update_type == 'patch' || github.event_name == 'schedule'
+        run: npm update --save
+
+      - name: Update minor versions
+        if: github.event.inputs.update_type == 'minor'
+        run: |
+          npx npm-check-updates -u --target minor
+          npm install
+
+      - name: Update major versions (experimental)
+        if: github.event.inputs.update_type == 'major'
+        run: |
+          npx npm-check-updates -u --target latest
+          npm install
+
+      - name: Run tests after update
+        run: npm run verify
+
+      - name: Generate codemaps after update
+        run: npm run codemaps:generate
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: |
+            chore: update dependencies
+
+            - Updated ${{ github.event.inputs.update_type || 'patch' }} versions
+            - Ran full test suite
+            - Regenerated codemaps
+          title: 'chore: update dependencies (${{ github.event.inputs.update_type || ''patch'' }})'
+          body: |
+            ## Dependency Updates
+
+            This PR updates dependencies to their latest ${{ github.event.inputs.update_type || 'patch' }} versions.
+
+            ### Changes
+            - Updated all dependencies to latest ${{ github.event.inputs.update_type || 'patch' }} versions
+            - Ran full verification suite (type-check, lint, build, tests)
+            - Regenerated codemaps
+
+            ### Testing
+            - ✅ TypeScript compilation
+            - ✅ ESLint checks
+            - ✅ Build successful
+            - ✅ All tests passing
+            - ✅ Codemaps validation
+
+            ### Next Steps
+            - Review the changes
+            - Test the application manually
+            - Merge if everything looks good
+          branch: dependency-updates/${{ github.event.inputs.update_type || 'patch' }}-${{ github.run_number }}
+          delete-branch: true
+          labels: |
+            dependencies
+            automated
+
+  # Security Updates Only
+  security-updates:
+    name: Security Updates
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run npm audit fix
+        run: npm audit fix
+
+      - name: Check if package-lock.json changed
+        id: verify-changed-files
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run tests after security fixes
+        if: steps.verify-changed-files.outputs.changed == 'true'
+        run: npm run verify
+
+      - name: Create security update PR
+        if: steps.verify-changed-files.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: |
+            fix: security updates
+
+            - Applied npm audit fixes
+            - Ran full test suite
+          title: 'fix: security dependency updates'
+          body: |
+            ## Security Updates
+
+            This PR applies security fixes identified by `npm audit`.
+
+            ### Changes
+            - Applied automatic security fixes from npm audit
+            - Ran full verification suite
+
+            ### Testing
+            - ✅ TypeScript compilation
+            - ✅ ESLint checks
+            - ✅ Build successful
+            - ✅ All tests passing
+
+            ### Security Impact
+            - Addresses vulnerabilities found in dependencies
+            - No breaking changes expected
+          branch: security-updates/${{ github.run_number }}
+          delete-branch: true
+          labels: |
+            security
+            dependencies
+            automated
+
+  # Outdated Dependencies Report
+  outdated-report:
+    name: Outdated Dependencies Report
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate outdated report
+        run: |
+          echo "# Outdated Dependencies Report" > outdated-report.md
+          echo "Generated on: $(date)" >> outdated-report.md
+          echo "" >> outdated-report.md
+          echo "## Current Versions" >> outdated-report.md
+          npm outdated >> outdated-report.md 2>&1 || true
+          echo "" >> outdated-report.md
+          echo "## Recommendations" >> outdated-report.md
+          echo "- Review major version updates carefully" >> outdated-report.md
+          echo "- Test thoroughly after updates" >> outdated-report.md
+          echo "- Check for breaking changes in changelogs" >> outdated-report.md
+
+      - name: Upload outdated report
+        uses: actions/upload-artifact@v4
+        with:
+          name: outdated-dependencies-report
+          path: outdated-report.md
+
+      - name: Create issue for outdated dependencies
+        if: github.event_name == 'schedule'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('outdated-report.md', 'utf8');
+
+            // Check if issue already exists
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['dependencies', 'outdated'],
+              state: 'open'
+            });
+
+            if (issues.data.length === 0) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: 'Weekly Dependency Update Report',
+                body: report,
+                labels: ['dependencies', 'outdated', 'automated']
+              });
+            } else {
+              // Update existing issue
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issues.data[0].number,
+                body: `## Updated Report (${new Date().toISOString()})\n\n${report}`
+              });
+            }
+
+  # Bundle Size Monitoring
+  bundle-monitoring:
+    name: Bundle Size Monitoring
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Analyze bundle size
+        run: npx webpack-bundle-analyzer build/static/js/*.js --mode json --output bundle-analysis.json
+
+      - name: Upload bundle analysis
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-analysis
+          path: bundle-analysis.json
+
+      - name: Compare bundle size
+        uses: codacy/git-version@2.7.1
+        with:
+          release-branch: main
+          dev-branch: develop

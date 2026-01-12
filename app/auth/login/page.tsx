@@ -36,7 +36,7 @@ export default function LoginPage() {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: `${window.location.origin}/auth/callback?role=user`,
           queryParams: {
             access_type: "offline",
             prompt: "consent",
@@ -69,7 +69,7 @@ export default function LoginPage() {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "apple",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: `${window.location.origin}/auth/callback?role=user`,
         },
       });
 
@@ -217,6 +217,22 @@ export default function LoginPage() {
               className="text-orange-600 hover:text-orange-700 font-medium"
             >
               Sign up
+            </a>
+          </div>
+          <div className="text-center text-sm text-muted-foreground">
+            Driver?{" "}
+            <a
+              href="/driver/login"
+              className="text-emerald-600 hover:text-emerald-700 font-medium"
+            >
+              Driver login
+            </a>{" "}
+            · Admin?{" "}
+            <a
+              href="/admin/login"
+              className="text-amber-600 hover:text-amber-700 font-medium"
+            >
+              Admin login
             </a>
           </div>
         </CardContent>

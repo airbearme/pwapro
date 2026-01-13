@@ -128,6 +128,8 @@ export default function HomePage() {
               src="/airbear-mascot.png"
               alt="Friendly brown bear mascot with pilot goggles representing AirBear"
               className="mx-auto rounded-full w-32 h-32 object-cover border-4 border-emerald-400/30 hover-lift animate-pulse-glow shadow-2xl"
+              width={128}
+              height={128}
             />
             <div className="absolute inset-0 pointer-events-none">
               <div className="absolute left-1/2 top-0 h-36 w-36 -translate-x-1/2 rounded-full border border-cyan-400/30 blur-sm animate-holographic"></div>

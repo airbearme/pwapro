@@ -14,6 +14,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { MapPin, ShoppingBag, Leaf, Zap, Crown } from "lucide-react";
 import AirbearWheel from "@/components/airbear-wheel";
+import ParticleCanvas from "@/components/ui/particle-canvas";
 
 export default function HomePage() {
   return (
@@ -80,28 +81,8 @@ export default function HomePage() {
         <div className="absolute bottom-10 left-1/2 h-40 w-[120%] -translate-x-1/2 rotate-3 bg-gradient-to-r from-amber-300/10 via-rose-400/20 to-purple-400/10 blur-2xl animate-float"></div>
       </div>
 
-      {/* Enhanced Particle effects background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {Array.from({ length: 24 }, (_, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full animate-particle opacity-70"
-            style={{
-              left: `${(i * 8) % 100}%`,
-              top: `${(i * 15) % 100}%`,
-              animationDelay: `${i * 0.5}s`,
-              width: `${2 + (i % 3)}px`,
-              height: `${2 + (i % 3)}px`,
-              backgroundColor:
-                i % 3 === 0
-                  ? "rgb(34, 197, 94)"
-                  : i % 3 === 1
-                    ? "rgb(56, 189, 248)"
-                    : "rgb(251, 191, 36)",
-            }}
-          />
-        ))}
-      </div>
+      {/* ⚡ Bolt: Replaced 24 animated divs with a single performant canvas element. */}
+      <ParticleCanvas />
 
       {/* Sparkle rings */}
       <div className="absolute inset-0 pointer-events-none">

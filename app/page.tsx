@@ -81,8 +81,9 @@ export default function HomePage() {
       </div>
 
       {/* Enhanced Particle effects background */}
+      {/* ⚡ Bolt: Reduced particle count from 24 to 12 to decrease DOM nodes and improve rendering performance. */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {Array.from({ length: 24 }, (_, i) => (
+        {Array.from({ length: 12 }, (_, i) => (
           <div
             key={i}
             className="absolute rounded-full animate-particle opacity-70"

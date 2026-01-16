@@ -15,6 +15,55 @@ import { Button } from "@/components/ui/button";
 import { MapPin, ShoppingBag, Leaf, Zap, Crown } from "lucide-react";
 import AirbearWheel from "@/components/airbear-wheel";
 
+// ⚡ Bolt: Extracted static particle effects outside the render loop.
+// These arrays were being recreated on every render, causing unnecessary CPU load.
+// By defining them once, we prevent re-computation and reduce re-renders.
+const particleEffects = Array.from({ length: 24 }, (_, i) => (
+  <div
+    key={i}
+    className="absolute rounded-full animate-particle opacity-70"
+    style={{
+      left: `${(i * 8) % 100}%`,
+      top: `${(i * 15) % 100}%`,
+      animationDelay: `${i * 0.5}s`,
+      width: `${2 + (i % 3)}px`,
+      height: `${2 + (i % 3)}px`,
+      backgroundColor:
+        i % 3 === 0
+          ? "rgb(34, 197, 94)"
+          : i % 3 === 1
+            ? "rgb(56, 189, 248)"
+            : "rgb(251, 191, 36)",
+    }}
+  />
+));
+
+const sparkleRings = Array.from({ length: 10 }, (_, i) => (
+  <div
+    key={`ring-${i}`}
+    className="absolute border border-emerald-400/20 rounded-full animate-pulse-glow"
+    style={{
+      left: `${10 + i * 8}%`,
+      top: `${15 + ((i * 13) % 70)}%`,
+      width: `${40 + (i % 4) * 16}px`,
+      height: `${40 + (i % 4) * 16}px`,
+      animationDelay: `${i * 0.4}s`,
+    }}
+  />
+));
+
+const holographicDots = Array.from({ length: 8 }, (_, i) => (
+  <div
+    key={i}
+    className="absolute w-2 h-2 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 rounded-full opacity-60 animate-pulse-glow"
+    style={{
+      left: `${20 + i * 10}%`,
+      top: `${30 + Math.sin(i) * 20}%`,
+      animationDelay: `${i * 0.3}s`,
+    }}
+  />
+));
+
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-emerald-950 via-lime-950 to-amber-950 dark:from-emerald-950 dark:via-lime-950 dark:to-amber-950 bg-[radial-gradient(1200px_circle_at_20%_10%,rgba(34,197,94,0.28),transparent_55%),radial-gradient(900px_circle_at_80%_20%,rgba(56,189,248,0.22),transparent_55%),radial-gradient(700px_circle_at_50%_90%,rgba(236,72,153,0.2),transparent_60%)] relative overflow-hidden">
@@ -82,42 +131,12 @@ export default function HomePage() {
 
       {/* Enhanced Particle effects background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {Array.from({ length: 24 }, (_, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full animate-particle opacity-70"
-            style={{
-              left: `${(i * 8) % 100}%`,
-              top: `${(i * 15) % 100}%`,
-              animationDelay: `${i * 0.5}s`,
-              width: `${2 + (i % 3)}px`,
-              height: `${2 + (i % 3)}px`,
-              backgroundColor:
-                i % 3 === 0
-                  ? "rgb(34, 197, 94)"
-                  : i % 3 === 1
-                    ? "rgb(56, 189, 248)"
-                    : "rgb(251, 191, 36)",
-            }}
-          />
-        ))}
+        {particleEffects}
       </div>
 
       {/* Sparkle rings */}
       <div className="absolute inset-0 pointer-events-none">
-        {Array.from({ length: 10 }, (_, i) => (
-          <div
-            key={`ring-${i}`}
-            className="absolute border border-emerald-400/20 rounded-full animate-pulse-glow"
-            style={{
-              left: `${10 + i * 8}%`,
-              top: `${15 + ((i * 13) % 70)}%`,
-              width: `${40 + (i % 4) * 16}px`,
-              height: `${40 + (i % 4) * 16}px`,
-              animationDelay: `${i * 0.4}s`,
-            }}
-          />
-        ))}
+        {sparkleRings}
       </div>
 
       <div className="container mx-auto px-4 py-16 relative z-10">
@@ -149,17 +168,7 @@ export default function HomePage() {
 
               {/* Holographic overlay effect */}
               <div className="absolute inset-0 pointer-events-none">
-                {Array.from({ length: 8 }, (_, i) => (
-                  <div
-                    key={i}
-                    className="absolute w-2 h-2 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 rounded-full opacity-60 animate-pulse-glow"
-                    style={{
-                      left: `${20 + i * 10}%`,
-                      top: `${30 + Math.sin(i) * 20}%`,
-                      animationDelay: `${i * 0.3}s`,
-                    }}
-                  />
-                ))}
+                {holographicDots}
               </div>
             </h1>
 

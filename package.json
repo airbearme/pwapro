@@ -26,7 +26,7 @@
     "test:database": "node scripts/test-database.js",
     "test:stripe": "node scripts/test-stripe.js",
     "test:pwa": "node scripts/test-pwa-manifest.js && node scripts/test-service-worker.js",
-    "test:components": "node scripts/test-components.js",
+    "test:components": "node scripts/test-components.cjs",
     "test:realtime": "node scripts/test-realtime.js",
     "test:error-logger": "node scripts/test-error-logger.js",
     "codemaps:generate": "node scripts/generate-codemaps.cjs",

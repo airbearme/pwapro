@@ -12,6 +12,11 @@
 import React, { useMemo } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { MapPin, ShoppingBag, Leaf, Zap, Crown } from "lucide-react";
 import AirbearWheel from "@/components/airbear-wheel";
 
@@ -274,9 +279,16 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 w-full max-w-5xl">
             <div className="flex flex-col items-center space-y-4 p-8 rounded-xl glass-morphism border border-white/50 shadow-2xl hover-lift hover:shadow-3xl transition-all duration-300 relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/10 via-cyan-400/10 to-transparent opacity-70"></div>
-              <div className="p-4 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-xl animate-pulse-glow relative z-10">
-                <Leaf className="h-12 w-12 text-white" />
-              </div>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="p-4 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-xl animate-pulse-glow relative z-10">
+                    <Leaf className="h-12 w-12 text-white" />
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Our commitment to a greener planet</p>
+                </TooltipContent>
+              </Tooltip>
               <h3 className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-700 bg-clip-text text-transparent relative z-10">
                 100% Eco-Friendly
               </h3>

@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import Link from "next/link";
 import AirbearWheel from "@/components/airbear-wheel";
 
-export default function FloatingMascot() {
+const FloatingMascot = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isMobile, setIsMobile] = useState(false);
 
@@ -76,5 +76,11 @@ export default function FloatingMascot() {
       </div>
     </Link>
   );
-}
+};
+
+FloatingMascot.displayName = "FloatingMascot";
+
+// ⚡ Bolt: Memoized FloatingMascot to prevent re-renders caused by mouse-tracking on the parent page.
+// This component is purely presentational and receives no props, making it a perfect candidate for memoization.
+export default memo(FloatingMascot);
 

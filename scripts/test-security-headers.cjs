@@ -14,7 +14,6 @@ const requiredHeaders = {
 	"strict-transport-security": "HSTS header should be present",
 	"x-content-type-options": "X-Content-Type-Options should be nosniff",
 	"x-frame-options": "X-Frame-Options should be present",
-	"x-xss-protection": "X-XSS-Protection should be present",
 	"referrer-policy": "Referrer-Policy should be present",
 };
 

@@ -12,6 +12,12 @@
 import React, { useMemo } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { MapPin, ShoppingBag, Leaf, Zap, Crown } from "lucide-react";
 import AirbearWheel from "@/components/airbear-wheel";
 
@@ -71,6 +77,7 @@ export default function HomePage() {
   }, []);
 
   return (
+    <TooltipProvider>
     <main className="min-h-screen bg-gradient-to-br from-emerald-950 via-lime-950 to-amber-950 dark:from-emerald-950 dark:via-lime-950 dark:to-amber-950 bg-[radial-gradient(1200px_circle_at_20%_10%,rgba(34,197,94,0.28),transparent_55%),radial-gradient(900px_circle_at_80%_20%,rgba(56,189,248,0.22),transparent_55%),radial-gradient(700px_circle_at_50%_90%,rgba(236,72,153,0.2),transparent_60%)] relative overflow-hidden">
       {/* DEBUG: Dark Mode & Beautiful UI - Version 2.0.5 - FORCED REDEPLOY */}
       <div className="fixed top-4 right-4 bg-black/80 text-white px-4 py-2 rounded-lg z-50 glass-morphism">
@@ -274,9 +281,21 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 w-full max-w-5xl">
             <div className="flex flex-col items-center space-y-4 p-8 rounded-xl glass-morphism border border-white/50 shadow-2xl hover-lift hover:shadow-3xl transition-all duration-300 relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/10 via-cyan-400/10 to-transparent opacity-70"></div>
-              <div className="p-4 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-xl animate-pulse-glow relative z-10">
-                <Leaf className="h-12 w-12 text-white" />
-              </div>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div
+                    tabIndex={0}
+                    role="img"
+                    aria-label="100% Eco-Friendly"
+                    className="p-4 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-xl animate-pulse-glow relative z-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  >
+                    <Leaf className="h-12 w-12 text-white" />
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>100% Eco-Friendly</p>
+                </TooltipContent>
+              </Tooltip>
               <h3 className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-700 bg-clip-text text-transparent relative z-10">
                 100% Eco-Friendly
               </h3>
@@ -288,12 +307,22 @@ export default function HomePage() {
 
             <div className="flex flex-col items-center space-y-4 p-8 rounded-xl glass-morphism border border-white/50 shadow-2xl hover-lift hover:shadow-3xl transition-all duration-300 relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-amber-400/10 via-rose-400/10 to-transparent opacity-70"></div>
-              <div
-                className="p-4 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 shadow-xl animate-pulse-glow relative z-10"
-                style={{ animationDelay: "0.5s" }}
-              >
-                <ShoppingBag className="h-12 w-12 text-white" />
-              </div>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div
+                    tabIndex={0}
+                    role="img"
+                    aria-label="Mobile Bodega"
+                    className="p-4 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 shadow-xl animate-pulse-glow relative z-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    style={{ animationDelay: "0.5s" }}
+                  >
+                    <ShoppingBag className="h-12 w-12 text-white" />
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Mobile Bodega</p>
+                </TooltipContent>
+              </Tooltip>
               <h3 className="text-2xl font-bold bg-gradient-to-r from-amber-600 to-amber-700 bg-clip-text text-transparent relative z-10">
                 Mobile Bodega
               </h3>
@@ -305,12 +334,22 @@ export default function HomePage() {
 
             <div className="flex flex-col items-center space-y-4 p-8 rounded-xl glass-morphism border border-white/50 shadow-2xl hover-lift hover:shadow-3xl transition-all duration-300 relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/10 via-orange-400/10 to-transparent opacity-70"></div>
-              <div
-                className="p-4 rounded-full bg-gradient-to-br from-emerald-400 to-orange-500 shadow-xl animate-pulse-glow relative z-10"
-                style={{ animationDelay: "1s" }}
-              >
-                <Zap className="h-12 w-12 text-white" />
-              </div>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div
+                    tabIndex={0}
+                    role="img"
+                    aria-label="Smart Routing"
+                    className="p-4 rounded-full bg-gradient-to-br from-emerald-400 to-orange-500 shadow-xl animate-pulse-glow relative z-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    style={{ animationDelay: "1s" }}
+                  >
+                    <Zap className="h-12 w-12 text-white" />
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Smart Routing</p>
+                </TooltipContent>
+              </Tooltip>
               <h3 className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-orange-600 bg-clip-text text-transparent relative z-10">
                 Smart Routing
               </h3>
@@ -365,5 +404,6 @@ export default function HomePage() {
         </div>
       </div>
     </main>
+    </TooltipProvider>
   );
 }

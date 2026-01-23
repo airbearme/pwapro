@@ -11,11 +11,10 @@ const http = require("http");
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://airbear.me";
 
 const requiredHeaders = {
-	"strict-transport-security": "HSTS header should be present",
 	"x-content-type-options": "X-Content-Type-Options should be nosniff",
 	"x-frame-options": "X-Frame-Options should be present",
-	"x-xss-protection": "X-XSS-Protection should be present",
 	"referrer-policy": "Referrer-Policy should be present",
+	"content-security-policy": "Content-Security-Policy should be present",
 };
 
 console.log("🔒 Testing security headers...\n");
@@ -61,6 +60,21 @@ function checkHeaders(url) {
 					} else {
 						results.failed.push({ header, value: headerValue, description });
 					}
+				}
+			}
+
+			// HSTS is only required on HTTPS sites
+			if (url.startsWith("https://")) {
+				if (!headers["strict-transport-security"]) {
+					results.missing.push({
+						header: "strict-transport-security",
+						description: "HSTS header should be present on HTTPS sites",
+					});
+				} else {
+					results.passed.push({
+						header: "strict-transport-security",
+						value: headers["strict-transport-security"],
+					});
 				}
 			}
 

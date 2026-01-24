@@ -12,6 +12,11 @@
 import React, { useMemo } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { MapPin, ShoppingBag, Leaf, Zap, Crown } from "lucide-react";
 import AirbearWheel from "@/components/airbear-wheel";
 
@@ -275,7 +280,14 @@ export default function HomePage() {
             <div className="flex flex-col items-center space-y-4 p-8 rounded-xl glass-morphism border border-white/50 shadow-2xl hover-lift hover:shadow-3xl transition-all duration-300 relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/10 via-cyan-400/10 to-transparent opacity-70"></div>
               <div className="p-4 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-xl animate-pulse-glow relative z-10">
-                <Leaf className="h-12 w-12 text-white" />
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Leaf className="h-12 w-12 text-white" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Eco-friendly icon</p>
+                  </TooltipContent>
+                </Tooltip>
               </div>
               <h3 className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-700 bg-clip-text text-transparent relative z-10">
                 100% Eco-Friendly
@@ -292,7 +304,14 @@ export default function HomePage() {
                 className="p-4 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 shadow-xl animate-pulse-glow relative z-10"
                 style={{ animationDelay: "0.5s" }}
               >
-                <ShoppingBag className="h-12 w-12 text-white" />
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <ShoppingBag className="h-12 w-12 text-white" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Mobile Bodega icon</p>
+                  </TooltipContent>
+                </Tooltip>
               </div>
               <h3 className="text-2xl font-bold bg-gradient-to-r from-amber-600 to-amber-700 bg-clip-text text-transparent relative z-10">
                 Mobile Bodega
@@ -309,7 +328,14 @@ export default function HomePage() {
                 className="p-4 rounded-full bg-gradient-to-br from-emerald-400 to-orange-500 shadow-xl animate-pulse-glow relative z-10"
                 style={{ animationDelay: "1s" }}
               >
-                <Zap className="h-12 w-12 text-white" />
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Zap className="h-12 w-12 text-white" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Smart Routing icon</p>
+                  </TooltipContent>
+                </Tooltip>
               </div>
               <h3 className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-orange-600 bg-clip-text text-transparent relative z-10">
                 Smart Routing

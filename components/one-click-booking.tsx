@@ -126,10 +126,10 @@ export function OneClickBooking({
       className="w-full eco-gradient text-white hover-lift ripple-effect animate-neon-glow shadow-xl"
     >
       {loading ? (
-        <>
+        <span role="status" className="flex items-center">
           <Spinner className="mr-2 h-5 w-5" />
           Booking...
-        </>
+        </span>
       ) : (
         <>
           <MapPin className="mr-2 h-5 w-5" />

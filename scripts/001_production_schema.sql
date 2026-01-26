@@ -1,12 +1,11 @@
 -- AirBear Production Database Schema
--- Version: 1.0.0
--- This script creates all tables needed for the AirBear PWA
+-- Version: 1.1.0 - Fixed circular dependencies
 
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- =====================================================
--- SPOTS TABLE - 17 GPS locations in Binghamton
+-- 1. SPOTS TABLE - 17 GPS locations in Binghamton (no deps)
 -- =====================================================
 CREATE TABLE IF NOT EXISTS public.spots (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -20,6 +19,11 @@ CREATE TABLE IF NOT EXISTS public.spots (
   is_active BOOLEAN DEFAULT true,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+-- Enable RLS for spots
+ALTER TABLE public.spots ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "spots_read_all" ON public.spots;
+CREATE POLICY "spots_read_all" ON public.spots FOR SELECT USING (true);
 
 -- Insert the 17 Binghamton GPS spots
 INSERT INTO public.spots (name, latitude, longitude, description, spot_number, amenities, address) VALUES
@@ -48,12 +52,40 @@ ON CONFLICT (spot_number) DO UPDATE SET
   amenities = EXCLUDED.amenities,
   address = EXCLUDED.address;
 
--- Enable RLS for spots
-ALTER TABLE public.spots ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "spots_read_all" ON public.spots FOR SELECT USING (true);
+-- =====================================================
+-- 2. USERS TABLE - Extended auth.users (depends on auth.users only)
+-- =====================================================
+CREATE TABLE IF NOT EXISTS public.users (
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  email VARCHAR(255) UNIQUE,
+  username VARCHAR(100),
+  full_name VARCHAR(255),
+  phone VARCHAR(20),
+  avatar_url TEXT,
+  role VARCHAR(20) DEFAULT 'user' CHECK (role IN ('user', 'driver', 'admin')),
+  eco_points INTEGER DEFAULT 0,
+  total_rides INTEGER DEFAULT 0,
+  co2_saved DECIMAL(10, 2) DEFAULT 0,
+  has_ceo_tshirt BOOLEAN DEFAULT false,
+  stripe_customer_id VARCHAR(255),
+  push_subscription JSONB,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Enable RLS for users
+ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "users_read_own" ON public.users;
+CREATE POLICY "users_read_own" ON public.users FOR SELECT USING (auth.uid() = id);
+DROP POLICY IF EXISTS "users_read_public" ON public.users;
+CREATE POLICY "users_read_public" ON public.users FOR SELECT USING (true);
+DROP POLICY IF EXISTS "users_insert_own" ON public.users;
+CREATE POLICY "users_insert_own" ON public.users FOR INSERT WITH CHECK (auth.uid() = id);
+DROP POLICY IF EXISTS "users_update_own" ON public.users;
+CREATE POLICY "users_update_own" ON public.users FOR UPDATE USING (auth.uid() = id);
 
 -- =====================================================
--- AIRBEARS TABLE - Fleet vehicles
+-- 3. AIRBEARS TABLE - Fleet vehicles (depends on spots, users)
 -- =====================================================
 CREATE TABLE IF NOT EXISTS public.airbears (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -64,77 +96,65 @@ CREATE TABLE IF NOT EXISTS public.airbears (
   battery_level INTEGER DEFAULT 100 CHECK (battery_level >= 0 AND battery_level <= 100),
   is_available BOOLEAN DEFAULT true,
   is_charging BOOLEAN DEFAULT false,
+  is_online BOOLEAN DEFAULT true,
   heading DECIMAL(5, 2) DEFAULT 0,
   speed DECIMAL(5, 2) DEFAULT 0,
-  driver_id UUID,
+  driver_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Insert 5 initial AirBears
-INSERT INTO public.airbears (id, name, latitude, longitude, battery_level, is_available, heading) VALUES
-  (uuid_generate_v4(), 'AirBear Alpha', 42.0987, -75.9179, 95, true, 45),
-  (uuid_generate_v4(), 'AirBear Beta', 42.0877, -75.9661, 87, true, 90),
-  (uuid_generate_v4(), 'AirBear Gamma', 42.1165, -75.9621, 72, true, 180),
-  (uuid_generate_v4(), 'AirBear Delta', 42.1027, -76.0077, 100, false, 270),
-  (uuid_generate_v4(), 'AirBear Epsilon', 42.0876, -75.9089, 45, true, 0)
-ON CONFLICT DO NOTHING;
-
 -- Enable RLS for airbears
 ALTER TABLE public.airbears ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "airbears_read_all" ON public.airbears;
 CREATE POLICY "airbears_read_all" ON public.airbears FOR SELECT USING (true);
+DROP POLICY IF EXISTS "airbears_update_driver" ON public.airbears;
 CREATE POLICY "airbears_update_driver" ON public.airbears FOR UPDATE USING (
   auth.uid() = driver_id OR 
   EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role IN ('driver', 'admin'))
 );
-
--- =====================================================
--- USERS TABLE - Extended auth.users
--- =====================================================
-CREATE TABLE IF NOT EXISTS public.users (
-  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-  email VARCHAR(255) NOT NULL UNIQUE,
-  username VARCHAR(100),
-  full_name VARCHAR(255),
-  phone VARCHAR(20),
-  avatar_url TEXT,
-  role VARCHAR(20) DEFAULT 'user' CHECK (role IN ('user', 'driver', 'admin')),
-  eco_points INTEGER DEFAULT 0,
-  total_rides INTEGER DEFAULT 0,
-  co2_saved DECIMAL(10, 2) DEFAULT 0,
-  has_ceo_tshirt BOOLEAN DEFAULT false,
-  assigned_airbear_id UUID REFERENCES public.airbears(id),
-  stripe_customer_id VARCHAR(255),
-  push_subscription JSONB,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- Enable RLS for users
-ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "users_read_own" ON public.users FOR SELECT USING (auth.uid() = id);
-CREATE POLICY "users_insert_own" ON public.users FOR INSERT WITH CHECK (auth.uid() = id);
-CREATE POLICY "users_update_own" ON public.users FOR UPDATE USING (auth.uid() = id);
-CREATE POLICY "users_admin_all" ON public.users FOR ALL USING (
+DROP POLICY IF EXISTS "airbears_insert_admin" ON public.airbears;
+CREATE POLICY "airbears_insert_admin" ON public.airbears FOR INSERT WITH CHECK (
   EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin')
 );
 
+-- Insert 5 initial AirBears
+INSERT INTO public.airbears (id, name, latitude, longitude, battery_level, is_available, heading, is_online) VALUES
+  (uuid_generate_v4(), 'AirBear Alpha', 42.0987, -75.9179, 95, true, 45, true),
+  (uuid_generate_v4(), 'AirBear Beta', 42.0877, -75.9661, 87, true, 90, true),
+  (uuid_generate_v4(), 'AirBear Gamma', 42.1165, -75.9621, 72, true, 180, true),
+  (uuid_generate_v4(), 'AirBear Delta', 42.1027, -76.0077, 100, false, 270, false),
+  (uuid_generate_v4(), 'AirBear Epsilon', 42.0876, -75.9089, 45, true, 0, true)
+ON CONFLICT DO NOTHING;
+
+-- Add assigned_airbear_id to users (after airbears exists)
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_schema = 'public' AND table_name = 'users' AND column_name = 'assigned_airbear_id'
+  ) THEN
+    ALTER TABLE public.users ADD COLUMN assigned_airbear_id UUID REFERENCES public.airbears(id);
+  END IF;
+END $$;
+
 -- =====================================================
--- RIDES TABLE - Ride bookings
+-- 4. RIDES TABLE - Ride bookings
 -- =====================================================
 CREATE TABLE IF NOT EXISTS public.rides (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID NOT NULL REFERENCES public.users(id),
-  driver_id UUID REFERENCES public.users(id),
-  airbear_id UUID REFERENCES public.airbears(id),
+  user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  driver_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
+  airbear_id UUID REFERENCES public.airbears(id) ON DELETE SET NULL,
   pickup_spot_id UUID NOT NULL REFERENCES public.spots(id),
   dropoff_spot_id UUID NOT NULL REFERENCES public.spots(id),
-  status VARCHAR(30) DEFAULT 'pending' CHECK (status IN ('pending', 'accepted', 'in_progress', 'completed', 'cancelled')),
-  fare DECIMAL(10, 2) NOT NULL,
+  status VARCHAR(30) DEFAULT 'pending' CHECK (status IN ('pending', 'accepted', 'driver_assigned', 'en_route', 'arrived', 'in_progress', 'completed', 'cancelled')),
+  fare DECIMAL(10, 2) NOT NULL DEFAULT 3.00,
   distance DECIMAL(10, 2),
-  estimated_duration INTEGER, -- in minutes
-  payment_method VARCHAR(30) CHECK (payment_method IN ('stripe', 'apple_pay', 'google_pay', 'cash')),
-  payment_status VARCHAR(20) DEFAULT 'unpaid' CHECK (payment_status IN ('unpaid', 'paid', 'refunded')),
+  estimated_duration INTEGER,
+  eta_minutes INTEGER,
+  payment_method VARCHAR(30) DEFAULT 'card' CHECK (payment_method IN ('card', 'stripe', 'apple_pay', 'google_pay', 'cash')),
+  payment_status VARCHAR(20) DEFAULT 'pending' CHECK (payment_status IN ('pending', 'paid', 'failed', 'refunded')),
   stripe_payment_intent_id VARCHAR(255),
   pickup_time TIMESTAMP WITH TIME ZONE,
   started_at TIMESTAMP WITH TIME ZONE,
@@ -146,66 +166,72 @@ CREATE TABLE IF NOT EXISTS public.rides (
 
 -- Enable RLS for rides
 ALTER TABLE public.rides ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "rides_read_own" ON public.rides;
 CREATE POLICY "rides_read_own" ON public.rides FOR SELECT USING (
   auth.uid() = user_id OR auth.uid() = driver_id OR
   EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role IN ('driver', 'admin'))
 );
+DROP POLICY IF EXISTS "rides_insert_own" ON public.rides;
 CREATE POLICY "rides_insert_own" ON public.rides FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "rides_update_involved" ON public.rides;
 CREATE POLICY "rides_update_involved" ON public.rides FOR UPDATE USING (
   auth.uid() = user_id OR auth.uid() = driver_id OR
   EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role IN ('driver', 'admin'))
 );
 
 -- =====================================================
--- BODEGA_ITEMS TABLE - Products for sale
+-- 5. BODEGA_ITEMS TABLE - Products for sale
 -- =====================================================
 CREATE TABLE IF NOT EXISTS public.bodega_items (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name VARCHAR(255) NOT NULL,
   description TEXT,
   price DECIMAL(10, 2) NOT NULL,
+  price_cents INTEGER,
   image_url TEXT,
   category VARCHAR(100),
   is_eco_friendly BOOLEAN DEFAULT false,
   is_available BOOLEAN DEFAULT true,
-  stock INTEGER DEFAULT 0,
+  stock INTEGER DEFAULT 100,
   stripe_price_id VARCHAR(255),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Insert sample bodega items
-INSERT INTO public.bodega_items (name, description, price, category, is_eco_friendly, stock, image_url) VALUES
-  ('Organic Water Bottle', 'Eco-friendly reusable water bottle', 12.99, 'Drinks', true, 50, '/images/bodega/water-bottle.jpg'),
-  ('AirBear Energy Bar', 'Sustainable energy snack', 3.99, 'Snacks', true, 100, '/images/bodega/energy-bar.jpg'),
-  ('Local Coffee', 'Locally roasted fair-trade coffee', 4.50, 'Drinks', true, 75, '/images/bodega/coffee.jpg'),
-  ('Organic Chips', 'Sustainably sourced potato chips', 2.99, 'Snacks', true, 80, '/images/bodega/chips.jpg'),
-  ('Bamboo Sunglasses', 'Eco-friendly bamboo frame sunglasses', 24.99, 'Accessories', true, 30, '/images/bodega/sunglasses.jpg'),
-  ('Phone Charger', 'Portable solar phone charger', 29.99, 'Electronics', true, 25, '/images/bodega/charger.jpg'),
-  ('Granola Bar', 'Organic granola snack bar', 2.49, 'Snacks', true, 120, '/images/bodega/granola.jpg'),
-  ('Fresh Fruit Cup', 'Local seasonal fruit cup', 5.99, 'Fresh', true, 40, '/images/bodega/fruit.jpg'),
-  ('Iced Tea', 'Organic unsweetened iced tea', 3.49, 'Drinks', true, 60, '/images/bodega/iced-tea.jpg'),
-  ('Trail Mix', 'Premium organic trail mix', 4.99, 'Snacks', true, 90, '/images/bodega/trail-mix.jpg')
-ON CONFLICT DO NOTHING;
-
 -- Enable RLS for bodega_items
 ALTER TABLE public.bodega_items ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "bodega_items_read_all" ON public.bodega_items;
 CREATE POLICY "bodega_items_read_all" ON public.bodega_items FOR SELECT USING (true);
-CREATE POLICY "bodega_items_admin_write" ON public.bodega_items FOR ALL USING (
-  EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin')
-);
+
+-- Insert sample bodega items
+INSERT INTO public.bodega_items (name, description, price, price_cents, category, is_eco_friendly, stock, image_url) VALUES
+  ('Organic Water Bottle', 'Eco-friendly reusable water bottle', 12.99, 1299, 'Drinks', true, 50, '/bodega/water-bottle.jpg'),
+  ('AirBear Energy Bar', 'Sustainable energy snack', 3.99, 399, 'Snacks', true, 100, '/bodega/energy-bar.jpg'),
+  ('Local Coffee', 'Locally roasted fair-trade coffee', 4.50, 450, 'Drinks', true, 75, '/bodega/coffee.jpg'),
+  ('Organic Chips', 'Sustainably sourced potato chips', 2.99, 299, 'Snacks', true, 80, '/bodega/chips.jpg'),
+  ('Bamboo Sunglasses', 'Eco-friendly bamboo frame sunglasses', 24.99, 2499, 'Accessories', true, 30, '/bodega/sunglasses.jpg'),
+  ('Solar Phone Charger', 'Portable solar phone charger', 29.99, 2999, 'Electronics', true, 25, '/bodega/charger.jpg'),
+  ('Granola Bar', 'Organic granola snack bar', 2.49, 249, 'Snacks', true, 120, '/bodega/granola.jpg'),
+  ('Fresh Fruit Cup', 'Local seasonal fruit cup', 5.99, 599, 'Fresh', true, 40, '/bodega/fruit.jpg'),
+  ('Organic Iced Tea', 'Organic unsweetened iced tea', 3.49, 349, 'Drinks', true, 60, '/bodega/iced-tea.jpg'),
+  ('Trail Mix', 'Premium organic trail mix', 4.99, 499, 'Snacks', true, 90, '/bodega/trail-mix.jpg'),
+  ('AirBear T-Shirt', 'Official AirBear merchandise tee', 24.99, 2499, 'Merch', true, 50, '/bodega/tshirt.jpg'),
+  ('AirBear Cap', 'Official AirBear baseball cap', 19.99, 1999, 'Merch', true, 40, '/bodega/cap.jpg')
+ON CONFLICT DO NOTHING;
 
 -- =====================================================
--- ORDERS TABLE - Bodega purchases
+-- 6. ORDERS TABLE - Bodega purchases
 -- =====================================================
 CREATE TABLE IF NOT EXISTS public.orders (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID NOT NULL REFERENCES public.users(id),
-  ride_id UUID REFERENCES public.rides(id),
-  airbear_id UUID REFERENCES public.airbears(id),
-  items JSONB NOT NULL,
+  user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  ride_id UUID REFERENCES public.rides(id) ON DELETE SET NULL,
+  airbear_id UUID REFERENCES public.airbears(id) ON DELETE SET NULL,
+  items JSONB NOT NULL DEFAULT '[]',
   total_amount DECIMAL(10, 2) NOT NULL,
+  total_cents INTEGER,
   status VARCHAR(30) DEFAULT 'pending' CHECK (status IN ('pending', 'confirmed', 'preparing', 'ready', 'delivered', 'cancelled')),
-  payment_method VARCHAR(30),
+  payment_method VARCHAR(30) DEFAULT 'card',
+  payment_status VARCHAR(20) DEFAULT 'pending',
   stripe_payment_intent_id VARCHAR(255),
   notes TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -213,30 +239,36 @@ CREATE TABLE IF NOT EXISTS public.orders (
 
 -- Enable RLS for orders
 ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "orders_read_own" ON public.orders;
 CREATE POLICY "orders_read_own" ON public.orders FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "orders_insert_own" ON public.orders;
 CREATE POLICY "orders_insert_own" ON public.orders FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "orders_update_own" ON public.orders;
 CREATE POLICY "orders_update_own" ON public.orders FOR UPDATE USING (auth.uid() = user_id);
 
 -- =====================================================
--- PAYMENTS TABLE - All payment records
+-- 7. PAYMENTS TABLE - All payment records
 -- =====================================================
 CREATE TABLE IF NOT EXISTS public.payments (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID NOT NULL REFERENCES public.users(id),
-  ride_id UUID REFERENCES public.rides(id),
-  order_id UUID REFERENCES public.orders(id),
+  user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  ride_id UUID REFERENCES public.rides(id) ON DELETE SET NULL,
+  order_id UUID REFERENCES public.orders(id) ON DELETE SET NULL,
   amount DECIMAL(10, 2) NOT NULL,
+  amount_cents INTEGER,
   currency VARCHAR(3) DEFAULT 'usd',
-  payment_method VARCHAR(30) NOT NULL CHECK (payment_method IN ('stripe', 'apple_pay', 'google_pay', 'cash')),
+  payment_method VARCHAR(30) NOT NULL CHECK (payment_method IN ('card', 'stripe', 'apple_pay', 'google_pay', 'cash')),
   stripe_payment_intent_id VARCHAR(255),
-  status VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending', 'completed', 'failed', 'refunded')),
+  status VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending', 'processing', 'completed', 'failed', 'refunded')),
   metadata JSONB,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- Enable RLS for payments
 ALTER TABLE public.payments ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "payments_read_own" ON public.payments;
 CREATE POLICY "payments_read_own" ON public.payments FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "payments_insert_own" ON public.payments;
 CREATE POLICY "payments_insert_own" ON public.payments FOR INSERT WITH CHECK (auth.uid() = user_id);
 
 -- =====================================================
@@ -246,14 +278,33 @@ CREATE INDEX IF NOT EXISTS idx_rides_user_id ON public.rides(user_id);
 CREATE INDEX IF NOT EXISTS idx_rides_driver_id ON public.rides(driver_id);
 CREATE INDEX IF NOT EXISTS idx_rides_status ON public.rides(status);
 CREATE INDEX IF NOT EXISTS idx_airbears_available ON public.airbears(is_available) WHERE is_available = true;
+CREATE INDEX IF NOT EXISTS idx_airbears_online ON public.airbears(is_online) WHERE is_online = true;
 CREATE INDEX IF NOT EXISTS idx_spots_active ON public.spots(is_active) WHERE is_active = true;
 CREATE INDEX IF NOT EXISTS idx_users_role ON public.users(role);
 
 -- =====================================================
 -- REALTIME subscriptions
 -- =====================================================
-ALTER PUBLICATION supabase_realtime ADD TABLE public.airbears;
-ALTER PUBLICATION supabase_realtime ADD TABLE public.rides;
+DO $$
+BEGIN
+  ALTER PUBLICATION supabase_realtime ADD TABLE public.airbears;
+EXCEPTION WHEN duplicate_object THEN
+  NULL;
+END $$;
+
+DO $$
+BEGIN
+  ALTER PUBLICATION supabase_realtime ADD TABLE public.rides;
+EXCEPTION WHEN duplicate_object THEN
+  NULL;
+END $$;
+
+DO $$
+BEGIN
+  ALTER PUBLICATION supabase_realtime ADD TABLE public.spots;
+EXCEPTION WHEN duplicate_object THEN
+  NULL;
+END $$;
 
 -- =====================================================
 -- TRIGGER: Auto-create user profile on signup
@@ -265,14 +316,15 @@ SECURITY DEFINER
 SET search_path = public
 AS $$
 BEGIN
-  INSERT INTO public.users (id, email, username, full_name, avatar_url, phone)
+  INSERT INTO public.users (id, email, username, full_name, avatar_url, phone, role)
   VALUES (
     NEW.id,
     NEW.email,
     COALESCE(NEW.raw_user_meta_data->>'username', split_part(NEW.email, '@', 1)),
     COALESCE(NEW.raw_user_meta_data->>'full_name', NEW.raw_user_meta_data->>'name'),
     COALESCE(NEW.raw_user_meta_data->>'avatar_url', NEW.raw_user_meta_data->>'picture'),
-    NEW.phone
+    NEW.phone,
+    COALESCE(NEW.raw_user_meta_data->>'role', 'user')
   )
   ON CONFLICT (id) DO UPDATE SET
     email = EXCLUDED.email,

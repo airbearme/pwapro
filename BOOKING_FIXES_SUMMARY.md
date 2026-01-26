@@ -21,7 +21,7 @@
 
 ### Run this SQL in Supabase Dashboard:
 
-```sql
+\`\`\`sql
 DROP TABLE IF EXISTS public.rides CASCADE;
 
 CREATE TABLE public.rides (
@@ -53,7 +53,7 @@ END $$;
 CREATE INDEX IF NOT EXISTS idx_rides_airbear_id ON public.rides(airbear_id);
 CREATE INDEX IF NOT EXISTS idx_rides_user_id ON public.rides(user_id);
 CREATE INDEX IF NOT EXISTS idx_rides_status ON public.rides(status);
-```
+\`\`\`
 
 ## 📁 Files Modified
 
@@ -69,7 +69,7 @@ CREATE INDEX IF NOT EXISTS idx_rides_status ON public.rides(status);
 ## 🧪 Testing Commands
 
 ### After running SQL fix:
-```bash
+\`\`\`bash
 # Test booking flow
 node test-booking-flow.js
 
@@ -77,7 +77,7 @@ node test-booking-flow.js
 curl -X POST http://localhost:3000/api/rides/create \
   -H "Content-Type: application/json" \
   -d '{"pickup_spot_id":"appalachian-dining","dropoff_spot_id":"bu-east-gym","fare":4.0,"distance":1.5}'
-```
+\`\`\`
 
 ## 🎯 Next Steps
 

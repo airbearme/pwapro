@@ -2,9 +2,9 @@
 
 If this passes, the application works.
 
-```bash
+\`\`\`bash
 ./scripts/validate-all.sh
-```
+\`\`\`
 
 Runs:
 - lint
@@ -12,4 +12,3 @@ Runs:
 - build
 - e2e
 - bundle budgets
-

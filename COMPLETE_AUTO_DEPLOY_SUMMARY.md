@@ -45,7 +45,7 @@
 
 ### Automatic Flow (Every Push to Main):
 
-```
+\`\`\`
 Push to main
     ↓
 ✅ Validate Environment Variables
@@ -63,7 +63,7 @@ Push to main
 🔐 Sync Secrets to Vercel
     ↓
 📢 Deployment Complete!
-```
+\`\`\`
 
 ### What Gets Synced:
 
@@ -165,7 +165,3 @@ Add these 10 secrets:
 - ✅ **Everything Linked**: Supabase ↔ Vercel ↔ GitHub ↔ Production
 
 **Just push to `main` and watch it deploy automatically!** 🚀
-
-
-
-

@@ -6,9 +6,9 @@ This guide covers deploying AirBear PWA to production at https://airbear.me usin
 
 ## Architecture
 
-```
+\`\`\`
 User → IONOS DNS (airbear.me) → Vercel (Next.js App) → Supabase (Database/Auth) → Stripe (Payments)
-```
+\`\`\`
 
 ## Prerequisites
 
@@ -37,24 +37,24 @@ User → IONOS DNS (airbear.me) → Vercel (Next.js App) → Supabase (Database/
 Add these in Vercel Dashboard → Project Settings → Environment Variables:
 
 **Supabase:**
-```
+\`\`\`
 NEXT_PUBLIC_SUPABASE_PWA4_URL=https://fofmrqgcidfenbevayrg.supabase.co
 NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 SUPABASE_PWA4_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-```
+\`\`\`
 
 **Stripe:**
-```
+\`\`\`
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...
 STRIPE_SECRET_KEY=sk_live_...
 STRIPE_WEBHOOK_SECRET=whsec_...
-```
+\`\`\`
 
 **Site:**
-```
+\`\`\`
 NEXT_PUBLIC_SITE_URL=https://airbear.me
 NODE_ENV=production
-```
+\`\`\`
 
 **Important:** 
 - Set all variables for **Production**, **Preview**, and **Development** environments
@@ -75,28 +75,28 @@ NODE_ENV=production
 3. Add/Update records:
 
 **Option A: CNAME (Recommended)**
-```
+\`\`\`
 Type: CNAME
 Name: @ (or leave blank for root)
 Value: cname.vercel-dns.com
 TTL: 3600
-```
+\`\`\`
 
 **Option B: A Record (If CNAME not supported for root)**
-```
+\`\`\`
 Type: A
 Name: @
 Value: 76.76.21.21 (Vercel's IP - check current IP)
 TTL: 3600
-```
+\`\`\`
 
 **For www subdomain:**
-```
+\`\`\`
 Type: CNAME
 Name: www
 Value: cname.vercel-dns.com
 TTL: 3600
-```
+\`\`\`
 
 ### 2.2 Verify in Vercel
 
@@ -123,9 +123,9 @@ TTL: 3600
 ### 3.2 Test Webhook
 
 1. Use Stripe CLI for local testing:
-   ```bash
+   \`\`\`bash
    stripe listen --forward-to localhost:3000/api/stripe/webhook
-   ```
+   \`\`\`
 2. Test in Stripe Dashboard → Webhooks → Send test webhook
 
 ## Phase 4: Supabase Configuration
@@ -135,10 +135,10 @@ TTL: 3600
 In Supabase Dashboard → Authentication → URL Configuration:
 
 Add these redirect URLs:
-```
+\`\`\`
 https://airbear.me/auth/callback
 https://www.airbear.me/auth/callback
-```
+\`\`\`
 
 ### 4.2 Enable Realtime
 
@@ -273,9 +273,3 @@ The `.github/workflows/ci-cd.yml` will:
 
 **Last Updated:** 2025-01-26
 **Status:** Production Ready ✅
-
-
-
-
-
-

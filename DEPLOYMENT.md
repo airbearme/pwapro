@@ -10,11 +10,11 @@
 ### Steps
 
 1. **Push to GitHub**
-   ```bash
+   \`\`\`bash
    git add .
    git commit -m "Deploy to production"
    git push origin main
-   ```
+   \`\`\`
 
 2. **GitHub Actions will automatically:**
    - Validate code (type-check, lint, build)
@@ -24,9 +24,9 @@
 
 If you need to deploy manually:
 
-```bash
+\`\`\`bash
 npm run deploy:vercel
-```
+\`\`\`
 
 ## Environment Variables Setup
 
@@ -67,6 +67,3 @@ The GitHub Actions workflow (`.github/workflows/ci-cd.yml`) will:
 - Verify Vercel secrets in GitHub
 - Check Vercel project settings
 - Ensure domain is configured in Vercel
-
-
-

@@ -89,7 +89,3 @@ AirbearWheel.displayName = "AirbearWheel";
 // ⚡ Bolt: Memoized AirbearWheel to prevent unnecessary re-renders on the animation-heavy homepage.
 // This is a purely presentational component, so it's a perfect candidate for memoization.
 export default AirbearWheel;
-
-
-
-

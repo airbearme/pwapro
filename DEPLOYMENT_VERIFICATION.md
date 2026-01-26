@@ -29,11 +29,11 @@
 ## 🚀 **DEPLOYMENT INSTRUCTIONS**
 
 ### **Step 1: Push to GitHub** ✅
-```bash
+\`\`\`bash
 git add -A
 git commit -m "Production deployment - Clean codebase with enhanced payment flow"
 git push origin main
-```
+\`\`\`
 
 ### **Step 2: Deploy to Vercel** 
 **Option A: Vercel Dashboard (Recommended)**
@@ -46,31 +46,31 @@ git push origin main
    - **Install Command**: `npm install`
    - **Output Directory**: `.next`
 5. Add Environment Variables:
-   ```
+   \`\`\`
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
    SUPABASE_SERVICE_ROLE_KEY=your_service_key
    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_key
    STRIPE_SECRET_KEY=your_stripe_secret
    STRIPE_WEBHOOK_SECRET=your_webhook_secret
-   ```
+   \`\`\`
 6. Deploy!
 
 **Option B: Vercel CLI**
-```bash
+\`\`\`bash
 # Install Vercel CLI (one-time)
 npm i -g vercel
 
 # Deploy
 vercel --prod
-```
+\`\`\`
 
 ---
 
 ## 🌐 **Live Deployment Configuration**
 
 ### **✅ Vercel Configuration**
-```json
+\`\`\`json
 {
   "buildCommand": "npm run build",
   "framework": "nextjs",
@@ -93,7 +93,7 @@ vercel --prod
     }
   ]
 }
-```
+\`\`\`
 
 ### **✅ Domain Configuration**
 - **Primary Domain**: `airbear.me`

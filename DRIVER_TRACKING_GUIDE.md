@@ -142,7 +142,7 @@ See all available AirBears:
 
 ### Update AirBear Location
 
-```bash
+\`\`\`bash
 POST /api/airbear/update-location
 Content-Type: application/json
 
@@ -155,19 +155,19 @@ Content-Type: application/json
   "is_charging": false,
   "heading": 45.5
 }
-```
+\`\`\`
 
 ### Driver Profile Data
 
-```sql
+\`\`\`sql
 SELECT * FROM users WHERE role = 'driver';
-```
+\`\`\`
 
 ### Available AirBears View
 
-```sql
+\`\`\`sql
 SELECT * FROM available_airbears_with_drivers;
-```
+\`\`\`
 
 ---
 

@@ -58,9 +58,9 @@ Your AirBear PWA is **production-ready** and ready to deploy to **https://airbea
 ### Quick Deploy (5 minutes)
 
 1. **Push to GitHub:**
-   ```bash
+   \`\`\`bash
    git push origin main
-   ```
+   \`\`\`
 
 2. **Create GitHub repo** (if needed):
    - Go to https://github.com/new
@@ -139,9 +139,3 @@ All targets met WITH animations:
 **Status**: ✅ **PRODUCTION READY**
 
 All requirements met. UI/UX preserved. Security hardened. Ready to ship! 🚀
-
-
-
-
-
-

@@ -78,11 +78,11 @@ This will sync all secrets to Vercel automatically.
 After setup, verify everything works:
 
 1. **Push a commit to main branch:**
-   ```bash
+   \`\`\`bash
    git add .
    git commit -m "Test auto-deploy workflow"
    git push origin main
-   ```
+   \`\`\`
 
 2. **Check GitHub Actions:**
    - Go to **Actions** tab
@@ -150,7 +150,3 @@ After setup, verify everything works:
 ---
 
 **After setup, every push to `main` will automatically test, build, and deploy!** 🎉
-
-
-
-

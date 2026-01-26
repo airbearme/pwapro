@@ -39,11 +39,11 @@ All animation classes are in Tailwind's `safelist` to prevent purging in product
 
 ### Deploy to Production:
 
-```bash
+\`\`\`bash
 git add app/globals.css
 git commit -m "Fix production UI animations - add missing keyframes and utility classes"
 git push origin main
-```
+\`\`\`
 
 The GitHub Actions workflow will automatically:
 1. ✅ Build the application
@@ -76,7 +76,3 @@ After deployment, all special effects should be visible:
 ---
 
 **Status:** ✅ Fixed - Ready to deploy!
-
-
-
-

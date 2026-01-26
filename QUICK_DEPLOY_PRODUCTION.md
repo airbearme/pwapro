@@ -10,7 +10,7 @@ Dark mode is already configured in `app/layout.tsx`:
 
 ### Option 1: Vercel CLI (Recommended)
 
-```bash
+\`\`\`bash
 # Install Vercel CLI
 npm i -g vercel
 
@@ -19,18 +19,18 @@ vercel login
 
 # Deploy to production
 vercel --prod
-```
+\`\`\`
 
 ### Option 2: GitHub Push (Automatic)
 
-```bash
+\`\`\`bash
 # Commit and push
 git add .
 git commit -m "Deploy to production - Dark mode enabled"
 git push origin main
 
 # GitHub Actions will auto-deploy to Vercel
-```
+\`\`\`
 
 ### Option 3: Vercel Dashboard
 
@@ -66,8 +66,3 @@ Make sure these are set in Vercel Dashboard:
 ---
 
 **Ready to deploy!** Run `vercel --prod` or push to GitHub. 🚀
-
-
-
-
-

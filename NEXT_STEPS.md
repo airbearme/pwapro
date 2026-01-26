@@ -29,16 +29,16 @@
 **Go to:** [Supabase Dashboard](https://supabase.com/dashboard) → Your Project → Authentication → URL Configuration
 
 **Site URL:**
-```
+\`\`\`
 https://airbear.me
-```
+\`\`\`
 
 **Redirect URLs (add all three):**
-```
+\`\`\`
 http://localhost:3000/auth/callback
 https://airbear.me/auth/callback
 https://www.airbear.me/auth/callback
-```
+\`\`\`
 
 **Why:** OAuth providers (Google/Apple) need to know where to redirect users after authentication.
 
@@ -64,16 +64,16 @@ https://www.airbear.me/auth/callback
 ### 3. Deploy to Production 🚀
 
 **Option A: GitHub Push (Automatic)**
-```bash
+\`\`\`bash
 git add .
 git commit -m "Configure OAuth callbacks and deploy to production"
 git push origin main
-```
+\`\`\`
 
 **Option B: Vercel CLI**
-```bash
+\`\`\`bash
 vercel --prod
-```
+\`\`\`
 
 **Option C: Vercel Dashboard**
 1. Go to https://vercel.com/dashboard
@@ -138,4 +138,3 @@ Test these on https://airbear.me:
 **Status:** Ready to deploy! 🎉
 
 **Next:** Configure Supabase redirect URLs → Deploy → Test OAuth
-

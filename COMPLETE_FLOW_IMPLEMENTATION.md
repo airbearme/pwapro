@@ -33,7 +33,7 @@ I've built a complete end-to-end ride booking and payment system for both passen
 
 ### 👤 PASSENGER FLOW:
 
-```
+\`\`\`
 1. Register/Login
    ↓
 2. View Map (/map)
@@ -50,11 +50,11 @@ I've built a complete end-to-end ride booking and payment system for both passen
 5. Dashboard (/dashboard)
    - View ride history
    - See status updates
-```
+\`\`\`
 
 ### 🚗 DRIVER FLOW:
 
-```
+\`\`\`
 1. Register as Driver
    ↓
 2. Login
@@ -70,7 +70,7 @@ I've built a complete end-to-end ride booking and payment system for both passen
    ↓
 6. Complete Ride
    - Click "Complete Ride"
-```
+\`\`\`
 
 ---
 
@@ -172,16 +172,12 @@ Follow the complete guide in `COMPLETE_USER_FLOW_TEST.md`
 
 All functionality is implemented and ready for testing. Once tested, deploy with:
 
-```bash
+\`\`\`bash
 git add .
 git commit -m "Complete user flow: booking, payment, driver dashboard"
 git push origin main
-```
+\`\`\`
 
 ---
 
 **Status:** ✅ **COMPLETE** - Ready for comprehensive testing!
-
-
-
-

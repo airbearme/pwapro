@@ -69,9 +69,3 @@ echo "   - Add CNAME: @ → cname.vercel-dns.com"
 echo ""
 echo "📚 See DEPLOY_NOW.md for complete instructions"
 echo ""
-
-
-
-
-
-

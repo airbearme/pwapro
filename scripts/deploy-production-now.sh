@@ -108,4 +108,3 @@ echo "   - Payments work"
 echo "4. Monitor Vercel dashboard for any issues"
 echo ""
 echo -e "${GREEN}🎉 AirBear PWA is now live at airbear.me with dark mode!${NC}"
-

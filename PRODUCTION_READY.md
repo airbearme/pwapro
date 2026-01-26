@@ -64,9 +64,9 @@ All production-grade improvements have been implemented while **strictly preserv
 ## Quick Deploy
 
 ### 1. Push to GitHub
-```bash
+\`\`\`bash
 git push origin main
-```
+\`\`\`
 
 ### 2. Configure Vercel
 - Import repository: `airbearme/pwapro`
@@ -88,9 +88,9 @@ git push origin main
 ## Verification
 
 Run production readiness check:
-```bash
+\`\`\`bash
 npm run deploy:prep
-```
+\`\`\`
 
 This validates:
 - ✅ Environment variables
@@ -146,9 +146,3 @@ This validates:
 **Ready to ship!** 🚀
 
 All production requirements met while preserving the beautiful UI/UX.
-
-
-
-
-
-

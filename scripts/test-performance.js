@@ -101,5 +101,3 @@ async function runPerformanceTests() {
 }
 
 runPerformanceTests();
-
-

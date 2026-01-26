@@ -2,14 +2,14 @@
 
 ## One Command Deployment
 
-```bash
+\`\`\`bash
 # Set tokens (one-time setup)
 export GITHUB_TOKEN=your_github_token
 export VERCEL_TOKEN=your_vercel_token
 
 # Deploy everything
 bash scripts/one-click-deploy.sh
-```
+\`\`\`
 
 That's it! 🎉
 
@@ -37,7 +37,7 @@ That's it! 🎉
 
 ## Run Deployment
 
-```bash
+\`\`\`bash
 # Load tokens
 export GITHUB_TOKEN=ghp_your_token_here
 export VERCEL_TOKEN=your_vercel_token_here
@@ -47,7 +47,7 @@ export STRIPE_SECRET_KEY=sk_live_...  # Already in .env.local
 
 # Deploy!
 bash scripts/one-click-deploy.sh
-```
+\`\`\`
 
 ## After Automation
 
@@ -61,7 +61,7 @@ Only 2 manual steps remain (can't be fully automated):
 
 ## What Happens
 
-```
+\`\`\`
 Run script
     ↓
 Creates GitHub repo
@@ -77,7 +77,7 @@ Creates Stripe webhook
 Deploys to production
     ↓
 ✅ Live in ~5 minutes!
-```
+\`\`\`
 
 ## Troubleshooting
 
@@ -103,9 +103,3 @@ Deploys to production
 ---
 
 **Ready to deploy?** Just run the one command above! 🚀
-
-
-
-
-
-

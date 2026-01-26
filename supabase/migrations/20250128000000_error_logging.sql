@@ -151,8 +151,3 @@ CREATE TRIGGER track_error_pattern_trigger
   AFTER INSERT ON error_logs
   FOR EACH ROW
   EXECUTE FUNCTION track_error_pattern();
-
-
-
-
-

@@ -23,7 +23,7 @@ All systems are **READY FOR PRODUCTION** at airbear.me!
 
 ### 1. Push to GitHub
 
-```bash
+\`\`\`bash
 # Initialize git if not already done
 git init
 git add .
@@ -36,11 +36,11 @@ git remote add origin https://github.com/airbearme/pwa4.git
 
 # Push to main branch
 git push -u origin main
-```
+\`\`\`
 
 ### 2. Deploy to Vercel
 
-```bash
+\`\`\`bash
 # Install Vercel CLI
 npm i -g vercel
 
@@ -52,7 +52,7 @@ vercel --prod
 
 # Add custom domain
 vercel domains add airbear.me
-```
+\`\`\`
 
 ### 3. Configure Domain
 
@@ -60,7 +60,7 @@ In your domain registrar (where you bought airbear.me):
 
 Add these DNS records:
 
-```
+\`\`\`
 Type: A
 Name: @
 Value: 76.76.19.19
@@ -68,7 +68,7 @@ Value: 76.76.19.19
 Type: CNAME  
 Name: www
 Value: cname.vercel-dns.com
-```
+\`\`\`
 
 ### 4. Setup Supabase
 
@@ -107,7 +107,7 @@ Go to Vercel Dashboard → Project → Settings → Environment Variables
 
 Ensure these are set:
 
-```
+\`\`\`
 NEXT_PUBLIC_SUPABASE_PWA4_URL=
 NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=
 SUPABASE_PWA4_SERVICE_ROLE_KEY=
@@ -117,15 +117,15 @@ STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
 
 NEXT_PUBLIC_APP_URL=https://airbear.me
-```
+\`\`\`
 
 ### 7. Test Production
 
-```bash
+\`\`\`bash
 # Run the test suite
 chmod +x scripts/test-production.sh
 ./scripts/test-production.sh https://airbear.me
-```
+\`\`\`
 
 ---
 
@@ -167,13 +167,13 @@ chmod +x scripts/test-production.sh
 
 ### Check Logs
 
-```bash
+\`\`\`bash
 # Vercel logs
 vercel logs
 
 # Or in dashboard
 # vercel.com/your-project/deployments
-```
+\`\`\`
 
 ### Monitor Supabase
 
@@ -241,10 +241,10 @@ Your deployment is successful when:
 
 ### Add Test Data
 
-```bash
+\`\`\`bash
 # Add sample airbears and spots to your Supabase database
 # Use the Supabase dashboard or run SQL inserts
-```
+\`\`\`
 
 ### Monitor Usage
 
@@ -257,12 +257,12 @@ Your deployment is successful when:
 
 GitHub Actions will automatically deploy when you push to main:
 
-```bash
+\`\`\`bash
 git add .
 git commit -m "Update feature"
 git push origin main
 # Auto-deploys to production!
-```
+\`\`\`
 
 ---
 
@@ -275,6 +275,6 @@ git push origin main
 ---
 
 **You're now live at https://airbear.me! 🎊**
-```
+\`\`\`
 
-```json file="" isHidden
+\`\`\`json file="" isHidden

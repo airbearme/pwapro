@@ -95,7 +95,3 @@ export async function GET(request: Request) {
     return NextResponse.redirect(`${origin}/auth/login?error=${encodeURIComponent(err.message || "oauth_failed")}`)
   }
 }
-
-
-
-

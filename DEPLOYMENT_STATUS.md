@@ -13,7 +13,7 @@
 - ✅ Windsurf rules: COMPREHENSIVE COVERAGE
 
 ### Build Results
-```
+\`\`\`
 ✓ Compiled successfully in 56s
 ✓ Collecting page data
 ✓ Generating static pages (27/27)
@@ -29,7 +29,7 @@ Route (app)                                 Size  First Load JS
 └── [27 total routes]                     ✅ All optimized
 
 ƒ Middleware                             79.9 kB
-```
+\`\`\`
 
 ### Issues Fixed
 - ✅ TypeScript error in airbear locations API
@@ -62,7 +62,7 @@ Route (app)                                 Size  First Load JS
 ## 🚀 Deployment Instructions
 
 ### Method 1: Manual Upload (Recommended)
-```bash
+\`\`\`bash
 # Create deployment package
 tar -czf airbear-deploy.tar.gz .next public package.json next.config.mjs .env.production
 
@@ -71,10 +71,10 @@ scp airbear-deploy.tar.gz a2096159@access-5018328928.webspace-host.com:/httpdocs
 
 # Extract on server
 ssh a2096159@access-5018328928.webspace-host.com "cd /httpdocs && tar -xzf airbear-deploy.tar.gz && rm airbear-deploy.tar.gz"
-```
+\`\`\`
 
 ### Method 2: Vercel Deployment
-```bash
+\`\`\`bash
 # Install Vercel CLI
 npm i -g vercel
 
@@ -83,14 +83,14 @@ vercel --prod
 
 # Configure custom domain
 vercel domains add airbear.me
-```
+\`\`\`
 
 ### Method 3: Automated Script
-```bash
+\`\`\`bash
 # Use deployment script
 chmod +x upload-deploy.sh
 ./upload-deploy.sh
-```
+\`\`\`
 
 ## 📊 Quality Metrics
 
@@ -171,10 +171,10 @@ chmod +x upload-deploy.sh
 7. Click "Create repository"
 
 ### Step 2: Push Code (1 minute)
-```bash
+\`\`\`bash
 cd /home/coden809/Projects/pwapro
 git push -u origin main
-```
+\`\`\`
 
 ### Step 3: Deploy to Vercel (5 minutes)
 1. Go to: https://vercel.com/dashboard
@@ -216,9 +216,9 @@ All beautiful UI elements are intact:
 ## 🚀 Quick Deploy Command
 
 Once GitHub repo is created:
-```bash
+\`\`\`bash
 git push -u origin main
-```
+\`\`\`
 
 Then import in Vercel dashboard.
 

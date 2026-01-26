@@ -31,9 +31,9 @@
 
 ### API Health Endpoint
 
-```bash
+\`\`\`bash
 curl https://airbear.me/api/health
-```
+\`\`\`
 
 **Response**: ✅ Healthy
 
@@ -278,7 +278,7 @@ All tables created with RLS policies:
 
 Your environment variables are already configured. Verify they're set in Vercel:
 
-```bash
+\`\`\`bash
 # Required Variables (Already Set):
 NEXT_PUBLIC_SUPABASE_PWA4_URL
 NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY
@@ -286,7 +286,7 @@ SUPABASE_PWA4_SERVICE_ROLE_KEY
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 STRIPE_SECRET_KEY
 STRIPE_WEBHOOK_SECRET (Get from Stripe dashboard)
-```
+\`\`\`
 
 ### Step 2: Configure Custom Domain in Vercel
 
@@ -297,7 +297,7 @@ STRIPE_WEBHOOK_SECRET (Get from Stripe dashboard)
 
 **DNS Configuration:**
 
-```
+\`\`\`
 Type: A
 Name: @
 Value: 76.76.21.21
@@ -305,7 +305,7 @@ Value: 76.76.21.21
 Type: CNAME
 Name: www
 Value: cname.vercel-dns.com
-```
+\`\`\`
 
 ### Step 3: Setup Stripe Webhook
 
@@ -338,37 +338,37 @@ Value: cname.vercel-dns.com
 
 Run the database setup script:
 
-```bash
+\`\`\`bash
 # The schema is in scripts/01-setup-database.sql
 # Execute via Supabase SQL Editor or CLI
-```
+\`\`\`
 
 ### Step 6: Deploy via GitHub
 
-```bash
+\`\`\`bash
 # Push to main branch - GitHub Actions will auto-deploy
 git add .
 git commit -m "Production deployment to airbear.me"
 git push origin main
-```
+\`\`\`
 
 **OR deploy manually:**
 
-```bash
+\`\`\`bash
 npm run deploy:vercel
-```
+\`\`\`
 
 ### Step 7: Verify Deployment
 
 Check all systems are operational:
 
-```bash
+\`\`\`bash
 curl https://airbear.me/api/health
-```
+\`\`\`
 
 Expected response:
 
-```json
+\`\`\`json
 {
   "timestamp": "2025-01-XX...",
   "status": "healthy",
@@ -378,7 +378,7 @@ Expected response:
     "stripe": { "status": "healthy" }
   }
 }
-```
+\`\`\`
 
 ---
 
@@ -485,7 +485,7 @@ Your AirBear PWA is production-ready with:
 
 Deploy with confidence and watch your mobile bodega rideshare business thrive! 🐻🚗🛒
 
-````
+\`\`\``
 
-```typescript file="" isHidden
-````
+\`\`\`typescript file="" isHidden
+\`\`\``

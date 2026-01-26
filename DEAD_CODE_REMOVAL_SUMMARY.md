@@ -85,7 +85,7 @@
 ### 📁 **Remaining Clean Structure**
 
 #### **✅ Active Directories**
-```
+\`\`\`
 app/                    # Next.js App Router pages
 components/            # Active UI components
 ├── ui/               # shadcn/ui components
@@ -98,7 +98,7 @@ hooks/               # Active React hooks
 scripts/             # Active build scripts
 public/              # Static assets
 .windsurf/           # Windsurf rules
-```
+\`\`\`
 
 #### **✅ Essential Files Remaining**
 - ✅ `package.json` - Dependencies and scripts

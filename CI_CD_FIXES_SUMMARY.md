@@ -81,20 +81,20 @@ Successfully identified and fixed **ALL** incorrect repository references from `
 - **Domain**: `airbear.me` (correctly configured)
 
 ### **✅ Correct Commands**
-```bash
+\`\`\`bash
 # All scripts now use correct repository
 git remote add origin https://github.com/airbearme/pwapro.git
 git push -u origin main
 
 # Vercel deployment targets correct project
 vercel --prod
-```
+\`\`\`
 
 ### **✅ Correct Environment**
-```bash
+\`\`\`bash
 # All documentation points to correct project
 cd /home/coden809/Projects/pwapro
-```
+\`\`\`
 
 ---
 

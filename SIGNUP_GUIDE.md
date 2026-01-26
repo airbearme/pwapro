@@ -122,36 +122,36 @@
 
 ### 🚗 Driver Signup Example
 
-```
+\`\`\`
 1. Go to: https://airbear.me/driver/signup
 2. Username: driver1
 3. Full Name: John Driver
 4. AirBear ID: airbear-001
 5. Click: "Create Driver Account"
 6. Success! Redirect to: /driver
-```
+\`\`\`
 
 ### 🛡️ Admin Signup Example
 
-```
+\`\`\`
 1. Go to: https://airbear.me/admin/signup
 2. Username: admin_user
 3. Full Name: Jane Admin
 4. Admin Code: AIRBEAR2024
 5. Click: "Create Admin Account"
 6. Success! Redirect to: /admin
-```
+\`\`\`
 
 ### 👥 Customer Signup Example
 
-```
+\`\`\`
 1. Go to: https://airbear.me/auth/signup
 2. Email: customer@email.com
 3. Username: customer123
 4. Password: mysecurepassword
 5. Click: "Create Account"
 6. Success! Redirect to booking page
-```
+\`\`\`
 
 ---
 

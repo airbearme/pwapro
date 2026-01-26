@@ -53,7 +53,7 @@
 ## 🚀 Usage Commands
 
 ### 📋 Basic CodeMaps
-```bash
+\`\`\`bash
 # Generate CodeMaps
 npm run codemaps:generate
 
@@ -62,32 +62,32 @@ npm run codemaps:validate
 
 # Deploy with CodeMaps
 npm run codemaps:deploy
-```
+\`\`\`
 
 ### 🔬 Advanced Analysis
-```bash
+\`\`\`bash
 # Run comprehensive analysis
 npm run codemaps:analyze
 
 # Generate optimization report
 npm run codemaps:optimize
-```
+\`\`\`
 
 ### 👁️ Real-time Monitoring
-```bash
+\`\`\`bash
 # Start real-time monitoring
 npm run codemaps:monitor
-```
+\`\`\`
 
 ### 🎯 Complete Workflow
-```bash
+\`\`\`bash
 # Run full CodeMaps workflow
 npm run codemaps:all
-```
+\`\`\`
 
 ## 📁 Generated Files Structure
 
-```
+\`\`\`
 .next/codemaps/
 ├── index.json                    # Main CodeMaps index
 ├── components.json               # Component mappings (69)
@@ -102,7 +102,7 @@ npm run codemaps:all
 ├── monitoring-report.json     # Real-time monitoring status
 ├── dashboard.html             # Live monitoring dashboard
 └── server/                    # Source maps for server-side
-```
+\`\`\`
 
 ## 🔍 Advanced Analysis Results
 

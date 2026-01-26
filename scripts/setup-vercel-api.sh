@@ -72,9 +72,3 @@ vercel --prod --token="$VERCEL_TOKEN"
 
 echo ""
 echo "✅ Vercel setup complete!"
-
-
-
-
-
-

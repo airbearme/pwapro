@@ -59,7 +59,7 @@
 
 Once you complete the one-time manual setup above, here's what happens automatically:
 
-```
+\`\`\`
 You commit code
     ↓
 Push to GitHub (main branch)
@@ -73,7 +73,7 @@ If validation passes → Deploys to Vercel
 Vercel builds and deploys to airbear.me
     ↓
 ✅ Live in production (2-3 minutes)
-```
+\`\`\`
 
 **No manual steps needed after initial setup!**
 
@@ -115,9 +115,3 @@ The system automatically:
 4. Updates `airbear.me`
 
 **No manual deployment steps needed!** 🎉
-
-
-
-
-
-

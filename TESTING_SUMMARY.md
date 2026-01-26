@@ -53,88 +53,88 @@ I've implemented a complete end-to-end user flow for both passengers and drivers
 ### As PASSENGER:
 
 1. **Register/Login:**
-   ```
+   \`\`\`
    Visit: https://airbear.me/auth/signup
    - Sign up with email OR
    - Click "Continue with Google" OR
    - Click "Continue with Apple"
-   ```
+   \`\`\`
 
 2. **View Map:**
-   ```
+   \`\`\`
    Visit: https://airbear.me/map
    - Map loads with spots and AirBears
    - Click spot markers to see details
    - Click "Book a Ride" button
-   ```
+   \`\`\`
 
 3. **Book Ride:**
-   ```
+   \`\`\`
    Visit: https://airbear.me/book
    - Select pickup location
    - Select destination
    - See fare calculation ($4.00)
    - Click "Book Ride & Continue to Payment"
-   ```
+   \`\`\`
 
 4. **Complete Payment:**
-   ```
+   \`\`\`
    Visit: https://airbear.me/checkout?rideId=XXX&amount=4.00
    - Enter card: 4242 4242 4242 4242
    - Expiry: Any future date
    - CVC: Any 3 digits
    - Click "Pay $4.00"
    - Should redirect to dashboard
-   ```
+   \`\`\`
 
 5. **View Dashboard:**
-   ```
+   \`\`\`
    Visit: https://airbear.me/dashboard
    - See ride history
    - See stats (total rides, CO₂ saved, etc.)
    - See ride status updates
-   ```
+   \`\`\`
 
 ### As DRIVER:
 
 1. **Register as Driver:**
-   ```
+   \`\`\`
    - Register normally
    - Update role in Supabase:
      UPDATE users SET role = 'driver' WHERE email = 'driver@example.com';
-   ```
+   \`\`\`
 
 2. **Login:**
-   ```
+   \`\`\`
    Visit: https://airbear.me/auth/login
    - Login with driver credentials
-   ```
+   \`\`\`
 
 3. **View Driver Dashboard:**
-   ```
+   \`\`\`
    Visit: https://airbear.me/driver
    - See pending ride requests
    - See active ride (if any)
-   ```
+   \`\`\`
 
 4. **Accept Ride:**
-   ```
+   \`\`\`
    - Click "Accept Ride" on a pending ride
    - Ride moves to "Active Ride" section
-   ```
+   \`\`\`
 
 5. **Start Ride:**
-   ```
+   \`\`\`
    - Click "Start Ride" on active ride
    - Status changes to "in_progress"
-   ```
+   \`\`\`
 
 6. **Complete Ride:**
-   ```
+   \`\`\`
    - Click "Complete Ride"
    - Ride status: "completed"
    - AirBear marked as available
-   ```
+   \`\`\`
 
 ---
 
@@ -220,7 +220,3 @@ Make sure these tables exist:
 ---
 
 **Status:** ✅ All core functionality implemented and ready for testing!
-
-
-
-

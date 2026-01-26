@@ -22,7 +22,7 @@ I've cleaned up and configured your environment variables:
 ## 📋 Current Environment Variables
 
 ### Essential Variables (✅ Already Configured)
-```bash
+\`\`\`bash
 # Supabase Configuration
 NEXT_PUBLIC_SUPABASE_PWA4_URL=https://fofmrqgcidfenbevayrg.supabase.co
 NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=[Get from Supabase Dashboard → Project Settings → API]
@@ -36,7 +36,7 @@ STRIPE_WEBHOOK_SECRET=[Get from Stripe Dashboard → Developers → Webhooks]
 # Site Configuration
 NEXT_PUBLIC_SITE_URL=https://airbear.me
 NODE_ENV=production
-```
+\`\`\`
 
 ## 🔧 What You Need to Do
 
@@ -47,59 +47,59 @@ Go to: https://github.com/airbearme/pwapro/settings/secrets/actions
 Add these repository secrets:
 
 1. `NEXT_PUBLIC_SUPABASE_PWA4_URL`
-   ```
+   \`\`\`
    https://fofmrqgcidfenbevayrg.supabase.co
-   ```
+   \`\`\`
 
 2. `NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY`
-   ```
+   \`\`\`
    [Get from Supabase Dashboard → Project Settings → API]
-   ```
+   \`\`\`
 
 3. `SUPABASE_PWA4_SERVICE_ROLE_KEY`
-   ```
+   \`\`\`
    [Get from Supabase Dashboard → Project Settings → API]
-   ```
+   \`\`\`
 
 4. `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
-   ```
+   \`\`\`
    [Get from Stripe Dashboard → Developers → API Keys]
-   ```
+   \`\`\`
 
 5. `STRIPE_SECRET_KEY`
-   ```
+   \`\`\`
    [Get from Stripe Dashboard → Developers → API Keys]
-   ```
+   \`\`\`
 
 6. `STRIPE_WEBHOOK_SECRET`
-   ```
+   \`\`\`
    [Get from Stripe Dashboard → Developers → Webhooks]
-   ```
+   \`\`\`
 
 7. `NEXT_PUBLIC_SITE_URL`
-   ```
+   \`\`\`
    https://airbear.me
-   ```
+   \`\`\`
 
 ### **Step 2: Configure Supabase Redirect URLs** (Required for OAuth)
 
 Go to: https://supabase.com/dashboard/project/fofmrqgcidfenbevayrg/auth/url-configuration
 
 **Site URL:**
-```
+\`\`\`
 https://airbear.me
-```
+\`\`\`
 
 **Redirect URLs (add all):**
-```
+\`\`\`
 http://localhost:3000/auth/callback
 https://airbear.me/auth/callback
 https://www.airbear.me/auth/callback
-```
+\`\`\`
 
 ### **Step 3: Deploy to Production** 
 
-```bash
+\`\`\`bash
 # Option A: Use the production script
 ./scripts/deploy-production.sh
 
@@ -108,11 +108,11 @@ npm run build
 git add .
 git commit -m "Configure environment variables and deploy"
 git push origin main
-```
+\`\`\`
 
 ## 🎯 Quick Commands
 
-```bash
+\`\`\`bash
 # Validate environment
 npm run check:supabase
 
@@ -124,7 +124,7 @@ npm run check:supabase
 
 # Deploy to production
 ./scripts/deploy-production.sh
-```
+\`\`\`
 
 ## ✅ Verification Checklist
 

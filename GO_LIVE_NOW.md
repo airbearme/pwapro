@@ -21,24 +21,24 @@
 3. **Click**: "Import"
 
 ### **STEP 3: CONFIGURE PROJECT**
-```
+\`\`\`
 Framework: Next.js (auto-detected)
 Build Command: npm run build
 Install Command: npm install
 Output Directory: .next
 Root Directory: ./
-```
+\`\`\`
 
 ### **STEP 4: ADD ENVIRONMENT VARIABLES**
 Copy these from your `.env.production` file:
-```bash
+\`\`\`bash
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
 STRIPE_SECRET_KEY=your_stripe_secret_key
 STRIPE_WEBHOOK_SECRET=your_webhook_secret
-```
+\`\`\`
 
 ### **STEP 5: DEPLOY**
 1. **Click**: "Deploy" button
@@ -55,7 +55,7 @@ STRIPE_WEBHOOK_SECRET=your_webhook_secret
 
 ## 🎯 **ALTERNATIVE: CLI DEPLOYMENT**
 
-```bash
+\`\`\`bash
 # Install Vercel CLI (one-time)
 npm i -g vercel
 
@@ -64,7 +64,7 @@ vercel login
 
 # Deploy to production
 vercel --prod
-```
+\`\`\`
 
 ---
 

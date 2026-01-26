@@ -135,17 +135,17 @@
 ## 🛠️ **Recommended Fixes**
 
 ### **Fix 1: Enhanced Payment Integration**
-```typescript
+\`\`\`typescript
 // In RidePayment component
 const handleCardPayment = async () => {
   setProcessing(true);
   // Pass ride information to CheckoutButton
   await router.push(`/checkout?rideId=${ride.id}&amount=${ride.fare}`);
 };
-```
+\`\`\`
 
 ### **Fix 2: Payment Confirmation**
-```typescript
+\`\`\`typescript
 // In checkout page, update ride status after payment
 const updateRideStatus = async (rideId: string) => {
   const supabase = getSupabaseClient();
@@ -154,10 +154,10 @@ const updateRideStatus = async (rideId: string) => {
     .update({ status: 'confirmed', paid_at: new Date().toISOString() })
     .eq('id', rideId);
 };
-```
+\`\`\`
 
 ### **Fix 3: Enhanced Error Handling**
-```typescript
+\`\`\`typescript
 // Add better error messages and retry logic
 const handlePaymentError = (error: any) => {
   toast({
@@ -166,7 +166,7 @@ const handlePaymentError = (error: any) => {
     variant: "destructive",
   });
 };
-```
+\`\`\`
 
 ---
 

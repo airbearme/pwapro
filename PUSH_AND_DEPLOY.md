@@ -20,15 +20,15 @@
 
 Once the repository is created, run:
 
-```bash
+\`\`\`bash
 cd /home/coden809/Projects/pwapro
 git push -u origin main
-```
+\`\`\`
 
 Or use the script:
-```bash
+\`\`\`bash
 bash scripts/push-and-deploy.sh
-```
+\`\`\`
 
 ## Step 3: Deploy to Vercel (5 minutes)
 
@@ -52,7 +52,7 @@ bash scripts/push-and-deploy.sh
 
 Click **"Environment Variables"** and add these (copy from your `.env.local`):
 
-```
+\`\`\`
 NEXT_PUBLIC_SUPABASE_PWA4_URL=https://fofmrqgcidfenbevayrg.supabase.co
 NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZvZm1ycWdjaWRmZW5iZXZheXJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM2MzQ3MjgsImV4cCI6MjA3OTIxMDcyOH0.Z6m5z1KQGp-cDjBbcdJjUaXIA25C3VD8IlcLge1fWyM
 SUPABASE_PWA4_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZvZm1ycWdjaWRmZW5iZXZheXJnIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MzYzNDcyOCwiZXhwIjoyMDc5MjEwNzI4fQ.89Y4IOCpB-Ky1qjTJLmotMBe8RqQyN8bk6Xp5F43MMA
@@ -61,7 +61,7 @@ STRIPE_SECRET_KEY=sk_live_... (your Stripe secret key)
 STRIPE_WEBHOOK_SECRET=whsec_... (your Stripe webhook secret)
 NEXT_PUBLIC_SITE_URL=https://airbear.me
 NODE_ENV=production
-```
+\`\`\`
 
 **Important:** 
 - Set each variable for **Production**, **Preview**, and **Development**
@@ -91,28 +91,28 @@ NODE_ENV=production
 3. Add/Update these records:
 
 **For root domain (airbear.me):**
-```
+\`\`\`
 Type: CNAME
 Name: @ (or leave blank)
 Value: cname.vercel-dns.com
 TTL: 3600
-```
+\`\`\`
 
 **For www subdomain:**
-```
+\`\`\`
 Type: CNAME
 Name: www
 Value: cname.vercel-dns.com
 TTL: 3600
-```
+\`\`\`
 
 **Note:** If IONOS doesn't support CNAME for root domain, use A record:
-```
+\`\`\`
 Type: A
 Name: @
 Value: 76.76.21.21 (check Vercel for current IP)
 TTL: 3600
-```
+\`\`\`
 
 4. Wait 5-60 minutes for DNS propagation
 
@@ -177,7 +177,7 @@ Check these:
 
 ## Quick Commands
 
-```bash
+\`\`\`bash
 # Push to GitHub
 git push -u origin main
 
@@ -189,10 +189,9 @@ vercel logs
 
 # Redeploy
 vercel --prod
-```
+\`\`\`
 
 ---
 
 **Total Time:** ~20 minutes
 **Status:** Ready to deploy! 🚀
-

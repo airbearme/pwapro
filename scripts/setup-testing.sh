@@ -55,8 +55,3 @@ echo "  npm run test:security     # Run security tests"
 echo "  npm run test:accessibility # Run accessibility tests"
 echo "  npm run test:all          # Run all tests"
 echo "  npm run test:validate     # Ultimate validation"
-
-
-
-
-

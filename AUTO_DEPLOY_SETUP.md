@@ -70,11 +70,11 @@ This syncs all secrets to Vercel automatically.
 
 Push a test commit:
 
-```bash
+\`\`\`bash
 git add .
 git commit -m "Test auto-deploy workflow"
 git push origin main
-```
+\`\`\`
 
 Watch the workflow run in **Actions** tab. It should:
 - ✅ Validate environment variables
@@ -166,7 +166,3 @@ After setup:
 ---
 
 **Setup complete! Your app will now automatically deploy on every push!** 🚀
-
-
-
-

@@ -170,10 +170,10 @@
 ## 🚀 Next Steps for Production
 
 1. **Set up VAPID keys** for push notifications:
-   ```bash
+   \`\`\`bash
    npm install -g web-push
    web-push generate-vapid-keys
-   ```
+   \`\`\`
 
 2. **Configure GitHub Secrets**:
    - `VERCEL_TOKEN`
@@ -185,9 +185,9 @@
    - `NEXT_PUBLIC_VAPID_PUBLIC_KEY`
 
 3. **Run database migrations**:
-   ```bash
+   \`\`\`bash
    supabase migration up
-   ```
+   \`\`\`
 
 4. **Enable GitHub Actions** in repository settings
 
@@ -212,8 +212,3 @@
 - **Self-Repairing**: ✅ Complete
 
 **All features are implemented and ready for production!** 🎉
-
-
-
-
-

@@ -99,9 +99,9 @@ This document describes the complete testing infrastructure for the AirBear PWA.
 ## Ultimate Validation
 
 ### Run All Tests
-```bash
+\`\`\`bash
 npm run test:validate
-```
+\`\`\`
 
 This runs the **Ultimate Validation Script** (`scripts/ultimate-validation.js`) which executes:
 
@@ -126,21 +126,21 @@ This runs the **Ultimate Validation Script** (`scripts/ultimate-validation.js`) 
 ## Setup
 
 ### Initial Setup
-```bash
+\`\`\`bash
 npm run setup:testing
-```
+\`\`\`
 
 This installs all testing dependencies and creates necessary directories.
 
 ### Manual Setup
-```bash
+\`\`\`bash
 npm install --save-dev \
   @testing-library/react @testing-library/jest-dom \
   @playwright/test \
   lighthouse @lhci/cli \
   pa11y \
   jest @jest/globals
-```
+\`\`\`
 
 ## Test Scripts Reference
 
@@ -185,7 +185,7 @@ See `.github/workflows/ci-cd.yml` for details.
 ## Writing Tests
 
 ### Unit Test Example
-```typescript
+\`\`\`typescript
 // __tests__/components/button.test.tsx
 import { render, screen } from '@testing-library/react';
 import { Button } from '@/components/ui/button';
@@ -196,10 +196,10 @@ describe('Button', () => {
     expect(screen.getByText('Click me')).toBeInTheDocument();
   });
 });
-```
+\`\`\`
 
 ### E2E Test Example
-```typescript
+\`\`\`typescript
 // tests/booking.spec.ts
 import { test, expect } from '@playwright/test';
 
@@ -208,7 +208,7 @@ test('user can book a ride', async ({ page }) => {
   await page.click('[data-testid="book-ride"]');
   await expect(page).toHaveURL(/.*booking/);
 });
-```
+\`\`\`
 
 ## Test Data
 
@@ -255,8 +255,3 @@ test('user can book a ride', async ({ page }) => {
 
 **Status**: ✅ Comprehensive testing suite implemented
 **Last Updated**: 2025-01-28
-
-
-
-
-

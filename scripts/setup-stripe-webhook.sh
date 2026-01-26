@@ -46,9 +46,3 @@ else
     echo "$response" | jq '.' 2>/dev/null || echo "$response"
     exit 1
 fi
-
-
-
-
-
-

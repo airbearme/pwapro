@@ -15,7 +15,7 @@ This guide explains the CodeMaps configuration for debugging and understanding t
 - `app/api/stripe/checkout/route.ts` - Stripe checkout session handling
 
 #### Loading States to Monitor:
-```typescript
+\`\`\`typescript
 // In checkout-button.tsx
 const [loading, setLoading] = useState(false)
 const [walletLoading, setWalletLoading] = useState({
@@ -26,7 +26,7 @@ const [walletLoading, setWalletLoading] = useState({
 // In checkout/page.tsx  
 const [loading, setLoading] = useState(true)
 const [authLoading, setAuthLoading] = useState(false)
-```
+\`\`\`
 
 #### Debug Points:
 - **authLoading**: Check if user authentication is stuck
@@ -43,7 +43,7 @@ const [authLoading, setAuthLoading] = useState(false)
 - `app/api/airbear/update-location/route.ts` - GPS location updates
 
 #### API Endpoints:
-```
+\`\`\`
 GET /api/airbear/locations
 - Filters AirBears by user role and assignment
 - Returns isDriverView flag for UI handling
@@ -53,14 +53,14 @@ POST /api/airbear/update-location
 - Updates GPS coordinates for assigned AirBear
 - Requires driver authentication
 - Updates battery and heading data
-```
+\`\`\`
 
 #### Database Relations:
-```sql
+\`\`\`sql
 users.assigned_airbear_id → airbears.id
 -- One driver can have one assigned AirBear
 -- AirBear status: is_available, is_charging, battery_level
-```
+\`\`\`
 
 #### Debug Points:
 - **userProfile**: Check `users.assigned_airbear_id` field
@@ -76,7 +76,7 @@ users.assigned_airbear_id → airbears.id
 - `app/api/rides/create.ts` - Ride creation logic
 
 #### AirBear Filtering Logic:
-```typescript
+\`\`\`typescript
 // Driver view: Only assigned AirBear
 if (userProfile?.role === "driver" && userProfile.assigned_airbear_id) {
   // Return single assigned AirBear
@@ -84,7 +84,7 @@ if (userProfile?.role === "driver" && userProfile.assigned_airbear_id) {
 
 // Customer view: All available AirBears  
 .eq("is_available", true)
-```
+\`\`\`
 
 ## 🔧 Debugging Workflows
 
@@ -104,28 +104,28 @@ if (userProfile?.role === "driver" && userProfile.assigned_airbear_id) {
 
 #### Issue: Checkout stuck on "Setting up payment..."
 **Solution**: Check Stripe initialization and API keys
-```typescript
+\`\`\`typescript
 // Verify environment variables
 process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 process.env.STRIPE_SECRET_KEY
-```
+\`\`\`
 
 #### Issue: Driver sees all AirBears instead of just assigned one
 **Solution**: Check API filtering logic
-```typescript
+\`\`\`typescript
 // In /api/airbear/locations/route.ts
 if (userProfile?.role === "driver" && userProfile.assigned_airbear_id) {
   // Should filter by assigned_airbear_id
 }
-```
+\`\`\`
 
 #### Issue: Loading spinners not showing
 **Solution**: Verify state management
-```typescript
+\`\`\`typescript
 // Check useState declarations
 const [loading, setLoading] = useState(false)
 // Ensure setLoading(true) is called appropriately
-```
+\`\`\`
 
 ## 📊 CodeMaps Integration
 

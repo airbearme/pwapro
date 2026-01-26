@@ -36,10 +36,10 @@
 
 Since Vercel is connected to GitHub, you can also:
 
-```bash
+\`\`\`bash
 # This will automatically trigger Vercel deployment
 git push origin main
-```
+\`\`\`
 
 **Already done!** ✅ Deployment should be processing now.
 

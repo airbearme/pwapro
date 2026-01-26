@@ -6,7 +6,7 @@
 **Issue**: `ErrorBoundary` component was imported but never wrapped around application content.
 
 **Fix**: Wrapped children with `<ErrorBoundary>` in `app/layout.tsx`:
-```tsx
+\`\`\`tsx
 <AuthProvider>
   <ErrorBoundary>
     {children}
@@ -16,7 +16,7 @@
     <Analytics />
   </ErrorBoundary>
 </AuthProvider>
-```
+\`\`\`
 
 **File**: `app/layout.tsx` (line 127)
 
@@ -26,9 +26,9 @@
 **Issue**: Signup form main container used old light gradient (`from-orange-50 via-white to-green-50`) while success screen used dark gradient.
 
 **Fix**: Updated main form container to use dark gradient matching global theme:
-```tsx
+\`\`\`tsx
 <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-950 via-lime-950 to-amber-950 dark:from-emerald-950 dark:via-lime-950 dark:to-amber-950 p-4">
-```
+\`\`\`
 
 **File**: `app/auth/signup/page.tsx` (line 133)
 
@@ -38,7 +38,7 @@
 **Issue**: Health endpoint returned `status: "healthy"` even when database check failed (HTTP 503).
 
 **Fix**: Set status to `"unhealthy"` when `dbError` exists:
-```tsx
+\`\`\`tsx
 const health = {
   status: dbError ? "unhealthy" : "healthy",
   timestamp: new Date().toISOString(),
@@ -49,7 +49,7 @@ const health = {
   version: process.env.NEXT_PUBLIC_APP_VERSION || "1.0.0",
   ...(dbError && { error: dbError.message }),
 };
-```
+\`\`\`
 
 **File**: `app/api/health/route.ts` (line 15)
 
@@ -87,8 +87,3 @@ All fixes have been:
 3. Test signup form dark theme
 4. Test health endpoint with/without database
 5. Test Google/Apple OAuth login
-
-
-
-
-

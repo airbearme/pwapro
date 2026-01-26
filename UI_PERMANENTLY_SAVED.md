@@ -52,9 +52,9 @@ The beautiful UI/UX/GUI is now **permanently embedded** in the heart of the code
 4. **Components** use classes → Effects render automatically
 
 ### Validation:
-```bash
+\`\`\`bash
 npm run validate:ui
-```
+\`\`\`
 
 This checks:
 - ✅ All keyframes present
@@ -73,15 +73,15 @@ This checks:
 
 Run this to verify everything is working:
 
-```bash
+\`\`\`bash
 npm run validate:ui
-```
+\`\`\`
 
 Expected output:
-```
+\`\`\`
 ✅ All core UI/UX features are present!
 🎨 Beautiful UI foundation is intact.
-```
+\`\`\`
 
 ## 🎨 Result
 
@@ -95,7 +95,3 @@ Expected output:
 ---
 
 **Status:** ✅ **COMPLETE** - UI/UX is permanently embedded and protected!
-
-
-
-

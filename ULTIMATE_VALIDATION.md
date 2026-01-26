@@ -5,14 +5,14 @@
 ## Quick Start
 
 ### Run Ultimate Validation
-```bash
+\`\`\`bash
 npm run test:validate
-```
+\`\`\`
 
 OR use the Claude command:
-```
+\`\`\`
 /validate
-```
+\`\`\`
 
 This runs **comprehensive validation** covering:
 - ✅ Linting & Type Checking
@@ -184,7 +184,7 @@ The validation runs **40+ individual tests** covering:
 ## Complete User Workflows Tested
 
 ### Workflow 1: New User Journey
-```
+\`\`\`
 1. User visits homepage
 2. User sees mascot and special effects
 3. User clicks "Book Your AirBear"
@@ -199,10 +199,10 @@ The validation runs **40+ individual tests** covering:
 12. User completes payment
 13. Ride confirmed
 14. User receives real-time updates
-```
+\`\`\`
 
 ### Workflow 2: Returning User Journey
-```
+\`\`\`
 1. User logs in with Apple OAuth
 2. User navigates to map
 3. User sees available AirBears
@@ -214,10 +214,10 @@ The validation runs **40+ individual tests** covering:
 9. User completes purchase
 10. Ride completes
 11. User rates experience
-```
+\`\`\`
 
 ### Workflow 3: Mobile Bodega Shopping
-```
+\`\`\`
 1. User browses products page
 2. User adds items to cart
 3. User proceeds to checkout
@@ -225,10 +225,10 @@ The validation runs **40+ individual tests** covering:
 5. Payment processed via Stripe
 6. Order confirmed
 7. User receives order details
-```
+\`\`\`
 
 ### Workflow 4: CEO T-Shirt Purchase
-```
+\`\`\`
 1. User clicks "CEO T-Shirt $100"
 2. User views promo details
 3. User purchases T-shirt
@@ -236,7 +236,7 @@ The validation runs **40+ individual tests** covering:
 5. User account upgraded
 6. Daily free rides activated
 7. VIP benefits unlocked
-```
+\`\`\`
 
 ## External Integration Testing
 
@@ -296,26 +296,26 @@ The validation is so comprehensive that:
 ## Usage
 
 ### Run All Validation
-```bash
+\`\`\`bash
 npm run test:validate
-```
+\`\`\`
 
 ### Run Individual Workflows
-```bash
+\`\`\`bash
 npm run test:workflows          # Complete workflow tests
 npm run test:comprehensive-e2e  # Comprehensive E2E tests
 npm run test:e2e                # Playwright tests
-```
+\`\`\`
 
 ### Run Specific Categories
-```bash
+\`\`\`bash
 npm run test:unit               # Unit tests
 npm run test:integration        # Integration tests
 npm run test:database           # Database tests
 npm run test:stripe             # Payment tests
 npm run test:realtime           # Real-time tests
 npm run test:pwa                # PWA tests
-```
+\`\`\`
 
 ## CI/CD Integration
 
@@ -346,8 +346,3 @@ The E2E testing is comprehensive enough that:
 **Ready**: Production-ready validation
 
 **Run `npm run test:validate` or `/validate` to validate everything!** 🚀
-
-
-
-
-

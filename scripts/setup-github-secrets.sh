@@ -62,7 +62,3 @@ fi
 
 echo ""
 echo "✅ Setup complete! Add secrets in GitHub UI and run the sync workflow."
-
-
-
-

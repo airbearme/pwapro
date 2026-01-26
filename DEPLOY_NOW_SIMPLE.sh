@@ -43,8 +43,3 @@ else
     echo "  3. Click 'Deploy' → 'Redeploy'"
     echo ""
 fi
-
-
-
-
-

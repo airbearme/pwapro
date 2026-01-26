@@ -8,14 +8,14 @@ Click this link: **https://github.com/new?org=airbearme&name=pwapro**
 - Click **"Create repository"**
 
 ## Step 2: Push Code (10 seconds)
-```bash
+\`\`\`bash
 bash DEPLOY_FINAL.sh
-```
+\`\`\`
 
 Or manually:
-```bash
+\`\`\`bash
 git push -u origin main
-```
+\`\`\`
 
 ## Step 3: Deploy to Vercel (2 minutes)
 1. Go to: https://vercel.com/dashboard
@@ -34,9 +34,3 @@ Your beautiful UI will be live at **airbear.me**!
 ---
 
 **All code is ready. Just create the GitHub repo and run `bash DEPLOY_FINAL.sh`**
-
-
-
-
-
-

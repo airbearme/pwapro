@@ -53,7 +53,7 @@ This document defines the **permanent, core UI/UX foundation** of AirBear. These
 
 **Required Safelist:**
 All animation classes MUST be in the `safelist` array to prevent purging:
-```typescript
+\`\`\`typescript
 safelist: [
   "airbear-holographic", "airbear-plasma", "airbear-solar-rays", 
   "airbear-marker", "airbear-eco-breeze", "airbear-god-rays",
@@ -67,7 +67,7 @@ safelist: [
   "animate-eco-breeze", "animate-airbear-bounce", "animate-god-rays",
   // ... color patterns
 ]
-```
+\`\`\`
 
 **Required Theme Extensions:**
 - `animation` object with all keyframe mappings
@@ -77,14 +77,14 @@ safelist: [
 **Location:** `app/layout.tsx` - Lines 115-120
 
 **Required Configuration:**
-```typescript
+\`\`\`typescript
 <ThemeProvider
   attribute="class"
   defaultTheme="dark"
   enableSystem={false}
   disableTransitionOnChange
 >
-```
+\`\`\`
 
 **Why:** Dark mode is the default brand experience. DO NOT change `defaultTheme` or `enableSystem`.
 
@@ -164,7 +164,3 @@ Before any deployment, verify:
 ---
 
 **This UI/UX foundation is CORE to AirBear's identity. Protect it.**
-
-
-
-

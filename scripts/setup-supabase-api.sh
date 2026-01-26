@@ -42,9 +42,3 @@ echo ""
 echo "Or use Supabase CLI:"
 echo "   supabase link --project-ref ${PROJECT_REF}"
 echo "   # Then update redirect URLs via dashboard"
-
-
-
-
-
-

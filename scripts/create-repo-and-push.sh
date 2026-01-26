@@ -129,4 +129,3 @@ echo "5. Deploy!"
 echo ""
 echo "Or run: bash scripts/one-click-deploy.sh (if VERCEL_TOKEN is set)"
 echo ""
-

@@ -14,9 +14,9 @@ The Supabase environment variables are either:
 ### Step 1: Check Current Configuration
 
 Run this diagnostic script:
-```bash
+\`\`\`bash
 npm run check:supabase
-```
+\`\`\`
 
 This will show you:
 - Which environment variables are set/missing
@@ -40,11 +40,11 @@ This will show you:
 3. Go to **Settings** → **Environment Variables**
 4. Add these **exact** variable names:
 
-```
+\`\`\`
 NEXT_PUBLIC_SUPABASE_PWA4_URL
 NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY
 SUPABASE_PWA4_SERVICE_ROLE_KEY
-```
+\`\`\`
 
 **Important:**
 - Variable names must match **exactly** (case-sensitive)
@@ -67,10 +67,10 @@ After adding variables, redeploy:
 2. Click **Redeploy** on the latest deployment
 
 **Option B: Via Git**
-```bash
+\`\`\`bash
 git commit --allow-empty -m "Redeploy with Supabase config"
 git push origin main
-```
+\`\`\`
 
 ### Step 6: Test OAuth
 
@@ -122,7 +122,3 @@ git push origin main
 ---
 
 **After fixing, OAuth should redirect to your Supabase project, not a demo URL!** ✅
-
-
-
-

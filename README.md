@@ -48,31 +48,31 @@ Production-ready Next.js PWA for sustainable rideshare services with integrated 
 ### Installation
 
 1. **Clone the repository**
-   ```bash
+   \`\`\`bash
    git clone https://github.com/airbearme/pwapro.git
    cd pwapro
-   ```
+   \`\`\`
 
 2. **Install dependencies**
-   ```bash
+   \`\`\`bash
    npm install
-   ```
+   \`\`\`
 
 3. **Set up environment variables**
-   ```bash
+   \`\`\`bash
    cp .env.example .env.local
    # Fill in your environment variables
-   ```
+   \`\`\`
 
 4. **Validate environment variables**
-   ```bash
+   \`\`\`bash
    npm run validate:env
-   ```
+   \`\`\`
 
 5. **Start development server**
-   ```bash
+   \`\`\`bash
    npm run dev
-   ```
+   \`\`\`
 
 6. **Open http://localhost:3000**
 
@@ -80,7 +80,7 @@ Production-ready Next.js PWA for sustainable rideshare services with integrated 
 
 Required environment variables (see `.env.example`):
 
-```bash
+\`\`\`bash
 # Supabase
 NEXT_PUBLIC_SUPABASE_PWA4_URL=
 NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=
@@ -94,7 +94,7 @@ STRIPE_WEBHOOK_SECRET=
 # Site
 NEXT_PUBLIC_SITE_URL=https://airbear.me
 NODE_ENV=production
-```
+\`\`\`
 
 See `docs/ENVIRONMENT_VARIABLES.md` for complete documentation.
 
@@ -116,7 +116,7 @@ Add these secrets in GitHub repository settings:
 
 ## Scripts
 
-```bash
+\`\`\`bash
 # Development
 npm run dev              # Start development server
 npm run build            # Build for production
@@ -151,7 +151,7 @@ npm run deploy:production  # Production deployment
 # Auto-Deploy Setup (GitHub Actions)
 npm run setup:secrets    # Guide for setting up GitHub secrets
 # See: SETUP_GITHUB_SECRETS.md and AUTO_DEPLOY_SETUP.md
-```
+\`\`\`
 
 ## Testing
 
@@ -169,15 +169,15 @@ This project includes a **comprehensive testing suite** covering all aspects:
 - ✅ **Real-time Tests** - Supabase subscriptions
 
 **Run ultimate validation:**
-```bash
+\`\`\`bash
 npm run test:validate
-```
+\`\`\`
 
 See `TESTING_COMPREHENSIVE.md` for complete testing documentation.
 
 ## Project Structure
 
-```
+\`\`\`
 ├── app/                 # Next.js app router pages
 │   ├── api/            # API routes
 │   ├── auth/           # Authentication pages
@@ -192,7 +192,7 @@ See `TESTING_COMPREHENSIVE.md` for complete testing documentation.
 │   └── hooks/          # Custom React hooks
 ├── scripts/            # Build and deployment scripts
 └── .github/workflows/  # GitHub Actions workflows
-```
+\`\`\`
 
 ## Deployment
 
@@ -202,16 +202,16 @@ See `TESTING_COMPREHENSIVE.md` for complete testing documentation.
 2. Add environment variables in Vercel dashboard
 3. Deploy automatically via GitHub Actions or manually:
 
-```bash
+\`\`\`bash
 npm run deploy:vercel
-```
+\`\`\`
 
 ### Manual Deployment
 
-```bash
+\`\`\`bash
 npm run build
 npm run start
-```
+\`\`\`
 
 ## Contributing
 

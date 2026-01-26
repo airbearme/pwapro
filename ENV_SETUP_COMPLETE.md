@@ -34,15 +34,15 @@ All required environment variables are properly set in `.env.local`:
 
 You can validate your environment variables at any time by running:
 
-```bash
+\`\`\`bash
 npm run validate:env
-```
+\`\`\`
 
 Or directly:
 
-```bash
+\`\`\`bash
 node scripts/validate-env.js
-```
+\`\`\`
 
 ## 🚀 Next Steps
 
@@ -64,4 +64,3 @@ See `docs/ENVIRONMENT_VARIABLES.md` for complete documentation on all environmen
 ---
 
 **Status**: ✅ All environment variables validated and ready to use!
-

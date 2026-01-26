@@ -22,7 +22,7 @@
 
 ### Option B: Deploy via CLI
 
-```bash
+\`\`\`bash
 # Install Vercel CLI
 npm i -g vercel
 
@@ -31,7 +31,7 @@ vercel login
 
 # Deploy
 vercel --prod
-```
+\`\`\`
 
 ## 2. Add Custom Domain (2 minutes)
 
@@ -41,34 +41,34 @@ In Vercel Dashboard:
 3. Add domain: `www.airbear.me`
 
 Update DNS records:
-```
+\`\`\`
 A Record:    @ → 76.76.21.21
 CNAME:      www → cname.vercel-dns.com
-```
+\`\`\`
 
 ## 3. Set Environment Variables (3 minutes)
 
 In Vercel Dashboard → Settings → Environment Variables:
 
 ### Supabase (PWA4 Instance)
-```bash
+\`\`\`bash
 NEXT_PUBLIC_SUPABASE_PWA4_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=your-anon-key
 SUPABASE_PWA4_SERVICE_ROLE_KEY=your-service-role-key
-```
+\`\`\`
 
 ### Stripe
-```bash
+\`\`\`bash
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...
 STRIPE_SECRET_KEY=sk_live_...
 STRIPE_WEBHOOK_SECRET=whsec_... (get after setting up webhook)
-```
+\`\`\`
 
 ### Site Configuration
-```bash
+\`\`\`bash
 NEXT_PUBLIC_SITE_URL=https://airbear.me
 NODE_ENV=production
-```
+\`\`\`
 
 **Important**: Set all environment variables for **Production** environment.
 
@@ -83,9 +83,9 @@ NODE_ENV=production
 
 ### Or via Supabase CLI:
 
-```bash
+\`\`\`bash
 npx supabase db push
-```
+\`\`\`
 
 ## 5. Configure OAuth (5 minutes)
 
@@ -129,11 +129,11 @@ Now every push to `main` auto-deploys!
 
 ## 8. Verify Deployment (2 minutes)
 
-```bash
+\`\`\`bash
 # Run verification script
 chmod +x scripts/verify-production.sh
 ./scripts/verify-production.sh https://airbear.me
-```
+\`\`\`
 
 Or manually check:
 - [ ] Visit https://airbear.me

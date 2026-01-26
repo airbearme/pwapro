@@ -129,20 +129,20 @@ Your AirBear PWA now includes **ALL** the beautiful special effects and is ready
 
 #### 1. Build & Test Locally
 
-```bash
+\`\`\`bash
 npm run build
 npm run start
-```
+\`\`\`
 
 #### 2. Deploy to Vercel
 
-```bash
+\`\`\`bash
 # Option 1: Use deployment script
 bash scripts/one-click-deploy.sh
 
 # Option 2: Manual deployment
 vercel --prod
-```
+\`\`\`
 
 #### 3. Verify Environment Variables
 
@@ -197,7 +197,3 @@ Visit **https://airbear.me** after deployment to see all the beautiful effects i
 
 **Last Updated**: 2025-01-28
 **Status**: ✅ Production Ready with All Special Effects
-
-
-
-

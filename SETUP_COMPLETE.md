@@ -24,21 +24,21 @@ Your AirBear PWA is ready for deployment with CI/CD!
 7. Click "Create repository"
 
 **Option B: Using GitHub CLI** (if installed)
-```bash
+\`\`\`bash
 gh repo create airbearme/pwapro --public --description "AirBear PWA - Solar-Powered Rideshare & Mobile Bodega" --source=. --remote=origin --push
-```
+\`\`\`
 
 **Option C: Using API Script**
-```bash
+\`\`\`bash
 export GITHUB_TOKEN=your_github_token
 bash scripts/create-github-repo.sh
-```
+\`\`\`
 
 ### 2. Push Code to GitHub
 
-```bash
+\`\`\`bash
 git push -u origin main
-```
+\`\`\`
 
 ### 3. Set Up GitHub Secrets
 
@@ -86,7 +86,7 @@ After pushing to `main` branch:
 
 ## 🔍 Verify Everything Works
 
-```bash
+\`\`\`bash
 # Validate environment variables
 npm run validate:env
 
@@ -98,7 +98,7 @@ npm run lint
 
 # Build (local test)
 npm run build
-```
+\`\`\`
 
 ## 📚 Documentation
 

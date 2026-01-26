@@ -38,11 +38,11 @@ Add these 10 secrets:
 
 ### Step 3: Test (1 min)
 
-```bash
+\`\`\`bash
 git add .
 git commit -m "Setup auto-deploy workflow"
 git push origin main
-```
+\`\`\`
 
 Watch it deploy automatically! 🎉
 
@@ -83,7 +83,3 @@ Watch it deploy automatically! 🎉
 ---
 
 **That's it! Your app now auto-deploys on every push!** ✨
-
-
-
-

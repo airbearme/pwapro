@@ -8,7 +8,7 @@ All manual steps are now automated! Run a single command to deploy everything.
 
 ### Option 1: Full Automation (Recommended)
 
-```bash
+\`\`\`bash
 # Set required tokens
 export GITHUB_TOKEN=your_github_token
 export VERCEL_TOKEN=your_vercel_token
@@ -18,11 +18,11 @@ export STRIPE_SECRET_KEY=your_stripe_secret_key
 
 # Run one-click deployment
 bash scripts/one-click-deploy.sh
-```
+\`\`\`
 
 ### Option 2: Step-by-Step Automation
 
-```bash
+\`\`\`bash
 # 1. Create GitHub repo
 export GITHUB_TOKEN=your_token
 bash scripts/setup-github-api.sh
@@ -40,7 +40,7 @@ bash scripts/setup-stripe-webhook.sh
 
 # 5. Setup Supabase (instructions)
 bash scripts/setup-supabase-api.sh
-```
+\`\`\`
 
 ## Required Tokens
 
@@ -111,12 +111,12 @@ bash scripts/setup-supabase-api.sh
 
 The `scripts/one-click-deploy.sh` script handles everything:
 
-```bash
+\`\`\`bash
 #!/bin/bash
 export GITHUB_TOKEN=your_token
 export VERCEL_TOKEN=your_token
 bash scripts/one-click-deploy.sh
-```
+\`\`\`
 
 **What it does:**
 1. ✅ Creates GitHub repository
@@ -145,16 +145,16 @@ Once automated setup completes:
 ## Troubleshooting
 
 ### GitHub Token Issues
-```bash
+\`\`\`bash
 # Test token
 curl -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/user
-```
+\`\`\`
 
 ### Vercel Token Issues
-```bash
+\`\`\`bash
 # Test token
 vercel whoami --token=$VERCEL_TOKEN
-```
+\`\`\`
 
 ### Webhook Creation Fails
 - Check Stripe secret key is correct
@@ -175,9 +175,3 @@ If automation fails, see `PUSH_AND_DEPLOY.md` for manual steps.
 ---
 
 **Status:** 🚀 **Fully Automated** (except DNS and Supabase redirect URLs which require dashboard access)
-
-
-
-
-
-

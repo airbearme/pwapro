@@ -163,9 +163,9 @@ This document guides you through testing all functionality as both a passenger a
 1. Visit: `https://airbear.me/auth/signup`
 2. Register with email: `driver@airbear.me`
 3. After registration, update user role in Supabase:
-   ```sql
+   \`\`\`sql
    UPDATE users SET role = 'driver' WHERE email = 'driver@airbear.me';
-   ```
+   \`\`\`
 
 **Option B: OAuth (then update role)**
 1. Register with Google/Apple
@@ -312,7 +312,3 @@ This document guides you through testing all functionality as both a passenger a
 ---
 
 **Status:** Ready for comprehensive testing! 🧪
-
-
-
-

@@ -87,4 +87,3 @@ echo "      - Settings > Secrets and variables > Actions"
 echo "      - Add: VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID"
 echo "      - Add all environment variables from .env.local"
 echo "   2. Push code: git push -u origin main"
-

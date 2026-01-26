@@ -42,16 +42,16 @@
 ## Next Steps
 
 1. **Rebuild the application:**
-   ```bash
+   \`\`\`bash
    npm run build
-   ```
+   \`\`\`
 
 2. **Deploy to production:**
-   ```bash
+   \`\`\`bash
    git add .
    git commit -m "Fix UI animations and map loading issues"
    git push origin main
-   ```
+   \`\`\`
 
 3. **Verify in production:**
    - Visit `https://airbear.me`
@@ -68,7 +68,3 @@
 ---
 
 **All UI/UX special effects should now load correctly!** ✨
-
-
-
-

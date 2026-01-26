@@ -3,9 +3,9 @@
 ## Quick Start (5 Minutes)
 
 ### Step 1: Push to GitHub
-```bash
+\`\`\`bash
 git push origin main
-```
+\`\`\`
 
 ### Step 2: Create GitHub Repository (if not exists)
 1. Go to https://github.com/new
@@ -16,10 +16,10 @@ git push origin main
 6. Click "Create repository"
 
 ### Step 3: Push Code
-```bash
+\`\`\`bash
 git remote add origin https://github.com/airbearme/pwapro.git
 git push -u origin main
-```
+\`\`\`
 
 ### Step 4: Deploy to Vercel
 1. Go to https://vercel.com/dashboard
@@ -37,7 +37,7 @@ git push -u origin main
 
 Copy these from your `.env.local`:
 
-```
+\`\`\`
 NEXT_PUBLIC_SUPABASE_PWA4_URL=https://fofmrqgcidfenbevayrg.supabase.co
 NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 SUPABASE_PWA4_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
@@ -46,7 +46,7 @@ STRIPE_SECRET_KEY=sk_live_... (your Stripe secret key)
 STRIPE_WEBHOOK_SECRET=whsec_... (your Stripe webhook secret)
 NEXT_PUBLIC_SITE_URL=https://airbear.me
 NODE_ENV=production
-```
+\`\`\`
 
 ## Stripe Webhook Setup
 
@@ -83,4 +83,3 @@ See `docs/PRODUCTION_DEPLOYMENT.md` for complete guide.
 **UI/UX**: ✅ All animations preserved
 **Security**: ✅ Hardened
 **Performance**: ✅ Optimized
-

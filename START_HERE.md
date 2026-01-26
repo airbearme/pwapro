@@ -24,15 +24,15 @@ Everything is **100% production-ready**:
 
 ### Step 1: Make Script Executable
 
-```bash
+\`\`\`bash
 chmod +x deploy.sh
-```
+\`\`\`
 
 ### Step 2: Deploy Everything
 
-```bash
+\`\`\`bash
 ./deploy.sh
-```
+\`\`\`
 
 This single command will:
 1. ✓ Verify all code compiles
@@ -45,9 +45,9 @@ This single command will:
 
 ### Step 3: Test Production
 
-```bash
+\`\`\`bash
 npm run test:production https://airbear.me
-```
+\`\`\`
 
 ---
 
@@ -123,17 +123,17 @@ Visit: https://airbear.me/products
 
 ### Check Deployment
 
-```bash
+\`\`\`bash
 # Watch GitHub Actions
 open https://github.com/airbearme/pwa4/actions
 
 # Check Vercel dashboard
 open https://vercel.com/dashboard
-```
+\`\`\`
 
 ### Check Logs
 
-```bash
+\`\`\`bash
 # Vercel logs
 vercel logs
 
@@ -142,7 +142,7 @@ vercel logs
 
 # Stripe events
 # Go to dashboard → Developers → Events
-```
+\`\`\`
 
 ---
 
@@ -150,27 +150,27 @@ vercel logs
 
 ### Map Doesn't Load
 
-```bash
+\`\`\`bash
 # Check browser console (F12)
 # Look for Leaflet errors
 # Verify Supabase connection
-```
+\`\`\`
 
 ### OAuth Doesn't Work
 
-```bash
+\`\`\`bash
 # Verify redirect URLs match exactly
 # Check OAuth credentials in Supabase
 # Try incognito mode
-```
+\`\`\`
 
 ### Payments Fail
 
-```bash
+\`\`\`bash
 # Use test card: 4242 4242 4242 4242
 # Check Stripe test mode is enabled
 # Verify webhook signature
-```
+\`\`\`
 
 See full troubleshooting: [TESTING_GUIDE.md](./TESTING_GUIDE.md)
 
@@ -243,9 +243,9 @@ Your deployment is successful when:
 
 ## 🎉 Ready? Let's Deploy!
 
-```bash
+\`\`\`bash
 chmod +x deploy.sh && ./deploy.sh
-```
+\`\`\`
 
 **Your app will be live in 3 minutes!** 🚀
 

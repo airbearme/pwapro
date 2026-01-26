@@ -41,11 +41,11 @@ Map is not loading and showing an error on `airbear.me`.
 
 ### Deploy to Production:
 
-```bash
+\`\`\`bash
 git add components/map-view-beautiful.tsx FIX_MAP_ERROR.md
 git commit -m "Fix map loading error - add better error handling and initialization"
 git push origin main
-```
+\`\`\`
 
 ### Verify After Deployment:
 
@@ -80,7 +80,3 @@ After deployment:
 ---
 
 **Status:** ✅ Fixed - Ready to deploy!
-
-
-
-

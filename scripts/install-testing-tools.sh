@@ -65,8 +65,3 @@ echo "\n📋 Next steps:"
 echo "   1. Run: npm run setup:testing"
 echo "   2. Run: npm run test:validate"
 echo "   3. Check: TESTING_COMPREHENSIVE.md"
-
-
-
-
-

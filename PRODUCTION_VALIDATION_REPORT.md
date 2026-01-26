@@ -177,9 +177,3 @@
 ---
 
 **The site is LIVE and beautiful! Just need to add environment variables to Vercel for full functionality.**
-
-
-
-
-
-

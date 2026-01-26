@@ -66,7 +66,7 @@
 ## 🛠️ **Technical Improvements**
 
 ### **API Enhancements**
-```typescript
+\`\`\`typescript
 // New ride confirmation endpoint
 POST /api/rides/[id]/confirm
 {
@@ -78,15 +78,15 @@ POST /api/rides/[id]/confirm
   success: true,
   ride: { status: "confirmed", payment_method: "...", paid_at: "..." }
 }
-```
+\`\`\`
 
 ### **Database Schema Updates**
-```sql
+\`\`\`sql
 -- Rides table now includes:
 - payment_method: text
 - paid_at: timestamp
 - confirmed_at: timestamp
-```
+\`\`\`
 
 ### **Frontend Improvements**
 - Direct navigation instead of component nesting
@@ -133,11 +133,11 @@ The complete booking and payment flow is now **fully functional and robust**:
 5. **Error Recovery**: Graceful handling of issues
 
 ### **📱 User Journey**
-```
+\`\`\`
 /book → Select Spots → Book Ride → /book (payment) → 
 Choose Payment → /checkout → Payment Success → 
 /order/success → Track Ride
-```
+\`\`\`
 
 ---
 

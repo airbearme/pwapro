@@ -29,28 +29,28 @@ Dark mode is configured and active:
 In your IONOS domain settings for `airbear.me`:
 
 **Option 1: CNAME (Recommended)**
-```
+\`\`\`
 Type: CNAME
 Name: @ (or leave blank)
 Value: cname.vercel-dns.com
 TTL: 3600
-```
+\`\`\`
 
 **Option 2: A Record (If CNAME not supported)**
-```
+\`\`\`
 Type: A
 Name: @
 Value: 76.76.19.19
 TTL: 3600
-```
+\`\`\`
 
 **For www subdomain:**
-```
+\`\`\`
 Type: CNAME
 Name: www
 Value: cname.vercel-dns.com
 TTL: 3600
-```
+\`\`\`
 
 ## ✅ Post-Deployment Checklist
 
@@ -115,8 +115,3 @@ Once DNS propagates (24-48 hours), it will also be available at:
 **URL**: https://airbear-pwa.vercel.app
 
 🎉 **Congratulations! Your AirBear PWA is live!** 🐻
-
-
-
-
-

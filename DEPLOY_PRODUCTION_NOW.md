@@ -2,15 +2,15 @@
 
 ## Quick Deploy
 
-```bash
+\`\`\`bash
 npm run deploy:now
-```
+\`\`\`
 
 OR
 
-```bash
+\`\`\`bash
 bash scripts/deploy-production-now.sh
-```
+\`\`\`
 
 ## What This Does
 
@@ -25,14 +25,14 @@ bash scripts/deploy-production-now.sh
 
 Dark mode is **permanently enabled** in `app/layout.tsx`:
 
-```tsx
+\`\`\`tsx
 <ThemeProvider
   attribute="class"
   defaultTheme="dark"      // ✅ Dark mode by default
   enableSystem={false}      // ✅ System theme detection disabled
   disableTransitionOnChange
 >
-```
+\`\`\`
 
 This ensures:
 - ✅ All users see dark mode by default
@@ -78,7 +78,7 @@ If using GitHub Actions:
 
 ### Method 1: Direct Vercel CLI (Fastest)
 
-```bash
+\`\`\`bash
 # Install Vercel CLI if not installed
 npm i -g vercel
 
@@ -87,18 +87,18 @@ vercel login
 
 # Deploy
 npm run deploy:now
-```
+\`\`\`
 
 ### Method 2: GitHub Actions (Automatic)
 
-```bash
+\`\`\`bash
 # Push to GitHub
 git add .
 git commit -m "Deploy to production - Dark mode enabled"
 git push origin main
 
 # GitHub Actions will automatically deploy
-```
+\`\`\`
 
 ### Method 3: Vercel Dashboard
 

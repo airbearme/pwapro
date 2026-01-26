@@ -62,7 +62,7 @@
 
 ### 🗄️ Database Setup
 
-```sql
+\`\`\`sql
 -- 16 numbered ride spots
 INSERT INTO spots VALUES
 ('spot-01', 'Spot 1 - Court Street Downtown', ...),
@@ -73,7 +73,7 @@ INSERT INTO spots VALUES
 -- Merchandise-only spot
 INSERT INTO spots VALUES
 ('merchandise-spot', '🛍️ AirBear Merchandise Shop', ...);
-```
+\`\`\`
 
 ### 🔄 API Endpoints
 
@@ -176,20 +176,20 @@ INSERT INTO spots VALUES
 
 Run the SQL script in Supabase:
 
-```bash
+\`\`\`bash
 # Execute in Supabase SQL Editor
 scripts/setup-numbered-spots.sql
-```
+\`\`\`
 
 ### 2. Verify API Endpoints
 
-```bash
+\`\`\`bash
 # Check ride spots (should return 16)
 curl https://airbear.me/api/spots/ride
 
 # Check all spots (should return 17)
 curl https://airbear.me/api/spots
-```
+\`\`\`
 
 ### 3. Test User Interface
 

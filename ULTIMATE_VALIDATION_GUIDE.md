@@ -7,9 +7,9 @@ The AirBear PWA now includes the **most comprehensive testing suite** available,
 ## Quick Start
 
 ### Run Ultimate Validation
-```bash
+\`\`\`bash
 npm run test:validate
-```
+\`\`\`
 
 This single command runs **all tests** across **17 different categories**.
 
@@ -135,9 +135,9 @@ All test scripts are located in `scripts/`:
 ## Installation
 
 ### First Time Setup
-```bash
+\`\`\`bash
 npm run setup:testing
-```
+\`\`\`
 
 This installs:
 - Jest + React Testing Library
@@ -147,7 +147,7 @@ This installs:
 - And all other testing tools
 
 ### Manual Installation
-```bash
+\`\`\`bash
 npm install --save-dev \
   @testing-library/react @testing-library/jest-dom @testing-library/user-event \
   @playwright/test \
@@ -155,12 +155,12 @@ npm install --save-dev \
   pa11y \
   jest @jest/globals ts-jest \
   @types/jest
-```
+\`\`\`
 
 ## Running Tests
 
 ### Individual Test Categories
-```bash
+\`\`\`bash
 npm run test              # Unit tests
 npm run test:integration  # Integration tests
 npm run test:e2e          # E2E tests
@@ -171,12 +171,12 @@ npm run test:database     # Database
 npm run test:stripe       # Stripe
 npm run test:pwa          # PWA features
 npm run test:all          # All automated tests
-```
+\`\`\`
 
 ### Ultimate Validation (All Tests)
-```bash
+\`\`\`bash
 npm run test:validate
-```
+\`\`\`
 
 ## Test Output
 
@@ -189,7 +189,7 @@ The ultimate validation script provides:
 5. **Duration** - Total time taken
 
 ### Example Output
-```
+\`\`\`
 🚀 ULTIMATE VALIDATION SUITE
 ============================================================
 Running comprehensive tests for AirBear PWA...
@@ -216,7 +216,7 @@ Running comprehensive tests for AirBear PWA...
 
 🎉 ALL CRITICAL TESTS PASSED!
 ✅ Codebase is ready for production!
-```
+\`\`\`
 
 ## CI/CD Integration
 
@@ -240,7 +240,7 @@ See `.github/workflows/test-comprehensive.yml`
 ## Writing New Tests
 
 ### Unit Test Example
-```typescript
+\`\`\`typescript
 // __tests__/components/my-component.test.tsx
 import { render, screen } from '@testing-library/react';
 import { MyComponent } from '@/components/my-component';
@@ -251,10 +251,10 @@ describe('MyComponent', () => {
     expect(screen.getByText('Hello')).toBeInTheDocument();
   });
 });
-```
+\`\`\`
 
 ### E2E Test Example
-```typescript
+\`\`\`typescript
 // tests/my-feature.spec.ts
 import { test, expect } from '@playwright/test';
 
@@ -263,40 +263,40 @@ test('user can complete feature', async ({ page }) => {
   await page.click('[data-testid="action-button"]');
   await expect(page).toHaveURL(/.*success/);
 });
-```
+\`\`\`
 
 ### Custom Test Script
-```javascript
+\`\`\`javascript
 // scripts/test-my-feature.js
 #!/usr/bin/env node
 console.log('Testing my feature...');
 // Your test logic here
 process.exit(0); // 0 = success, 1 = failure
-```
+\`\`\`
 
 ## Troubleshooting
 
 ### Tests Failing?
 
 1. **Environment Variables**
-   ```bash
+   \`\`\`bash
    npm run validate:env
-   ```
+   \`\`\`
 
 2. **Database Connection**
-   ```bash
+   \`\`\`bash
    npm run test:database
-   ```
+   \`\`\`
 
 3. **Build Issues**
-   ```bash
+   \`\`\`bash
    npm run build
-   ```
+   \`\`\`
 
 4. **Dependencies**
-   ```bash
+   \`\`\`bash
    npm install
-   ```
+   \`\`\`
 
 ### Performance Tests Failing?
 
@@ -323,7 +323,7 @@ process.exit(0); // 0 = success, 1 = failure
 
 ## Test Files Structure
 
-```
+\`\`\`
 ├── __tests__/              # Unit tests
 │   ├── components/         # Component tests
 │   ├── lib/                # Utility tests
@@ -338,7 +338,7 @@ process.exit(0); // 0 = success, 1 = failure
 │   ├── test-*.js
 │   └── check-*.js
 └── jest.config.js          # Jest configuration
-```
+\`\`\`
 
 ## Continuous Improvement
 
@@ -366,8 +366,3 @@ The testing suite is designed to:
 **Coverage**: All aspects of the application
 
 **Run `npm run test:validate` to validate everything!** 🚀
-
-
-
-
-

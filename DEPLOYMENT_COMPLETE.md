@@ -10,10 +10,10 @@ Your AirBear PWA is **100% ready** for production deployment at **airbear.me**!
 
 ### Step 1: Run Final Verification
 
-```bash
+\`\`\`bash
 chmod +x scripts/final-check.sh
 ./scripts/final-check.sh
-```
+\`\`\`
 
 This will verify:
 - TypeScript compiles without errors
@@ -24,10 +24,10 @@ This will verify:
 
 ### Step 2: Sync to GitHub
 
-```bash
+\`\`\`bash
 chmod +x scripts/sync-github.sh
 npm run sync:github
-```
+\`\`\`
 
 This will:
 - Commit all changes
@@ -37,10 +37,10 @@ This will:
 
 ### Step 3: Verify Production
 
-```bash
+\`\`\`bash
 chmod +x scripts/test-production.sh
 npm run test:production https://airbear.me
-```
+\`\`\`
 
 This tests:
 - All pages load correctly
@@ -186,7 +186,7 @@ Before announcing launch, manually verify:
 
 ### 1. Add Sample Data (Optional)
 
-```sql
+\`\`\`sql
 -- In Supabase SQL Editor
 
 -- Add sample spots
@@ -202,7 +202,7 @@ VALUES
   (42.0987, -75.9179, 85, true, false),
   (42.0908, -75.9686, 92, true, false),
   (42.0893, -75.9149, 45, false, true);
-```
+\`\`\`
 
 ### 2. Monitor Performance
 
@@ -215,12 +215,12 @@ Visit these URLs to monitor:
 
 When ready for real payments:
 
-```bash
+\`\`\`bash
 # In Vercel Dashboard, update these env vars:
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...
 STRIPE_SECRET_KEY=sk_live_...
 STRIPE_WEBHOOK_SECRET=whsec_... (from live webhook)
-```
+\`\`\`
 
 ### 4. Marketing & Launch
 

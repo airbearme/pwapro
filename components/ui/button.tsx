@@ -36,11 +36,17 @@ export interface ButtonProps
   asChild?: boolean
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
-    return <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />
-  },
+// Performance: Memoize the Button component to prevent unnecessary re-renders.
+// Since this is a presentational component, its output is solely dependent on its props.
+// This optimization is particularly effective in applications where buttons are rendered
+// inside parent components that re-render frequently.
+const Button = React.memo(
+  React.forwardRef<HTMLButtonElement, ButtonProps>(
+    ({ className, variant, size, asChild = false, ...props }, ref) => {
+      const Comp = asChild ? Slot : "button"
+      return <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />
+    },
+  ),
 )
 Button.displayName = "Button"
 

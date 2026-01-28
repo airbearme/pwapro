@@ -36,11 +36,15 @@ export interface ButtonProps
   asChild?: boolean
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
-    return <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />
-  },
+// ⚡ Bolt: Memoized Button to prevent unnecessary re-renders.
+// This is a foundational, purely presentational component, making it an ideal candidate for memoization.
+const Button = React.memo(
+  React.forwardRef<HTMLButtonElement, ButtonProps>(
+    ({ className, variant, size, asChild = false, ...props }, ref) => {
+      const Comp = asChild ? Slot : "button"
+      return <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />
+    },
+  ),
 )
 Button.displayName = "Button"
 

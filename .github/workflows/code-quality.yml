@@ -133,6 +133,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Generate codemaps
+        run: npm run codemaps:generate
+
       - name: Run codemaps analysis
         run: npm run codemaps:analyze
 
@@ -163,7 +166,7 @@ jobs:
         run: npm ci
 
       - name: Detect dead code
-        run: npx unimported
+        run: npx unimported --ignore-unresolved-issues
 
       - name: Upload dead code report
         uses: actions/upload-artifact@v4

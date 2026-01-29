@@ -78,25 +78,7 @@ Production-ready Next.js PWA for sustainable rideshare services with integrated 
 
 ## Environment Variables
 
-Required environment variables (see `.env.example`):
-
-```bash
-# Supabase
-NEXT_PUBLIC_SUPABASE_PWA4_URL=
-NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=
-SUPABASE_PWA4_SERVICE_ROLE_KEY=
-
-# Stripe
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
-STRIPE_SECRET_KEY=
-STRIPE_WEBHOOK_SECRET=
-
-# Site
-NEXT_PUBLIC_SITE_URL=https://airbear.me
-NODE_ENV=production
-```
-
-See `docs/ENVIRONMENT_VARIABLES.md` for complete documentation.
+See `.env.example` and `docs/ENVIRONMENT_VARIABLES.md` for required environment variables.
 
 ## CI/CD Pipeline
 

@@ -12,6 +12,11 @@
 import React, { useMemo } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { MapPin, ShoppingBag, Leaf, Zap, Crown } from "lucide-react";
 import AirbearWheel from "@/components/airbear-wheel";
 
@@ -210,17 +215,27 @@ export default function HomePage() {
               </Link>
             </Button>
 
-            <Button
-              asChild
-              size="lg"
-              className="group bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-500 text-white hover-lift ripple-effect px-8 py-4 text-lg font-semibold animate-pulse-glow shadow-xl"
-            >
-              <Link href="/merchandise" className="relative flex items-center">
-                <span className="absolute -inset-3 rounded-full bg-gradient-to-r from-amber-400/20 via-rose-400/30 to-emerald-400/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity -z-10 pointer-events-none"></span>
-                <Crown className="mr-2 h-5 w-5" />
-                CEO T-Shirt $100
-              </Link>
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  asChild
+                  size="lg"
+                  className="group bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-500 text-white hover-lift ripple-effect px-8 py-4 text-lg font-semibold animate-pulse-glow shadow-xl"
+                >
+                  <Link
+                    href="/merchandise"
+                    className="relative flex items-center"
+                  >
+                    <span className="absolute -inset-3 rounded-full bg-gradient-to-r from-amber-400/20 via-rose-400/30 to-emerald-400/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity -z-10 pointer-events-none"></span>
+                    <Crown className="mr-2 h-5 w-5" />
+                    CEO T-Shirt $100
+                  </Link>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Wear what the CEO wears. A bold price for a bold statement.</p>
+              </TooltipContent>
+            </Tooltip>
 
             <Button
               asChild

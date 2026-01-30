@@ -3,13 +3,13 @@ import { NextResponse, type NextRequest } from "next/server"
 import { SECURITY_HEADERS } from "./lib/security-headers"
 
 /**
- * Production-grade middleware for:
+ * Production-grade middleware (named 'proxy' in this environment) for:
  * - Supabase session refresh (automatic token refresh)
  * - Protected route authentication
  * - Secure cookie handling
  * - Security headers enforcement
  */
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   // Use both standard and PWA4 environment variables
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_PWA4_URL
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY

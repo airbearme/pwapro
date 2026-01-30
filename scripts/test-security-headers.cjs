@@ -14,6 +14,8 @@ const requiredHeaders = {
 	"x-content-type-options": "X-Content-Type-Options should be nosniff",
 	"x-frame-options": "X-Frame-Options should be present",
 	"referrer-policy": "Referrer-Policy should be present",
+	"content-security-policy": "Content-Security-Policy should be present",
+	"permissions-policy": "Permissions-Policy should be present",
 };
 
 if (SITE_URL.startsWith("https://")) {
@@ -117,5 +119,3 @@ async function runSecurityTests() {
 }
 
 runSecurityTests();
-
-

@@ -31,6 +31,9 @@ class AdvancedCodeMapsAnalyzer {
     console.log("🔬 Running Advanced CodeMaps Analysis...\n");
 
     try {
+      // Ensure output directory exists
+      this.ensureOutputDir();
+
       // Load existing CodeMaps
       await this.loadExistingCodeMaps();
 
@@ -60,6 +63,16 @@ class AdvancedCodeMapsAnalyzer {
     } catch (error) {
       console.error("❌ Analysis failed:", error.message);
       process.exit(1);
+    }
+  }
+
+  /**
+   * Ensure output directory exists
+   */
+  ensureOutputDir() {
+    if (!fs.existsSync(this.outputDir)) {
+      fs.mkdirSync(this.outputDir, { recursive: true });
+      console.log(`📁 Created output directory: ${this.outputDir}`);
     }
   }
 
@@ -133,7 +146,9 @@ class AdvancedCodeMapsAnalyzer {
     }
 
     complexityReport.average =
-      complexityReport.total / this.metrics.components.length;
+      this.metrics.components.length > 0
+        ? complexityReport.total / this.metrics.components.length
+        : 0;
 
     // Calculate averages by type
     for (const [type, data] of Object.entries(complexityReport.byType)) {

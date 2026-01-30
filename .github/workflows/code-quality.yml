@@ -8,6 +8,8 @@ on:
 
 env:
   NODE_VERSION: "20"
+  NEXT_PUBLIC_SUPABASE_URL: "https://example.supabase.co"
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV4YW1wbGUiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTYxNjQ5OTI5NSwiZXhwIjoxOTMyMDY1Mjk1fQ.dummy-key"
 
 jobs:
   # Code Formatting
@@ -134,9 +136,6 @@ jobs:
         run: npm ci
 
       - name: Generate codemaps
-        env:
-          NEXT_PUBLIC_SUPABASE_URL: "https://example.supabase.co"
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: "example-anon-key"
         run: npm run codemaps:generate
 
       - name: Run codemaps analysis

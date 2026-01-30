@@ -1,3 +1,5 @@
+import importPlugin from "eslint-plugin-import";
+
 export default [
   {
     ignores: [
@@ -24,6 +26,24 @@ export default [
     rules: {
       "no-unused-vars": "off",
       "no-console": "off",
+    },
+  },
+  {
+    plugins: {
+      import: importPlugin,
+    },
+    rules: {
+      "import/order": [
+        "error",
+        {
+          groups: ["builtin", "external", "internal"],
+          "newlines-between": "always",
+          alphabetize: {
+            order: "asc",
+            caseInsensitive: true,
+          },
+        },
+      ],
     },
   },
 ];

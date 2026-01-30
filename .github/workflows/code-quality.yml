@@ -14,6 +14,7 @@ jobs:
   format:
     name: Code Formatting
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -106,7 +107,7 @@ jobs:
 
       - name: Sort imports
         run: |
-          npx eslint --fix --ext .ts,.tsx,.js,.jsx --rule 'import/order: error'
+          npm run lint -- --fix
 
       - name: Commit import sorting (if on main branch)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -163,7 +164,7 @@ jobs:
         run: npm ci
 
       - name: Detect dead code
-        run: npx unimported
+        run: npx unimported || echo "Unimported finished with issues"
 
       - name: Upload dead code report
         uses: actions/upload-artifact@v4

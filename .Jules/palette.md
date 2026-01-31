@@ -1,4 +1,3 @@
-## 2026-01-10 - Enabling Sitewide Tooltips
-
-**Learning:** In a Radix-based UI system (like shadcn/ui), enabling tooltips sitewide requires wrapping the application in a `TooltipProvider` at the root layout level. This allows any component to use `Tooltip` without needing its own provider.
-**Action:** Always check `app/layout.tsx` for `TooltipProvider` before implementing tooltips. If missing, add it to enable consistent micro-UX enhancements across the app.
+## 2025-05-15 - Sitewide Tooltip and Accessible Icon Buttons
+**Learning:** Enabling sitewide tooltips via `TooltipProvider` in the root layout allows for immediate enhancement of icon-only buttons with descriptive text. Pairing `Tooltip` with an explicit `aria-label` not only improves accessibility for screen readers but also provides a stable, unique selector for automated frontend verification (e.g., Playwright).
+**Action:** Always wrap the app's children in `TooltipProvider` if using Radix/shadcn tooltips, and ensure every icon-only button has both a `Tooltip` for sighted users and an `aria-label` for assistive technology.

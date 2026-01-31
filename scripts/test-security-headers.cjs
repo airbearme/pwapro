@@ -14,6 +14,8 @@ const requiredHeaders = {
 	"x-content-type-options": "X-Content-Type-Options should be nosniff",
 	"x-frame-options": "X-Frame-Options should be present",
 	"referrer-policy": "Referrer-Policy should be present",
+	"content-security-policy": "Content-Security-Policy should be present",
+	"permissions-policy": "Permissions-Policy should be present",
 };
 
 if (SITE_URL.startsWith("https://")) {
@@ -58,6 +60,13 @@ function checkHeaders(url) {
 						isValid = false;
 					}
 
+					if (header === "content-security-policy") {
+						// Basic check for important CSP directives
+						if (!headerValue.includes("default-src") || !headerValue.includes("'self'")) {
+							isValid = false;
+						}
+					}
+
 					if (isValid) {
 						results.passed.push({ header, value: headerValue });
 					} else {
@@ -83,7 +92,7 @@ async function runSecurityTests() {
 
 		console.log("✅ Passed:");
 		results.passed.forEach(({ header, value }) => {
-			console.log(`   ${header}: ${value}`);
+			console.log(`   ${header}: ${value.substring(0, 100)}${value.length > 100 ? '...' : ''}`);
 		});
 
 		if (results.missing.length > 0) {
@@ -117,5 +126,3 @@ async function runSecurityTests() {
 }
 
 runSecurityTests();
-
-

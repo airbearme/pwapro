@@ -194,7 +194,7 @@ export default function MapPage() {
                   {airbears.length > 0
                     ? Math.round(
                         airbears.reduce((sum, a) => sum + a.battery_level, 0) /
-                          airbears.length
+                          airbears.length,
                       )
                     : 0}
                   %

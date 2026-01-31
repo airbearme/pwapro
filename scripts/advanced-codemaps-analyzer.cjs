@@ -17,10 +17,10 @@ class AdvancedCodeMapsAnalyzer {
       components: [],
       api: [],
       utilities: [],
-      dependencies: {},
-      performance: {},
-      security: {},
-      coverage: {},
+      dependencies: { categories: {} },
+      performance: { api: { byMethod: {} } },
+      security: { issues: [], bestPractices: [] },
+      coverage: { byType: { components: {}, api: {}, utilities: {} } },
     };
   }
 
@@ -31,6 +31,11 @@ class AdvancedCodeMapsAnalyzer {
     console.log("🔬 Running Advanced CodeMaps Analysis...\n");
 
     try {
+      // Ensure output directory exists
+      if (!fs.existsSync(this.outputDir)) {
+        fs.mkdirSync(this.outputDir, { recursive: true });
+      }
+
       // Load existing CodeMaps
       await this.loadExistingCodeMaps();
 
@@ -111,6 +116,11 @@ class AdvancedCodeMapsAnalyzer {
         map: { count: 0, complexity: [] },
       },
     };
+
+    if (this.metrics.components.length === 0) {
+      this.metrics.complexity = complexityReport;
+      return;
+    }
 
     for (const component of this.metrics.components) {
       const complexity = await this.calculateComponentComplexity(component);
@@ -212,7 +222,7 @@ class AdvancedCodeMapsAnalyzer {
 
     for (const route of this.metrics.api) {
       const method = route.method || "UNKNOWN";
-      if (performanceReport.byMethod[method]) {
+      if (performanceReport.byMethod[method] !== undefined) {
         performanceReport.byMethod[method]++;
       }
 
@@ -655,6 +665,8 @@ class AdvancedCodeMapsAnalyzer {
   generateRecommendations(metrics) {
     const recommendations = [];
 
+    if (!metrics.complexity) return recommendations;
+
     // Complexity recommendations
     if (metrics.complexity.average > 15) {
       recommendations.push({
@@ -732,6 +744,8 @@ class AdvancedCodeMapsAnalyzer {
   generateInsights() {
     const insights = [];
 
+    if (!this.metrics.complexity) return insights;
+
     // Component insights
     if (this.metrics.complexity.high.length > 0) {
       insights.push({
@@ -790,7 +804,7 @@ Version: ${reports.version}
 - **Components**: ${reports.metrics.components.length} total
 - **API Routes**: ${reports.metrics.api.length} total  
 - **Utilities**: ${reports.metrics.utilities.length} total
-- **Average Complexity**: ${reports.metrics.complexity.average?.toFixed(2) || "N/A"}
+- **Average Complexity**: ${reports.metrics.complexity?.average?.toFixed(2) || "N/A"}
 - **Security Score**: ${reports.metrics.security.score}/100
 - **Test Coverage**: ${reports.metrics.coverage.coverage}%
 
@@ -807,8 +821,7 @@ ${reports.insights
 ${
   reports.metrics.performance.overall?.recommendations
     ?.map(
-      (rec) =>
-        `### ${rec.type} (${rec.priority})
+      (rec) => `### ${rec.type} (${rec.priority})
 - **Issue**: ${rec.message}
 - **Action**: ${rec.action}`,
     )
@@ -818,9 +831,9 @@ ${
 ## 🔍 Detailed Metrics
 
 ### Component Complexity
-- **High Complexity**: ${reports.metrics.complexity.high?.length || 0}
-- **Medium Complexity**: ${reports.metrics.complexity.medium?.length || 0}
-- **Low Complexity**: ${reports.metrics.complexity.low?.length || 0}
+- **High Complexity**: ${reports.metrics.complexity?.high?.length || 0}
+- **Medium Complexity**: ${reports.metrics.complexity?.medium?.length || 0}
+- **Low Complexity**: ${reports.metrics.complexity?.low?.length || 0}
 
 ### Security Analysis
 - **Issues Found**: ${reports.metrics.security.issues.length}

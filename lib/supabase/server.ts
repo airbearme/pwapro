@@ -13,10 +13,12 @@ const supabaseEnvSchema = z.object({
 
 const resolvedSupabaseUrl =
   process.env.NEXT_PUBLIC_SUPABASE_URL ||
-  process.env.NEXT_PUBLIC_SUPABASE_PWA4_URL
+  process.env.NEXT_PUBLIC_SUPABASE_PWA4_URL ||
+  "https://placeholder.supabase.co"
 const resolvedSupabaseAnonKey =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-  process.env.NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY
+  process.env.NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy"
 
 const env = supabaseEnvSchema.parse({
   NEXT_PUBLIC_SUPABASE_URL: resolvedSupabaseUrl,

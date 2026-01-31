@@ -1,5 +1,5 @@
-## 2026-01-31 - [Middleware Configuration Bug]
+## 2026-01-31 - [CI Build and Middleware Fixes]
 
-**Vulnerability:** Security headers and route protection were not being applied because the middleware was named `proxy.ts` instead of the standard `middleware.ts`, making it inactive in Next.js.
-**Learning:** Next.js expects `middleware.ts` (or `middleware.js`) in the root or `src/`. Even if Turbopack mentions a mapping, it doesn't guarantee the middleware is executed as a standard Next.js middleware unless it follows the naming convention and exports.
-**Prevention:** Always verify that security headers are actually present in the HTTP response using tools like `curl -I` or the browser console, rather than relying on the presence of code files.
+**Vulnerability:** Security headers were partially missing and route protection was unreliable.
+**Learning:** Next.js 16.1.6 (in this environment) uses `proxy.ts` instead of `middleware.ts`. Zod validation at module level in `lib/supabase/server.ts` caused build failures in CI because environment variables are not present during build time.
+**Prevention:** Move environment variable validation into the functions that use them to avoid module-level execution during build. Standardize security header application in the middleware/proxy.

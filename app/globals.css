@@ -394,6 +394,23 @@
   }
 }
 
+/* ⚡ Bolt: Optimized Map Marker Animations
+   Moved from inline style tags in MapComponent to global CSS to reduce DOM weight
+   and style parsing overhead when rendering multiple markers. */
+@keyframes map-marker-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.15); opacity: 0.9; }
+}
+
+@keyframes map-marker-pulse-glow {
+  0%, 100% {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3), 0 0 0 3px rgba(16, 185, 129, 0.3), 0 0 20px rgba(16, 185, 129, 0.4);
+  }
+  50% {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3), 0 0 0 5px rgba(16, 185, 129, 0.6), 0 0 30px rgba(16, 185, 129, 0.8);
+  }
+}
+
 @keyframes float {
   0%, 100% {
     transform: translateY(0px);
@@ -441,6 +458,14 @@
 /* Animation utility classes - These are also defined in Tailwind config but kept here for compatibility */
 .animate-pulse-glow {
   animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-map-marker-pulse {
+  animation: map-marker-pulse 1.5s ease-in-out infinite;
+}
+
+.animate-map-marker-pulse-glow {
+  animation: map-marker-pulse-glow 2s ease-in-out infinite;
 }
 
 .animate-float {

@@ -221,9 +221,10 @@ export default function MapView({
               justify-content: center;
               font-size: 28px;
               transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+              /* ⚡ Bolt: Using global optimized animation to reduce DOM size and style parsing overhead */
               animation: ${
                 hasAvailableAirbears
-                  ? "pulse-glow 2s ease-in-out infinite"
+                  ? "map-marker-pulse-glow 2s ease-in-out infinite"
                   : "none"
               };
               overflow: hidden;
@@ -259,26 +260,12 @@ export default function MapView({
                 font-weight: bold;
                 border: 4px solid white;
                 box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
-                animation: pulse 1.5s ease-in-out infinite;
+                animation: map-marker-pulse 1.5s ease-in-out infinite;
               "><img src="/airbear-mascot.png" style="width: 16px; height: 16px; border-radius: 50%; object-fit: cover;" alt="AirBear" /></div>
             `
                 : ""
             }
           </div>
-          <style>
-            @keyframes pulse {
-              0%, 100% { transform: scale(1); opacity: 1; }
-              50% { transform: scale(1.1); opacity: 0.9; }
-            }
-            @keyframes pulse-glow {
-              0%, 100% { 
-                box-shadow: 0 6px 20px rgba(0,0,0,0.3), 0 0 0 3px rgba(16, 185, 129, 0.3), 0 0 20px rgba(16, 185, 129, 0.4);
-              }
-              50% { 
-                box-shadow: 0 6px 20px rgba(0,0,0,0.3), 0 0 0 5px rgba(16, 185, 129, 0.6), 0 0 30px rgba(16, 185, 129, 0.8);
-              }
-            }
-          </style>
         `,
         className: "bg-transparent border-0",
         iconSize: [56, 56],
@@ -312,7 +299,7 @@ export default function MapView({
             }; border-radius: 50%; box-shadow: 0 0 12px ${
         hasAvailableAirbears ? "#10b981" : "#9ca3af"
       }; animation: ${
-        hasAvailableAirbears ? "pulse 2s ease-in-out infinite" : "none"
+        hasAvailableAirbears ? "map-marker-pulse 2s ease-in-out infinite" : "none"
       };"></div>
             <span style="font-weight: 700; color: ${
               hasAvailableAirbears ? "#047857" : "#4b5563"
@@ -409,9 +396,10 @@ export default function MapView({
               align-items: center;
               justify-content: center;
               font-size: 24px;
+              /* ⚡ Bolt: Using global optimized animation to reduce DOM size and style parsing overhead */
               animation: ${
                 airbear.is_available
-                  ? "pulse-glow 2s ease-in-out infinite"
+                  ? "map-marker-pulse-glow 2s ease-in-out infinite"
                   : "none"
               };
               transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -445,26 +433,12 @@ export default function MapView({
                 justify-content: center;
                 font-size: 12px;
                 box-shadow: 0 4px 12px rgba(251, 191, 36, 0.6);
-                animation: pulse 1.5s ease-in-out infinite;
+                animation: map-marker-pulse 1.5s ease-in-out infinite;
               ">⚡</div>
             `
                 : ""
             }
           </div>
-          <style>
-            @keyframes pulse {
-              0%, 100% { transform: scale(1); opacity: 1; }
-              50% { transform: scale(1.15); opacity: 0.9; }
-            }
-            @keyframes pulse-glow {
-              0%, 100% { 
-                box-shadow: 0 6px 18px rgba(0,0,0,0.35), 0 0 0 4px rgba(16, 185, 129, 0.25), 0 0 20px rgba(16, 185, 129, 0.4);
-              }
-              50% { 
-                box-shadow: 0 6px 18px rgba(0,0,0,0.35), 0 0 0 6px rgba(16, 185, 129, 0.5), 0 0 30px rgba(16, 185, 129, 0.8);
-              }
-            }
-          </style>
         `,
         className: "bg-transparent border-0",
         iconSize: [48, 48],

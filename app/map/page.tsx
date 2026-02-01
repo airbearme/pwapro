@@ -122,6 +122,8 @@ export default function MapPage() {
               size="sm"
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               className="glass-morphism hover-lift"
+              aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+              title={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
             >
               {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>

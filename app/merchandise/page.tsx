@@ -214,7 +214,12 @@ export default function MerchandisePage() {
                     <ShoppingBag className="w-4 h-4 mr-2" />
                     {item.inStock ? "Add to Cart" : "Out of Stock"}
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    aria-label="Add to favorites"
+                    title="Add to favorites"
+                  >
                     <Star className="w-4 h-4" />
                   </Button>
                 </div>

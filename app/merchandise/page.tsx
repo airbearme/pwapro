@@ -24,6 +24,11 @@ import {
   Truck,
   ShoppingBag,
 } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import Link from "next/link";
 
 interface MerchandiseItem {
@@ -214,9 +219,16 @@ export default function MerchandisePage() {
                     <ShoppingBag className="w-4 h-4 mr-2" />
                     {item.inStock ? "Add to Cart" : "Out of Stock"}
                   </Button>
-                  <Button variant="outline" size="sm">
-                    <Star className="w-4 h-4" />
-                  </Button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="outline" size="sm" aria-label="Add to favorites">
+                        <Star className="w-4 h-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Add to favorites</p>
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
               </CardContent>
             </Card>

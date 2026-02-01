@@ -134,7 +134,7 @@ jobs:
         run: npm ci
 
       - name: Run codemaps analysis
-        run: npm run codemaps:analyze
+        run: npm run codemaps:generate && npm run codemaps:analyze
 
       - name: Bundle analyzer
         run: npx webpack-bundle-analyzer --mode static

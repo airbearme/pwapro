@@ -1,3 +1,3 @@
-## 2025-05-15 - Sitewide Tooltip and Accessible Icon Buttons
-**Learning:** Enabling sitewide tooltips via `TooltipProvider` in the root layout allows for immediate enhancement of icon-only buttons with descriptive text. Pairing `Tooltip` with an explicit `aria-label` not only improves accessibility for screen readers but also provides a stable, unique selector for automated frontend verification (e.g., Playwright).
-**Action:** Always wrap the app's children in `TooltipProvider` if using Radix/shadcn tooltips, and ensure every icon-only button has both a `Tooltip` for sighted users and an `aria-label` for assistive technology.
+## 2025-05-15 - Accessible Icon Buttons with Native Tooltips
+**Learning:** In a constrained environment where line count matters, using the native 'title' attribute along with 'aria-label' provides a solid micro-UX improvement for icon-only buttons without the overhead of UI library tooltips and providers.
+**Action:** Use 'aria-label' for screen readers and 'title' for simple hover hints when line count constraints prevent using complex tooltip components.

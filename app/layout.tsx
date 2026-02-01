@@ -4,7 +4,6 @@ import { Inter, Space_Grotesk } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { AuthProvider } from "@/components/auth-provider";
 import { ThemeProvider } from "@/components/theme-provider";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import ClientErrorLogger from "@/components/client-error-logger";
 import "leaflet/dist/leaflet.css";
 import "./globals.css";
@@ -104,9 +103,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body
-        className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased relative overflow-x-hidden`}
-      >
+      <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased relative overflow-x-hidden`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -123,9 +120,9 @@ export default function RootLayout({
           </div>
           <div className="relative z-10 min-h-screen">
             <ClientErrorLogger />
-            <TooltipProvider>
-              <AuthProvider>{children}</AuthProvider>
-            </TooltipProvider>
+            <AuthProvider>
+              {children}
+            </AuthProvider>
           </div>
         </ThemeProvider>
         <Analytics />

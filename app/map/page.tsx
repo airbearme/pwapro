@@ -1,17 +1,17 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { Battery, MapPin, Navigation, Moon, Sun } from "lucide-react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { useTheme } from "next-themes";
 import { useAuthContext } from "@/components/auth-provider";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import { subscribeToAirbearLocations } from "@/lib/supabase/realtime";
 import { useAirbearNotifications } from "@/lib/hooks/use-airbear-notifications";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { Battery, MapPin, Navigation, Moon, Sun } from "lucide-react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useTheme } from "next-themes";
 import {
   Tooltip,
   TooltipContent,
@@ -202,7 +202,7 @@ export default function MapPage() {
                   {airbears.length > 0
                     ? Math.round(
                         airbears.reduce((sum, a) => sum + a.battery_level, 0) /
-                          airbears.length,
+                          airbears.length
                       )
                     : 0}
                   %

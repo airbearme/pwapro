@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { User, Mail, Lock, Car } from "lucide-react";
-import Link from "next/link";
 import { useAuthContext } from "@/components/auth-provider";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import {
@@ -17,6 +15,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { User, Mail, Lock, Car } from "lucide-react";
+import Link from "next/link";
 
 export default function DriverSignupPage() {
   const { user } = useAuthContext();
@@ -67,7 +67,7 @@ export default function DriverSignupPage() {
 
           if (signInError) {
             throw new Error(
-              "Account exists but sign-in failed. Please contact support.",
+              "Account exists but sign-in failed. Please contact support."
             );
           }
         } else {
@@ -76,7 +76,7 @@ export default function DriverSignupPage() {
       }
 
       // Create user profile
-      const userId = (authData as any)?.user?.id || (user as any)?.id || "";
+      const userId = (authData as any)?.user?.id || (user as any)?.id || '';
       const { error: profileError } = await supabase.from("users").upsert({
         id: userId,
         email: `${formData.username}@airbear.me`,

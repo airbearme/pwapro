@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
 import { getSupabaseServer } from "@/lib/supabase/server";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
@@ -25,7 +25,7 @@ export async function POST(request: Request) {
           error:
             "Missing required fields: pickup_spot_id, dropoff_spot_id, fare, distance",
         },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
@@ -39,20 +39,13 @@ export async function POST(request: Request) {
 
     if (airbearError) {
       console.error("Error checking AirBear availability:", airbearError);
-      return NextResponse.json(
-        { error: "Failed to check vehicle availability" },
-        { status: 500 },
-      );
+      return NextResponse.json({ error: "Failed to check vehicle availability" }, { status: 500 });
     }
 
     if (!availableAirbears || availableAirbears.length === 0) {
-      return NextResponse.json(
-        {
-          error:
-            "No AirBears Available - All vehicles are currently in use. Please try again later.",
-        },
-        { status: 503 },
-      );
+      return NextResponse.json({
+        error: "No AirBears Available - All vehicles are currently in use. Please try again later."
+      }, { status: 503 });
     }
 
     const assignedAirbear = availableAirbears[0];

@@ -1,7 +1,6 @@
 # 🚀 Next Steps - AirBear PWA Deployment
 
 ## ✅ Completed
-
 - [x] Fixed ErrorBoundary component wrapping
 - [x] Fixed signup page dark mode gradient
 - [x] Fixed health endpoint status mismatch
@@ -15,7 +14,6 @@
 **Quick Fix:** See `FIX_SUPABASE_OAUTH.md` for detailed instructions.
 
 **TL;DR:**
-
 1. Run: `npm run check:supabase` to diagnose
 2. Add correct Supabase environment variables to Vercel:
    - `NEXT_PUBLIC_SUPABASE_PWA4_URL`
@@ -31,13 +29,11 @@
 **Go to:** [Supabase Dashboard](https://supabase.com/dashboard) → Your Project → Authentication → URL Configuration
 
 **Site URL:**
-
 ```
 https://airbear.me
 ```
 
 **Redirect URLs (add all three):**
-
 ```
 http://localhost:3000/auth/callback
 https://airbear.me/auth/callback
@@ -53,7 +49,6 @@ https://www.airbear.me/auth/callback
 **Go to:** [Vercel Dashboard](https://vercel.com/dashboard) → Your Project → Settings → Environment Variables
 
 **Required Variables:**
-
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
@@ -69,7 +64,6 @@ https://www.airbear.me/auth/callback
 ### 3. Deploy to Production 🚀
 
 **Option A: GitHub Push (Automatic)**
-
 ```bash
 git add .
 git commit -m "Configure OAuth callbacks and deploy to production"
@@ -77,13 +71,11 @@ git push origin main
 ```
 
 **Option B: Vercel CLI**
-
 ```bash
 vercel --prod
 ```
 
 **Option C: Vercel Dashboard**
-
 1. Go to https://vercel.com/dashboard
 2. Select your project
 3. Click "Deploy" → "Redeploy"
@@ -118,19 +110,16 @@ Test these on https://airbear.me:
 ## 🔍 Troubleshooting
 
 ### OAuth redirects to wrong page?
-
 - ✅ Check Supabase redirect URLs are configured correctly
 - ✅ Verify `NEXT_PUBLIC_SITE_URL` is set in Vercel
 - ✅ Check browser console for errors
 
 ### Health endpoint shows unhealthy?
-
 - ✅ Verify Supabase environment variables in Vercel
 - ✅ Check Supabase project is active
 - ✅ Verify database connectivity
 
 ### Dark mode not working?
-
 - ✅ Already configured in `app/layout.tsx` (`defaultTheme="dark"`)
 - ✅ Should work automatically after deployment
 

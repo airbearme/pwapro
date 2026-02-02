@@ -161,7 +161,7 @@ export async function POST(request: Request) {
   try {
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_PWA4_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY!,
+      process.env.NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY!
     );
 
     // Delete existing spots using service role key

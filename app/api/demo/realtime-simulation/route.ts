@@ -55,7 +55,7 @@ export async function POST(request: Request) {
           error:
             "Invalid action. Available actions: user_booking, driver_location, ride_status",
         },
-        { status: 400 },
+        { status: 400 }
       );
   }
 }

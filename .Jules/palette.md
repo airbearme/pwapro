@@ -1,4 +1,3 @@
-## 2024-05-24 - [Accessible Tooltips for Icon-Only Actions]
-
-**Learning:** Icon-only buttons (like theme toggles or dismiss buttons) are often missing both visual labels (tooltips) and accessible labels (aria-labels). Enabling sitewide `TooltipProvider` in the root layout allows for a consistent and accessible way to provide these missing pieces of information.
-**Action:** Always wrap the root layout in `TooltipProvider` and ensure icon-only buttons are paired with both `aria-label` and `Tooltip`.
+## 2025-05-15 - Sitewide Tooltips and Accessibility
+**Learning:** Adding a sitewide TooltipProvider allows for consistent micro-interactions. Pair icon-only buttons with ARIA labels and tooltips to ensure they are accessible to both screen readers and visual users.
+**Action:** Always wrap the root layout in TooltipProvider when using Radix-based tooltips to avoid repeated provider boilerplate and ensure accessibility sitewide.

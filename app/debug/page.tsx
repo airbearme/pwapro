@@ -10,9 +10,7 @@ export default function DebugHomePage() {
         <div className="max-w-2xl text-center space-y-4">
           <p className="text-xl mb-8">✅ Testing with Analytics only</p>
           <div className="border border-emerald-500 rounded-lg p-6 bg-black/20 backdrop-blur-sm">
-            <h2 className="text-2xl font-semibold mb-4 text-emerald-400">
-              Component Test Status:
-            </h2>
+            <h2 className="text-2xl font-semibold mb-4 text-emerald-400">Component Test Status:</h2>
             <div className="space-y-2 text-left">
               <p>✅ Layout loads</p>
               <p>✅ Fonts load</p>
@@ -21,9 +19,7 @@ export default function DebugHomePage() {
             </div>
           </div>
           <div className="mt-8 p-4 border border-yellow-500 rounded-lg bg-yellow-500/10">
-            <p className="text-yellow-300">
-              If this page stays visible, Analytics is not the issue
-            </p>
+            <p className="text-yellow-300">If this page stays visible, Analytics is not the issue</p>
             <p className="text-yellow-300">Next: Add ThemeProvider</p>
           </div>
         </div>

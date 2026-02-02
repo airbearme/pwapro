@@ -1,43 +1,43 @@
-"use client";
+"use client"
 
-import { useEffect, useRef } from "react";
-import { useAuthContext } from "@/components/auth-provider";
-import type { AirbearLocation } from "@/lib/supabase/realtime";
+import { useEffect, useRef } from "react"
+import { useAuthContext } from "@/components/auth-provider"
+import type { AirbearLocation } from "@/lib/supabase/realtime"
 
 interface NotificationState {
-  permission: NotificationPermission;
-  isSupported: boolean;
+  permission: NotificationPermission
+  isSupported: boolean
 }
 
 /**
  * Hook to send push notifications when airbears become available
  */
 export function useAirbearNotifications(airbears: AirbearLocation[]) {
-  const { user } = useAuthContext();
-  const previousAvailableCountRef = useRef<number>(0);
+  const { user } = useAuthContext()
+  const previousAvailableCountRef = useRef<number>(0)
   const notificationStateRef = useRef<NotificationState>({
     permission: "default",
     isSupported: typeof window !== "undefined" && "Notification" in window,
-  });
+  })
 
   useEffect(() => {
     if (!user || !notificationStateRef.current.isSupported) {
-      return;
+      return
     }
 
     // Request notification permission if not already granted
     if (notificationStateRef.current.permission === "default") {
       Notification.requestPermission().then((permission) => {
-        notificationStateRef.current.permission = permission;
-      });
+        notificationStateRef.current.permission = permission
+      })
     }
 
     // Calculate current available airbears
     const availableCount = airbears.filter(
-      (a) => a.is_available && !a.is_charging,
-    ).length;
+      (a) => a.is_available && !a.is_charging
+    ).length
 
-    const previousCount = previousAvailableCountRef.current;
+    const previousCount = previousAvailableCountRef.current
 
     // If airbears became available (went from 0 to >0, or increased)
     if (previousCount === 0 && availableCount > 0) {
@@ -51,7 +51,7 @@ export function useAirbearNotifications(airbears: AirbearLocation[]) {
           badge: "/icon-192x192.png",
           tag: "airbear-available",
           requireInteraction: false,
-        });
+        })
       }
     } else if (previousCount > 0 && availableCount > previousCount) {
       // More airbears became available
@@ -65,15 +65,15 @@ export function useAirbearNotifications(airbears: AirbearLocation[]) {
           badge: "/icon-192x192.png",
           tag: "airbear-available",
           requireInteraction: false,
-        });
+        })
       }
     }
 
-    previousAvailableCountRef.current = availableCount;
-  }, [airbears, user]);
+    previousAvailableCountRef.current = availableCount
+  }, [airbears, user])
 
   return {
     permission: notificationStateRef.current.permission,
     isSupported: notificationStateRef.current.isSupported,
-  };
+  }
 }

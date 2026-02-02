@@ -1,14 +1,4 @@
-import importPlugin from "eslint-plugin-import";
-import tsParser from "@typescript-eslint/parser";
-import tsPlugin from "@typescript-eslint/eslint-plugin";
-
 export default [
-  {
-    plugins: {
-      import: importPlugin,
-      "@typescript-eslint": tsPlugin,
-    },
-  },
   {
     ignores: [
       "**/.next/**",
@@ -30,17 +20,7 @@ export default [
     ],
   },
   {
-    files: ["**/*.{js,jsx,ts,tsx}"],
-    languageOptions: {
-      parser: tsParser,
-      parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
-    },
+    files: ["**/*.{js,jsx}"],
     rules: {
       "no-unused-vars": "off",
       "no-console": "off",

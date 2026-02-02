@@ -1,5 +1,6 @@
-import { getSupabaseServer } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+
+import { getSupabaseServer } from "@/lib/supabase/server";
 
 export async function POST(request: Request) {
   try {
@@ -43,8 +44,8 @@ export async function POST(request: Request) {
     }
 
     if (!availableAirbears || availableAirbears.length === 0) {
-      return NextResponse.json({ 
-        error: "No AirBears Available - All vehicles are currently in use. Please try again later." 
+      return NextResponse.json({
+        error: "No AirBears Available - All vehicles are currently in use. Please try again later."
       }, { status: 503 });
     }
 

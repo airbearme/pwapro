@@ -366,8 +366,3 @@ The testing suite is designed to:
 **Coverage**: All aspects of the application
 
 **Run `npm run test:validate` to validate everything!** 🚀
-
-
-
-
-

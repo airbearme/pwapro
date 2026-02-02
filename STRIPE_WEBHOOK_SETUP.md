@@ -126,7 +126,7 @@ STRIPE_WEBHOOK_SECRET=whsec_your_actual_secret_here
 **Full Stripe section in `.env` should look like:**
 \`\`\`bash
 # Stripe Configuration
-VITE_STRIPE_PUBLIC_KEY=pk_live_your_actual_public_key_here
+VITE_STRIPE_PUBLIC_KEY=... (your publishable key)_actual_public_key_here
 STRIPE_SECRET_KEY=sk_live_your_actual_secret_key_here
 STRIPE_WEBHOOK_SECRET=whsec_your_actual_secret_here
 \`\`\`

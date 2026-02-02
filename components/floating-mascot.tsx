@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useState, useEffect } from "react";
+
 import AirbearWheel from "@/components/airbear-wheel";
 
 export default function FloatingMascot() {
@@ -13,7 +14,7 @@ export default function FloatingMascot() {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
 
@@ -48,14 +49,14 @@ export default function FloatingMascot() {
       <div className="group relative">
         {/* Glowing background circle */}
         <div className="absolute inset-0 bg-emerald-500/20 rounded-full blur-2xl animate-pulse-glow group-hover:bg-emerald-500/40 transition-colors"></div>
-        
+
         {/* Mascot container */}
         <div className="relative w-16 h-16 md:w-20 md:h-20 rounded-full border-4 border-emerald-400/50 dark:border-emerald-500/50 bg-gradient-to-br from-emerald-500/20 to-lime-500/20 backdrop-blur-sm shadow-2xl hover-lift group-hover:scale-110 transition-transform duration-300 overflow-hidden">
           {/* Spinning wheel in background */}
           <div className="absolute inset-0 flex items-center justify-center opacity-20 group-hover:opacity-40 transition-opacity">
             <AirbearWheel size="lg" glowing animated className="opacity-50" />
           </div>
-          
+
           {/* Mascot image */}
           <img
             src="/airbear-mascot.png"
@@ -63,10 +64,10 @@ export default function FloatingMascot() {
             className="w-full h-full object-cover rounded-full animate-float"
             style={{ animationDuration: "4s" }}
           />
-          
+
           {/* Pulse ring */}
           <div className="absolute inset-0 rounded-full border-2 border-emerald-400/30 animate-ping"></div>
-          
+
           {/* Tooltip on hover */}
           <div className="absolute bottom-full right-0 mb-2 px-3 py-1.5 bg-emerald-600 dark:bg-emerald-700 text-white text-xs font-semibold rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
             Go Home 🏠
@@ -77,4 +78,3 @@ export default function FloatingMascot() {
     </Link>
   );
 }
-

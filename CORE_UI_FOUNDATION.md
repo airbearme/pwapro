@@ -55,15 +55,15 @@ This document defines the **permanent, core UI/UX foundation** of AirBear. These
 All animation classes MUST be in the `safelist` array to prevent purging:
 ```typescript
 safelist: [
-  "airbear-holographic", "airbear-plasma", "airbear-solar-rays", 
+  "airbear-holographic", "airbear-plasma", "airbear-solar-rays",
   "airbear-marker", "airbear-eco-breeze", "airbear-god-rays",
-  "glass-morphism", "neumorphism", "eco-gradient", "particle-system", 
+  "glass-morphism", "neumorphism", "eco-gradient", "particle-system",
   "airbear-wheel", "hover-lift", "ripple-effect",
-  "animate-spin-slow", "animate-pulse-glow", "animate-float", 
+  "animate-spin-slow", "animate-pulse-glow", "animate-float",
   "animate-shimmer", "animate-particle", "animate-rickshaw-bounce",
-  "animate-wheel-spin", "animate-neon-glow", "animate-vortex-zoom", 
+  "animate-wheel-spin", "animate-neon-glow", "animate-vortex-zoom",
   "animate-confetti-burst", "animate-liquid-fill", "animate-ripple-wave",
-  "animate-holographic", "animate-plasma", "animate-solar-rays", 
+  "animate-holographic", "animate-plasma", "animate-solar-rays",
   "animate-eco-breeze", "animate-airbear-bounce", "animate-god-rays",
   // ... color patterns
 ]
@@ -164,7 +164,3 @@ Before any deployment, verify:
 ---
 
 **This UI/UX foundation is CORE to AirBear's identity. Protect it.**
-
-
-
-

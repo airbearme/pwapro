@@ -1,21 +1,23 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useAuthContext } from "@/components/auth-provider";
-import { getSupabaseClient } from "@/lib/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
-import { loadStripe } from "@stripe/stripe-js";
 import {
   Elements,
   PaymentElement,
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 import { CreditCard, Smartphone, QrCode, CheckCircle, Apple, Wallet, MapPin } from "lucide-react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+
+import { useAuthContext } from "@/components/auth-provider";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
+import { getSupabaseClient } from "@/lib/supabase/client";
+
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""
@@ -64,7 +66,7 @@ function CheckoutForm({ clientSecret, rideId, amount, onSuccess }: CheckoutFormP
         const supabase = getSupabaseClient();
         const { error } = await supabase
           .from("rides")
-          .update({ 
+          .update({
             status: "confirmed",
             payment_method: "card",
             paid_at: new Date().toISOString()
@@ -207,8 +209,8 @@ function CheckoutPageContent() {
           <div className="space-y-2">
             <div className="w-8 h-8 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin mx-auto"></div>
             <p className="text-xl text-muted-foreground animate-pulse">
-              {authLoading ? "Authenticating..." : 
-               loading ? "Setting up payment..." : 
+              {authLoading ? "Authenticating..." :
+               loading ? "Setting up payment..." :
                "Initializing payment form..."}
             </p>
             <p className="text-sm text-muted-foreground">
@@ -346,4 +348,3 @@ export default function CheckoutPage() {
     </Suspense>
   );
 }
-

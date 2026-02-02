@@ -39,8 +39,8 @@ Copy these from your `.env.local`:
 
 ```
 NEXT_PUBLIC_SUPABASE_PWA4_URL=https://fofmrqgcidfenbevayrg.supabase.co
-NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-SUPABASE_PWA4_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=... (your token)
+SUPABASE_PWA4_SERVICE_ROLE_KEY=... (your token)
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_... (your Stripe publishable key)
 STRIPE_SECRET_KEY=sk_live_... (your Stripe secret key)
 STRIPE_WEBHOOK_SECRET=whsec_... (your Stripe webhook secret)
@@ -83,4 +83,3 @@ See `docs/PRODUCTION_DEPLOYMENT.md` for complete guide.
 **UI/UX**: ✅ All animations preserved
 **Security**: ✅ Hardened
 **Performance**: ✅ Optimized
-

@@ -1,5 +1,6 @@
-import { createClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
+
+import { createClient } from "@/lib/supabase/server"
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url)
@@ -21,7 +22,7 @@ export async function GET(request: Request) {
 
   try {
     const supabase = await createClient()
-    
+
     // Exchange code for session
     const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
 
@@ -95,7 +96,3 @@ export async function GET(request: Request) {
     return NextResponse.redirect(`${origin}/auth/login?error=${encodeURIComponent(err.message || "oauth_failed")}`)
   }
 }
-
-
-
-

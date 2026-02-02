@@ -74,5 +74,3 @@ try {
 	console.error(`❌ Failed to read service worker: ${error.message}`);
 	process.exit(1);
 }
-
-

@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
 import { execSync } from "child_process";
-import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
+
+import dotenv from "dotenv";
 import SftpClient from "ssh2-sftp-client";
 
 // Load environment variables

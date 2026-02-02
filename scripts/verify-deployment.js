@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-import dotenv from "dotenv";
 import path from "path";
+
+import dotenv from "dotenv";
 import SftpClient from "ssh2-sftp-client";
 
 // Load environment variables

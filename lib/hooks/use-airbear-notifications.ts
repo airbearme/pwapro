@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+
 import { useAuthContext } from "@/components/auth-provider"
 import type { AirbearLocation } from "@/lib/supabase/realtime"
 
@@ -77,4 +78,3 @@ export function useAirbearNotifications(airbears: AirbearLocation[]) {
     isSupported: notificationStateRef.current.isSupported,
   }
 }
-

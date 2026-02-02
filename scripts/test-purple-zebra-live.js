@@ -2,9 +2,9 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = "https://fofmrqgcidfenbevayrg.supabase.co";
 const supabaseServiceKey =
-	"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZvZm1ycWdjaWRmZW5iZXZheXJnIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MzYzNDcyOCwiZXhwIjoyMDc5MjEwNzI4fQ.89Y4IOCpB-Ky1qjTJLmotMBe8RqQyN8bk6Xp5F43MMA";
+	"... (your token)";
 const supabaseAnonKey =
-	"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZvZm1ycWdjaWRmZW5iZXZheXJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM2MzQ3MjgsImV4cCI6MjA3OTIxMDcyOH0.Z6m5z1KQGp-cDjBbcdJjUaXIA25C3VD8IlcLge1fWyM";
+	"... (your token)";
 
 console.log("🔌 Testing Purple Zebra (fofmrqgcidfenbevayrg)...");
 console.log("URL:", supabaseUrl);

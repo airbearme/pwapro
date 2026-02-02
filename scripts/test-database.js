@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import dotenv from "dotenv";
 import { createClient } from "@supabase/supabase-js";
+import dotenv from "dotenv";
 
 /**
  * Database Connectivity Testing Script
@@ -82,4 +82,3 @@ async function testDatabase() {
 }
 
 testDatabase();
-

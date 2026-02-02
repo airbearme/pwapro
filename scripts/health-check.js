@@ -5,8 +5,8 @@
  * Checks all critical endpoints and services
  */
 
-const https = require("https");
 const http = require("http");
+const https = require("https");
 
 const checks = [
 	{
@@ -66,5 +66,3 @@ runHealthChecks().catch((error) => {
 	console.error("Health check failed:", error);
 	process.exit(1);
 });
-
-

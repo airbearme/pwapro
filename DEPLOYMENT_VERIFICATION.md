@@ -35,7 +35,7 @@ git commit -m "Production deployment - Clean codebase with enhanced payment flow
 git push origin main
 ```
 
-### **Step 2: Deploy to Vercel** 
+### **Step 2: Deploy to Vercel**
 **Option A: Vercel Dashboard (Recommended)**
 1. Go to [vercel.com/dashboard](https://vercel.com/dashboard)
 2. Click "Add New" → "Project"

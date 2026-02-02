@@ -2,6 +2,18 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import {
+  MapPin,
+  Navigation,
+  DollarSign,
+  Clock,
+  ArrowRight,
+  Loader2,
+  Map,
+  Eye,
+  EyeOff,
+} from "lucide-react";
+import Link from "next/link";
 import { useAuthContext } from "@/components/auth-provider";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import {
@@ -15,18 +27,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import {
-  MapPin,
-  Navigation,
-  DollarSign,
-  Clock,
-  ArrowRight,
-  Loader2,
-  Map,
-  Eye,
-  EyeOff,
-} from "lucide-react";
-import Link from "next/link";
 import MapComponent, { type Spot } from "@/components/map-view-beautiful";
 import type { AirbearLocation } from "@/lib/supabase/realtime";
 import { RidePayment } from "@/components/ride-payment";
@@ -565,13 +565,7 @@ function BookRidePageContent() {
 
 export default function BookRidePage() {
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen bg-black text-white flex items-center justify-center">
-          Loading booking...
-        </div>
-      }
-    >
+    <Suspense fallback={<div className="min-h-screen bg-black text-white flex items-center justify-center">Loading booking...</div>}>
       <BookRidePageContent />
     </Suspense>
   );

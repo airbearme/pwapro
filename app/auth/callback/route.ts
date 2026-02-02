@@ -1,51 +1,44 @@
-import { createClient } from "@/lib/supabase/server";
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server"
+import { createClient } from "@/lib/supabase/server"
 
 export async function GET(request: Request) {
-  const requestUrl = new URL(request.url);
-  const code = requestUrl.searchParams.get("code");
-  const error = requestUrl.searchParams.get("error");
-  const errorDescription = requestUrl.searchParams.get("error_description");
-  const requestedRole = requestUrl.searchParams.get("role");
-  const origin = requestUrl.origin;
+  const requestUrl = new URL(request.url)
+  const code = requestUrl.searchParams.get("code")
+  const error = requestUrl.searchParams.get("error")
+  const errorDescription = requestUrl.searchParams.get("error_description")
+  const requestedRole = requestUrl.searchParams.get("role")
+  const origin = requestUrl.origin
 
   // Handle OAuth errors
   if (error) {
-    console.error("OAuth error:", error, errorDescription);
-    return NextResponse.redirect(
-      `${origin}/auth/login?error=${encodeURIComponent(errorDescription || error)}`,
-    );
+    console.error("OAuth error:", error, errorDescription)
+    return NextResponse.redirect(`${origin}/auth/login?error=${encodeURIComponent(errorDescription || error)}`)
   }
 
   if (!code) {
-    return NextResponse.redirect(`${origin}/auth/login?error=missing_code`);
+    return NextResponse.redirect(`${origin}/auth/login?error=missing_code`)
   }
 
   try {
-    const supabase = await createClient();
+    const supabase = await createClient()
 
     // Exchange code for session
-    const { error: exchangeError } =
-      await supabase.auth.exchangeCodeForSession(code);
+    const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
 
     if (exchangeError) {
-      console.error("Session exchange error:", exchangeError);
-      return NextResponse.redirect(
-        `${origin}/auth/login?error=${encodeURIComponent(exchangeError.message)}`,
-      );
+      console.error("Session exchange error:", exchangeError)
+      return NextResponse.redirect(`${origin}/auth/login?error=${encodeURIComponent(exchangeError.message)}`)
     }
 
     // Get user after successful exchange
     const {
       data: { user },
       error: userError,
-    } = await supabase.auth.getUser();
+    } = await supabase.auth.getUser()
 
     if (userError || !user) {
-      console.error("User fetch error:", userError);
-      return NextResponse.redirect(
-        `${origin}/auth/login?error=user_fetch_failed`,
-      );
+      console.error("User fetch error:", userError)
+      return NextResponse.redirect(`${origin}/auth/login?error=user_fetch_failed`)
     }
 
     // Create user profile if it doesn't exist
@@ -53,24 +46,21 @@ export async function GET(request: Request) {
       .from("users")
       .select("id")
       .eq("id", user.id)
-      .single();
+      .single()
 
     if (!existingProfile) {
-      const username =
-        user.email?.split("@")[0] || `user_${user.id.slice(0, 8)}`;
+      const username = user.email?.split("@")[0] || `user_${user.id.slice(0, 8)}`
 
       const { error: insertError } = await supabase.from("users").insert({
         id: user.id,
         email: user.email!,
         username,
-        full_name:
-          user.user_metadata?.full_name || user.user_metadata?.name || null,
-        avatar_url:
-          user.user_metadata?.avatar_url || user.user_metadata?.picture || null,
-      });
+        full_name: user.user_metadata?.full_name || user.user_metadata?.name || null,
+        avatar_url: user.user_metadata?.avatar_url || user.user_metadata?.picture || null,
+      })
 
       if (insertError) {
-        console.error("Profile creation error:", insertError);
+        console.error("Profile creation error:", insertError)
         // Don't fail the login, just log the error
       }
     }
@@ -80,15 +70,14 @@ export async function GET(request: Request) {
         .from("users")
         .select("role")
         .eq("id", user.id)
-        .single();
+        .single()
 
-      const effectiveRole = profile?.role ?? user.user_metadata?.role ?? "user";
+      const effectiveRole =
+        profile?.role ?? user.user_metadata?.role ?? "user"
 
       if (effectiveRole !== requestedRole) {
-        await supabase.auth.signOut();
-        return NextResponse.redirect(
-          `${origin}/auth/login?error=role_mismatch`,
-        );
+        await supabase.auth.signOut()
+        return NextResponse.redirect(`${origin}/auth/login?error=role_mismatch`)
       }
     }
 
@@ -97,14 +86,12 @@ export async function GET(request: Request) {
         ? "/admin"
         : requestedRole === "driver"
           ? "/driver"
-          : "/dashboard";
+          : "/dashboard"
 
     // Redirect to dashboard on success
-    return NextResponse.redirect(`${origin}${redirectPath}`);
+    return NextResponse.redirect(`${origin}${redirectPath}`)
   } catch (err: any) {
-    console.error("Unexpected callback error:", err);
-    return NextResponse.redirect(
-      `${origin}/auth/login?error=${encodeURIComponent(err.message || "oauth_failed")}`,
-    );
+    console.error("Unexpected callback error:", err)
+    return NextResponse.redirect(`${origin}/auth/login?error=${encodeURIComponent(err.message || "oauth_failed")}`)
   }
 }

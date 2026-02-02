@@ -2,10 +2,10 @@
 
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { CheckCircle, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 function OrderSuccessPageContent() {
   const router = useRouter();
@@ -125,13 +125,7 @@ function OrderSuccessPageContent() {
 
 export default function OrderSuccessPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen bg-black text-white flex items-center justify-center">
-          Loading success page...
-        </div>
-      }
-    >
+    <Suspense fallback={<div className="min-h-screen bg-black text-white flex items-center justify-center">Loading success page...</div>}>
       <OrderSuccessPageContent />
     </Suspense>
   );

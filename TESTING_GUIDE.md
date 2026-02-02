@@ -33,7 +33,6 @@ npm run sync:github
 ### Manual Test Steps
 
 1. **Initial Load**
-
    ```
    ✓ Navigate to /map
    ✓ Map loads within 2 seconds
@@ -42,7 +41,6 @@ npm run sync:github
    ```
 
 2. **Marker Display**
-
    ```
    ✓ AirBear markers appear (🚲 icon)
    ✓ Spot markers appear (🐻 icon)
@@ -52,7 +50,6 @@ npm run sync:github
    ```
 
 3. **Real-time Updates**
-
    ```
    ✓ Open browser DevTools → Network tab
    ✓ See WebSocket connection to Supabase
@@ -96,7 +93,6 @@ WHERE id = 'your-airbear-id';
 ### Google Sign-In
 
 1. **Setup Check**
-
    ```
    ✓ Supabase dashboard → Authentication → Providers
    ✓ Google OAuth is enabled
@@ -105,7 +101,6 @@ WHERE id = 'your-airbear-id';
    ```
 
 2. **Test Flow**
-
    ```
    ✓ Visit /auth/login
    ✓ Click "Continue with Google"
@@ -126,7 +121,6 @@ WHERE id = 'your-airbear-id';
 ### Apple Sign-In
 
 1. **Setup Check**
-
    ```
    ✓ Supabase dashboard → Authentication → Providers
    ✓ Apple OAuth is enabled
@@ -147,7 +141,6 @@ WHERE id = 'your-airbear-id';
 ### Email/Password
 
 1. **Sign Up**
-
    ```
    ✓ Visit /auth/signup
    ✓ Enter email and password
@@ -171,7 +164,6 @@ WHERE id = 'your-airbear-id';
 ### Setup Verification
 
 1. **Stripe Dashboard**
-
    ```
    ✓ Login to dashboard.stripe.com
    ✓ Switch to Test Mode (toggle in sidebar)
@@ -192,7 +184,6 @@ WHERE id = 'your-airbear-id';
 ### Test Payments
 
 1. **Credit Card Payment**
-
    ```
    ✓ Visit /products
    ✓ Click "Buy Now" on any product
@@ -206,7 +197,6 @@ WHERE id = 'your-airbear-id';
    ```
 
 2. **Apple Pay** (Safari/iOS only)
-
    ```
    ✓ Visit /products on iOS Safari
    ✓ Click "Buy Now"
@@ -295,7 +285,6 @@ grep -r "SERVICE_ROLE" .next/static
 ### Responsive Design
 
 1. **Chrome DevTools**
-
    ```
    ✓ Open DevTools (F12)
    ✓ Click device toggle (Ctrl+Shift+M)
@@ -317,7 +306,6 @@ grep -r "SERVICE_ROLE" .next/static
 ### PWA Installation
 
 1. **iOS Safari**
-
    ```
    ✓ Visit airbear.me
    ✓ Tap Share button
@@ -416,7 +404,6 @@ Deployment:
 **Issue:** Blank white box instead of map
 
 **Fix:**
-
 ```typescript
 // Check app/globals.css has Leaflet styles
 @import url('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
@@ -432,12 +419,11 @@ const MapComponent = dynamic(() => import("@/components/map-view"), {
 **Issue:** Keeps redirecting after OAuth login
 
 **Fix:**
-
 ```typescript
 // Check middleware.ts doesn't block auth callback
 export const config = {
-  matcher: ["/((?!api|auth|_next/static|_next/image|favicon.ico).*)"],
-};
+  matcher: ['/((?!api|auth|_next/static|_next/image|favicon.ico).*)']
+}
 ```
 
 ### Stripe Webhook Fails
@@ -445,7 +431,6 @@ export const config = {
 **Issue:** Payments work but orders not created
 
 **Fix:**
-
 ```bash
 # Verify webhook signature
 # In app/api/stripe/webhook/route.ts
@@ -458,7 +443,6 @@ stripe.webhooks.constructEvent(body, sig, webhookSecret)
 **Issue:** Map doesn't update locations
 
 **Fix:**
-
 ```sql
 -- Enable realtime in Supabase
 ALTER PUBLICATION supabase_realtime ADD TABLE airbears;

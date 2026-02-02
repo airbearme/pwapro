@@ -8,16 +8,16 @@ echo "========================================================"
 
 # Array of environment variables to add
 declare -a env_vars=(
-    "NEXT_PUBLIC_SUPABASE_PWA4_URL=https://your-project.supabase.co"
-    "NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=... (your Supabase anon key)"
-    "SUPABASE_PWA4_SERVICE_ROLE_KEY=... (your Supabase service role key)"
-    "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=... (your Stripe publishable key)"
-    "STRIPE_SECRET_KEY=... (your Stripe secret key)"
-    "STRIPE_WEBHOOK_SECRET=... (your Stripe webhook secret)"
-    "SUPABASE_URL=https://your-project.supabase.co"
-    "SUPABASE_SERVICE_ROLE_KEY=... (your Supabase service role key)"
-    "VITE_SUPABASE_URL=https://your-project.supabase.co"
-    "VITE_SUPABASE_ANON_KEY=... (your Supabase anon key)"
+    "NEXT_PUBLIC_SUPABASE_PWA4_URL=https://fofmrqgcidfenbevayrg.supabase.co"
+    "NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=... (your token)"
+    "SUPABASE_PWA4_SERVICE_ROLE_KEY=... (your token)"
+    "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=... (your publishable key)"
+    "STRIPE_SECRET_KEY=... (your secret key)... (your Stripe secret key)"
+    "STRIPE_WEBHOOK_SECRET=... (your webhook secret)"
+    "SUPABASE_URL=https://fofmrqgcidfenbevayrg.supabase.co"
+    "SUPABASE_SERVICE_ROLE_KEY=... (your token)"
+    "VITE_SUPABASE_URL=https://fofmrqgcidfenbevayrg.supabase.co"
+    "VITE_SUPABASE_ANON_KEY=... (your token)"
     "NEXT_PUBLIC_SITE_URL=https://airbear.me"
 )
 

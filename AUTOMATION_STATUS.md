@@ -3,7 +3,6 @@
 ## ✅ What's Automated (After Initial Setup)
 
 ### 1. **CI/CD Pipeline** - FULLY AUTOMATED ✅
-
 - **Trigger:** Every push to `main` branch
 - **What it does:**
   - ✅ Validates environment variables
@@ -14,7 +13,6 @@
 - **Location:** `.github/workflows/ci-cd.yml`
 
 ### 2. **Vercel Deployment** - FULLY AUTOMATED ✅
-
 - **Trigger:** Every push to `main` branch (via GitHub Actions)
 - **What it does:**
   - ✅ Pulls latest code from GitHub
@@ -24,43 +22,36 @@
 - **Location:** `.github/workflows/deploy-vercel.yml`
 
 ### 3. **GitHub Actions** - FULLY AUTOMATED ✅
-
 - Runs automatically on every commit to `main`
 - No manual intervention needed after initial setup
 
 ## ⚠️ What Requires One-Time Manual Setup
 
 ### 1. **GitHub Repository Creation** - Manual (2 min)
-
 - Create repo at: https://github.com/new
 - Owner: `airbearme`, Name: `pwapro`
 - **After this:** Everything else can be automated
 
 ### 2. **Vercel Project Setup** - Manual (5 min)
-
 - Import GitHub repository
 - Add environment variables (one-time)
 - Connect domain `airbear.me`
 - **After this:** Auto-deploys on every push
 
 ### 3. **Environment Variables** - Manual (5 min)
-
 - Add to Vercel dashboard (one-time)
 - Add to GitHub Secrets (for CI/CD)
 - **After this:** Used automatically in all deployments
 
 ### 4. **DNS Configuration** - Manual (5 min)
-
 - Configure IONOS DNS to point to Vercel
 - **After this:** Permanent, no changes needed
 
 ### 5. **Stripe Webhook** - Manual (3 min)
-
 - Create webhook endpoint in Stripe dashboard
 - **After this:** Automatically receives events
 
 ### 6. **Supabase Redirect URLs** - Manual (2 min)
-
 - Add `https://airbear.me/auth/callback` to Supabase
 - **After this:** Permanent, no changes needed
 
@@ -114,12 +105,10 @@ Complete these once, then everything is automated:
 **After the one-time manual setup (~20 minutes), everything is fully automated.**
 
 Every time you:
-
 - Commit code
 - Push to `main` branch
 
 The system automatically:
-
 1. Validates your code
 2. Builds the project
 3. Deploys to production

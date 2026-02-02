@@ -38,9 +38,9 @@ Add these in Vercel Dashboard → Project Settings → Environment Variables:
 
 **Supabase:**
 ```
-NEXT_PUBLIC_SUPABASE_PWA4_URL=https://fofmrqgcidfenbevayrg.supabase.co
-NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-SUPABASE_PWA4_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+NEXT_PUBLIC_SUPABASE_PWA4_URL=https://... (your Supabase URL)
+NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=... (your Supabase anon key)
+SUPABASE_PWA4_SERVICE_ROLE_KEY=... (your Supabase service role key)
 ```
 
 **Stripe:**
@@ -273,9 +273,3 @@ The `.github/workflows/ci-cd.yml` will:
 
 **Last Updated:** 2025-01-26
 **Status:** Production Ready ✅
-
-
-
-
-
-

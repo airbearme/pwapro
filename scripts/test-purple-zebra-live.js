@@ -1,12 +1,16 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = "https://fofmrqgcidfenbevayrg.supabase.co";
-const supabaseServiceKey =
-	"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZvZm1ycWdjaWRmZW5iZXZheXJnIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MzYzNDcyOCwiZXhwIjoyMDc5MjEwNzI4fQ.89Y4IOCpB-Ky1qjTJLmotMBe8RqQyN8bk6Xp5F43MMA";
-const supabaseAnonKey =
-	"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZvZm1ycWdjaWRmZW5iZXZheXJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM2MzQ3MjgsImV4cCI6MjA3OTIxMDcyOH0.Z6m5z1KQGp-cDjBbcdJjUaXIA25C3VD8IlcLge1fWyM";
+// Use environment variables for credentials
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://fofmrqgcidfenbevayrg.supabase.co";
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-console.log("🔌 Testing Purple Zebra (fofmrqgcidfenbevayrg)...");
+if (!supabaseServiceKey || !supabaseAnonKey) {
+  console.error("❌ Missing environment variables: SUPABASE_SERVICE_ROLE_KEY and NEXT_PUBLIC_SUPABASE_ANON_KEY must be set.");
+  process.exit(1);
+}
+
+console.log("🔌 Testing Supabase Connection...");
 console.log("URL:", supabaseUrl);
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
@@ -36,7 +40,7 @@ async function test() {
 			console.log("✅ Database Connected! Spots found:", tables?.length || 0);
 		}
 
-		console.log("\n🎉 Purple Zebra is LIVE and accessible!");
+		console.log("\n🎉 Connection test completed!");
 	} catch (e) {
 		console.log("❌ Exception:", e.message);
 	}

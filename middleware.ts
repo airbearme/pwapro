@@ -8,18 +8,23 @@ import { SECURITY_HEADERS } from "./lib/security-headers"
  * - Protected route authentication
  * - Secure cookie handling
  */
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
+  let supabaseResponse = NextResponse.next({
+    request,
+  })
+
+  // Add security headers early to ensure they are present even if an early return occurs
+  for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
+    supabaseResponse.headers.set(key, value)
+  }
+
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
   if (!supabaseUrl || !supabaseAnonKey) {
     console.error("Missing Supabase environment variables in middleware")
-    return NextResponse.next()
+    return supabaseResponse
   }
-
-  let supabaseResponse = NextResponse.next({
-    request,
-  })
 
   const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
     cookies: {
@@ -66,10 +71,6 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  // Add security headers
-  for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
-    supabaseResponse.headers.set(key, value)
-  }
   return supabaseResponse
 }
 

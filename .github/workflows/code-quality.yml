@@ -9,13 +9,13 @@ on:
 env:
   NODE_VERSION: "20"
   NEXT_PUBLIC_SUPABASE_URL: "https://placeholder.supabase.co"
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: 'eyJplaceholder'
-  NEXT_PUBLIC_SUPABASE_PWA4_URL: 'https://placeholder.supabase.co'
-  NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY: 'eyJplaceholder'
-  SUPABASE_PWA4_SERVICE_ROLE_KEY: 'placeholder-service-key'
-  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: 'pk_test_placeholder'
-  STRIPE_SECRET_KEY: 'sk_test_placeholder'
-  NEXT_PUBLIC_SITE_URL: 'https://airbear.me'
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: "eyJplaceholder"
+  NEXT_PUBLIC_SUPABASE_PWA4_URL: "https://placeholder.supabase.co"
+  NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY: "eyJplaceholder"
+  SUPABASE_PWA4_SERVICE_ROLE_KEY: "placeholder-service-key"
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: "pk_test_placeholder"
+  STRIPE_SECRET_KEY: "sk_test_placeholder"
+  NEXT_PUBLIC_SITE_URL: "https://airbear.me"
 
 jobs:
   # Code Formatting
@@ -114,7 +114,7 @@ jobs:
 
       - name: Sort imports
         run: |
-          npx eslint --fix --ext .ts,.tsx,.js,.jsx --rule 'import/order: error'
+          npx eslint --fix --rule 'import/order: error' .
 
       - name: Commit import sorting (if on main branch)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -143,15 +143,6 @@ jobs:
 
       - name: Run codemaps analysis
         run: npm run codemaps:generate && npm run codemaps:analyze
-
-      - name: Bundle analyzer
-        run: npx webpack-bundle-analyzer --mode static
-
-      - name: Upload bundle analysis
-        uses: actions/upload-artifact@v4
-        with:
-          name: bundle-analysis
-          path: bundle-analyzer-report.html
 
   # Dead Code Detection
   dead-code:

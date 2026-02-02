@@ -18,6 +18,7 @@ SUPABASE_PWA4_SERVICE_ROLE_KEY=... (your Supabase service role key)
 ```
 
 **Where to find:**
+
 - Supabase Dashboard > Project Settings > API
 
 ### Stripe Configuration
@@ -34,6 +35,7 @@ STRIPE_WEBHOOK_SECRET=whsec_...
 ```
 
 **Where to find:**
+
 - Publishable/Secret Keys: Stripe Dashboard > Developers > API keys
 - Webhook Secret: Stripe Dashboard > Developers > Webhooks > Endpoint
 
@@ -103,7 +105,7 @@ const envSchema = z.object({
   NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY: z.string().min(1),
   SUPABASE_PWA4_SERVICE_ROLE_KEY: z.string().min(1),
   // ... other validations
-})
+});
 ```
 
 ## Setting Up in Vercel

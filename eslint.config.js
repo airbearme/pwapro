@@ -20,6 +20,14 @@ export default [
     ],
   },
   {
+    plugins: {
+      import: (await import("eslint-plugin-import")).default,
+    },
+    rules: {
+      "import/order": "error",
+    },
+  },
+  {
     files: ["**/*.{js,jsx}"],
     rules: {
       "no-unused-vars": "off",

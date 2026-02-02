@@ -9,14 +9,6 @@ on:
 
 env:
   NODE_VERSION: "20"
-  NEXT_PUBLIC_SUPABASE_URL: "https://placeholder.supabase.co"
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: "eyJplaceholder"
-  NEXT_PUBLIC_SUPABASE_PWA4_URL: "https://placeholder.supabase.co"
-  NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY: "eyJplaceholder"
-  SUPABASE_PWA4_SERVICE_ROLE_KEY: "placeholder-service-key"
-  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: "pk_test_placeholder"
-  STRIPE_SECRET_KEY: "sk_test_placeholder"
-  NEXT_PUBLIC_SITE_URL: "https://airbear.me"
 
 jobs:
   ci:
@@ -46,11 +38,11 @@ jobs:
       - name: ESLint
         run: npm run lint
 
-      - name: Generate codemaps
-        run: npm run codemaps:generate
-
       - name: Validate codemaps
         run: npm run codemaps:validate
+
+      - name: Generate codemaps
+        run: npm run codemaps:generate
 
       - name: Build application
         run: npm run build

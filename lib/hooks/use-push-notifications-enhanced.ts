@@ -4,9 +4,11 @@
  */
 
 import { useEffect, useState, useCallback } from "react";
-import { getSupabaseClient } from "../supabase/client";
+
 import { useToast } from "@/hooks/use-toast";
+
 import errorLogger from "../error-logger";
+import { getSupabaseClient } from "../supabase/client";
 
 interface PushNotificationState {
   isSupported: boolean;

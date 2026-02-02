@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
+
 import type { User } from "@supabase/supabase-js";
+
 import { getSupabaseClient } from "@/lib/supabase/client";
 import type { Database } from "@/lib/types/database";
 

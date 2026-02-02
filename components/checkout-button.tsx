@@ -1,10 +1,10 @@
 "use client"
 
 import { useState } from "react"
+
 import { CreditCard, QrCode, Apple, Wallet } from "lucide-react"
+
 import { Button } from "@/components/ui/button"
-import { getStripe } from "@/lib/stripe/client"
-import { useToast } from "@/hooks/use-toast"
 import {
   Card,
   CardContent,
@@ -12,8 +12,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Spinner } from "@/components/ui/spinner"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useToast } from "@/hooks/use-toast"
+import { getStripe } from "@/lib/stripe/client"
 
 interface CheckoutButtonProps {
   items: Array<{ name: string; price: number; quantity: number }>

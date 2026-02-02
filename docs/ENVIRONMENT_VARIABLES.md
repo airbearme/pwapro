@@ -14,11 +14,11 @@ NEXT_PUBLIC_SUPABASE_PWA4_URL=https://your-project.supabase.co
 
 # Public Anonymous Key (safe to expose to client)
 
-NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=... (your token)
+NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=...
 
 # Service Role Key (KEEP SECRET - server-side only)
 
-SUPABASE_PWA4_SERVICE_ROLE_KEY=... (your token)
+SUPABASE_PWA4_SERVICE_ROLE_KEY=...
 \`\`\`
 
 **Where to find:**
@@ -31,15 +31,15 @@ SUPABASE_PWA4_SERVICE_ROLE_KEY=... (your token)
 
 # Public Stripe Key (safe to expose)
 
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=... (your publishable key)...
+NEXT*PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live*...
 
 # Secret Stripe Key (KEEP SECRET - server-side only)
 
-STRIPE_SECRET_KEY=... (your secret key)...
+STRIPE*SECRET_KEY=sk_live*...
 
 # Webhook Secret (KEEP SECRET - for signature verification)
 
-STRIPE_WEBHOOK_SECRET=... (your webhook secret)...
+STRIPE*WEBHOOK_SECRET=whsec*...
 \`\`\`
 
 **Where to find:**

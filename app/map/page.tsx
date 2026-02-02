@@ -1,18 +1,21 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { Battery, MapPin, Navigation, Moon, Sun } from "lucide-react";
-import { useRouter } from "next/navigation";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+import { Battery, MapPin, Navigation, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+
 import { useAuthContext } from "@/components/auth-provider";
-import { getSupabaseClient } from "@/lib/supabase/client";
-import { subscribeToAirbearLocations } from "@/lib/supabase/realtime";
-import { useAirbearNotifications } from "@/lib/hooks/use-airbear-notifications";
+import MapComponent, { type Spot } from "@/components/map-view-beautiful";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Button } from "@/components/ui/button";
-import MapComponent, { type Spot } from "@/components/map-view-beautiful";
+import { useAirbearNotifications } from "@/lib/hooks/use-airbear-notifications";
+import { getSupabaseClient } from "@/lib/supabase/client";
+import { subscribeToAirbearLocations } from "@/lib/supabase/realtime";
 import type { AirbearLocation } from "@/lib/supabase/realtime";
 
 export default function MapPage() {

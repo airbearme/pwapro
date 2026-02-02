@@ -38,7 +38,34 @@ export default [
       import: importPlugin,
     },
     rules: {
-      "import/order": "error",
+      "import/order": [
+        "error",
+        {
+          groups: ["builtin", "external", "internal", ["parent", "sibling"]],
+          pathGroups: [
+            {
+              pattern: "react",
+              group: "external",
+              position: "before",
+            },
+            {
+              pattern: "next/**",
+              group: "external",
+              position: "before",
+            },
+            {
+              pattern: "@/**",
+              group: "internal",
+            },
+          ],
+          pathGroupsExcludedImportTypes: ["react"],
+          "newlines-between": "always",
+          alphabetize: {
+            order: "asc",
+            caseInsensitive: true,
+          },
+        },
+      ],
     },
   },
   {

@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
+
 import Link from "next/link";
+
 import AirbearWheel from "@/components/airbear-wheel";
 
 export default function FloatingMascot() {

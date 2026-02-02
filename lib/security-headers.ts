@@ -5,5 +5,4 @@ export const SECURITY_HEADERS = {
   "X-Content-Type-Options": "nosniff",
   "X-Frame-Options": "SAMEORIGIN",
   "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
-  "Permissions-Policy": "camera=(), microphone=(), geolocation=(self)",
 };

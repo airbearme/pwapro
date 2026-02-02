@@ -1,11 +1,12 @@
 "use client";
 
 import type React from "react";
-
 import { useState } from "react";
+
 import { useRouter } from "next/navigation";
+
 import { Apple, Chrome, Car } from "lucide-react";
-import { getSupabaseClient } from "@/lib/supabase/client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,6 +17,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { getSupabaseClient } from "@/lib/supabase/client";
 
 const ENABLE_APPLE_SIGN_IN = false;
 const EXPECTED_ROLE = "driver";

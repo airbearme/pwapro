@@ -1,14 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { Calendar, MapPin, Leaf, Award, Navigation, Clock, CheckCircle } from "lucide-react";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+import { Calendar, MapPin, Leaf, Award, Navigation, Clock, CheckCircle } from "lucide-react";
+
 import { useAuthContext } from "@/components/auth-provider";
-import { getSupabaseClient } from "@/lib/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { getSupabaseClient } from "@/lib/supabase/client";
 
 interface Ride {
   id: string;

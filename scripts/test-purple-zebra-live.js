@@ -1,10 +1,11 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = "https://fofmrqgcidfenbevayrg.supabase.co";
+const supabaseUrl =
+  process.env.NEXT_PUBLIC_SUPABASE_URL || "https://your-project.supabase.co";
 const supabaseServiceKey =
-	"... (your token)";
+  process.env.SUPABASE_SERVICE_ROLE_KEY || "... (your service role key)";
 const supabaseAnonKey =
-	"... (your token)";
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "... (your anon key)";
 
 console.log("🔌 Testing Purple Zebra (fofmrqgcidfenbevayrg)...");
 console.log("URL:", supabaseUrl);

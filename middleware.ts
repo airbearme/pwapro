@@ -1,5 +1,7 @@
-import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+
+import { createServerClient } from "@supabase/ssr";
+
 import { SECURITY_HEADERS } from "./lib/security-headers";
 
 /**
@@ -21,7 +23,7 @@ export async function middleware(request: NextRequest) {
     request,
   });
 
-  // Add security headers early to ensure they're present even on early returns
+  // Add security headers early to ensure they are present even on early returns
   for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
     supabaseResponse.headers.set(key, value);
   }

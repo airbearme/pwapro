@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
+
+import Link from "next/link";
+
 import {
   ShoppingCart,
   Star,
@@ -14,8 +17,9 @@ import {
   Truck,
   ShoppingBag,
 } from "lucide-react";
-import Link from "next/link";
+
 import { useAuthContext } from "@/components/auth-provider";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -23,7 +27,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
 interface MerchandiseItem {

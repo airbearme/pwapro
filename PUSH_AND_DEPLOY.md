@@ -54,12 +54,12 @@ bash scripts/push-and-deploy.sh
 Click **"Environment Variables"** and add these (copy from your `.env.local`):
 
 ```
-NEXT_PUBLIC_SUPABASE_PWA4_URL=https://fofmrqgcidfenbevayrg.supabase.co
-NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=... (your token)
-SUPABASE_PWA4_SERVICE_ROLE_KEY=... (your token)
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=... (your publishable key)... (your Stripe publishable key)
-STRIPE_SECRET_KEY=... (your secret key)... (your Stripe secret key)
-STRIPE_WEBHOOK_SECRET=... (your webhook secret)... (your Stripe webhook secret)
+NEXT_PUBLIC_SUPABASE_PWA4_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=... (your anon key)
+SUPABASE_PWA4_SERVICE_ROLE_KEY=... (your service role key)
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_... (your Stripe publishable key)
+STRIPE_SECRET_KEY=sk_live_... (your Stripe secret key)
+STRIPE_WEBHOOK_SECRET=whsec_... (your Stripe webhook secret)
 NEXT_PUBLIC_SITE_URL=https://airbear.me
 NODE_ENV=production
 ```
@@ -131,7 +131,7 @@ TTL: 3600
    - ✅ `payment_intent.succeeded`
    - ✅ `payment_intent.payment_failed`
 5. Click **"Add endpoint"**
-6. Copy the **Signing secret** (starts with `... (your webhook secret)`)
+6. Copy the **Signing secret** (starts with `whsec_`)
 7. Go back to Vercel → Environment Variables
 8. Update `STRIPE_WEBHOOK_SECRET` with the new value
 9. Redeploy (or it will auto-redeploy on next push)

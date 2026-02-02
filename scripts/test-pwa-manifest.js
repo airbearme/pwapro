@@ -97,5 +97,3 @@ try {
 	console.error(`❌ Failed to validate manifest: ${error.message}`);
 	process.exit(1);
 }
-
-

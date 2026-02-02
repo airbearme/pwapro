@@ -70,7 +70,7 @@ function BookRidePageContent() {
         if (airbearsResponse.ok) {
           const airbearsData = await airbearsResponse.json();
           setAirbears(airbearsData.data || []);
-          
+
           // Show driver-specific message if applicable
           if (airbearsData.isDriverView) {
             console.log("Driver view: Showing only assigned AirBear");

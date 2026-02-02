@@ -2,6 +2,11 @@
 
 import { useEffect, useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { X, Download, Smartphone } from "lucide-react";
 import AirbearWheel from "@/components/airbear-wheel";
 
@@ -71,7 +76,7 @@ export default function PWAInstallPrompt() {
     return () => {
       window.removeEventListener(
         "beforeinstallprompt",
-        handleBeforeInstallPrompt
+        handleBeforeInstallPrompt,
       );
       clearTimeout(timer);
     };
@@ -93,7 +98,7 @@ export default function PWAInstallPrompt() {
         "To install AirBear:\n\n" +
           "iOS Safari: Tap Share → Add to Home Screen\n\n" +
           "Android Chrome: Tap Menu → Install App\n\n" +
-          "Desktop: Look for install icon in address bar"
+          "Desktop: Look for install icon in address bar",
       );
     }
   };
@@ -120,13 +125,20 @@ export default function PWAInstallPrompt() {
 
         <div className="relative z-10">
           {/* Close button */}
-          <button
-            onClick={handleDismiss}
-            className="absolute top-2 right-2 p-1 rounded-full hover:bg-white/10 transition-colors"
-            aria-label="Dismiss"
-          >
-            <X className="h-4 w-4 text-muted-foreground" />
-          </button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                onClick={handleDismiss}
+                className="absolute top-2 right-2 p-1 rounded-full hover:bg-white/10 transition-colors"
+                aria-label="Dismiss"
+              >
+                <X className="h-4 w-4 text-muted-foreground" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Dismiss</p>
+            </TooltipContent>
+          </Tooltip>
 
           {/* Content */}
           <div className="flex items-start gap-4 mb-4">

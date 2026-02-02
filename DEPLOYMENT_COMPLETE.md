@@ -191,14 +191,14 @@ Before announcing launch, manually verify:
 
 -- Add sample spots
 INSERT INTO spots (name, latitude, longitude, description, is_active, amenities)
-VALUES 
+VALUES
   ('Downtown Hub', 42.0987, -75.9179, 'Main downtown location', true, ARRAY['charging', 'wifi']),
   ('University Plaza', 42.0908, -75.9686, 'Near campus', true, ARRAY['charging']),
   ('Hospital Station', 42.0893, -75.9149, 'Medical center pickup', true, ARRAY['charging', '24/7']);
 
 -- Add sample airbears
 INSERT INTO airbears (latitude, longitude, battery_level, is_available, is_charging)
-VALUES 
+VALUES
   (42.0987, -75.9179, 85, true, false),
   (42.0908, -75.9686, 92, true, false),
   (42.0893, -75.9149, 45, false, true);

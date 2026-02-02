@@ -188,7 +188,7 @@ The **AirBear PWA** is now **deploying to production**:
 
 ---
 
-*Last Updated: January 7, 2026*  
-*Status: ✅ DEPLOYING TO PRODUCTION*  
-*Repository: https://github.com/airbearme/pwapro*  
+*Last Updated: January 7, 2026*
+*Status: ✅ DEPLOYING TO PRODUCTION*
+*Repository: https://github.com/airbearme/pwapro*
 *Vercel Project: pwapro*

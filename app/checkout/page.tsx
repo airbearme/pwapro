@@ -64,7 +64,7 @@ function CheckoutForm({ clientSecret, rideId, amount, onSuccess }: CheckoutFormP
         const supabase = getSupabaseClient();
         const { error } = await supabase
           .from("rides")
-          .update({ 
+          .update({
             status: "confirmed",
             payment_method: "card",
             paid_at: new Date().toISOString()
@@ -207,8 +207,8 @@ function CheckoutPageContent() {
           <div className="space-y-2">
             <div className="w-8 h-8 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin mx-auto"></div>
             <p className="text-xl text-muted-foreground animate-pulse">
-              {authLoading ? "Authenticating..." : 
-               loading ? "Setting up payment..." : 
+              {authLoading ? "Authenticating..." :
+               loading ? "Setting up payment..." :
                "Initializing payment form..."}
             </p>
             <p className="text-sm text-muted-foreground">
@@ -346,4 +346,3 @@ export default function CheckoutPage() {
     </Suspense>
   );
 }
-

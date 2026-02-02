@@ -208,6 +208,6 @@ The **AirBear PWA** is now **100% ready** for live deployment at **airbear.me**:
 
 ---
 
-*Last Updated: January 7, 2026*  
-*Status: ✅ PRODUCTION READY*  
+*Last Updated: January 7, 2026*
+*Status: ✅ PRODUCTION READY*
 *Repository: https://github.com/airbearme/pwapro*

@@ -63,7 +63,7 @@ NEXT_PUBLIC_SITE_URL=https://airbear.me
 NODE_ENV=production
 ```
 
-**Important:** 
+**Important:**
 - Set each variable for **Production**, **Preview**, and **Development**
 - Click **"Save"** after adding each variable
 
@@ -195,4 +195,3 @@ vercel --prod
 
 **Total Time:** ~20 minutes
 **Status:** Ready to deploy! 🚀
-

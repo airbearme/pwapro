@@ -82,7 +82,7 @@ git push origin main
 ## Common Issues
 
 ### Issue: Still redirecting to demo URL
-**Fix:** 
+**Fix:**
 - Double-check environment variable names match exactly
 - Verify you're using credentials from your **actual** project, not a demo
 - Make sure variables are set for **Production** environment in Vercel
@@ -122,7 +122,3 @@ git push origin main
 ---
 
 **After fixing, OAuth should redirect to your Supabase project, not a demo URL!** ✅
-
-
-
-

@@ -45,7 +45,7 @@ export function RidePayment({
         pickupSpot: pickupSpot.name,
         destinationSpot: destinationSpot.name,
       });
-      
+
       // This will be handled by redirecting to checkout page
       window.location.href = `/checkout?${params.toString()}`;
     } catch (error) {
@@ -113,9 +113,9 @@ export function RidePayment({
                 <p className="font-medium text-sm">{pickupSpot.name}</p>
               </div>
             </div>
-            
+
             <div className="border-l-2 border-dashed border-muted-foreground ml-1.5 h-4" />
-            
+
             <div className="flex items-start space-x-3">
               <div className="w-3 h-3 rounded-full bg-red-500 mt-1 flex-shrink-0" />
               <div className="flex-1">
@@ -209,8 +209,8 @@ export function RidePayment({
           {/* Payment Action */}
           <div className="pt-4 border-t">
             {paymentMethod === "card" && (
-              <Button 
-                onClick={handleCardPayment} 
+              <Button
+                onClick={handleCardPayment}
                 disabled={processing}
                 className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 h-12 text-lg"
               >
@@ -229,8 +229,8 @@ export function RidePayment({
             )}
 
             {paymentMethod === "digital" && (
-              <Button 
-                onClick={handleCardPayment} 
+              <Button
+                onClick={handleCardPayment}
                 disabled={processing}
                 className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 h-12 text-lg"
               >
@@ -249,8 +249,8 @@ export function RidePayment({
             )}
 
             {paymentMethod === "cash" && (
-              <Button 
-                onClick={handleCashPayment} 
+              <Button
+                onClick={handleCashPayment}
                 disabled={processing}
                 className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 h-12 text-lg"
               >

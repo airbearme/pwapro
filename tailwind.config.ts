@@ -129,11 +129,11 @@ const config: Config = {
 					"50%": { filter: "hue-rotate(180deg)" },
 				},
 				"plasma-flow": {
-					"0%, 100%": { 
+					"0%, 100%": {
 						background: "linear-gradient(45deg, #ff0080, #ff8c00, #40e0d0)",
 						filter: "hue-rotate(0deg)"
 					},
-					"50%": { 
+					"50%": {
 						background: "linear-gradient(45deg, #40e0d0, #ff0080, #ff8c00)",
 						filter: "hue-rotate(180deg)"
 					},

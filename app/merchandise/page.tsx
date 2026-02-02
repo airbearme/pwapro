@@ -10,6 +10,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
 import {
   ShoppingCart,
@@ -214,9 +219,16 @@ export default function MerchandisePage() {
                     <ShoppingBag className="w-4 h-4 mr-2" />
                     {item.inStock ? "Add to Cart" : "Out of Stock"}
                   </Button>
-                  <Button variant="outline" size="sm">
-                    <Star className="w-4 h-4" />
-                  </Button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="outline" size="sm" aria-label="Favorite">
+                        <Star className="w-4 h-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Favorite</p>
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
               </CardContent>
             </Card>

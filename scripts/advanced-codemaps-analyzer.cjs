@@ -14,9 +14,9 @@ class AdvancedCodeMapsAnalyzer {
     this.projectRoot = process.cwd();
     this.outputDir = path.join(this.projectRoot, '.next/codemaps');
     this.metrics = {
-      components: {},
-      api: {},
-      utilities: {},
+      components: [],
+      api: [],
+      utilities: [],
       dependencies: {},
       performance: {},
       security: {},
@@ -71,13 +71,13 @@ class AdvancedCodeMapsAnalyzer {
     console.log('📋 Loading existing CodeMaps...');
 
     const files = ['components.json', 'api-routes.json', 'utilities.json'];
-    
+
     for (const file of files) {
       const filePath = path.join(this.outputDir, file);
       if (fs.existsSync(filePath)) {
         const content = fs.readFileSync(filePath, 'utf8');
         const data = JSON.parse(content);
-        
+
         if (file === 'components.json') {
           this.metrics.components = data.components || [];
         } else if (file === 'api-routes.json') {
@@ -113,9 +113,9 @@ class AdvancedCodeMapsAnalyzer {
 
     for (const component of this.metrics.components) {
       const complexity = await this.calculateComponentComplexity(component);
-      
+
       complexityReport.total += complexity;
-      
+
       const type = component.type || 'component';
       if (complexityReport.byType[type]) {
         complexityReport.byType[type].count++;
@@ -153,29 +153,29 @@ class AdvancedCodeMapsAnalyzer {
       if (!fs.existsSync(filePath)) return 1;
 
       const content = fs.readFileSync(filePath, 'utf8');
-      
+
       let complexity = 1;
-      
+
       // Count React hooks
       const hooks = content.match(/use[A-Z][a-zA-Z]*/g) || [];
       complexity += hooks.length * 2;
-      
+
       // Count conditionals
       const conditionals = content.match(/\b(if|else|switch|case|ternary|\?|\:)/g) || [];
       complexity += conditionals.length;
-      
+
       // Count loops
       const loops = content.match(/\b(for|while|do|map|filter|reduce|forEach)/g) || [];
       complexity += loops.length * 2;
-      
+
       // Count function definitions
       const functions = content.match(/function\s+\w+|=>\s*{|\w+\s*:\s*\([^)]*\)\s*=>/g) || [];
       complexity += functions.length;
-      
+
       // File size factor
       const sizeKB = component.size / 1024;
       complexity += Math.min(sizeKB / 10, 5);
-      
+
       return Math.round(complexity);
     } catch (error) {
       return 1;
@@ -209,7 +209,7 @@ class AdvancedCodeMapsAnalyzer {
       }
 
       const complexity = await this.calculateApiComplexity(route);
-      
+
       if (complexity > 15) {
         performanceReport.complex.push({ ...route, complexity });
       } else {
@@ -238,25 +238,25 @@ class AdvancedCodeMapsAnalyzer {
       if (!fs.existsSync(filePath)) return 1;
 
       const content = fs.readFileSync(filePath, 'utf8');
-      
+
       let complexity = 1;
-      
+
       // Count database operations
       const dbOps = content.match(/\b(select|insert|update|delete|create|find|query)/gi) || [];
       complexity += dbOps.length * 3;
-      
+
       // Count error handling
       const errorHandling = content.match(/\b(try|catch|throw|error)/gi) || [];
       complexity += errorHandling.length;
-      
+
       // Count validation
       const validation = content.match(/\b(validate|check|verify|ensure)/gi) || [];
       complexity += validation.length * 2;
-      
+
       // Count async operations
       const asyncOps = content.match(/\b(await|async|Promise)/g) || [];
       complexity += asyncOps.length;
-      
+
       return Math.round(complexity);
     } catch (error) {
       return 1;
@@ -283,7 +283,7 @@ class AdvancedCodeMapsAnalyzer {
 
     const packageJsonPath = path.join(this.projectRoot, 'package.json');
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
-    
+
     const dependencies = {
       total: 0,
       production: Object.keys(packageJson.dependencies || {}).length,
@@ -342,7 +342,7 @@ class AdvancedCodeMapsAnalyzer {
    */
   async checkDependencySecurity(dependencies) {
     const issues = [];
-    
+
     // Known vulnerable packages (simplified example)
     const knownVulnerable = {
       'lodash': '<4.17.21',
@@ -382,7 +382,7 @@ class AdvancedCodeMapsAnalyzer {
       if (fs.existsSync(filePath)) {
         const content = fs.readFileSync(filePath, 'utf8');
         const fileSecurity = await this.analyzeFileSecurity(content, route.path);
-        
+
         securityReport.byFile[route.path] = fileSecurity;
         securityReport.issues.push(...fileSecurity.issues);
         securityReport.bestPractices.push(...fileSecurity.bestPractices);
@@ -469,8 +469,8 @@ class AdvancedCodeMapsAnalyzer {
     coverageReport.byType.components.total = this.metrics.components.length;
     coverageReport.byType.api.total = this.metrics.api.length;
     coverageReport.byType.utilities.total = this.metrics.utilities.length;
-    coverageReport.total = coverageReport.byType.components.total + 
-                        coverageReport.byType.api.total + 
+    coverageReport.total = coverageReport.byType.components.total +
+                        coverageReport.byType.api.total +
                         coverageReport.byType.utilities.total;
 
     // Count test files (simplified)
@@ -486,7 +486,7 @@ class AdvancedCodeMapsAnalyzer {
     }
 
     coverageReport.tested = testFileCount;
-    coverageReport.coverage = coverageReport.total > 0 ? 
+    coverageReport.coverage = coverageReport.total > 0 ?
       Math.round((testFileCount / coverageReport.total) * 100) : 0;
 
     this.metrics.coverage = coverageReport;
@@ -498,15 +498,15 @@ class AdvancedCodeMapsAnalyzer {
    */
   findTestFiles(dir) {
     const files = [];
-    
+
     const walk = (currentDir) => {
       try {
         const items = fs.readdirSync(currentDir);
-        
+
         items.forEach(item => {
           const itemPath = path.join(currentDir, item);
           const stat = fs.statSync(itemPath);
-          
+
           if (stat.isDirectory()) {
             walk(itemPath);
           } else if (item.includes('.test.') || item.includes('.spec.')) {
@@ -517,7 +517,7 @@ class AdvancedCodeMapsAnalyzer {
         // Skip directories we can't read
       }
     };
-    
+
     walk(dir);
     return files;
   }
@@ -555,7 +555,7 @@ class AdvancedCodeMapsAnalyzer {
 
       let totalSize = 0;
       const files = this.findFiles(buildDir, ['.js', '.css']);
-      
+
       for (const file of files) {
         const stat = fs.statSync(file);
         totalSize += stat.size;
@@ -572,15 +572,15 @@ class AdvancedCodeMapsAnalyzer {
    */
   findFiles(dir, extensions) {
     const files = [];
-    
+
     const walk = (currentDir) => {
       try {
         const items = fs.readdirSync(currentDir);
-        
+
         items.forEach(item => {
           const itemPath = path.join(currentDir, item);
           const stat = fs.statSync(itemPath);
-          
+
           if (stat.isDirectory() && !item.startsWith('.') && item !== 'node_modules') {
             walk(itemPath);
           } else if (stat.isFile() && extensions.some(ext => item.endsWith(ext))) {
@@ -591,7 +591,7 @@ class AdvancedCodeMapsAnalyzer {
         // Skip directories we can't read
       }
     };
-    
+
     walk(dir);
     return files;
   }
@@ -650,6 +650,11 @@ class AdvancedCodeMapsAnalyzer {
    */
   async createAdvancedReports() {
     console.log('📊 Creating advanced reports...');
+
+    // Ensure output directory exists
+    if (!fs.existsSync(this.outputDir)) {
+      fs.mkdirSync(this.outputDir, { recursive: true });
+    }
 
     const reports = {
       timestamp: new Date().toISOString(),
@@ -741,13 +746,13 @@ Version: ${reports.version}
 
 ## 🎯 Key Insights
 
-${reports.insights.map(insight => 
+${reports.insights.map(insight =>
   `- **${insight.type}**: ${insight.message} (${insight.level})`
 ).join('\n')}
 
 ## 📈 Recommendations
 
-${reports.metrics.performance.overall?.recommendations?.map(rec => 
+${reports.metrics.performance.overall?.recommendations?.map(rec =>
   `### ${rec.type} (${rec.priority})
 - **Issue**: ${rec.message}
 - **Action**: ${rec.action}`

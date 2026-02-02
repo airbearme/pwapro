@@ -46,7 +46,7 @@ export function RideConfirmation({
       description: "Your ride is confirmed. AirBear is on the way!",
     });
     onPaymentComplete?.();
-    
+
     // Simulate ride progression
     setTimeout(() => {
       setRideStep("in_progress");
@@ -55,7 +55,7 @@ export function RideConfirmation({
         description: "Your ride has arrived. Please meet your driver.",
       });
     }, 5000);
-    
+
     setTimeout(() => {
       setRideStep("completed");
       toast({
@@ -123,9 +123,9 @@ export function RideConfirmation({
                 )}
               </div>
             </div>
-            
+
             <div className="border-l-2 border-dashed border-muted-foreground ml-1.5 h-4" />
-            
+
             <div className="flex items-start space-x-3">
               <div className="w-3 h-3 rounded-full bg-red-500 mt-1 flex-shrink-0" />
               <div className="flex-1">
@@ -197,52 +197,52 @@ export function RideConfirmation({
           <CardContent className="space-y-4">
             <div className="space-y-3">
               <div className={`flex items-center space-x-3 ${
-                rideStep === "waiting" || rideStep === "arriving" || rideStep === "in_progress" || rideStep === "completed" 
-                  ? "text-green-600" 
+                rideStep === "waiting" || rideStep === "arriving" || rideStep === "in_progress" || rideStep === "completed"
+                  ? "text-green-600"
                   : "text-muted-foreground"
               }`}>
                 <div className={`w-4 h-4 rounded-full ${
                   rideStep === "waiting" || rideStep === "arriving" || rideStep === "in_progress" || rideStep === "completed"
-                    ? "bg-green-500" 
+                    ? "bg-green-500"
                     : "bg-gray-300"
                 }`} />
                 <span>Payment Confirmed</span>
               </div>
-              
+
               <div className={`flex items-center space-x-3 ${
-                rideStep === "arriving" || rideStep === "in_progress" || rideStep === "completed" 
-                  ? "text-green-600" 
+                rideStep === "arriving" || rideStep === "in_progress" || rideStep === "completed"
+                  ? "text-green-600"
                   : "text-muted-foreground"
               }`}>
                 <div className={`w-4 h-4 rounded-full ${
                   rideStep === "arriving" || rideStep === "in_progress" || rideStep === "completed"
-                    ? "bg-green-500" 
+                    ? "bg-green-500"
                     : "bg-gray-300"
                 }`} />
                 <span>AirBear Dispatched</span>
               </div>
-              
+
               <div className={`flex items-center space-x-3 ${
-                rideStep === "in_progress" || rideStep === "completed" 
-                  ? "text-green-600" 
+                rideStep === "in_progress" || rideStep === "completed"
+                  ? "text-green-600"
                   : "text-muted-foreground"
               }`}>
                 <div className={`w-4 h-4 rounded-full ${
                   rideStep === "in_progress" || rideStep === "completed"
-                    ? "bg-green-500" 
+                    ? "bg-green-500"
                     : "bg-gray-300"
                 }`} />
                 <span>Ride in Progress</span>
               </div>
-              
+
               <div className={`flex items-center space-x-3 ${
-                rideStep === "completed" 
-                  ? "text-green-600" 
+                rideStep === "completed"
+                  ? "text-green-600"
                   : "text-muted-foreground"
               }`}>
                 <div className={`w-4 h-4 rounded-full ${
                   rideStep === "completed"
-                    ? "bg-green-500" 
+                    ? "bg-green-500"
                     : "bg-gray-300"
                 }`} />
                 <span>Ride Completed</span>

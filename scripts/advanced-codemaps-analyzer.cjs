@@ -14,9 +14,9 @@ class AdvancedCodeMapsAnalyzer {
     this.projectRoot = process.cwd();
     this.outputDir = path.join(this.projectRoot, ".next/codemaps");
     this.metrics = {
-      components: {},
-      api: {},
-      utilities: {},
+      components: [],
+      api: [],
+      utilities: [],
       dependencies: {},
       performance: {},
       security: {},
@@ -133,7 +133,7 @@ class AdvancedCodeMapsAnalyzer {
     }
 
     complexityReport.average =
-      complexityReport.total / this.metrics.components.length;
+      this.metrics.components.length > 0 ? complexityReport.total / this.metrics.components.length : 0;
 
     // Calculate averages by type
     for (const [type, data] of Object.entries(complexityReport.byType)) {
@@ -181,7 +181,7 @@ class AdvancedCodeMapsAnalyzer {
       complexity += functions.length;
 
       // File size factor
-      const sizeKB = component.size / 1024;
+      const sizeKB = (component.size || 0) / 1024;
       complexity += Math.min(sizeKB / 10, 5);
 
       return Math.round(complexity);
@@ -212,7 +212,7 @@ class AdvancedCodeMapsAnalyzer {
 
     for (const route of this.metrics.api) {
       const method = route.method || "UNKNOWN";
-      if (performanceReport.byMethod[method]) {
+      if (performanceReport.byMethod[method] !== undefined) {
         performanceReport.byMethod[method]++;
       }
 
@@ -225,7 +225,7 @@ class AdvancedCodeMapsAnalyzer {
       }
 
       // Group by path pattern
-      const pathPattern = this.extractPathPattern(route.path);
+      const pathPattern = this.extractPathPattern(route.path || "");
       if (!performanceReport.byPath[pathPattern]) {
         performanceReport.byPath[pathPattern] = { count: 0, routes: [] };
       }
@@ -245,7 +245,7 @@ class AdvancedCodeMapsAnalyzer {
    */
   async calculateApiComplexity(route) {
     try {
-      const filePath = path.join(this.projectRoot, route.file);
+      const filePath = path.join(this.projectRoot, route.file || "");
       if (!fs.existsSync(filePath)) return 1;
 
       const content = fs.readFileSync(filePath, "utf8");
@@ -405,15 +405,15 @@ class AdvancedCodeMapsAnalyzer {
 
     // Analyze API routes for security
     for (const route of this.metrics.api) {
-      const filePath = path.join(this.projectRoot, route.file);
+      const filePath = path.join(this.projectRoot, route.file || "");
       if (fs.existsSync(filePath)) {
         const content = fs.readFileSync(filePath, "utf8");
         const fileSecurity = await this.analyzeFileSecurity(
           content,
-          route.path,
+          route.path || "",
         );
 
-        securityReport.byFile[route.path] = fileSecurity;
+        securityReport.byFile[route.path || "unknown"] = fileSecurity;
         securityReport.issues.push(...fileSecurity.issues);
         securityReport.bestPractices.push(...fileSecurity.bestPractices);
       }
@@ -656,7 +656,7 @@ class AdvancedCodeMapsAnalyzer {
     const recommendations = [];
 
     // Complexity recommendations
-    if (metrics.complexity.average > 15) {
+    if (metrics.complexity && metrics.complexity.average > 15) {
       recommendations.push({
         type: "complexity",
         priority: "high",
@@ -667,7 +667,7 @@ class AdvancedCodeMapsAnalyzer {
     }
 
     // Dependency recommendations
-    if (metrics.dependencies.total > 100) {
+    if (metrics.dependencies && metrics.dependencies.total > 100) {
       recommendations.push({
         type: "dependencies",
         priority: "medium",
@@ -678,7 +678,7 @@ class AdvancedCodeMapsAnalyzer {
     }
 
     // Security recommendations
-    if (this.metrics.security.score < 80) {
+    if (this.metrics.security && this.metrics.security.score < 80) {
       recommendations.push({
         type: "security",
         priority: "high",
@@ -688,7 +688,7 @@ class AdvancedCodeMapsAnalyzer {
     }
 
     // Test coverage recommendations
-    if (this.metrics.coverage.coverage < 50) {
+    if (this.metrics.coverage && this.metrics.coverage.coverage < 50) {
       recommendations.push({
         type: "testing",
         priority: "medium",
@@ -733,7 +733,7 @@ class AdvancedCodeMapsAnalyzer {
     const insights = [];
 
     // Component insights
-    if (this.metrics.complexity.high.length > 0) {
+    if (this.metrics.complexity && this.metrics.complexity.high && this.metrics.complexity.high.length > 0) {
       insights.push({
         type: "complexity",
         level: "warning",
@@ -742,7 +742,7 @@ class AdvancedCodeMapsAnalyzer {
     }
 
     // API insights
-    const complexApis = this.metrics.performance.api?.complex?.length || 0;
+    const complexApis = this.metrics.performance && this.metrics.performance.api?.complex?.length || 0;
     if (complexApis > 0) {
       insights.push({
         type: "api",
@@ -752,7 +752,7 @@ class AdvancedCodeMapsAnalyzer {
     }
 
     // Security insights
-    if (this.metrics.security.issues.length > 0) {
+    if (this.metrics.security && this.metrics.security.issues && this.metrics.security.issues.length > 0) {
       insights.push({
         type: "security",
         level: "error",

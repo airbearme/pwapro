@@ -1,16 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useAuthContext } from "@/components/auth-provider";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
 import {
   ShoppingCart,
   Star,
@@ -24,12 +14,22 @@ import {
   Truck,
   ShoppingBag,
 } from "lucide-react";
+import Link from "next/link";
+import { useAuthContext } from "@/components/auth-provider";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import Link from "next/link";
 
 interface MerchandiseItem {
   id: string;
@@ -221,7 +221,11 @@ export default function MerchandisePage() {
                   </Button>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button variant="outline" size="sm" aria-label="Add to favorites">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        aria-label="Add to favorites"
+                      >
                         <Star className="w-4 h-4" />
                       </Button>
                     </TooltipTrigger>

@@ -1,8 +1,6 @@
-import type React from "react";
-
-import { Inter } from "next/font/google";
-
 import type { Metadata, Viewport } from "next";
+import { Inter } from "next/font/google";
+import type React from "react";
 import "./globals.css";
 
 const inter = Inter({

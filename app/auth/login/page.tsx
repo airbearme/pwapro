@@ -1,11 +1,9 @@
 "use client";
 
+import { Apple, Chrome } from "lucide-react";
+import { useRouter } from "next/navigation";
 import type React from "react";
 import { useState } from "react";
-
-import { useRouter } from "next/navigation";
-
-import { Apple, Chrome } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {

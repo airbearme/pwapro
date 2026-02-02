@@ -1,9 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
-
-import Link from "next/link";
-
 import {
   ShoppingCart,
   Star,
@@ -17,6 +13,8 @@ import {
   Truck,
   ShoppingBag,
 } from "lucide-react";
+import Link from "next/link";
+import { useState, useEffect } from "react";
 
 import { useAuthContext } from "@/components/auth-provider";
 import { Button } from "@/components/ui/button";

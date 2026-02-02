@@ -1,14 +1,13 @@
 "use client";
 
-import { useEffect, useState, Suspense } from "react";
-
+import { CheckCircle, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
-
-import { CheckCircle, ArrowRight } from "lucide-react";
+import { useEffect, useState, Suspense } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 function OrderSuccessPageContent() {
   const router = useRouter();

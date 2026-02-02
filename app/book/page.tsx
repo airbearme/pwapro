@@ -1,10 +1,5 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
-
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-
 import {
   MapPin,
   Navigation,
@@ -16,6 +11,9 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
 
 import { useAuthContext } from "@/components/auth-provider";
 import MapComponent, { type Spot } from "@/components/map-view-beautiful";

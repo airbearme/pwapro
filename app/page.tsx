@@ -9,14 +9,14 @@
 
 "use client";
 
-import React, { useMemo } from "react";
-
-import Link from "next/link";
-
 import { MapPin, ShoppingBag, Leaf, Zap, Crown } from "lucide-react";
+import Link from "next/link";
+import React, { useMemo } from "react";
 
 import AirbearWheel from "@/components/airbear-wheel";
 import { Button } from "@/components/ui/button";
+
+
 
 export default function HomePage() {
   // ⚡ Bolt: Memoize particle effects to prevent re-calculation on every render.

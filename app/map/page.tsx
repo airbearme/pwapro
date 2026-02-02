@@ -1,12 +1,10 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
-
+import { Battery, MapPin, Navigation, Moon, Sun } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
-import { Battery, MapPin, Navigation, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useEffect, useState, useMemo } from "react";
 
 import { useAuthContext } from "@/components/auth-provider";
 import MapComponent, { type Spot } from "@/components/map-view-beautiful";

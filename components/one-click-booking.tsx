@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
-
 import { MapPin } from "lucide-react";
+import { useState } from "react";
 
 import { useAuthContext } from "@/components/auth-provider";
 import { CheckoutButton } from "@/components/checkout-button";
@@ -12,7 +11,6 @@ import { Spinner } from "@/components/ui/spinner";
 import { useToast } from "@/hooks/use-toast";
 import errorLogger from "@/lib/error-logger";
 import { getSupabaseClient } from "@/lib/supabase/client";
-
 
 interface OneClickBookingProps {
   pickupSpotId: string;

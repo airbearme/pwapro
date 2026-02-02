@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-
 import { X, Download, Smartphone } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
 
 import AirbearWheel from "@/components/airbear-wheel";
 import { Button } from "@/components/ui/button";

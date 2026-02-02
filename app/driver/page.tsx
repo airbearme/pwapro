@@ -1,10 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
-
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-
 import {
   Navigation,
   Battery,
@@ -16,6 +11,9 @@ import {
   RefreshCw,
   User,
 } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 
 import { useAuthContext } from "@/components/auth-provider";
 import { Badge } from "@/components/ui/badge";
@@ -29,6 +27,7 @@ import {
 } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { getSupabaseClient } from "@/lib/supabase/client";
+
 
 interface Ride {
   id: string;

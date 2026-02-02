@@ -1,9 +1,7 @@
-import type React from "react";
-
-import { Inter, Space_Grotesk } from "next/font/google";
-
 import { Analytics } from "@vercel/analytics/react";
 import type { Metadata, Viewport } from "next";
+import { Inter, Space_Grotesk } from "next/font/google";
+import type React from "react";
 
 import { AuthProvider } from "@/components/auth-provider";
 import ClientErrorLogger from "@/components/client-error-logger";

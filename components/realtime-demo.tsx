@@ -1,7 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
-
 import {
   MapPin,
   Navigation,
@@ -10,11 +8,11 @@ import {
   Wifi,
   Activity,
 } from "lucide-react";
+import { useState, useEffect } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
 
 interface RealtimeEvent {
   type: "user_booking" | "driver_location" | "ride_status";

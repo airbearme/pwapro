@@ -1,3 +1,4 @@
+import tsPlugin from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
 import importPlugin from "eslint-plugin-import";
 
@@ -35,30 +36,27 @@ export default [
       },
     },
     plugins: {
+      "@typescript-eslint": tsPlugin,
       import: importPlugin,
     },
     rules: {
       "import/order": [
         "error",
         {
-          groups: ["builtin", "external", "internal", ["parent", "sibling"]],
+          groups: [
+            "builtin",
+            "external",
+            "internal",
+            "parent",
+            "sibling",
+            "index",
+          ],
           pathGroups: [
-            {
-              pattern: "react",
-              group: "external",
-              position: "before",
-            },
-            {
-              pattern: "next/**",
-              group: "external",
-              position: "before",
-            },
             {
               pattern: "@/**",
               group: "internal",
             },
           ],
-          pathGroupsExcludedImportTypes: ["react"],
           "newlines-between": "always",
           alphabetize: {
             order: "asc",

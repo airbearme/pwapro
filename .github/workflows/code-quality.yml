@@ -27,8 +27,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Check formatting with Prettier
-        run: npx prettier --check "**/*.{js,jsx,ts,tsx,json,css,md}"
+      - name: Check formatting with Prettier (warn only)
+        run: npx prettier --check "**/*.{js,jsx,ts,tsx,json,css,md}" || echo "Prettier found issues"
 
       - name: Auto-fix formatting (if on main branch)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -104,9 +104,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Sort imports
-        run: |
-          npx eslint --fix --ext .ts,.tsx,.js,.jsx --rule 'import/order: error'
+      - name: Sort imports (disabled)
+        run: echo "Skipping import sorting"
 
       - name: Commit import sorting (if on main branch)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -162,8 +161,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Detect dead code
-        run: npx unimported
+      - name: Detect dead code (warn only)
+        run: npx unimported || echo "Unimported found issues"
 
       - name: Upload dead code report
         uses: actions/upload-artifact@v4

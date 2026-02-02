@@ -4,14 +4,15 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
+import PWAInstallPrompt from "@/components/pwa-install-prompt";
 import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "AirBear - Ride Sharing for Everyone",
-  description: "Affordable, reliable, and safe ride sharing for your daily needs.",
+  description:
+    "Affordable, reliable, and safe ride sharing for your daily needs.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,

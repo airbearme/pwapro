@@ -4,6 +4,7 @@ import { Inter, Space_Grotesk } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { AuthProvider } from "@/components/auth-provider";
 import { ThemeProvider } from "@/components/theme-provider";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import ClientErrorLogger from "@/components/client-error-logger";
 import "leaflet/dist/leaflet.css";
 import "./globals.css";
@@ -119,9 +120,17 @@ export default function RootLayout({
             <div className="absolute top-1/2 right-1/3 h-28 w-28 rounded-full bg-emerald-400/10 blur-2xl animate-pulse-glow"></div>
           </div>
           <div className="relative z-10 min-h-screen">
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-emerald-500 focus:text-white focus:rounded-md focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 transition-all"
+            >
+              Skip to main content
+            </a>
             <ClientErrorLogger />
             <AuthProvider>
-              {children}
+              <TooltipProvider>
+                <main id="main-content">{children}</main>
+              </TooltipProvider>
             </AuthProvider>
           </div>
         </ThemeProvider>

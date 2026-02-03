@@ -1,0 +1,14 @@
+{
+  "entry": [
+    "app/page.tsx",
+    "app/layout.tsx",
+    "app/api/**/route.ts",
+    "app/**/page.tsx"
+  ],
+  "ignoreUnimported": [
+    "components/ui/**",
+    "scripts/**",
+    "public/**",
+    "supabase/**"
+  ]
+}

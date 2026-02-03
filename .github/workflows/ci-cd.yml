@@ -2,13 +2,13 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [main, develop]
+    branches: [ main, develop ]
   pull_request:
-    branches: [main, develop]
+    branches: [ main, develop ]
   workflow_dispatch:
 
 env:
-  NODE_VERSION: "20"
+  NODE_VERSION: '20'
 
 jobs:
   ci:
@@ -22,7 +22,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: "npm"
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
@@ -38,14 +38,34 @@ jobs:
       - name: ESLint
         run: npm run lint
 
-      - name: Generate codemaps
-        run: npm run codemaps:generate
-
       - name: Validate codemaps
         run: npm run codemaps:validate
 
+      - name: Generate codemaps
+        run: npm run codemaps:generate
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://abc.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJabc
+          NEXT_PUBLIC_SUPABASE_PWA4_URL: https://abc.supabase.co
+          NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY: eyJabc
+          SUPABASE_PWA4_SERVICE_ROLE_KEY: eyJabc
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: pk_test_abc
+          STRIPE_SECRET_KEY: sk_test_abc
+          NEXT_PUBLIC_SITE_URL: https://airbear.me
+          NODE_ENV: production
+
       - name: Build application
         run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://abc.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJabc
+          NEXT_PUBLIC_SUPABASE_PWA4_URL: https://abc.supabase.co
+          NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY: eyJabc
+          SUPABASE_PWA4_SERVICE_ROLE_KEY: eyJabc
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: pk_test_abc
+          STRIPE_SECRET_KEY: sk_test_abc
+          NEXT_PUBLIC_SITE_URL: https://airbear.me
+          NODE_ENV: production
 
       - name: Upload npm logs (on failure)
         if: failure()

@@ -2,13 +2,13 @@
   "entry": [
     "app/page.tsx",
     "app/layout.tsx",
-    "middleware.ts",
     "app/api/**/route.ts",
-    "app/**/page.tsx",
-    "app/**/layout.tsx"
+    "app/**/page.tsx"
   ],
-  "extensions": [".ts", ".tsx", ".js", ".jsx"],
-  "ignoreUnimported": ["*"],
-  "ignoreUnused": ["*"],
-  "ignoreUnresolved": []
+  "ignoreUnimported": [
+    "components/ui/**",
+    "scripts/**",
+    "public/**",
+    "supabase/**"
+  ]
 }

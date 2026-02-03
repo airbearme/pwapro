@@ -129,9 +129,7 @@ export default function RootLayout({
             <ClientErrorLogger />
             <AuthProvider>
               <TooltipProvider>
-                <main id="main-content">
-                  {children}
-                </main>
+                <main id="main-content">{children}</main>
               </TooltipProvider>
             </AuthProvider>
           </div>

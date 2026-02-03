@@ -12,13 +12,13 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
-import MapComponent, { type Spot } from "@/components/map-view-beautiful";
-import type { AirbearLocation } from "@/lib/supabase/realtime";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import MapComponent, { type Spot } from "@/components/map-view-beautiful";
+import type { AirbearLocation } from "@/lib/supabase/realtime";
 
 export default function MapPage() {
   const { loading: authLoading } = useAuthContext();
@@ -194,7 +194,7 @@ export default function MapPage() {
                   {airbears.length > 0
                     ? Math.round(
                         airbears.reduce((sum, a) => sum + a.battery_level, 0) /
-                          airbears.length,
+                          airbears.length
                       )
                     : 0}
                   %

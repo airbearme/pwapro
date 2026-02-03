@@ -26,6 +26,7 @@ git push -u origin main
 ```
 
 Or use the script:
+
 ```bash
 bash scripts/push-and-deploy.sh
 ```
@@ -53,9 +54,9 @@ bash scripts/push-and-deploy.sh
 Click **"Environment Variables"** and add these (copy from your `.env.local`):
 
 ```
-NEXT_PUBLIC_SUPABASE_PWA4_URL=https://fofmrqgcidfenbevayrg.supabase.co
-NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZvZm1ycWdjaWRmZW5iZXZheXJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM2MzQ3MjgsImV4cCI6MjA3OTIxMDcyOH0.Z6m5z1KQGp-cDjBbcdJjUaXIA25C3VD8IlcLge1fWyM
-SUPABASE_PWA4_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZvZm1ycWdjaWRmZW5iZXZheXJnIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MzYzNDcyOCwiZXhwIjoyMDc5MjEwNzI4fQ.89Y4IOCpB-Ky1qjTJLmotMBe8RqQyN8bk6Xp5F43MMA
+NEXT_PUBLIC_SUPABASE_PWA4_URL=https://... (your Supabase URL)
+NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=... (your Supabase anon key)
+SUPABASE_PWA4_SERVICE_ROLE_KEY=... (your Supabase service role key)
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_... (your Stripe publishable key)
 STRIPE_SECRET_KEY=sk_live_... (your Stripe secret key)
 STRIPE_WEBHOOK_SECRET=whsec_... (your Stripe webhook secret)
@@ -63,7 +64,8 @@ NEXT_PUBLIC_SITE_URL=https://airbear.me
 NODE_ENV=production
 ```
 
-**Important:** 
+**Important:**
+
 - Set each variable for **Production**, **Preview**, and **Development**
 - Click **"Save"** after adding each variable
 
@@ -91,6 +93,7 @@ NODE_ENV=production
 3. Add/Update these records:
 
 **For root domain (airbear.me):**
+
 ```
 Type: CNAME
 Name: @ (or leave blank)
@@ -99,6 +102,7 @@ TTL: 3600
 ```
 
 **For www subdomain:**
+
 ```
 Type: CNAME
 Name: www
@@ -107,6 +111,7 @@ TTL: 3600
 ```
 
 **Note:** If IONOS doesn't support CNAME for root domain, use A record:
+
 ```
 Type: A
 Name: @
@@ -156,21 +161,25 @@ Check these:
 ## Troubleshooting
 
 ### Build Fails
+
 - Check Vercel build logs
 - Verify all environment variables are set
 - Run `npm run build` locally to test
 
 ### Domain Not Working
+
 - Check DNS propagation: https://dnschecker.org
 - Verify DNS records in IONOS
 - Check domain in Vercel settings
 
 ### Webhook Not Working
+
 - Check Stripe webhook logs
 - Verify `STRIPE_WEBHOOK_SECRET` matches
 - Check Vercel function logs
 
 ### OAuth Not Working
+
 - Verify redirect URLs in Supabase
 - Check `NEXT_PUBLIC_SITE_URL` is `https://airbear.me`
 - Check browser console for errors
@@ -195,4 +204,3 @@ vercel --prod
 
 **Total Time:** ~20 minutes
 **Status:** Ready to deploy! 🚀
-

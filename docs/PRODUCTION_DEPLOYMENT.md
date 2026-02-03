@@ -39,15 +39,15 @@ Add these in Vercel Dashboard → Project Settings → Environment Variables:
 **Supabase:**
 ```
 NEXT_PUBLIC_SUPABASE_PWA4_URL=https://fofmrqgcidfenbevayrg.supabase.co
-NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-SUPABASE_PWA4_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=... (your Supabase anon key)
+SUPABASE_PWA4_SERVICE_ROLE_KEY=... (your Supabase anon key)
 ```
 
 **Stripe:**
 ```
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...
-STRIPE_SECRET_KEY=sk_live_...
-STRIPE_WEBHOOK_SECRET=whsec_...
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_... (your Stripe publishable key)
+STRIPE_SECRET_KEY=... (your Stripe secret key)
+STRIPE_WEBHOOK_SECRET=... (your Stripe webhook secret)
 ```
 
 **Site:**
@@ -56,9 +56,9 @@ NEXT_PUBLIC_SITE_URL=https://airbear.me
 NODE_ENV=production
 ```
 
-**Important:** 
+**Important:**
 - Set all variables for **Production**, **Preview**, and **Development** environments
-- Use **live** Stripe keys (pk_live_, sk_live_)
+- Use **live** Stripe keys (pk_live_... (your Stripe publishable key)
 
 ### 1.3 Deploy
 
@@ -117,7 +117,7 @@ TTL: 3600
    - `payment_intent.succeeded`
    - `payment_intent.payment_failed`
 5. Click "Add endpoint"
-6. Copy **Signing secret** (starts with `whsec_`)
+6. Copy **Signing secret** (starts with `... (your Stripe webhook secret)
 7. Add to Vercel environment variables as `STRIPE_WEBHOOK_SECRET`
 
 ### 3.2 Test Webhook
@@ -273,9 +273,3 @@ The `.github/workflows/ci-cd.yml` will:
 
 **Last Updated:** 2025-01-26
 **Status:** Production Ready ✅
-
-
-
-
-
-

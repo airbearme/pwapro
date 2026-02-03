@@ -11,10 +11,10 @@ Complete reference for all environment variables used in production.
 NEXT_PUBLIC_SUPABASE_PWA4_URL=https://your-project.supabase.co
 
 # Public Anonymous Key (safe to expose to client)
-NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=... (your Supabase anon key)
 
 # Service Role Key (KEEP SECRET - server-side only)
-SUPABASE_PWA4_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+SUPABASE_PWA4_SERVICE_ROLE_KEY=... (your Supabase anon key)
 \`\`\`
 
 **Where to find:**
@@ -24,13 +24,13 @@ SUPABASE_PWA4_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 \`\`\`bash
 # Public Stripe Key (safe to expose)
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_... (your Stripe publishable key)
 
 # Secret Stripe Key (KEEP SECRET - server-side only)
-STRIPE_SECRET_KEY=sk_live_...
+STRIPE_SECRET_KEY=... (your Stripe secret key)
 
 # Webhook Secret (KEEP SECRET - for signature verification)
-STRIPE_WEBHOOK_SECRET=whsec_...
+STRIPE_WEBHOOK_SECRET=... (your Stripe webhook secret)
 \`\`\`
 
 **Where to find:**

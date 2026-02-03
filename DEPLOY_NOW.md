@@ -3,11 +3,13 @@
 ## Quick Start (5 Minutes)
 
 ### Step 1: Push to GitHub
+
 ```bash
 git push origin main
 ```
 
 ### Step 2: Create GitHub Repository (if not exists)
+
 1. Go to https://github.com/new
 2. Owner: `airbearme`
 3. Repository name: `pwapro`
@@ -16,12 +18,14 @@ git push origin main
 6. Click "Create repository"
 
 ### Step 3: Push Code
+
 ```bash
 git remote add origin https://github.com/airbearme/pwapro.git
 git push -u origin main
 ```
 
 ### Step 4: Deploy to Vercel
+
 1. Go to https://vercel.com/dashboard
 2. Click "Add New" → "Project"
 3. Import `airbearme/pwapro`
@@ -29,6 +33,7 @@ git push -u origin main
 5. Deploy!
 
 ### Step 5: Configure Domain
+
 1. In Vercel: Settings → Domains → Add `airbear.me`
 2. In IONOS: DNS → Add CNAME: `@` → `cname.vercel-dns.com`
 3. Wait 5-60 minutes for DNS propagation
@@ -38,9 +43,9 @@ git push -u origin main
 Copy these from your `.env.local`:
 
 ```
-NEXT_PUBLIC_SUPABASE_PWA4_URL=https://fofmrqgcidfenbevayrg.supabase.co
-NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-SUPABASE_PWA4_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+NEXT_PUBLIC_SUPABASE_PWA4_URL=https://... (your Supabase URL)
+NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=... (your Supabase anon key)
+SUPABASE_PWA4_SERVICE_ROLE_KEY=... (your Supabase service role key)
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_... (your Stripe publishable key)
 STRIPE_SECRET_KEY=sk_live_... (your Stripe secret key)
 STRIPE_WEBHOOK_SECRET=whsec_... (your Stripe webhook secret)
@@ -68,6 +73,7 @@ NODE_ENV=production
 ## Verify Deployment
 
 After deployment, check:
+
 - ✅ https://airbear.me loads
 - ✅ OAuth login works
 - ✅ Map displays with real-time updates
@@ -83,4 +89,3 @@ See `docs/PRODUCTION_DEPLOYMENT.md` for complete guide.
 **UI/UX**: ✅ All animations preserved
 **Security**: ✅ Hardened
 **Performance**: ✅ Optimized
-

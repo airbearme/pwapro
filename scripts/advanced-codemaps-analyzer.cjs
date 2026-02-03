@@ -74,15 +74,19 @@ class AdvancedCodeMapsAnalyzer {
     for (const file of files) {
       const filePath = path.join(this.outputDir, file);
       if (fs.existsSync(filePath)) {
-        const content = fs.readFileSync(filePath, "utf8");
-        const data = JSON.parse(content);
+        try {
+          const content = fs.readFileSync(filePath, "utf8");
+          const data = JSON.parse(content);
 
-        if (file === "components.json") {
-          this.metrics.components = data.components || [];
-        } else if (file === "api-routes.json") {
-          this.metrics.api = data.routes || [];
-        } else if (file === "utilities.json") {
-          this.metrics.utilities = data.utilities || [];
+          if (file === "components.json") {
+            this.metrics.components = data.components || [];
+          } else if (file === "api-routes.json") {
+            this.metrics.api = data.routes || [];
+          } else if (file === "utilities.json") {
+            this.metrics.utilities = data.utilities || [];
+          }
+        } catch (e) {
+          console.warn(`⚠️  Failed to parse ${file}: ${e.message}`);
         }
       }
     }
@@ -112,28 +116,32 @@ class AdvancedCodeMapsAnalyzer {
       },
     };
 
-    for (const component of this.metrics.components) {
-      const complexity = await this.calculateComponentComplexity(component);
+    if (Array.isArray(this.metrics.components)) {
+      for (const component of this.metrics.components) {
+        const complexity = await this.calculateComponentComplexity(component);
 
-      complexityReport.total += complexity;
+        complexityReport.total += complexity;
 
-      const type = component.type || "component";
-      if (complexityReport.byType[type]) {
-        complexityReport.byType[type].count++;
-        complexityReport.byType[type].complexity.push(complexity);
-      }
+        const type = component.type || "component";
+        if (complexityReport.byType[type]) {
+          complexityReport.byType[type].count++;
+          complexityReport.byType[type].complexity.push(complexity);
+        }
 
-      if (complexity > 20) {
-        complexityReport.high.push({ ...component, complexity });
-      } else if (complexity > 10) {
-        complexityReport.medium.push({ ...component, complexity });
-      } else {
-        complexityReport.low.push({ ...component, complexity });
+        if (complexity > 20) {
+          complexityReport.high.push({ ...component, complexity });
+        } else if (complexity > 10) {
+          complexityReport.medium.push({ ...component, complexity });
+        } else {
+          complexityReport.low.push({ ...component, complexity });
+        }
       }
     }
 
     complexityReport.average =
-      this.metrics.components.length > 0 ? complexityReport.total / this.metrics.components.length : 0;
+      this.metrics.components.length > 0
+        ? complexityReport.total / this.metrics.components.length
+        : 0;
 
     // Calculate averages by type
     for (const [type, data] of Object.entries(complexityReport.byType)) {
@@ -210,30 +218,32 @@ class AdvancedCodeMapsAnalyzer {
       byPath: {},
     };
 
-    for (const route of this.metrics.api) {
-      const method = route.method || "UNKNOWN";
-      if (performanceReport.byMethod[method] !== undefined) {
-        performanceReport.byMethod[method]++;
-      }
+    if (Array.isArray(this.metrics.api)) {
+      for (const route of this.metrics.api) {
+        const method = route.method || "UNKNOWN";
+        if (performanceReport.byMethod[method] !== undefined) {
+          performanceReport.byMethod[method]++;
+        }
 
-      const complexity = await this.calculateApiComplexity(route);
+        const complexity = await this.calculateApiComplexity(route);
 
-      if (complexity > 15) {
-        performanceReport.complex.push({ ...route, complexity });
-      } else {
-        performanceReport.simple.push({ ...route, complexity });
-      }
+        if (complexity > 15) {
+          performanceReport.complex.push({ ...route, complexity });
+        } else {
+          performanceReport.simple.push({ ...route, complexity });
+        }
 
-      // Group by path pattern
-      const pathPattern = this.extractPathPattern(route.path || "");
-      if (!performanceReport.byPath[pathPattern]) {
-        performanceReport.byPath[pathPattern] = { count: 0, routes: [] };
+        // Group by path pattern
+        const pathPattern = this.extractPathPattern(route.path || "");
+        if (!performanceReport.byPath[pathPattern]) {
+          performanceReport.byPath[pathPattern] = { count: 0, routes: [] };
+        }
+        performanceReport.byPath[pathPattern].count++;
+        performanceReport.byPath[pathPattern].routes.push({
+          ...route,
+          complexity,
+        });
       }
-      performanceReport.byPath[pathPattern].count++;
-      performanceReport.byPath[pathPattern].routes.push({
-        ...route,
-        complexity,
-      });
     }
 
     this.metrics.performance.api = performanceReport;
@@ -295,46 +305,50 @@ class AdvancedCodeMapsAnalyzer {
   async analyzeDependencies() {
     console.log("📦 Analyzing dependencies...");
 
-    const packageJsonPath = path.join(this.projectRoot, "package.json");
-    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
+    try {
+      const packageJsonPath = path.join(this.projectRoot, "package.json");
+      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
 
-    const dependencies = {
-      total: 0,
-      production: Object.keys(packageJson.dependencies || {}).length,
-      development: Object.keys(packageJson.devDependencies || {}).length,
-      categories: {
-        ui: [],
-        database: [],
-        auth: [],
-        payment: [],
-        testing: [],
-        build: [],
-        other: [],
-      },
-      outdated: [],
-      security: [],
-    };
+      const dependencies = {
+        total: 0,
+        production: Object.keys(packageJson.dependencies || {}).length,
+        development: Object.keys(packageJson.devDependencies || {}).length,
+        categories: {
+          ui: [],
+          database: [],
+          auth: [],
+          payment: [],
+          testing: [],
+          build: [],
+          other: [],
+        },
+        outdated: [],
+        security: [],
+      };
 
-    dependencies.total = dependencies.production + dependencies.development;
+      dependencies.total = dependencies.production + dependencies.development;
 
-    // Categorize dependencies
-    for (const [name, version] of Object.entries(
-      packageJson.dependencies || {},
-    )) {
-      const category = this.categorizeDependency(name);
-      dependencies.categories[category].push({ name, version });
+      // Categorize dependencies
+      for (const [name, version] of Object.entries(
+        packageJson.dependencies || {},
+      )) {
+        const category = this.categorizeDependency(name);
+        dependencies.categories[category].push({ name, version });
+      }
+
+      // Check for security issues (simplified)
+      const securityIssues = await this.checkDependencySecurity(
+        packageJson.dependencies || {},
+      );
+      dependencies.security = securityIssues;
+
+      this.metrics.dependencies = dependencies;
+      console.log(
+        `✅ Dependency analysis complete - ${dependencies.total} total dependencies`,
+      );
+    } catch (e) {
+      console.warn(`⚠️  Dependency analysis skipped: ${e.message}`);
     }
-
-    // Check for security issues (simplified)
-    const securityIssues = await this.checkDependencySecurity(
-      packageJson.dependencies || {},
-    );
-    dependencies.security = securityIssues;
-
-    this.metrics.dependencies = dependencies;
-    console.log(
-      `✅ Dependency analysis complete - ${dependencies.total} total dependencies`,
-    );
   }
 
   /**
@@ -403,19 +417,21 @@ class AdvancedCodeMapsAnalyzer {
       byFile: {},
     };
 
-    // Analyze API routes for security
-    for (const route of this.metrics.api) {
-      const filePath = path.join(this.projectRoot, route.file || "");
-      if (fs.existsSync(filePath)) {
-        const content = fs.readFileSync(filePath, "utf8");
-        const fileSecurity = await this.analyzeFileSecurity(
-          content,
-          route.path || "",
-        );
+    if (Array.isArray(this.metrics.api)) {
+      // Analyze API routes for security
+      for (const route of this.metrics.api) {
+        const filePath = path.join(this.projectRoot, route.file || "");
+        if (fs.existsSync(filePath)) {
+          const content = fs.readFileSync(filePath, "utf8");
+          const fileSecurity = await this.analyzeFileSecurity(
+            content,
+            route.path || "",
+          );
 
-        securityReport.byFile[route.path || "unknown"] = fileSecurity;
-        securityReport.issues.push(...fileSecurity.issues);
-        securityReport.bestPractices.push(...fileSecurity.bestPractices);
+          securityReport.byFile[route.path || "unknown"] = fileSecurity;
+          securityReport.issues.push(...fileSecurity.issues);
+          securityReport.bestPractices.push(...fileSecurity.bestPractices);
+        }
       }
     }
 
@@ -667,7 +683,11 @@ class AdvancedCodeMapsAnalyzer {
     }
 
     // Dependency recommendations
-    if (metrics.dependencies && metrics.dependencies.total > 100) {
+    if (
+      metrics.dependencies &&
+      Object.keys(metrics.dependencies).length > 0 &&
+      metrics.dependencies.total > 100
+    ) {
       recommendations.push({
         type: "dependencies",
         priority: "medium",
@@ -715,15 +735,23 @@ class AdvancedCodeMapsAnalyzer {
       trends: this.generateTrends(),
     };
 
-    // Write comprehensive report
-    const reportPath = path.join(this.outputDir, "advanced-analysis.json");
-    fs.writeFileSync(reportPath, JSON.stringify(reports, null, 2));
+    try {
+      if (!fs.existsSync(this.outputDir)) {
+        fs.mkdirSync(this.outputDir, { recursive: true });
+      }
 
-    // Write summary report
-    const summaryPath = path.join(this.outputDir, "analysis-summary.md");
-    fs.writeFileSync(summaryPath, this.generateMarkdownSummary(reports));
+      // Write comprehensive report
+      const reportPath = path.join(this.outputDir, "advanced-analysis.json");
+      fs.writeFileSync(reportPath, JSON.stringify(reports, null, 2));
 
-    console.log("✅ Advanced reports created");
+      // Write summary report
+      const summaryPath = path.join(this.outputDir, "analysis-summary.md");
+      fs.writeFileSync(summaryPath, this.generateMarkdownSummary(reports));
+
+      console.log("✅ Advanced reports created");
+    } catch (e) {
+      console.warn(`⚠️  Failed to write reports: ${e.message}`);
+    }
   }
 
   /**
@@ -733,7 +761,11 @@ class AdvancedCodeMapsAnalyzer {
     const insights = [];
 
     // Component insights
-    if (this.metrics.complexity && this.metrics.complexity.high && this.metrics.complexity.high.length > 0) {
+    if (
+      this.metrics.complexity &&
+      this.metrics.complexity.high &&
+      this.metrics.complexity.high.length > 0
+    ) {
       insights.push({
         type: "complexity",
         level: "warning",
@@ -742,7 +774,10 @@ class AdvancedCodeMapsAnalyzer {
     }
 
     // API insights
-    const complexApis = this.metrics.performance && this.metrics.performance.api?.complex?.length || 0;
+    const complexApis =
+      (this.metrics.performance &&
+        this.metrics.performance.api?.complex?.length) ||
+      0;
     if (complexApis > 0) {
       insights.push({
         type: "api",
@@ -752,7 +787,11 @@ class AdvancedCodeMapsAnalyzer {
     }
 
     // Security insights
-    if (this.metrics.security && this.metrics.security.issues && this.metrics.security.issues.length > 0) {
+    if (
+      this.metrics.security &&
+      this.metrics.security.issues &&
+      this.metrics.security.issues.length > 0
+    ) {
       insights.push({
         type: "security",
         level: "error",
@@ -790,9 +829,9 @@ Version: ${reports.version}
 - **Components**: ${reports.metrics.components.length} total
 - **API Routes**: ${reports.metrics.api.length} total  
 - **Utilities**: ${reports.metrics.utilities.length} total
-- **Average Complexity**: ${reports.metrics.complexity.average?.toFixed(2) || "N/A"}
-- **Security Score**: ${reports.metrics.security.score}/100
-- **Test Coverage**: ${reports.metrics.coverage.coverage}%
+- **Average Complexity**: ${reports.metrics.complexity?.average?.toFixed(2) || "N/A"}
+- **Security Score**: ${reports.metrics.security?.score}/100
+- **Test Coverage**: ${reports.metrics.coverage?.coverage}%
 
 ## 🎯 Key Insights
 
@@ -805,7 +844,7 @@ ${reports.insights
 ## 📈 Recommendations
 
 ${
-  reports.metrics.performance.overall?.recommendations
+  reports.metrics.performance?.overall?.recommendations
     ?.map(
       (rec) =>
         `### ${rec.type} (${rec.priority})
@@ -818,18 +857,18 @@ ${
 ## 🔍 Detailed Metrics
 
 ### Component Complexity
-- **High Complexity**: ${reports.metrics.complexity.high?.length || 0}
-- **Medium Complexity**: ${reports.metrics.complexity.medium?.length || 0}
-- **Low Complexity**: ${reports.metrics.complexity.low?.length || 0}
+- **High Complexity**: ${reports.metrics.complexity?.high?.length || 0}
+- **Medium Complexity**: ${reports.metrics.complexity?.medium?.length || 0}
+- **Low Complexity**: ${reports.metrics.complexity?.low?.length || 0}
 
 ### Security Analysis
-- **Issues Found**: ${reports.metrics.security.issues.length}
-- **Best Practices**: ${reports.metrics.security.bestPractices.length}
+- **Issues Found**: ${reports.metrics.security?.issues?.length || 0}
+- **Best Practices**: ${reports.metrics.security?.bestPractices?.length || 0}
 
 ### Dependencies
-- **Production**: ${reports.metrics.dependencies.production}
-- **Development**: ${reports.metrics.dependencies.development}
-- **Security Issues**: ${reports.metrics.dependencies.security.length}
+- **Production**: ${reports.metrics.dependencies?.production || 0}
+- **Development**: ${reports.metrics.dependencies?.development || 0}
+- **Security Issues**: ${reports.metrics.dependencies?.security?.length || 0}
 
 ---
 *Report generated by Advanced CodeMaps Analyzer*

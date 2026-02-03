@@ -37,32 +37,28 @@ User → IONOS DNS (airbear.me) → Vercel (Next.js App) → Supabase (Database/
 Add these in Vercel Dashboard → Project Settings → Environment Variables:
 
 **Supabase:**
-
 ```
-NEXT_PUBLIC_SUPABASE_PWA4_URL=https://... (your Supabase URL)
+NEXT_PUBLIC_SUPABASE_PWA4_URL=https://fofmrqgcidfenbevayrg.supabase.co
 NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=... (your Supabase anon key)
-SUPABASE_PWA4_SERVICE_ROLE_KEY=... (your Supabase service role key)
+SUPABASE_PWA4_SERVICE_ROLE_KEY=... (your Supabase anon key)
 ```
 
 **Stripe:**
-
 ```
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...
-STRIPE_SECRET_KEY=sk_live_...
-STRIPE_WEBHOOK_SECRET=whsec_...
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_... (your Stripe publishable key)
+STRIPE_SECRET_KEY=... (your Stripe secret key)
+STRIPE_WEBHOOK_SECRET=... (your Stripe webhook secret)
 ```
 
 **Site:**
-
 ```
 NEXT_PUBLIC_SITE_URL=https://airbear.me
 NODE_ENV=production
 ```
 
 **Important:**
-
 - Set all variables for **Production**, **Preview**, and **Development** environments
-- Use **live** Stripe keys (pk*live*, sk*live*)
+- Use **live** Stripe keys (pk_live_... (your Stripe publishable key)
 
 ### 1.3 Deploy
 
@@ -79,7 +75,6 @@ NODE_ENV=production
 3. Add/Update records:
 
 **Option A: CNAME (Recommended)**
-
 ```
 Type: CNAME
 Name: @ (or leave blank for root)
@@ -88,7 +83,6 @@ TTL: 3600
 ```
 
 **Option B: A Record (If CNAME not supported for root)**
-
 ```
 Type: A
 Name: @
@@ -97,7 +91,6 @@ TTL: 3600
 ```
 
 **For www subdomain:**
-
 ```
 Type: CNAME
 Name: www
@@ -124,7 +117,7 @@ TTL: 3600
    - `payment_intent.succeeded`
    - `payment_intent.payment_failed`
 5. Click "Add endpoint"
-6. Copy **Signing secret** (starts with `whsec_`)
+6. Copy **Signing secret** (starts with `... (your Stripe webhook secret)
 7. Add to Vercel environment variables as `STRIPE_WEBHOOK_SECRET`
 
 ### 3.2 Test Webhook
@@ -142,7 +135,6 @@ TTL: 3600
 In Supabase Dashboard → Authentication → URL Configuration:
 
 Add these redirect URLs:
-
 ```
 https://airbear.me/auth/callback
 https://www.airbear.me/auth/callback
@@ -157,7 +149,6 @@ https://www.airbear.me/auth/callback
 ### 4.3 RLS Policies
 
 Verify Row Level Security is enabled:
-
 - `users` table: Users can only read/update their own data
 - `orders` table: Users can only read their own orders
 - `rides` table: Users can only read their own rides
@@ -170,7 +161,6 @@ Verify Row Level Security is enabled:
 Go to: https://github.com/airbearme/pwapro/settings/secrets/actions
 
 Add:
-
 - `VERCEL_TOKEN` - From Vercel → Settings → Tokens
 - `VERCEL_ORG_ID` - From Vercel project settings
 - `VERCEL_PROJECT_ID` - From Vercel project settings
@@ -179,7 +169,6 @@ Add:
 ### 5.2 Workflow
 
 The `.github/workflows/ci-cd.yml` will:
-
 1. Run on every push to `main`
 2. Validate (type-check, lint, build)
 3. Deploy to Vercel if validation passes

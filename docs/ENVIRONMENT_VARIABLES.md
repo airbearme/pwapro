@@ -6,7 +6,7 @@ Complete reference for all environment variables used in production.
 
 ### Supabase Configuration
 
-```bash
+\`\`\`bash
 # Public Supabase URL (PWA4 instance)
 NEXT_PUBLIC_SUPABASE_PWA4_URL=https://your-project.supabase.co
 
@@ -14,64 +14,62 @@ NEXT_PUBLIC_SUPABASE_PWA4_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=... (your Supabase anon key)
 
 # Service Role Key (KEEP SECRET - server-side only)
-SUPABASE_PWA4_SERVICE_ROLE_KEY=... (your Supabase service role key)
-```
+SUPABASE_PWA4_SERVICE_ROLE_KEY=... (your Supabase anon key)
+\`\`\`
 
 **Where to find:**
-
 - Supabase Dashboard > Project Settings > API
 
 ### Stripe Configuration
 
-```bash
+\`\`\`bash
 # Public Stripe Key (safe to expose)
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_... (your Stripe publishable key)
 
 # Secret Stripe Key (KEEP SECRET - server-side only)
-STRIPE_SECRET_KEY=sk_live_...
+STRIPE_SECRET_KEY=... (your Stripe secret key)
 
 # Webhook Secret (KEEP SECRET - for signature verification)
-STRIPE_WEBHOOK_SECRET=whsec_...
-```
+STRIPE_WEBHOOK_SECRET=... (your Stripe webhook secret)
+\`\`\`
 
 **Where to find:**
-
 - Publishable/Secret Keys: Stripe Dashboard > Developers > API keys
 - Webhook Secret: Stripe Dashboard > Developers > Webhooks > Endpoint
 
 ### Site Configuration
 
-```bash
+\`\`\`bash
 # Production site URL
 NEXT_PUBLIC_SITE_URL=https://airbear.me
 
 # Node environment
 NODE_ENV=production
-```
+\`\`\`
 
 ## Optional Variables
 
 ### OAuth Configuration
 
-```bash
+\`\`\`bash
 # Google OAuth (configured in Supabase)
 NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
 
 # Apple OAuth (configured in Supabase)
 NEXT_PUBLIC_APPLE_CLIENT_ID=com.airbear.signin
-```
+\`\`\`
 
 **Note:** OAuth is primarily configured in Supabase Dashboard, these are reference values.
 
 ### Development Variables
 
-```bash
+\`\`\`bash
 # Override for development
 NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL=http://localhost:3000
 
 # Enable debug logging
 NEXT_PUBLIC_DEBUG=false
-```
+\`\`\`
 
 ## Security Best Practices
 
@@ -98,15 +96,15 @@ NEXT_PUBLIC_DEBUG=false
 
 All environment variables are validated at build time:
 
-```typescript
+\`\`\`typescript
 // lib/env.ts
 const envSchema = z.object({
   NEXT_PUBLIC_SUPABASE_PWA4_URL: z.string().url(),
   NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY: z.string().min(1),
   SUPABASE_PWA4_SERVICE_ROLE_KEY: z.string().min(1),
   // ... other validations
-});
-```
+})
+\`\`\`
 
 ## Setting Up in Vercel
 
@@ -119,27 +117,27 @@ const envSchema = z.object({
 
 ### Via CLI
 
-```bash
+\`\`\`bash
 vercel env add VARIABLE_NAME production
 # Paste value when prompted
-```
+\`\`\`
 
 ### Via API
 
-```bash
+\`\`\`bash
 curl -X POST https://api.vercel.com/v10/projects/PROJECT_ID/env \
   -H "Authorization: Bearer TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"key":"VARIABLE_NAME","value":"value","target":["production"]}'
-```
+\`\`\`
 
 ## Troubleshooting
 
 ### Build Fails with Missing Variables
 
-```
+\`\`\`
 Error: Missing required environment variable: NEXT_PUBLIC_SUPABASE_PWA4_URL
-```
+\`\`\`
 
 **Solution:** Add the missing variable in Vercel dashboard
 
@@ -147,9 +145,9 @@ Error: Missing required environment variable: NEXT_PUBLIC_SUPABASE_PWA4_URL
 
 **Solution:** Redeploy after adding/updating variables
 
-```bash
+\`\`\`bash
 vercel --prod --force
-```
+\`\`\`
 
 ### Client-Side Variables Undefined
 

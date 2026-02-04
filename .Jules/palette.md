@@ -1,0 +1,3 @@
+## 2025-05-14 - [Accessibility for Icon-only Elements]
+**Learning:** Icon-only buttons (like theme toggles or close buttons) and purely decorative spinning elements (like AirbearWheel) are common accessibility blind spots in this app. Adding `aria-label` and `Tooltip` to the former, and `aria-hidden="true"` to the latter, significantly improves the experience for screen reader users and provides better visual feedback for sighted users.
+**Action:** Always check for `aria-label` on any `Button` or `Link` that only contains an icon, and ensure decorative animations are hidden from the accessibility tree.

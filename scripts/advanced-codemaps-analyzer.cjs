@@ -14,9 +14,9 @@ class AdvancedCodeMapsAnalyzer {
     this.projectRoot = process.cwd();
     this.outputDir = path.join(this.projectRoot, '.next/codemaps');
     this.metrics = {
-      components: {},
-      api: {},
-      utilities: {},
+      components: [],
+      api: [],
+      utilities: [],
       dependencies: {},
       performance: {},
       security: {},
@@ -88,7 +88,7 @@ class AdvancedCodeMapsAnalyzer {
       }
     }
 
-    console.log(`✅ Loaded ${this.metrics.components.length} components, ${this.metrics.api.length} API routes, ${this.metrics.utilities.length} utilities`);
+    console.log(`✅ Loaded ${this.metrics.components?.length || 0} components, ${this.metrics.api?.length || 0} API routes, ${this.metrics.utilities?.length || 0} utilities`);
   }
 
   /**

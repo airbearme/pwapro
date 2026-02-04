@@ -13,6 +13,10 @@ class AdvancedCodeMapsAnalyzer {
   constructor() {
     this.projectRoot = process.cwd();
     this.outputDir = path.join(this.projectRoot, '.next/codemaps');
+    // Ensure output directory exists
+    if (!fs.existsSync(this.outputDir)) {
+      fs.mkdirSync(this.outputDir, { recursive: true });
+    }
     this.metrics = {
       components: [],
       api: [],

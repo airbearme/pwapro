@@ -8,6 +8,8 @@ on:
 
 env:
   NODE_VERSION: '20'
+  NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsYWNlaG9sZGVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2MDcyNjY3MDgsImV4cCI6MTkyMjg0MjcwOH0.placeholder
 
 jobs:
   # Code Formatting
@@ -133,6 +135,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Generate codemaps
+        run: npm run codemaps:generate
 
       - name: Run codemaps analysis
         run: npm run codemaps:analyze

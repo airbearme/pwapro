@@ -704,12 +704,11 @@ class AdvancedCodeMapsAnalyzer {
    * Create advanced reports
    */
   async createAdvancedReports() {
-    console.log("📊 Creating advanced reports...");
-
     // Ensure output directory exists
     if (!fs.existsSync(this.outputDir)) {
       fs.mkdirSync(this.outputDir, { recursive: true });
     }
+    console.log("📊 Creating advanced reports...");
 
     const reports = {
       timestamp: new Date().toISOString(),

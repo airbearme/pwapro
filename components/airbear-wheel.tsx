@@ -39,6 +39,7 @@ const AirbearWheel = memo(
         glowClass,
         className
       )}
+      aria-hidden="true"
     >
       <div
         className={cn(

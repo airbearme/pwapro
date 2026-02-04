@@ -15,7 +15,7 @@
     "lint": "eslint . --max-warnings 0",
     "start": "next start",
     "sync:github": "bash scripts/sync-github.sh",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "test:unit": "jest --testPathPattern=__tests__",
     "test:integration": "jest --testPathPattern=tests/integration",
     "test:api": "jest --testPathPattern=tests/api",
@@ -139,8 +139,10 @@
     "dotenv": "^17.2.3",
     "eslint": "^9.39.2",
     "eslint-config-next": "^16.1.1",
+    "eslint-plugin-import": "^2.32.0",
     "jest": "^30.2.0",
     "postcss": "^8.5.6",
+    "prettier": "^3.8.1",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3"
   }

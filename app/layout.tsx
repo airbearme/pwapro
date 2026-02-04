@@ -122,9 +122,7 @@ export default function RootLayout({
           <div className="relative z-10 min-h-screen">
             <ClientErrorLogger />
             <AuthProvider>
-              <TooltipProvider>
-                {children}
-              </TooltipProvider>
+              <TooltipProvider>{children}</TooltipProvider>
             </AuthProvider>
           </div>
         </ThemeProvider>

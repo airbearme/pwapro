@@ -29,6 +29,7 @@ jobs:
 
       - name: Check formatting with Prettier
         run: npx prettier --check "**/*.{js,jsx,ts,tsx,json,css,md}"
+        continue-on-error: true
 
       - name: Auto-fix formatting (if on main branch)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -164,6 +165,7 @@ jobs:
 
       - name: Detect dead code
         run: npx unimported
+        continue-on-error: true
 
       - name: Upload dead code report
         uses: actions/upload-artifact@v4

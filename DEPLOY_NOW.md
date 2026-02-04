@@ -38,9 +38,9 @@ git push -u origin main
 Copy these from your `.env.local`:
 
 ```
-NEXT_PUBLIC_SUPABASE_PWA4_URL=https://fofmrqgcidfenbevayrg.supabase.co
-NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-SUPABASE_PWA4_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+NEXT_PUBLIC_SUPABASE_PWA4_URL=... (your Supabase URL)
+NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=... (your Supabase anon key)
+SUPABASE_PWA4_SERVICE_ROLE_KEY=... (your Supabase service role key)
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_... (your Stripe publishable key)
 STRIPE_SECRET_KEY=sk_live_... (your Stripe secret key)
 STRIPE_WEBHOOK_SECRET=whsec_... (your Stripe webhook secret)

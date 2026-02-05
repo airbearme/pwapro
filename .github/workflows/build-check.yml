@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
 
+env:
+  NEXT_PUBLIC_SUPABASE_URL: 'https://example.supabase.co'
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: 'eyJplaceholder'
+
 jobs:
   build-check:
     runs-on: ubuntu-latest

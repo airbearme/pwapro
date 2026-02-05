@@ -129,6 +129,9 @@ export function OneClickBooking({
         <>
           <Spinner className="mr-2 h-5 w-5" />
           Booking...
+          <span role="status" aria-live="polite" className="sr-only">
+            Booking, please wait...
+          </span>
         </>
       ) : (
         <>

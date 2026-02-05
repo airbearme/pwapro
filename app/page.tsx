@@ -11,8 +11,8 @@
 
 import React, { useMemo } from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { MapPin, ShoppingBag, Leaf, Zap, Crown } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import AirbearWheel from "@/components/airbear-wheel";
 
 export default function HomePage() {
@@ -71,7 +71,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <main id="main-content" className="min-h-screen bg-gradient-to-br from-emerald-950 via-lime-950 to-amber-950 dark:from-emerald-950 dark:via-lime-950 dark:to-amber-950 bg-[radial-gradient(1200px_circle_at_20%_10%,rgba(34,197,94,0.28),transparent_55%),radial-gradient(900px_circle_at_80%_20%,rgba(56,189,248,0.22),transparent_55%),radial-gradient(700px_circle_at_50%_90%,rgba(236,72,153,0.2),transparent_60%)] relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-950 via-lime-950 to-amber-950 dark:from-emerald-950 dark:via-lime-950 dark:to-amber-950 bg-[radial-gradient(1200px_circle_at_20%_10%,rgba(34,197,94,0.28),transparent_55%),radial-gradient(900px_circle_at_80%_20%,rgba(56,189,248,0.22),transparent_55%),radial-gradient(700px_circle_at_50%_90%,rgba(236,72,153,0.2),transparent_60%)] relative overflow-hidden">
       {/* DEBUG: Dark Mode & Beautiful UI - Version 2.0.5 - FORCED REDEPLOY */}
       <div className="fixed top-4 right-4 bg-black/80 text-white px-4 py-2 rounded-lg z-50 glass-morphism">
         🌙 Dark Mode Active - v2.0.5
@@ -140,9 +140,7 @@ export default function HomePage() {
       </div>
 
       {/* Sparkle rings */}
-      <div className="absolute inset-0 pointer-events-none">
-        {sparkleRings}
-      </div>
+      <div className="absolute inset-0 pointer-events-none">{sparkleRings}</div>
 
       <div className="container mx-auto px-4 py-16 relative z-10">
         <div className="flex flex-col items-center justify-center text-center space-y-8">
@@ -252,21 +250,27 @@ export default function HomePage() {
               <div className="text-3xl sm:text-4xl font-bold text-lime-500 relative z-10">
                 582kg
               </div>
-              <div className="text-sm text-muted-foreground relative z-10">CO₂ Saved</div>
+              <div className="text-sm text-muted-foreground relative z-10">
+                CO₂ Saved
+              </div>
             </div>
             <div className="text-center hover-lift p-4 rounded-lg glass-morphism relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-amber-400/10 via-rose-400/10 to-transparent opacity-70"></div>
               <div className="text-3xl sm:text-4xl font-bold text-amber-500 relative z-10">
                 16
               </div>
-              <div className="text-sm text-muted-foreground relative z-10">Active Spots</div>
+              <div className="text-sm text-muted-foreground relative z-10">
+                Active Spots
+              </div>
             </div>
             <div className="text-center hover-lift p-4 rounded-lg glass-morphism relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/10 via-lime-400/10 to-transparent opacity-70"></div>
               <div className="text-3xl sm:text-4xl font-bold text-emerald-500 relative z-10">
                 100%
               </div>
-              <div className="text-sm text-muted-foreground relative z-10">Solar Powered</div>
+              <div className="text-sm text-muted-foreground relative z-10">
+                Solar Powered
+              </div>
             </div>
           </div>
 
@@ -364,6 +368,6 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

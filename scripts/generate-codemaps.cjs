@@ -97,7 +97,7 @@ class CodeMapsGenerator {
     } catch (error) {
       console.warn(
         "⚠️  Warning: Could not clean previous maps:",
-        error.message
+        error.message,
       );
     }
   }
@@ -110,8 +110,8 @@ class CodeMapsGenerator {
 
     try {
       // Build with source maps enabled
-      console.log("🔨 Running: NODE_ENV=production npm run build");
-      execSync("NODE_ENV=production npm run build", {
+      console.log("🔨 Running: NODE_ENV=production pnpm run build");
+      execSync("NODE_ENV=production pnpm run build", {
         stdio: "inherit",
         cwd: this.projectRoot,
         env: {
@@ -131,7 +131,7 @@ class CodeMapsGenerator {
       console.log("✅ Next.js source maps generated");
     } catch (error) {
       console.error("❌ Error generating Next.js source maps:", error.message);
-throw new Error(error);
+      throw new Error(error);
     }
   }
 
@@ -328,7 +328,7 @@ throw new Error(error);
   extractRoutePath(filePath) {
     const relativePath = path.relative(
       path.join(this.projectRoot, "app", "api"),
-      filePath
+      filePath,
     );
     const dirPath = path.dirname(relativePath);
     return `/api/${dirPath.replace(/\\/g, "/")}`;

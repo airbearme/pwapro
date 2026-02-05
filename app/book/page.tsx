@@ -2,6 +2,18 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import {
+  MapPin,
+  Navigation,
+  DollarSign,
+  Clock,
+  ArrowRight,
+  Loader2,
+  Map,
+  Eye,
+  EyeOff,
+} from "lucide-react";
+import Link from "next/link";
 import { useAuthContext } from "@/components/auth-provider";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import {
@@ -15,18 +27,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import {
-  MapPin,
-  Navigation,
-  DollarSign,
-  Clock,
-  ArrowRight,
-  Loader2,
-  Map,
-  Eye,
-  EyeOff,
-} from "lucide-react";
-import Link from "next/link";
 import MapComponent, { type Spot } from "@/components/map-view-beautiful";
 import type { AirbearLocation } from "@/lib/supabase/realtime";
 import { RidePayment } from "@/components/ride-payment";
@@ -70,7 +70,7 @@ function BookRidePageContent() {
         if (airbearsResponse.ok) {
           const airbearsData = await airbearsResponse.json();
           setAirbears(airbearsData.data || []);
-          
+
           // Show driver-specific message if applicable
           if (airbearsData.isDriverView) {
             console.log("Driver view: Showing only assigned AirBear");
@@ -243,7 +243,7 @@ function BookRidePageContent() {
   }
 
   return (
-    <main id="main-content" className="min-h-screen bg-gradient-to-br from-emerald-950 via-lime-950 to-amber-950 dark:from-emerald-950 dark:via-lime-950 dark:to-amber-950">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-950 via-lime-950 to-amber-950 dark:from-emerald-950 dark:via-lime-950 dark:to-amber-950">
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
@@ -559,13 +559,19 @@ function BookRidePageContent() {
           </Button>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
 
 export default function BookRidePage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-black text-white flex items-center justify-center">Loading booking...</div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-black text-white flex items-center justify-center">
+          Loading booking...
+        </div>
+      }
+    >
       <BookRidePageContent />
     </Suspense>
   );

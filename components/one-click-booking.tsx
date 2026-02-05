@@ -122,13 +122,14 @@ export function OneClickBooking({
     <Button
       onClick={handleOneClickBook}
       disabled={loading}
+      aria-disabled={loading}
       size="lg"
       className="w-full eco-gradient text-white hover-lift ripple-effect animate-neon-glow shadow-xl"
     >
       {loading ? (
         <>
           <Spinner className="mr-2 h-5 w-5" />
-          Booking...
+          <span role="status">Booking...</span>
         </>
       ) : (
         <>

@@ -3,21 +3,40 @@ import { NextResponse, type NextRequest } from "next/server"
 import { SECURITY_HEADERS } from "./lib/security-headers"
 
 /**
- * Production-grade middleware for:
+ * Helper to apply security headers to a response.
+ * Follows defense-in-depth by ensuring headers are present even on redirects.
+ */
+function applySecurityHeaders(response: NextResponse, request: NextRequest) {
+  for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
+    // To prevent local development issues, Strict-Transport-Security (HSTS)
+    // is only applied if the request is over HTTPS.
+    if (key === "Strict-Transport-Security" && request.nextUrl.protocol !== "https:") {
+      continue;
+    }
+    response.headers.set(key, value)
+  }
+  return response
+}
+
+/**
+ * Production-grade proxy (middleware) for:
  * - Supabase session refresh (automatic token refresh)
  * - Protected route authentication
  * - Secure cookie handling
+ * - Security header enforcement (CSP, HSTS, etc.)
+ *
+ * Note: In Next.js 16+, 'proxy.ts' is the standard convention over 'middleware.ts'.
  */
 export async function proxy(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
   if (!supabaseUrl || !supabaseAnonKey) {
-    console.error("Missing Supabase environment variables in middleware")
-    return NextResponse.next()
+    console.error("Missing Supabase environment variables in proxy")
+    return applySecurityHeaders(NextResponse.next(), request)
   }
 
-  let supabaseResponse = NextResponse.next({
+  let response = NextResponse.next({
     request,
   })
 
@@ -26,51 +45,42 @@ export async function proxy(request: NextRequest) {
       getAll() {
         return request.cookies.getAll()
       },
-      setAll(cookiesToSet: Array<{ name: string; value: string; options?: Record<string, unknown> }>) {
+      setAll(cookiesToSet: Array<{ name: string; value: string; options?: any }>) {
         cookiesToSet.forEach(({ name, value }) => {
           request.cookies.set(name, value)
         })
-        supabaseResponse = NextResponse.next({
+        // When setting cookies, we must create a new response to ensure they are sent
+        response = NextResponse.next({
           request,
         })
         cookiesToSet.forEach(({ name, value, options }) => {
-          if (options) {
-            supabaseResponse.cookies.set(name, value, options as Parameters<typeof supabaseResponse.cookies.set>[2])
-          } else {
-            supabaseResponse.cookies.set(name, value)
-          }
+          response.cookies.set(name, value, options)
         })
       },
     },
   })
 
-  // Refresh session if needed (automatic token refresh)
-  await supabase.auth.getUser()
+  // Refresh session if needed and get user in a single call for efficiency.
+  // This satisfies both session maintenance and route protection needs.
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
   // Protect authenticated routes
   const isProtectedRoute =
     request.nextUrl.pathname.startsWith("/dashboard") ||
     request.nextUrl.pathname.startsWith("/driver") ||
-    request.nextUrl.pathname.startsWith("/map") && request.nextUrl.searchParams.has("auth")
+    (request.nextUrl.pathname.startsWith("/map") && request.nextUrl.searchParams.has("auth"))
 
-  if (isProtectedRoute) {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-
-    if (!user) {
-      const url = request.nextUrl.clone()
-      url.pathname = "/auth/login"
-      url.searchParams.set("redirect", request.nextUrl.pathname)
-      return NextResponse.redirect(url)
-    }
+  if (isProtectedRoute && !user) {
+    const url = request.nextUrl.clone()
+    url.pathname = "/auth/login"
+    url.searchParams.set("redirect", request.nextUrl.pathname)
+    const redirectResponse = NextResponse.redirect(url)
+    return applySecurityHeaders(redirectResponse, request)
   }
 
-  // Add security headers
-  for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
-    supabaseResponse.headers.set(key, value)
-  }
-  return supabaseResponse
+  return applySecurityHeaders(response, request)
 }
 
 export const config = {

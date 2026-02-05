@@ -109,7 +109,7 @@ AirBear Production Webhook - Payment Events
 
 **Example:**
 \`\`\`
-whsec_1234567890abcdefghijklmnopqrstuvwxyz1234567890abcdefghijklmnop
+whsec_... (your Stripe webhook secret)
 \`\`\`
 
 ---

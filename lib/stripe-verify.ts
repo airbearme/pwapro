@@ -5,16 +5,27 @@ import crypto from "crypto";
  * Note: In production, it is recommended to use stripe.webhooks.constructEvent.
  */
 export function verifyStripe(sig: string, body: string, secret: string): boolean {
+  // Create HMAC hex digest
   const h = crypto.createHmac("sha256", secret).update(body).digest("hex");
 
-  // Use timingSafeEqual to prevent timing attacks.
-  // Both strings must be converted to buffers of the same length for timingSafeEqual.
-  const signatureBuffer = Buffer.from(sig);
-  const hashBuffer = Buffer.from(h);
+  // Stripe signatures in the header are typically in format: t=TIMESTAMP,v1=SIGNATURE
+  const signature = sig.split(',').find(p => p.trim().startsWith('v1='))?.trim().substring(3);
 
-  if (signatureBuffer.length !== hashBuffer.length) {
+  // If we can't find v1=, fallback to full string if it looks like a hex digest
+  const target = signature || sig;
+
+  // Use timingSafeEqual to prevent timing attacks.
+  // Both must be buffers of the same length.
+  try {
+    const signatureBuffer = Buffer.from(target, 'hex');
+    const hashBuffer = Buffer.from(h, 'hex');
+
+    if (signatureBuffer.length !== hashBuffer.length || signatureBuffer.length === 0) {
+      return false;
+    }
+
+    return crypto.timingSafeEqual(signatureBuffer, hashBuffer);
+  } catch (e) {
     return false;
   }
-
-  return crypto.timingSafeEqual(signatureBuffer, hashBuffer);
 }

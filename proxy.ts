@@ -24,8 +24,6 @@ function applySecurityHeaders(response: NextResponse, request: NextRequest) {
  * - Protected route authentication
  * - Secure cookie handling
  * - Security header enforcement (CSP, HSTS, etc.)
- *
- * Note: In Next.js 16+, 'proxy.ts' is the standard convention over 'middleware.ts'.
  */
 export async function proxy(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -49,7 +47,6 @@ export async function proxy(request: NextRequest) {
         cookiesToSet.forEach(({ name, value }) => {
           request.cookies.set(name, value)
         })
-        // When setting cookies, we must create a new response to ensure they are sent
         response = NextResponse.next({
           request,
         })
@@ -60,8 +57,7 @@ export async function proxy(request: NextRequest) {
     },
   })
 
-  // Refresh session if needed and get user in a single call for efficiency.
-  // This satisfies both session maintenance and route protection needs.
+  // Refresh session and get user in one call
   const {
     data: { user },
   } = await supabase.auth.getUser()
@@ -76,8 +72,7 @@ export async function proxy(request: NextRequest) {
     const url = request.nextUrl.clone()
     url.pathname = "/auth/login"
     url.searchParams.set("redirect", request.nextUrl.pathname)
-    const redirectResponse = NextResponse.redirect(url)
-    return applySecurityHeaders(redirectResponse, request)
+    return applySecurityHeaders(NextResponse.redirect(url), request)
   }
 
   return applySecurityHeaders(response, request)

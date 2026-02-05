@@ -103,7 +103,7 @@ export default function MapPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-950 via-lime-950 to-amber-950 dark:from-emerald-950 dark:via-lime-950 dark:to-amber-950">
+    <main id="main-content" className="min-h-screen bg-gradient-to-br from-emerald-950 via-lime-950 to-amber-950 dark:from-emerald-950 dark:via-lime-950 dark:to-amber-950">
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
@@ -228,6 +228,6 @@ export default function MapPage() {
           </div>
         </Card>
       </div>
-    </div>
+    </main>
   );
 }

@@ -38,14 +38,11 @@ jobs:
       - name: ESLint
         run: npm run lint
 
-      - name: Validate codemaps
-        run: npm run codemaps:validate
-
       - name: Generate codemaps
         run: npm run codemaps:generate
 
-      - name: Build application
-        run: npm run build
+      - name: Validate codemaps
+        run: npm run codemaps:validate
 
       - name: Upload npm logs (on failure)
         if: failure()

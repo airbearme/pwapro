@@ -3,9 +3,11 @@
 ## ✅ Recommended Settings
 
 ### Auto-expose System Environment Variables
+
 **Recommendation: UNCHECK (Disable)**
 
 **Why?**
+
 - Better security control
 - Prevents accidental exposure of system variables
 - You explicitly control what's exposed
@@ -16,6 +18,7 @@
 Add these **explicitly** in Vercel (don't rely on auto-expose):
 
 ### Supabase (Required)
+
 ```
 NEXT_PUBLIC_SUPABASE_PWA4_URL
 NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY
@@ -23,6 +26,7 @@ SUPABASE_PWA4_SERVICE_ROLE_KEY
 ```
 
 ### Stripe (Required)
+
 ```
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 STRIPE_SECRET_KEY
@@ -30,6 +34,7 @@ STRIPE_WEBHOOK_SECRET
 ```
 
 ### Site Configuration (Required)
+
 ```
 NEXT_PUBLIC_SITE_URL=https://airbear.me
 NODE_ENV=production
@@ -73,6 +78,7 @@ NODE_ENV=production
 ## ✅ Verification
 
 After adding variables, verify:
+
 - Health endpoint: `https://airbear.me/api/health`
 - Should show Supabase and Stripe as "healthy"
 - Authentication should work
@@ -81,9 +87,3 @@ After adding variables, verify:
 ---
 
 **TL;DR: Uncheck auto-expose for better security. Add variables explicitly.**
-
-
-
-
-
-

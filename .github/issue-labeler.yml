@@ -3,78 +3,78 @@
 
 # Bug reports
 bug:
-  - title: '/bug|issue|problem|error|fail/'
-  - body: '/bug|issue|problem|error|fail|not working|broken/'
+  - title: "/bug|issue|problem|error|fail/"
+  - body: "/bug|issue|problem|error|fail|not working|broken/"
 
 # Feature requests
 enhancement:
-  - title: '/feature|enhancement|improve|add|new/'
-  - body: '/feature|enhancement|improve|add|new|would like|request/'
+  - title: "/feature|enhancement|improve|add|new/"
+  - body: "/feature|enhancement|improve|add|new|would like|request/"
 
 # Documentation
 documentation:
-  - title: '/docs|documentation|readme|guide|tutorial/'
-  - body: '/docs|documentation|readme|guide|tutorial|explain|help/'
+  - title: "/docs|documentation|readme|guide|tutorial/"
+  - body: "/docs|documentation|readme|guide|tutorial|explain|help/"
 
 # Security
 security:
-  - title: '/security|vulnerability|exploit|hack|attack/'
-  - body: '/security|vulnerability|exploit|hack|attack|unsafe|insecure/'
+  - title: "/security|vulnerability|exploit|hack|attack/"
+  - body: "/security|vulnerability|exploit|hack|attack|unsafe|insecure/"
 
 # Performance
 performance:
-  - title: '/performance|speed|slow|fast|optimize|lag/'
-  - body: '/performance|speed|slow|fast|optimize|lag|loading/'
+  - title: "/performance|speed|slow|fast|optimize|lag/"
+  - body: "/performance|speed|slow|fast|optimize|lag|loading/"
 
 # UI/UX
 ui-ux:
-  - title: '/ui|ux|design|style|layout|visual|appearance/'
-  - body: '/ui|ux|design|style|layout|visual|appearance|look|feel/'
+  - title: "/ui|ux|design|style|layout|visual|appearance/"
+  - body: "/ui|ux|design|style|layout|visual|appearance|look|feel/"
 
 # API
 api:
-  - title: '/api|endpoint|route|request|response|server/'
-  - body: '/api|endpoint|route|request|response|server|backend/'
+  - title: "/api|endpoint|route|request|response|server/"
+  - body: "/api|endpoint|route|request|response|server|backend/"
 
 # Database
 database:
-  - title: '/database|db|sql|query|migration|schema/'
-  - body: '/database|db|sql|query|migration|schema|data/'
+  - title: "/database|db|sql|query|migration|schema/"
+  - body: "/database|db|sql|query|migration|schema|data/"
 
 # Payments
 payments:
-  - title: '/payment|stripe|checkout|billing|price|cost|money/'
-  - body: '/payment|stripe|checkout|billing|price|cost|money|pay/'
+  - title: "/payment|stripe|checkout|billing|price|cost|money/"
+  - body: "/payment|stripe|checkout|billing|price|cost|money|pay/"
 
 # Maps
 maps:
-  - title: '/map|location|gps|geolocation|route|navigation/'
-  - body: '/map|location|gps|geolocation|route|navigation|address/'
+  - title: "/map|location|gps|geolocation|route|navigation/"
+  - body: "/map|location|gps|geolocation|route|navigation|address/"
 
 # PWA
 pwa:
-  - title: '/pwa|offline|install|manifest|service worker|cache/'
-  - body: '/pwa|offline|install|manifest|service worker|cache|mobile app/'
+  - title: "/pwa|offline|install|manifest|service worker|cache/"
+  - body: "/pwa|offline|install|manifest|service worker|cache|mobile app/"
 
 # Testing
 testing:
-  - title: '/test|testing|spec|unit|e2e|integration|coverage/'
-  - body: '/test|testing|spec|unit|e2e|integration|coverage|assert/'
+  - title: "/test|testing|spec|unit|e2e|integration|coverage/"
+  - body: "/test|testing|spec|unit|e2e|integration|coverage|assert/"
 
 # CI/CD
 ci-cd:
-  - title: '/ci|cd|deploy|build|pipeline|workflow|github actions/'
-  - body: '/ci|cd|deploy|build|pipeline|workflow|github actions|automation/'
+  - title: "/ci|cd|deploy|build|pipeline|workflow|github actions/"
+  - body: "/ci|cd|deploy|build|pipeline|workflow|github actions|automation/"
 
 # Dependencies
 dependencies:
-  - title: '/dependency|package|npm|yarn|install|update|version/'
-  - body: '/dependency|package|npm|yarn|install|update|version|module/'
+  - title: "/dependency|package|npm|yarn|install|update|version/"
+  - body: "/dependency|package|npm|yarn|install|update|version|module/"
 
 # Breaking change
 breaking-change:
-  - title: '/breaking|break|major|incompatible|change/'
-  - body: '/breaking|break|major|incompatible|change|migration/'
+  - title: "/breaking|break|major|incompatible|change/"
+  - body: "/breaking|break|major|incompatible|change|migration/"
 
 # Question
 question:
@@ -83,44 +83,44 @@ question:
 
 # Good first issue
 good first issue:
-  - title: '/beginner|first|simple|easy|starter|intro/'
-  - body: '/beginner|first|simple|easy|starter|intro|newbie/'
+  - title: "/beginner|first|simple|easy|starter|intro/"
+  - body: "/beginner|first|simple|easy|starter|intro|newbie/"
 
 # Priority labels
 priority-high:
-  - title: '/urgent|critical|emergency|asap|high priority/'
-  - body: '/urgent|critical|emergency|asap|high priority|blocking/'
+  - title: "/urgent|critical|emergency|asap|high priority/"
+  - body: "/urgent|critical|emergency|asap|high priority|blocking/"
 
 priority-low:
-  - title: '/low priority|nice to have|future|eventually|maybe/'
-  - body: '/low priority|nice to have|future|eventually|maybe|optional/'
+  - title: "/low priority|nice to have|future|eventually|maybe/"
+  - body: "/low priority|nice to have|future|eventually|maybe|optional/"
 
 # Status labels
 status-needs-info:
-  - title: '/need|missing|require|information|details|clarify/'
-  - body: '/need|missing|require|information|details|clarify|more info/'
+  - title: "/need|missing|require|information|details|clarify/"
+  - body: "/need|missing|require|information|details|clarify|more info/"
 
 status-investigating:
-  - title: '/investigate|debug|analyze|check|verify|reproduce/'
-  - body: '/investigate|debug|analyze|check|verify|reproduce|looking into/'
+  - title: "/investigate|debug|analyze|check|verify|reproduce/"
+  - body: "/investigate|debug|analyze|check|verify|reproduce|looking into/"
 
 status-confirmed:
-  - title: '/confirmed|reproduced|verified|can reproduce/'
-  - body: '/confirmed|reproduced|verified|can reproduce|yes/'
+  - title: "/confirmed|reproduced|verified|can reproduce/"
+  - body: "/confirmed|reproduced|verified|can reproduce|yes/"
 
 # Type labels
 type-bug:
-  - title: '/bug|issue|problem|error|fail/'
-  - body: '/bug|issue|problem|error|fail|not working|broken/'
+  - title: "/bug|issue|problem|error|fail/"
+  - body: "/bug|issue|problem|error|fail|not working|broken/"
 
 type-feature:
-  - title: '/feature|enhancement|improve|add|new/'
-  - body: '/feature|enhancement|improve|add|new|would like|request/'
+  - title: "/feature|enhancement|improve|add|new/"
+  - body: "/feature|enhancement|improve|add|new|would like|request/"
 
 type-maintenance:
-  - title: '/maintenance|chore|cleanup|refactor|update|upgrade/'
-  - body: '/maintenance|chore|cleanup|refactor|update|upgrade|improve/'
+  - title: "/maintenance|chore|cleanup|refactor|update|upgrade/"
+  - body: "/maintenance|chore|cleanup|refactor|update|upgrade|improve/"
 
 type-research:
-  - title: '/research|investigation|analysis|study|explore/'
-  - body: '/research|investigation|analysis|study|explore|learn/'
+  - title: "/research|investigation|analysis|study|explore/"
+  - body: "/research|investigation|analysis|study|explore|learn/"

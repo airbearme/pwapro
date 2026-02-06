@@ -74,7 +74,7 @@ export default function MapView({
 
         // Dynamically import Leaflet
         const L = (await import("leaflet")).default;
-        
+
         if (!L || !L.map) {
           throw new Error("Leaflet failed to load");
         }
@@ -99,7 +99,7 @@ export default function MapView({
           zoomControl: true,
           preferCanvas: true,
         });
-        
+
         // Invalidate size to ensure map renders
         map.invalidateSize();
         let resizeObserver: ResizeObserver | null = null;
@@ -136,7 +136,7 @@ export default function MapView({
         mapInstanceRef.current.__resizeObserver = resizeObserver;
         mapInstanceRef.current.__resizeHandler = resizeHandler;
         setMapLoaded(true);
-        
+
         // Setup global booking function
         const handleSpotSelect = onSpotSelectRef.current;
         if (typeof window !== "undefined" && handleSpotSelect) {

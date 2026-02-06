@@ -207,5 +207,3 @@ if (errors.length === 0 && warnings.length === 0) {
 	console.log("\n📚 See CORE_UI_FOUNDATION.md for required features.");
 	process.exit(errors.length > 0 ? 1 : 0);
 }
-
-

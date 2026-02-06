@@ -68,7 +68,7 @@ This document describes the complete testing infrastructure for the AirBear PWA.
 - Manifest validation
 - Service worker functionality
 - Offline capabilities
-- **Scripts**: 
+- **Scripts**:
   - `scripts/test-pwa-manifest.js`
   - `scripts/test-service-worker.js`
 
@@ -255,8 +255,3 @@ test('user can book a ride', async ({ page }) => {
 
 **Status**: ✅ Comprehensive testing suite implemented
 **Last Updated**: 2025-01-28
-
-
-
-
-

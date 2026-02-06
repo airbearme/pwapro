@@ -28,7 +28,7 @@ NEXT_PUBLIC_SUPABASE_PWA4_URL=https://fofmrqgcidfenbevayrg.supabase.co
 NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=[Get from Supabase Dashboard → Project Settings → API]
 SUPABASE_PWA4_SERVICE_ROLE_KEY=[Get from Supabase Dashboard → Project Settings → API]
 
-# Stripe Configuration  
+# Stripe Configuration
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=[Get from Stripe Dashboard → Developers → API Keys]
 STRIPE_SECRET_KEY=[Get from Stripe Dashboard → Developers → API Keys]
 STRIPE_WEBHOOK_SECRET=[Get from Stripe Dashboard → Developers → Webhooks]
@@ -97,7 +97,7 @@ https://airbear.me/auth/callback
 https://www.airbear.me/auth/callback
 ```
 
-### **Step 3: Deploy to Production** 
+### **Step 3: Deploy to Production**
 
 ```bash
 # Option A: Use the production script
@@ -143,7 +143,7 @@ After setup, verify these work:
 ✅ **One-command setup** - Use `./scripts/setup-environment.sh` for future projects  
 ✅ **Automatic deployment** - GitHub Actions will deploy automatically  
 ✅ **Consistent configuration** - Same variables across local, GitHub, and Vercel  
-✅ **Security maintained** - Sensitive keys properly stored as secrets  
+✅ **Security maintained** - Sensitive keys properly stored as secrets
 
 ---
 

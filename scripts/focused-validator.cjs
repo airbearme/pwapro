@@ -39,7 +39,7 @@ class FocusedValidator {
       this.generateFinalReport();
 
       // Check if essential validations passed
-      const essentialPassed = this.results.passed.filter(test => 
+      const essentialPassed = this.results.passed.filter(test =>
         ['TypeScript Type Check', 'ESLint', 'CodeMaps Validation', 'Build', 'Production Tests'].includes(test)
       ).length;
 
@@ -62,7 +62,7 @@ class FocusedValidator {
    */
   async runTypeCheck() {
     console.log('🔷 Running TypeScript Type Check...');
-    
+
     try {
       execSync('npm run type-check', { stdio: 'pipe', cwd: this.projectRoot });
       this.results.passed.push('TypeScript Type Check');
@@ -79,7 +79,7 @@ class FocusedValidator {
    */
   async runLinting() {
     console.log('\n🔍 Running ESLint...');
-    
+
     try {
       execSync('npm run lint', { stdio: 'pipe', cwd: this.projectRoot });
       this.results.passed.push('ESLint');
@@ -95,7 +95,7 @@ class FocusedValidator {
    */
   async runCodeMapsValidation() {
     console.log('\n🗺️  Running CodeMaps Validation...');
-    
+
     try {
       execSync('npm run codemaps:validate', { stdio: 'pipe', cwd: this.projectRoot });
       this.results.passed.push('CodeMaps Validation');
@@ -111,7 +111,7 @@ class FocusedValidator {
    */
   async runBuild() {
     console.log('\n🔨 Running Build...');
-    
+
     try {
       execSync('npm run build', { stdio: 'pipe', cwd: this.projectRoot });
       this.results.passed.push('Build');
@@ -127,7 +127,7 @@ class FocusedValidator {
    */
   async runProductionTests() {
     console.log('\n🚀 Running Production Tests...');
-    
+
     try {
       execSync('npm run test:production', { stdio: 'pipe', cwd: this.projectRoot });
       this.results.passed.push('Production Tests');
@@ -143,12 +143,12 @@ class FocusedValidator {
    */
   async validateCodeMapsIntegration() {
     console.log('\n🔧 Validating CodeMaps Integration...');
-    
+
     try {
       // Check if CodeMaps files exist
       const codemapsDir = path.join(this.projectRoot, '.next/codemaps');
       const requiredFiles = ['index.json', 'components.json', 'api-routes.json', 'utilities.json'];
-      
+
       let allFilesExist = true;
       for (const file of requiredFiles) {
         const filePath = path.join(codemapsDir, file);
@@ -176,15 +176,15 @@ class FocusedValidator {
    */
   async validateProductionDeployment() {
     console.log('\n🌐 Validating Production Deployment...');
-    
+
     try {
       // Check if production is accessible
       const { execSync } = require('child_process');
-      const response = execSync('curl -s -o /dev/null -w "%{http_code}" https://airbear.me', { 
-        stdio: 'pipe', 
-        cwd: this.projectRoot 
+      const response = execSync('curl -s -o /dev/null -w "%{http_code}" https://airbear.me', {
+        stdio: 'pipe',
+        cwd: this.projectRoot
       });
-      
+
       if (response.toString().trim() === '200') {
         this.results.passed.push('Production Deployment');
         console.log('✅ Production Deployment validated');

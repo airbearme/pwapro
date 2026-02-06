@@ -77,4 +77,3 @@ export function useAirbearNotifications(airbears: AirbearLocation[]) {
     isSupported: notificationStateRef.current.isSupported,
   }
 }
-

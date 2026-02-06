@@ -2,13 +2,21 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
   workflow_dispatch:
 
 env:
-  NODE_VERSION: '20'
+  NODE_VERSION: "20"
+  NEXT_PUBLIC_SUPABASE_URL: "https://example.supabase.co"
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: "eyJplaceholder"
+  NEXT_PUBLIC_SUPABASE_PWA4_URL: "https://example.supabase.co"
+  NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY: "eyJplaceholder"
+  SUPABASE_PWA4_SERVICE_ROLE_KEY: "eyJplaceholder"
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: "pk_test_placeholder"
+  STRIPE_SECRET_KEY: "sk_test_placeholder"
+  NEXT_PUBLIC_SITE_URL: "https://example.com"
 
 jobs:
   ci:
@@ -22,30 +30,34 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --no-frozen-lockfile
 
       - name: Show versions
         run: |
           node --version
-          npm --version
+          pnpm --version
 
       - name: TypeScript type check
-        run: npm run type-check
+        run: pnpm run type-check
 
       - name: ESLint
-        run: npm run lint
-
-      - name: Validate codemaps
-        run: npm run codemaps:validate
+        run: pnpm run lint
 
       - name: Generate codemaps
-        run: npm run codemaps:generate
+        run: pnpm run codemaps:generate
 
-      - name: Build application
-        run: npm run build
+      - name: Validate codemaps
+        run: pnpm run codemaps:validate
+
+      - name: Build check
+        run: pnpm run build
 
       - name: Upload npm logs (on failure)
         if: failure()

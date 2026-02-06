@@ -9,15 +9,15 @@ echo "========================================================"
 # Array of environment variables to add
 declare -a env_vars=(
     "NEXT_PUBLIC_SUPABASE_PWA4_URL=https://fofmrqgcidfenbevayrg.supabase.co"
-    "NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=... (your Supabase JWT)"
-    "SUPABASE_PWA4_SERVICE_ROLE_KEY=... (your Supabase JWT)"
-    "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_51RzDHKKPp8gF577PnHEhuO3X7zbzdTe2c25Z02PlMcc5DXAjs4odL16Rtx8cJ8evlUrRAcJYHrR7tFS8P7y4SC7t00lvh2rk7h"
+    "NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=... (your Supabase anon key)"
+    "SUPABASE_PWA4_SERVICE_ROLE_KEY=... (your Supabase service role key)"
+    "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_... (your Stripe publishable key)"
     "STRIPE_SECRET_KEY=sk_live_... (your Stripe secret key)"
     "STRIPE_WEBHOOK_SECRET=whsec_... (your Stripe webhook secret)"
     "SUPABASE_URL=https://fofmrqgcidfenbevayrg.supabase.co"
-    "SUPABASE_SERVICE_ROLE_KEY=... (your Supabase JWT)"
+    "SUPABASE_SERVICE_ROLE_KEY=... (your Supabase service role key)"
     "VITE_SUPABASE_URL=https://fofmrqgcidfenbevayrg.supabase.co"
-    "VITE_SUPABASE_ANON_KEY=... (your Supabase JWT)"
+    "VITE_SUPABASE_ANON_KEY=... (your Supabase anon key)"
     "NEXT_PUBLIC_SITE_URL=https://airbear.me"
 )
 
@@ -45,13 +45,3 @@ echo ""
 echo "Next steps:"
 echo "1. Deploy to production: vercel --prod"
 echo "2. Test the live site: curl https://airbear.me/api/health"
-echo ""
-echo "Expected health check response:"
-echo '{'
-echo '  "status": "healthy",'
-echo '  "checks": {'
-echo '    "environment": {"status": "healthy"},'
-echo '    "supabase": {"status": "healthy"},'
-echo '    "stripe": {"status": "healthy"}'
-echo '  }'
-echo '}'

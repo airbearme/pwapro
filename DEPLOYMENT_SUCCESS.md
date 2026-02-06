@@ -3,14 +3,12 @@
 ## 🎉 Your AirBear PWA is now LIVE!
 
 **Deployment URLs:**
-
 - **Production**: https://airbear-k8xsluc8b-airbearmes-projects.vercel.app
 - **Aliased**: https://airbear-pwa.vercel.app
 
 ## 🌙 Dark Mode: PERMANENTLY ENABLED ✅
 
 Dark mode is configured and active:
-
 - `defaultTheme="dark"` ✅
 - `enableSystem={false}` ✅
 - All users will see dark mode by default
@@ -31,7 +29,6 @@ Dark mode is configured and active:
 In your IONOS domain settings for `airbear.me`:
 
 **Option 1: CNAME (Recommended)**
-
 ```
 Type: CNAME
 Name: @ (or leave blank)
@@ -40,7 +37,6 @@ TTL: 3600
 ```
 
 **Option 2: A Record (If CNAME not supported)**
-
 ```
 Type: A
 Name: @
@@ -49,7 +45,6 @@ TTL: 3600
 ```
 
 **For www subdomain:**
-
 ```
 Type: CNAME
 Name: www
@@ -76,19 +71,16 @@ TTL: 3600
 Make sure these are set in **Vercel Dashboard**:
 
 **Supabase:**
-
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
 
 **Stripe:**
-
 - `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
 - `STRIPE_SECRET_KEY`
 - `STRIPE_WEBHOOK_SECRET`
 
 **Site:**
-
 - `NEXT_PUBLIC_SITE_URL=https://airbear.me`
 - `NODE_ENV=production`
 
@@ -113,7 +105,6 @@ Make sure these are set in **Vercel Dashboard**:
 Visit: **https://airbear-pwa.vercel.app**
 
 Once DNS propagates (24-48 hours), it will also be available at:
-
 - **https://airbear.me**
 - **https://www.airbear.me**
 

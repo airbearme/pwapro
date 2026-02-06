@@ -47,7 +47,7 @@ export default function LoginPage() {
       if (error) {
         console.error("Google OAuth error:", error);
         setError(
-          error.message || "Failed to sign in with Google. Please try again.",
+          error.message || "Failed to sign in with Google. Please try again."
         );
         setLoading(false);
       } else if (data?.url) {
@@ -76,7 +76,7 @@ export default function LoginPage() {
       if (error) {
         console.error("Apple OAuth error:", error);
         setError(
-          error.message || "Failed to sign in with Apple. Please try again.",
+          error.message || "Failed to sign in with Apple. Please try again."
         );
         setLoading(false);
       } else if (data?.url) {

@@ -5,19 +5,16 @@
 ## Quick Start
 
 ### Run Ultimate Validation
-
 ```bash
 npm run test:validate
 ```
 
 OR use the Claude command:
-
 ```
 /validate
 ```
 
 This runs **comprehensive validation** covering:
-
 - ✅ Linting & Type Checking
 - ✅ Build Verification
 - ✅ Unit & Integration Tests
@@ -33,19 +30,16 @@ This runs **comprehensive validation** covering:
 ## What Gets Tested
 
 ### Phase 1: Code Quality
-
 - ESLint validation
 - TypeScript type checking
 - Code formatting
 
 ### Phase 2: Build
-
 - Next.js compilation
 - Build output verification
 - Bundle size analysis
 
 ### Phase 3: Unit & Integration Tests
-
 - Component tests
 - Utility function tests
 - API route tests
@@ -123,7 +117,6 @@ This runs **comprehensive validation** covering:
 ### Phase 6: Database Operations
 
 **Complete Database Testing:**
-
 - Connection validation
 - Schema verification
 - Table existence checks
@@ -134,7 +127,6 @@ This runs **comprehensive validation** covering:
 ### Phase 7: API Endpoints
 
 **All API Routes Tested:**
-
 - `/api/health` - Health check
 - `/api/stripe/create-payment-intent` - Payment creation
 - `/api/stripe/checkout` - Checkout session
@@ -145,7 +137,6 @@ This runs **comprehensive validation** covering:
 ### Phase 8: PWA Features
 
 **PWA Validation:**
-
 - Manifest.json structure
 - Service worker functionality
 - Offline capabilities
@@ -155,7 +146,6 @@ This runs **comprehensive validation** covering:
 ### Phase 9: Error Handling
 
 **Error System Testing:**
-
 - Error logger functionality
 - User consent management
 - Error boundary components
@@ -165,7 +155,6 @@ This runs **comprehensive validation** covering:
 ### Phase 10: Performance & Quality
 
 **Quality Metrics:**
-
 - Lighthouse performance scores
 - Bundle size validation
 - Security headers
@@ -195,7 +184,6 @@ The validation runs **40+ individual tests** covering:
 ## Complete User Workflows Tested
 
 ### Workflow 1: New User Journey
-
 ```
 1. User visits homepage
 2. User sees mascot and special effects
@@ -214,7 +202,6 @@ The validation runs **40+ individual tests** covering:
 ```
 
 ### Workflow 2: Returning User Journey
-
 ```
 1. User logs in with Apple OAuth
 2. User navigates to map
@@ -230,7 +217,6 @@ The validation runs **40+ individual tests** covering:
 ```
 
 ### Workflow 3: Mobile Bodega Shopping
-
 ```
 1. User browses products page
 2. User adds items to cart
@@ -242,7 +228,6 @@ The validation runs **40+ individual tests** covering:
 ```
 
 ### Workflow 4: CEO T-Shirt Purchase
-
 ```
 1. User clicks "CEO T-Shirt $100"
 2. User views promo details
@@ -256,7 +241,6 @@ The validation runs **40+ individual tests** covering:
 ## External Integration Testing
 
 ### Google OAuth Flow
-
 - ✅ OAuth button renders
 - ✅ Redirect URL configured
 - ✅ Token exchange works
@@ -264,7 +248,6 @@ The validation runs **40+ individual tests** covering:
 - ✅ Session established
 
 ### Apple OAuth Flow
-
 - ✅ OAuth button renders
 - ✅ Redirect URL configured
 - ✅ Token exchange works
@@ -272,7 +255,6 @@ The validation runs **40+ individual tests** covering:
 - ✅ Session established
 
 ### Stripe Payment Flow
-
 - ✅ Payment intent created
 - ✅ Google Pay available
 - ✅ Apple Pay available
@@ -282,7 +264,6 @@ The validation runs **40+ individual tests** covering:
 - ✅ Order fulfilled
 
 ### Supabase Real-time Flow
-
 - ✅ Database connected
 - ✅ Subscription established
 - ✅ Location updates received
@@ -303,7 +284,6 @@ The validation runs **40+ individual tests** covering:
 **If `/validate` passes, your app works.**
 
 The validation is so comprehensive that:
-
 - ✅ Every user workflow is tested
 - ✅ Every external integration is verified
 - ✅ Every API endpoint is hit
@@ -316,13 +296,11 @@ The validation is so comprehensive that:
 ## Usage
 
 ### Run All Validation
-
 ```bash
 npm run test:validate
 ```
 
 ### Run Individual Workflows
-
 ```bash
 npm run test:workflows          # Complete workflow tests
 npm run test:comprehensive-e2e  # Comprehensive E2E tests
@@ -330,7 +308,6 @@ npm run test:e2e                # Playwright tests
 ```
 
 ### Run Specific Categories
-
 ```bash
 npm run test:unit               # Unit tests
 npm run test:integration        # Integration tests
@@ -343,7 +320,6 @@ npm run test:pwa                # PWA tests
 ## CI/CD Integration
 
 The validation runs automatically in GitHub Actions:
-
 - On every push
 - On every PR
 - Scheduled (every 6 hours)
@@ -355,7 +331,6 @@ See `.github/workflows/test-comprehensive.yml`
 **If validation passes, deploy with confidence.**
 
 The E2E testing is comprehensive enough that:
-
 - ✅ Real user workflows are tested
 - ✅ External integrations are verified
 - ✅ Complete journeys are simulated

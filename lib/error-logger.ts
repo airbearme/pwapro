@@ -70,7 +70,7 @@ class ErrorLogger {
       const consent = window.confirm(
         "AirBear would like to collect error logs to improve the app. " +
           "This helps us fix bugs faster. No personal information is shared. " +
-          "Do you consent to error logging?",
+          "Do you consent to error logging?"
       );
 
       this.setConsent(consent).then(() => resolve(consent));
@@ -97,7 +97,7 @@ class ErrorLogger {
             ...consentData,
             user_id: user.id,
           },
-          { onConflict: "user_id" },
+          { onConflict: "user_id" }
         );
 
         if (error) throw error;
@@ -111,7 +111,7 @@ class ErrorLogger {
       // Store in localStorage as fallback
       localStorage.setItem(
         "error_logging_consent",
-        JSON.stringify(this.consentState),
+        JSON.stringify(this.consentState)
       );
     } catch (error) {
       console.error("Failed to save consent:", error);
@@ -185,8 +185,7 @@ class ErrorLogger {
       }
 
       // Get user agent
-      const userAgent =
-        typeof navigator !== "undefined" ? navigator.userAgent : "";
+      const userAgent = typeof navigator !== "undefined" ? navigator.userAgent : "";
 
       const logEntry = {
         user_id: user?.id || null,
@@ -213,11 +212,7 @@ class ErrorLogger {
     }
   }
 
-  async logPerformance(
-    metricName: string,
-    value: number,
-    metadata?: Record<string, any>,
-  ) {
+  async logPerformance(metricName: string, value: number, metadata?: Record<string, any>) {
     try {
       const hasConsent = await this.hasConsent();
       if (!hasConsent) return;

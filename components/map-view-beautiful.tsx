@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, memo, useMemo } from "react";
 import type { AirbearLocation } from "@/lib/supabase/realtime";
 import type { Database } from "@/lib/types/database";
 
@@ -12,7 +12,7 @@ interface MapViewProps {
   onSpotSelect?: (spot: Spot) => void;
 }
 
-export default function MapView({
+const MapView = memo(function MapView({
   spots,
   airbears,
   onSpotSelect,
@@ -25,6 +25,20 @@ export default function MapView({
   const onSpotSelectRef = useRef(onSpotSelect);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [mapError, setMapError] = useState<string | null>(null);
+
+  // ⚡ Bolt: Pre-calculate airbear counts per spot to improve performance from O(N*M) to O(N+M)
+  const airbearCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    airbears.forEach((airbear) => {
+      if (airbear.current_spot_id && airbear.is_available) {
+        counts.set(
+          airbear.current_spot_id,
+          (counts.get(airbear.current_spot_id) || 0) + 1
+        );
+      }
+    });
+    return counts;
+  }, [airbears]);
 
   useEffect(() => {
     spotsRef.current = spots;
@@ -181,20 +195,20 @@ export default function MapView({
     const map = mapInstanceRef.current;
     const L = LeafletRef.current;
 
-    // Remove old spot markers
+    // ⚡ Bolt: Synchronize spot markers instead of recreating them
+    const currentSpotIds = new Set(spots.map((s) => `spot-${s.id}`));
     markersRef.current.forEach((marker, id) => {
-      if (id.startsWith("spot-")) {
+      if (id.startsWith("spot-") && !currentSpotIds.has(id)) {
         marker.remove();
         markersRef.current.delete(id);
       }
     });
 
-    // Add spot markers with beautiful styling
+    // Add or update spot markers
     spots.forEach((spot) => {
-      const airbearsAtSpot = airbears.filter(
-        (a) => a.current_spot_id === spot.id && a.is_available
-      );
-      const hasAvailableAirbears = airbearsAtSpot.length > 0;
+      const markerId = `spot-${spot.id}`;
+      const count = airbearCounts.get(spot.id) || 0;
+      const hasAvailableAirbears = count > 0;
 
       const icon = L.divIcon({
         html: `
@@ -221,13 +235,9 @@ export default function MapView({
               justify-content: center;
               font-size: 28px;
               transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-              animation: ${
-                hasAvailableAirbears
-                  ? "pulse-glow 2s ease-in-out infinite"
-                  : "none"
-              };
               overflow: hidden;
             " 
+            class="${hasAvailableAirbears ? "map-marker-pulse-glow" : ""}"
             onmouseover="this.style.transform='scale(1.15)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.4), 0 0 0 5px ${
               hasAvailableAirbears
                 ? "rgba(16, 185, 129, 0.5)"
@@ -259,36 +269,17 @@ export default function MapView({
                 font-weight: bold;
                 border: 4px solid white;
                 box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
-                animation: pulse 1.5s ease-in-out infinite;
-              "><img src="/airbear-mascot.png" style="width: 16px; height: 16px; border-radius: 50%; object-fit: cover;" alt="AirBear" /></div>
+              " class="map-marker-pulse"><img src="/airbear-mascot.png" style="width: 16px; height: 16px; border-radius: 50%; object-fit: cover;" alt="AirBear" /></div>
             `
                 : ""
             }
           </div>
-          <style>
-            @keyframes pulse {
-              0%, 100% { transform: scale(1); opacity: 1; }
-              50% { transform: scale(1.1); opacity: 0.9; }
-            }
-            @keyframes pulse-glow {
-              0%, 100% { 
-                box-shadow: 0 6px 20px rgba(0,0,0,0.3), 0 0 0 3px rgba(16, 185, 129, 0.3), 0 0 20px rgba(16, 185, 129, 0.4);
-              }
-              50% { 
-                box-shadow: 0 6px 20px rgba(0,0,0,0.3), 0 0 0 5px rgba(16, 185, 129, 0.6), 0 0 30px rgba(16, 185, 129, 0.8);
-              }
-            }
-          </style>
         `,
         className: "bg-transparent border-0",
         iconSize: [56, 56],
         iconAnchor: [28, 56],
         popupAnchor: [0, -56],
       });
-
-      const marker = L.marker([spot.latitude, spot.longitude], { icon }).addTo(
-        map
-      );
 
       const popupContent = `
         <div style="min-width: 240px; padding: 12px; font-family: system-ui, -apple-system, sans-serif;">
@@ -311,13 +302,11 @@ export default function MapView({
               hasAvailableAirbears ? "#10b981" : "#9ca3af"
             }; border-radius: 50%; box-shadow: 0 0 12px ${
         hasAvailableAirbears ? "#10b981" : "#9ca3af"
-      }; animation: ${
-        hasAvailableAirbears ? "pulse 2s ease-in-out infinite" : "none"
-      };"></div>
+      };" class="${hasAvailableAirbears ? "map-marker-pulse" : ""}"></div>
             <span style="font-weight: 700; color: ${
               hasAvailableAirbears ? "#047857" : "#4b5563"
-            }; font-size: 15px;">${airbearsAtSpot.length} AirBear${
-        airbearsAtSpot.length !== 1 ? "s" : ""
+            }; font-size: 15px;">${count} AirBear${
+        count !== 1 ? "s" : ""
       } available</span>
           </div>
           ${
@@ -360,21 +349,25 @@ export default function MapView({
         </div>
       `;
 
-      marker.bindPopup(popupContent + bookingButton, {
-        maxWidth: 300,
-        className: "beautiful-popup",
-      });
-
-      // Setup click handler for booking
-      marker.on("click", () => {
-        if (onSpotSelect) {
-          onSpotSelect(spot);
-        }
-      });
-
-      markersRef.current.set(`spot-${spot.id}`, marker);
+      let marker = markersRef.current.get(markerId);
+      if (marker) {
+        marker.setIcon(icon);
+        marker.setPopupContent(popupContent + bookingButton);
+      } else {
+        marker = L.marker([spot.latitude, spot.longitude], { icon }).addTo(map);
+        marker.bindPopup(popupContent + bookingButton, {
+          maxWidth: 300,
+          className: "beautiful-popup",
+        });
+        marker.on("click", () => {
+          if (onSpotSelectRef.current) {
+            onSpotSelectRef.current(spot);
+          }
+        });
+        markersRef.current.set(markerId, marker);
+      }
     });
-  }, [spots, airbears, onSpotSelect, mapLoaded]);
+  }, [spots, airbearCounts, mapLoaded]);
 
   useEffect(() => {
     if (!mapInstanceRef.current || !LeafletRef.current || !mapLoaded) return;
@@ -409,13 +402,9 @@ export default function MapView({
               align-items: center;
               justify-content: center;
               font-size: 24px;
-              animation: ${
-                airbear.is_available
-                  ? "pulse-glow 2s ease-in-out infinite"
-                  : "none"
-              };
               transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             " 
+            class="${airbear.is_available ? "map-marker-pulse-glow" : ""}"
             onmouseover="this.style.transform='scale(1.2)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.4), 0 0 0 6px ${
               airbear.is_available
                 ? "rgba(16, 185, 129, 0.4)"
@@ -445,26 +434,11 @@ export default function MapView({
                 justify-content: center;
                 font-size: 12px;
                 box-shadow: 0 4px 12px rgba(251, 191, 36, 0.6);
-                animation: pulse 1.5s ease-in-out infinite;
-              ">⚡</div>
+              " class="map-marker-pulse">⚡</div>
             `
                 : ""
             }
           </div>
-          <style>
-            @keyframes pulse {
-              0%, 100% { transform: scale(1); opacity: 1; }
-              50% { transform: scale(1.15); opacity: 0.9; }
-            }
-            @keyframes pulse-glow {
-              0%, 100% { 
-                box-shadow: 0 6px 18px rgba(0,0,0,0.35), 0 0 0 4px rgba(16, 185, 129, 0.25), 0 0 20px rgba(16, 185, 129, 0.4);
-              }
-              50% { 
-                box-shadow: 0 6px 18px rgba(0,0,0,0.35), 0 0 0 6px rgba(16, 185, 129, 0.5), 0 0 30px rgba(16, 185, 129, 0.8);
-              }
-            }
-          </style>
         `,
         className: "bg-transparent border-0",
         iconSize: [48, 48],
@@ -584,4 +558,6 @@ export default function MapView({
       )}
     </div>
   );
-}
+});
+
+export default MapView;

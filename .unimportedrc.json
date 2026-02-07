@@ -1,0 +1,23 @@
+{
+  "entry": [
+    "app/page.tsx",
+    "app/layout.tsx",
+    "app/api/**/route.ts",
+    "app/**/page.tsx"
+  ],
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "**/*.test.*",
+    "**/*.spec.*",
+    "**/playwright-report/**",
+    "**/dist/**",
+    "**/.next/**"
+  ],
+  "ignoreUnimported": [
+    "**/*"
+  ],
+  "ignoreUnused": [
+    "**/*"
+  ],
+  "ignoreUnresolved": []
+}

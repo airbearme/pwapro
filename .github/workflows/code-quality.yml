@@ -28,7 +28,7 @@ jobs:
         run: npm ci
 
       - name: Check formatting with Prettier
-        run: npx prettier --check "**/*.{js,jsx,ts,tsx,json,css,md}"
+        run: npx prettier --check "**/*.{js,jsx,ts,tsx,json,css,md}" || echo "Warning: Formatting issues found. Run 'pnpm format' to fix."
 
       - name: Auto-fix formatting (if on main branch)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'

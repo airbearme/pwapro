@@ -129,13 +129,23 @@ export default function MapPage() {
                   size="sm"
                   onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
                   className="glass-morphism hover-lift"
-                  aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+                  aria-label={
+                    theme === "dark"
+                      ? "Switch to light mode"
+                      : "Switch to dark mode"
+                  }
                 >
-                  {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                  {theme === "dark" ? (
+                    <Sun className="h-4 w-4" />
+                  ) : (
+                    <Moon className="h-4 w-4" />
+                  )}
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                {theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
+                {theme === "dark"
+                  ? "Switch to Light Mode"
+                  : "Switch to Dark Mode"}
               </TooltipContent>
             </Tooltip>
           </div>
@@ -190,7 +200,7 @@ export default function MapPage() {
                   {airbears.length > 0
                     ? Math.round(
                         airbears.reduce((sum, a) => sum + a.battery_level, 0) /
-                          airbears.length
+                          airbears.length,
                       )
                     : 0}
                   %

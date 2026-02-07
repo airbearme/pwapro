@@ -76,7 +76,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run ESLint with auto-fix
-        run: pnpm run lint -- --fix
+        run: pnpm run lint --fix
 
       - name: Commit auto-fixes (if on main branch)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -135,7 +135,7 @@ jobs:
 
       - name: Sort imports
         run: |
-          pnpm exec eslint --fix --ext .ts,.tsx,.js,.jsx --rule 'import/order: error'
+          pnpm exec eslint . --fix --rule 'import/order: error'
 
       - name: Commit import sorting (if on main branch)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'

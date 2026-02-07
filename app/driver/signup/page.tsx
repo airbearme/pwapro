@@ -19,7 +19,6 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { getSupabaseClient } from "@/lib/supabase/client";
 
-
 export default function DriverSignupPage() {
   const { user } = useAuthContext();
   const router = useRouter();

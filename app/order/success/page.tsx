@@ -8,7 +8,6 @@ import { useEffect, useState, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-
 function OrderSuccessPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();

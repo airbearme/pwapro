@@ -25,7 +25,6 @@ import {
 } from "@/components/ui/card";
 import { getSupabaseClient } from "@/lib/supabase/client";
 
-
 interface Ride {
   id: string;
   pickup_spot_id: string;

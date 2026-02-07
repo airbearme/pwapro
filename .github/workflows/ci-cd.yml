@@ -2,13 +2,15 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
   workflow_dispatch:
 
 env:
-  NODE_VERSION: '20'
+  NODE_VERSION: "20"
+  NEXT_PUBLIC_SUPABASE_URL: "https://placeholder.supabase.co"
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: "eyJplaceholder"
 
 jobs:
   ci:
@@ -22,7 +24,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -38,11 +40,11 @@ jobs:
       - name: ESLint
         run: npm run lint
 
-      - name: Validate codemaps
-        run: npm run codemaps:validate
-
       - name: Generate codemaps
         run: npm run codemaps:generate
+
+      - name: Validate codemaps
+        run: npm run codemaps:validate
 
       - name: Build application
         run: npm run build

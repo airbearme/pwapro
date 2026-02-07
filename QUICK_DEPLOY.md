@@ -36,11 +36,13 @@ vercel --prod
 ## 2. Add Custom Domain (2 minutes)
 
 In Vercel Dashboard:
+
 1. Go to **Settings → Domains**
 2. Add domain: `airbear.me`
 3. Add domain: `www.airbear.me`
 
 Update DNS records:
+
 ```
 A Record:    @ → 76.76.21.21
 CNAME:      www → cname.vercel-dns.com
@@ -51,6 +53,7 @@ CNAME:      www → cname.vercel-dns.com
 In Vercel Dashboard → Settings → Environment Variables:
 
 ### Supabase (PWA4 Instance)
+
 ```bash
 NEXT_PUBLIC_SUPABASE_PWA4_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=your-anon-key
@@ -58,6 +61,7 @@ SUPABASE_PWA4_SERVICE_ROLE_KEY=your-service-role-key
 ```
 
 ### Stripe
+
 ```bash
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...
 STRIPE_SECRET_KEY=sk_live_...
@@ -65,6 +69,7 @@ STRIPE_WEBHOOK_SECRET=whsec_... (get after setting up webhook)
 ```
 
 ### Site Configuration
+
 ```bash
 NEXT_PUBLIC_SITE_URL=https://airbear.me
 NODE_ENV=production
@@ -119,6 +124,7 @@ npx supabase db push
 The GitHub Actions workflow is already configured!
 
 Add these secrets to GitHub:
+
 1. Go to GitHub → Settings → Secrets and variables → Actions
 2. Add secrets:
    - `VERCEL_TOKEN` (from Vercel account settings)
@@ -136,6 +142,7 @@ chmod +x scripts/verify-production.sh
 ```
 
 Or manually check:
+
 - [ ] Visit https://airbear.me
 - [ ] Check health: https://airbear.me/api/health
 - [ ] View map: https://airbear.me/map
@@ -146,6 +153,7 @@ Or manually check:
 Your AirBear PWA is now running at **https://airbear.me**
 
 ### What's Working:
+
 - ✅ Real-time driver tracking on map
 - ✅ One-click OAuth (Google + Apple)
 - ✅ Secure Stripe payments (Apple Pay + Google Pay)
@@ -154,12 +162,14 @@ Your AirBear PWA is now running at **https://airbear.me**
 - ✅ Automatic deployments from GitHub
 
 ### Monitor Your App:
+
 - **Vercel Analytics**: vercel.com/dashboard
 - **Supabase Logs**: supabase.com/dashboard
 - **Stripe Dashboard**: dashboard.stripe.com
 - **Health Check**: https://airbear.me/api/health
 
 ### Need Help?
+
 - Check logs in Vercel Dashboard
 - Review Supabase Auth logs
 - Test Stripe webhooks in test mode first

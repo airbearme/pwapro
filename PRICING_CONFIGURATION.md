@@ -3,20 +3,23 @@
 ## Current Pricing Structure
 
 ### Standard Rides: **$4.00 Flat Rate**
+
 - All rides between the 16 GPS spots cost $4.00
 - No distance-based pricing
 - Simple, predictable pricing for customers
 
 ### Implementation
+
 Located in: `client/src/lib/spots.ts`
 
 \`\`\`typescript
 export const estimateRideFare = (distance: number): number => {
-  return 4.00; // Flat rate for all standard rides
+return 4.00; // Flat rate for all standard rides
 };
 \`\`\`
 
 ### The 16 Standard Spots
+
 1. Court Street Downtown
 2. Riverwalk BU Center
 3. Confluence Park
@@ -40,7 +43,7 @@ For rides outside the 16 standard spots, you can:
 
 1. **Add More Spots to Database:**
    \`\`\`sql
-   INSERT INTO public.spots (id, name, latitude, longitude, description, amenities, is_active) 
+   INSERT INTO public.spots (id, name, latitude, longitude, description, amenities, is_active)
    VALUES ('custom-location', 'Custom Location Name', 42.123456, -75.123456, 'Description', ARRAY['Amenity1'], true);
    \`\`\`
 
@@ -55,11 +58,11 @@ Modify `estimateRideFare` function:
 
 \`\`\`typescript
 export const estimateRideFare = (distance: number, isCustomRide?: boolean): number => {
-  if (isCustomRide) {
-    // Custom ride pricing (example: $2 base + $1 per km)
-    return 2.00 + (distance * 1.00);
-  }
-  return 4.00; // Standard flat rate
+if (isCustomRide) {
+// Custom ride pricing (example: $2 base + $1 per km)
+return 2.00 + (distance \* 1.00);
+}
+return 4.00; // Standard flat rate
 };
 \`\`\`
 
@@ -83,24 +86,27 @@ export const estimateRideFare = (distance: number, isCustomRide?: boolean): numb
 Consider these pricing strategies:
 
 ### 1. **Time-Based Surge Pricing**
+
 \`\`\`typescript
 const getSurgePricing = (hour: number): number => {
-  if (hour >= 17 && hour <= 19) return 1.5; // Rush hour
-  if (hour >= 22 || hour <= 6) return 1.25; // Late night
-  return 1.0; // Normal
+if (hour >= 17 && hour <= 19) return 1.5; // Rush hour
+if (hour >= 22 || hour <= 6) return 1.25; // Late night
+return 1.0; // Normal
 };
 \`\`\`
 
 ### 2. **Membership Discounts**
+
 \`\`\`typescript
 const applyMembershipDiscount = (basePrice: number, userRole: string): number => {
-  if (userRole === 'premium') return basePrice * 0.8; // 20% off
-  if (userRole === 'student') return basePrice * 0.9; // 10% off
-  return basePrice;
+if (userRole === 'premium') return basePrice _ 0.8; // 20% off
+if (userRole === 'student') return basePrice _ 0.9; // 10% off
+return basePrice;
 };
 \`\`\`
 
 ### 3. **Multi-Ride Packages**
+
 - 5 rides: $18 ($3.60 per ride)
 - 10 rides: $35 ($3.50 per ride)
 - Monthly unlimited: $100
@@ -117,6 +123,7 @@ For your current setup:
 ## Testing
 
 To test pricing:
+
 1. Go to https://airbear.me/map
 2. Select any two spots
 3. Click "Book Ride"

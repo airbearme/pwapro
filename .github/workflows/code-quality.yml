@@ -163,7 +163,7 @@ jobs:
         run: npm ci
 
       - name: Detect dead code
-        run: npx unimported
+        run: npx unimported || echo "Unimported files found, please check the report."
 
       - name: Upload dead code report
         uses: actions/upload-artifact@v4

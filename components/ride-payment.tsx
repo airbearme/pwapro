@@ -1,12 +1,26 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
-import { MapPin, Clock, DollarSign, CreditCard, Smartphone, QrCode, Banknote } from "lucide-react";
+import {
+  MapPin,
+  Clock,
+  DollarSign,
+  CreditCard,
+  Smartphone,
+  QrCode,
+  Banknote,
+} from "lucide-react";
 
 interface RidePaymentProps {
   ride: {
@@ -31,7 +45,9 @@ export function RidePayment({
   estimatedArrival,
   onPaymentComplete,
 }: RidePaymentProps) {
-  const [paymentMethod, setPaymentMethod] = useState<"card" | "digital" | "cash">("card");
+  const [paymentMethod, setPaymentMethod] = useState<
+    "card" | "digital" | "cash"
+  >("card");
   const [processing, setProcessing] = useState(false);
   const { toast } = useToast();
 
@@ -45,7 +61,7 @@ export function RidePayment({
         pickupSpot: pickupSpot.name,
         destinationSpot: destinationSpot.name,
       });
-      
+
       // This will be handled by redirecting to checkout page
       window.location.href = `/checkout?${params.toString()}`;
     } catch (error) {
@@ -65,9 +81,9 @@ export function RidePayment({
     try {
       // Update ride status to confirmed for cash payment
       const response = await fetch(`/api/rides/${ride.id}/confirm`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ paymentMethod: 'cash' })
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ paymentMethod: "cash" }),
       });
 
       if (response.ok) {
@@ -113,9 +129,9 @@ export function RidePayment({
                 <p className="font-medium text-sm">{pickupSpot.name}</p>
               </div>
             </div>
-            
+
             <div className="border-l-2 border-dashed border-muted-foreground ml-1.5 h-4" />
-            
+
             <div className="flex items-start space-x-3">
               <div className="w-3 h-3 rounded-full bg-red-500 mt-1 flex-shrink-0" />
               <div className="flex-1">
@@ -133,7 +149,9 @@ export function RidePayment({
               <span>$4.00</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Distance ({ride.distance.toFixed(1)} km)</span>
+              <span className="text-muted-foreground">
+                Distance ({ride.distance.toFixed(1)} km)
+              </span>
               <span>Included</span>
             </div>
             <Separator />
@@ -175,7 +193,9 @@ export function RidePayment({
               <CreditCard className="mr-3 h-5 w-5" />
               <div className="text-left">
                 <div className="font-medium">Credit/Debit Card</div>
-                <div className="text-xs text-muted-foreground">Visa, Mastercard, etc.</div>
+                <div className="text-xs text-muted-foreground">
+                  Visa, Mastercard, etc.
+                </div>
               </div>
             </Button>
 
@@ -188,7 +208,9 @@ export function RidePayment({
               <Smartphone className="mr-3 h-5 w-5" />
               <div className="text-left">
                 <div className="font-medium">Digital Wallet</div>
-                <div className="text-xs text-muted-foreground">Apple Pay, Google Pay</div>
+                <div className="text-xs text-muted-foreground">
+                  Apple Pay, Google Pay
+                </div>
               </div>
             </Button>
 
@@ -201,7 +223,9 @@ export function RidePayment({
               <Banknote className="mr-3 h-5 w-5" />
               <div className="text-left">
                 <div className="font-medium">Pay Cash</div>
-                <div className="text-xs text-muted-foreground">Pay driver directly</div>
+                <div className="text-xs text-muted-foreground">
+                  Pay driver directly
+                </div>
               </div>
             </Button>
           </div>
@@ -209,8 +233,8 @@ export function RidePayment({
           {/* Payment Action */}
           <div className="pt-4 border-t">
             {paymentMethod === "card" && (
-              <Button 
-                onClick={handleCardPayment} 
+              <Button
+                onClick={handleCardPayment}
                 disabled={processing}
                 className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 h-12 text-lg"
               >
@@ -229,8 +253,8 @@ export function RidePayment({
             )}
 
             {paymentMethod === "digital" && (
-              <Button 
-                onClick={handleCardPayment} 
+              <Button
+                onClick={handleCardPayment}
                 disabled={processing}
                 className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 h-12 text-lg"
               >
@@ -249,8 +273,8 @@ export function RidePayment({
             )}
 
             {paymentMethod === "cash" && (
-              <Button 
-                onClick={handleCashPayment} 
+              <Button
+                onClick={handleCashPayment}
                 disabled={processing}
                 className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 h-12 text-lg"
               >

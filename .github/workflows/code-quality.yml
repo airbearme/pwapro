@@ -8,6 +8,8 @@ on:
 
 env:
   NODE_VERSION: '20'
+  NEXT_PUBLIC_SUPABASE_URL: 'https://placeholder.supabase.co'
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder.placeholder'
 
 jobs:
   # Code Formatting
@@ -135,15 +137,6 @@ jobs:
 
       - name: Run codemaps analysis
         run: npm run codemaps:analyze
-
-      - name: Bundle analyzer
-        run: npx webpack-bundle-analyzer --mode static
-
-      - name: Upload bundle analysis
-        uses: actions/upload-artifact@v4
-        with:
-          name: bundle-analysis
-          path: bundle-analyzer-report.html
 
   # Dead Code Detection
   dead-code:

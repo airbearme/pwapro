@@ -28,7 +28,6 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { getSupabaseClient } from "@/lib/supabase/client";
 
-
 interface Ride {
   id: string;
   user_id: string;

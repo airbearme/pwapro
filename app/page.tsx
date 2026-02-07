@@ -16,8 +16,6 @@ import React, { useMemo } from "react";
 import AirbearWheel from "@/components/airbear-wheel";
 import { Button } from "@/components/ui/button";
 
-
-
 export default function HomePage() {
   // ⚡ Bolt: Memoize particle effects to prevent re-calculation on every render.
   // These are static visual elements, so they only need to be computed once.

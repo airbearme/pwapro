@@ -2,23 +2,23 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
   workflow_dispatch:
 
 env:
-  NODE_VERSION: '20'
-  NEXT_PUBLIC_SUPABASE_URL: 'https://placeholder.supabase.co'
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder.placeholder'
-  NEXT_PUBLIC_SUPABASE_PWA4_URL: 'https://placeholder.supabase.co'
-  NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder.placeholder'
-  SUPABASE_PWA4_SERVICE_ROLE_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder.placeholder'
-  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: 'pk_test_placeholder'
-  STRIPE_SECRET_KEY: 'sk_test_placeholder'
-  STRIPE_WEBHOOK_SECRET: 'whsec_placeholder'
-  NEXT_PUBLIC_SITE_URL: 'https://airbear.me'
-  NODE_ENV: 'production'
+  NODE_VERSION: "20"
+  NEXT_PUBLIC_SUPABASE_URL: "https://placeholder.supabase.co"
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder.placeholder"
+  NEXT_PUBLIC_SUPABASE_PWA4_URL: "https://placeholder.supabase.co"
+  NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder.placeholder"
+  SUPABASE_PWA4_SERVICE_ROLE_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder.placeholder"
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: "pk_test_placeholder"
+  STRIPE_SECRET_KEY: "sk_test_placeholder"
+  STRIPE_WEBHOOK_SECRET: "whsec_placeholder"
+  NEXT_PUBLIC_SITE_URL: "https://airbear.me"
+  NODE_ENV: "production"
 
 jobs:
   ci:
@@ -28,40 +28,36 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "pnpm"
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Show versions
         run: |
           node --version
-          npm --version
+          pnpm --version
 
       - name: TypeScript type check
-        run: npm run type-check
+        run: pnpm run type-check
 
       - name: ESLint
-        run: npm run lint
+        run: pnpm run lint
 
       - name: Generate codemaps
-        run: npm run codemaps:generate
+        run: pnpm run codemaps:generate
 
       - name: Validate codemaps
-        run: npm run codemaps:validate
+        run: pnpm run codemaps:validate
 
       - name: Build application
-        run: npm run build
-
-      - name: Upload npm logs (on failure)
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: npm-logs
-          path: |
-            npm-debug.log
-            ~/.npm/_logs
+        run: pnpm run build

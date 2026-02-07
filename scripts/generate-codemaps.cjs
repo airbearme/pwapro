@@ -110,8 +110,8 @@ class CodeMapsGenerator {
 
     try {
       // Build with source maps enabled
-      console.log("🔨 Running: NODE_ENV=production npm run build");
-      execSync("NODE_ENV=production npm run build", {
+      console.log("🔨 Running: NODE_ENV=production ppnpm run build");
+      execSync("NODE_ENV=production ppnpm run build", {
         stdio: "inherit",
         cwd: this.projectRoot,
         env: {

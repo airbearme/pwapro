@@ -1,0 +1,35 @@
+{
+  "entry": [
+    "app/layout.tsx",
+    "app/page.tsx",
+    "app/**/page.tsx",
+    "app/**/route.ts",
+    "proxy.ts",
+    "middleware.ts"
+  ],
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "**/*.tests.{js,jsx,ts,tsx}",
+    "**/*.test.{js,jsx,ts,tsx}",
+    "**/*.spec.{js,jsx,ts,tsx}",
+    "**/tests/**",
+    "**/__tests__/**",
+    "**/*.d.ts",
+    "scripts/**"
+  ],
+  "ignoreUnimported": [],
+  "ignoreUnused": [
+    "next",
+    "react",
+    "react-dom",
+    "@radix-ui/*",
+    "lucide-react",
+    "framer-motion",
+    "tailwindcss-animate",
+    "class-variance-authority",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "ignoreUnresolved": [],
+  "respectGitignore": true
+}

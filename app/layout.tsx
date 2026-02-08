@@ -4,6 +4,7 @@ import { Inter, Space_Grotesk } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { AuthProvider } from "@/components/auth-provider";
 import { ThemeProvider } from "@/components/theme-provider";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import ClientErrorLogger from "@/components/client-error-logger";
 import "leaflet/dist/leaflet.css";
 import "./globals.css";
@@ -104,10 +105,16 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased relative overflow-x-hidden`}>
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-4 focus:left-4 focus:bg-background focus:text-foreground focus:px-4 focus:py-2 focus:border-2 focus:border-emerald-500 focus:rounded-md focus:outline-none shadow-2xl"
+        >
+          Skip to content
+        </a>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
-          enableSystem
+          enableSystem={false}
           disableTransitionOnChange
         >
           <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
@@ -121,7 +128,9 @@ export default function RootLayout({
           <div className="relative z-10 min-h-screen">
             <ClientErrorLogger />
             <AuthProvider>
-              {children}
+              <TooltipProvider>
+                {children}
+              </TooltipProvider>
             </AuthProvider>
           </div>
         </ThemeProvider>

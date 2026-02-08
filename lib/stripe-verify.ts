@@ -8,7 +8,11 @@ import crypto from "crypto";
  * @param secret - The Stripe webhook signing secret (whsec_...)
  * @returns boolean - True if the signature is valid and within the tolerance window
  */
-export function verifyStripe(sig: string, body: string, secret: string): boolean {
+export function verifyStripe(
+  sig: string,
+  body: string,
+  secret: string,
+): boolean {
   try {
     if (!sig || !body || !secret) return false;
 

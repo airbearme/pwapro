@@ -131,9 +131,28 @@ JS
 ###############################################################################
 cat > lib/stripe-verify.ts <<'TS'
 import crypto from "crypto";
-export function verifyStripe(sig:string, body:string, secret:string){
-  const h=crypto.createHmac("sha256",secret).update(body).digest("hex");
-  return sig.includes(h);
+
+export function verifyStripe(sig: string, body: string, secret: string): boolean {
+  try {
+    if (!sig || !body || !secret) return false;
+    const pairs = sig.split(",");
+    const tPair = pairs.find((p) => p.trim().startsWith("t="));
+    const v1Pair = pairs.find((p) => p.trim().startsWith("v1="));
+    if (!tPair || !v1Pair) return false;
+    const t = tPair.split("=")[1];
+    const v1 = v1Pair.split("=")[1];
+    if (!t || !v1) return false;
+    const tolerance = 300;
+    const timestamp = parseInt(t, 10);
+    const now = Math.floor(Date.now() / 1000);
+    if (isNaN(timestamp) || Math.abs(now - timestamp) > tolerance) return false;
+    const signedPayload = `${t}.${body}`;
+    const expectedSignature = crypto.createHmac("sha256", secret).update(signedPayload).digest("hex");
+    const expectedBuffer = Buffer.from(expectedSignature, "hex");
+    const v1Buffer = Buffer.from(v1, "hex");
+    if (expectedBuffer.length !== v1Buffer.length) return false;
+    return crypto.timingSafeEqual(expectedBuffer, v1Buffer);
+  } catch { return false; }
 }
 TS
 

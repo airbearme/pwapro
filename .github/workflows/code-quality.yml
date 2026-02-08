@@ -136,15 +136,6 @@ jobs:
       - name: Run codemaps analysis
         run: npm run codemaps:analyze
 
-      - name: Bundle analyzer
-        run: npx webpack-bundle-analyzer --mode static
-
-      - name: Upload bundle analysis
-        uses: actions/upload-artifact@v4
-        with:
-          name: bundle-analysis
-          path: bundle-analyzer-report.html
-
   # Dead Code Detection
   dead-code:
     name: Dead Code Detection

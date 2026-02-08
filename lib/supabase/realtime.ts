@@ -1,19 +1,21 @@
-import { getSupabaseClient } from "./client"
+import { getSupabaseClient } from "./client";
 
 export interface AirbearLocation {
-  id: string
-  latitude: number
-  longitude: number
-  battery_level: number
-  is_available: boolean
-  is_charging: boolean
-  heading: number
-  current_spot_id: string | null
-  updated_at: string
+  id: string;
+  latitude: number;
+  longitude: number;
+  battery_level: number;
+  is_available: boolean;
+  is_charging: boolean;
+  heading: number;
+  current_spot_id: string | null;
+  updated_at: string;
 }
 
-export function subscribeToAirbearLocations(callback: (payload: AirbearLocation) => void) {
-  const supabase = getSupabaseClient()
+export function subscribeToAirbearLocations(
+  callback: (payload: AirbearLocation) => void,
+) {
+  const supabase = getSupabaseClient();
 
   const channel = supabase
     .channel("airbear-locations", {
@@ -31,19 +33,24 @@ export function subscribeToAirbearLocations(callback: (payload: AirbearLocation)
       },
       (payload: any) => {
         if (payload.new) {
-          callback(payload.new as AirbearLocation)
+          callback(payload.new as AirbearLocation);
         }
       },
     )
-    .subscribe()
+    .subscribe();
 
   return () => {
-    supabase.removeChannel(channel)
-  }
+    supabase.removeChannel(channel);
+  };
 }
 
-export async function updateAirbearLocation(airbearId: string, latitude: number, longitude: number, heading?: number) {
-  const supabase = getSupabaseClient()
+export async function updateAirbearLocation(
+  airbearId: string,
+  latitude: number,
+  longitude: number,
+  heading?: number,
+) {
+  const supabase = getSupabaseClient();
 
   const { data, error } = await supabase
     .from("airbears")
@@ -54,11 +61,11 @@ export async function updateAirbearLocation(airbearId: string, latitude: number,
       updated_at: new Date().toISOString(),
     })
     .eq("id", airbearId)
-    .select()
+    .select();
 
   if (error) {
-    throw error
+    throw error;
   }
 
-  return data
+  return data;
 }

@@ -39,6 +39,11 @@ class CodeMapsValidator {
     console.log("🔍 Validating CodeMaps...\n");
 
     try {
+      // Ensure output directory exists
+      if (!fs.existsSync(this.outputDir)) {
+        fs.mkdirSync(this.outputDir, { recursive: true });
+      }
+
       // Check if output directory exists
       await this.checkOutputDirectory();
 
@@ -414,6 +419,11 @@ class CodeMapsValidator {
    * Generate validation report
    */
   async generateValidationReport() {
+    // Ensure output directory exists
+    if (!fs.existsSync(this.outputDir)) {
+      fs.mkdirSync(this.outputDir, { recursive: true });
+    }
+
     const report = {
       timestamp: new Date().toISOString(),
       project: "airbear-pwa",

@@ -11,10 +11,10 @@ Complete reference for all environment variables used in production.
 NEXT_PUBLIC_SUPABASE_PWA4_URL=https://your-project.supabase.co
 
 # Public Anonymous Key (safe to expose to client)
-NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=... (your Supabase anon key)
+NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 # Service Role Key (KEEP SECRET - server-side only)
-SUPABASE_PWA4_SERVICE_ROLE_KEY=... (your Supabase service role key)
+SUPABASE_PWA4_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 \`\`\`
 
 **Where to find:**

@@ -31,6 +31,11 @@ class AdvancedCodeMapsAnalyzer {
     console.log('🔬 Running Advanced CodeMaps Analysis...\n');
 
     try {
+      // Ensure output directory exists
+      if (!fs.existsSync(this.outputDir)) {
+        fs.mkdirSync(this.outputDir, { recursive: true });
+      }
+
       // Load existing CodeMaps
       await this.loadExistingCodeMaps();
 

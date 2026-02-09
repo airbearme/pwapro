@@ -14,9 +14,9 @@ class AdvancedCodeMapsAnalyzer {
     this.projectRoot = process.cwd();
     this.outputDir = path.join(this.projectRoot, '.next/codemaps');
     this.metrics = {
-      components: {},
-      api: {},
-      utilities: {},
+      components: [],
+      api: [],
+      utilities: [],
       dependencies: {},
       performance: {},
       security: {},
@@ -31,6 +31,11 @@ class AdvancedCodeMapsAnalyzer {
     console.log('🔬 Running Advanced CodeMaps Analysis...\n');
 
     try {
+      // Ensure output directory exists
+      if (!fs.existsSync(this.outputDir)) {
+        fs.mkdirSync(this.outputDir, { recursive: true });
+      }
+
       // Load existing CodeMaps
       await this.loadExistingCodeMaps();
 
@@ -131,7 +136,7 @@ class AdvancedCodeMapsAnalyzer {
       }
     }
 
-    complexityReport.average = complexityReport.total / this.metrics.components.length;
+    complexityReport.average = this.metrics.components.length > 0 ? complexityReport.total / this.metrics.components.length : 0;
 
     // Calculate averages by type
     for (const [type, data] of Object.entries(complexityReport.byType)) {
@@ -480,7 +485,7 @@ class AdvancedCodeMapsAnalyzer {
     for (const testDir of testDirs) {
       const dirPath = path.join(this.projectRoot, testDir);
       if (fs.existsSync(dirPath)) {
-        const testFiles = this.findTestFiles(dirPath);
+        const testFiles = this.findTestFiles(testDir);
         testFileCount += testFiles.length;
       }
     }
@@ -501,16 +506,20 @@ class AdvancedCodeMapsAnalyzer {
     
     const walk = (currentDir) => {
       try {
-        const items = fs.readdirSync(currentDir);
+        const fullDir = path.join(this.projectRoot, currentDir);
+        if (!fs.existsSync(fullDir)) return;
+
+        const items = fs.readdirSync(fullDir);
         
         items.forEach(item => {
           const itemPath = path.join(currentDir, item);
-          const stat = fs.statSync(itemPath);
+          const fullItemPath = path.join(this.projectRoot, itemPath);
+          const stat = fs.statSync(fullItemPath);
           
           if (stat.isDirectory()) {
             walk(itemPath);
           } else if (item.includes('.test.') || item.includes('.spec.')) {
-            files.push(itemPath);
+            files.push(fullItemPath);
           }
         });
       } catch (error) {

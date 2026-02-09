@@ -26,6 +26,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://fofmrqgcidfenbevayrg.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy
 
       - name: Show versions
         run: |
@@ -34,18 +37,27 @@ jobs:
 
       - name: TypeScript type check
         run: npm run type-check
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://fofmrqgcidfenbevayrg.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy
 
       - name: ESLint
         run: npm run lint
 
+      - name: Generate codemaps
+        run: npm run codemaps:generate
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://fofmrqgcidfenbevayrg.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy
+
       - name: Validate codemaps
         run: npm run codemaps:validate
 
-      - name: Generate codemaps
-        run: npm run codemaps:generate
-
       - name: Build application
         run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://fofmrqgcidfenbevayrg.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy
 
       - name: Upload npm logs (on failure)
         if: failure()

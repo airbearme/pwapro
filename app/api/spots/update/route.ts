@@ -1,6 +1,5 @@
-import { NextResponse } from "next/server";
-
 import { getSupabaseServer } from "@/lib/supabase/server";
+import { NextResponse } from "next/server";
 
 const numberedSpots = [
   {

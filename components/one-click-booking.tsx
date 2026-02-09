@@ -1,16 +1,15 @@
 "use client";
 
-import { MapPin } from "lucide-react";
 import { useState } from "react";
-
-import { useAuthContext } from "@/components/auth-provider";
-import { CheckoutButton } from "@/components/checkout-button";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Spinner } from "@/components/ui/spinner";
 import { useToast } from "@/hooks/use-toast";
-import errorLogger from "@/lib/error-logger";
 import { getSupabaseClient } from "@/lib/supabase/client";
+import { useAuthContext } from "@/components/auth-provider";
+import { MapPin } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
+import { CheckoutButton } from "@/components/checkout-button";
+import errorLogger from "@/lib/error-logger";
 
 interface OneClickBookingProps {
   pickupSpotId: string;

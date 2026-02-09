@@ -1,5 +1,20 @@
 "use client";
 
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useAuthContext } from "@/components/auth-provider";
+import { getSupabaseClient } from "@/lib/supabase/client";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
 import {
   MapPin,
   Navigation,
@@ -12,25 +27,9 @@ import {
   EyeOff,
 } from "lucide-react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useEffect, Suspense } from "react";
-
-import { useAuthContext } from "@/components/auth-provider";
 import MapComponent, { type Spot } from "@/components/map-view-beautiful";
-import { RidePayment } from "@/components/ride-payment";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
-import { getSupabaseClient } from "@/lib/supabase/client";
 import type { AirbearLocation } from "@/lib/supabase/realtime";
+import { RidePayment } from "@/components/ride-payment";
 
 function BookRidePageContent() {
   const { user, loading: authLoading } = useAuthContext();

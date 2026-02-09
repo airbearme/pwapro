@@ -1,23 +1,24 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
-import { useAuthContext } from "@/components/auth-provider";
-import { getSupabaseClient } from "@/lib/supabase/client";
-import { subscribeToAirbearLocations } from "@/lib/supabase/realtime";
-import { useAirbearNotifications } from "@/lib/hooks/use-airbear-notifications";
-import { Card } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
 import { Battery, MapPin, Navigation, Moon, Sun } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
+import { useEffect, useState, useMemo } from "react";
+
+import { useAuthContext } from "@/components/auth-provider";
+import MapComponent, { type Spot } from "@/components/map-view-beautiful";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { useTheme } from "next-themes";
-import MapComponent, { type Spot } from "@/components/map-view-beautiful";
+import { useToast } from "@/hooks/use-toast";
+import { useAirbearNotifications } from "@/lib/hooks/use-airbear-notifications";
+import { getSupabaseClient } from "@/lib/supabase/client";
+import { subscribeToAirbearLocations } from "@/lib/supabase/realtime";
 import type { AirbearLocation } from "@/lib/supabase/realtime";
 
 export default function MapPage() {
@@ -129,13 +130,25 @@ export default function MapPage() {
                   size="sm"
                   onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
                   className="glass-morphism hover-lift"
-                  aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+                  aria-label={
+                    theme === "dark"
+                      ? "Switch to light mode"
+                      : "Switch to dark mode"
+                  }
                 >
-                  {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                  {theme === "dark" ? (
+                    <Sun className="h-4 w-4" />
+                  ) : (
+                    <Moon className="h-4 w-4" />
+                  )}
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>{theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}</p>
+                <p>
+                  {theme === "dark"
+                    ? "Switch to light mode"
+                    : "Switch to dark mode"}
+                </p>
               </TooltipContent>
             </Tooltip>
           </div>
@@ -190,7 +203,7 @@ export default function MapPage() {
                   {airbears.length > 0
                     ? Math.round(
                         airbears.reduce((sum, a) => sum + a.battery_level, 0) /
-                          airbears.length
+                          airbears.length,
                       )
                     : 0}
                   %

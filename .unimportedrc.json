@@ -1,0 +1,25 @@
+{
+  "entry": [
+    "app/**/*.{ts,tsx}",
+    "components/**/*.{ts,tsx}",
+    "lib/**/*.{ts,tsx}",
+    "proxy.ts"
+  ],
+  "extensions": [".ts", ".tsx", ".js", ".jsx"],
+  "ignoreUnimported": [
+    "app/layout.original.tsx",
+    "app.layout.analytics.tsx",
+    "public/sw.js",
+    "public/workbox-*.js",
+    "scripts/**"
+  ],
+  "ignoreUnused": [
+    "@radix-ui/react-*",
+    "lucide-react",
+    "next-themes",
+    "tailwindcss-animate",
+    "class-variance-authority",
+    "clsx",
+    "tailwind-merge"
+  ]
+}

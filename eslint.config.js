@@ -20,7 +20,18 @@ export default [
     ],
   },
   {
-    files: ["**/*.{js,jsx}"],
+    files: ["**/*.{ts,tsx,js,jsx}"],
+    plugins: {
+      import: (await import("eslint-plugin-import")).default,
+    },
+    languageOptions: {
+      parser: (await import("@typescript-eslint/parser")).default,
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
     rules: {
       "no-unused-vars": "off",
       "no-console": "off",

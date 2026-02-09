@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
 import {
   ShoppingCart,
@@ -106,7 +107,10 @@ export default function MerchandisePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-950 via-lime-950 to-amber-950 dark:from-emerald-950 dark:via-lime-950 dark:to-amber-950">
+    <main
+      id="main-content"
+      className="min-h-screen bg-gradient-to-br from-emerald-950 via-lime-950 to-amber-950 dark:from-emerald-950 dark:via-lime-950 dark:to-amber-950"
+    >
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
@@ -214,9 +218,20 @@ export default function MerchandisePage() {
                     <ShoppingBag className="w-4 h-4 mr-2" />
                     {item.inStock ? "Add to Cart" : "Out of Stock"}
                   </Button>
-                  <Button variant="outline" size="sm">
-                    <Star className="w-4 h-4" />
-                  </Button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        aria-label="Add to favorites"
+                      >
+                        <Star className="w-4 h-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Add to favorites</p>
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
               </CardContent>
             </Card>
@@ -270,6 +285,6 @@ export default function MerchandisePage() {
           </Button>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

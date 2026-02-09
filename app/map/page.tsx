@@ -8,6 +8,11 @@ import { useAirbearNotifications } from "@/lib/hooks/use-airbear-notifications";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { Battery, MapPin, Navigation, Moon, Sun } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -117,14 +122,22 @@ export default function MapPage() {
                 />
               </div>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="glass-morphism hover-lift"
-            >
-              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                  className="glass-morphism hover-lift"
+                  aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+                >
+                  {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
           <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-emerald-600 via-lime-500 to-amber-500 bg-clip-text text-transparent animate-pulse-glow">
             Real-Time AirBear Tracking

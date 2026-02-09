@@ -10,11 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
 import {
   ShoppingCart,
@@ -227,7 +223,7 @@ export default function MerchandisePage() {
                       <Button
                         variant="outline"
                         size="sm"
-                        aria-label={`Add ${item.name} to favorites`}
+                        aria-label="Add to favorites"
                       >
                         <Star className="w-4 h-4" />
                       </Button>

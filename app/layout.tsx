@@ -105,16 +105,10 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased relative overflow-x-hidden`}>
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-4 focus:left-4 focus:bg-background focus:text-foreground focus:px-4 focus:py-2 focus:border-2 focus:border-emerald-500 focus:rounded-md focus:outline-none shadow-2xl"
-        >
-          Skip to content
-        </a>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
-          enableSystem={false}
+          enableSystem
           disableTransitionOnChange
         >
           <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
@@ -126,11 +120,15 @@ export default function RootLayout({
             <div className="absolute top-1/2 right-1/3 h-28 w-28 rounded-full bg-emerald-400/10 blur-2xl animate-pulse-glow"></div>
           </div>
           <div className="relative z-10 min-h-screen">
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-emerald-600 focus:text-white focus:rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-400"
+            >
+              Skip to content
+            </a>
             <ClientErrorLogger />
             <AuthProvider>
-              <TooltipProvider>
-                {children}
-              </TooltipProvider>
+              <TooltipProvider delayDuration={300}>{children}</TooltipProvider>
             </AuthProvider>
           </div>
         </ThemeProvider>

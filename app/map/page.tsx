@@ -11,11 +11,7 @@ import { Battery, MapPin, Navigation, Moon, Sun } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useTheme } from "next-themes";
 import MapComponent, { type Spot } from "@/components/map-view-beautiful";
 import type { AirbearLocation } from "@/lib/supabase/realtime";
@@ -132,17 +128,13 @@ export default function MapPage() {
                   size="sm"
                   onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
                   className="glass-morphism hover-lift"
-                  aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+                  aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
                 >
-                  {theme === "dark" ? (
-                    <Sun className="h-4 w-4" />
-                  ) : (
-                    <Moon className="h-4 w-4" />
-                  )}
+                  {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Switch to {theme === "dark" ? "light" : "dark"} mode</p>
+                <p>{theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}</p>
               </TooltipContent>
             </Tooltip>
           </div>

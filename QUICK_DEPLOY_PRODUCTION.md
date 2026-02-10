@@ -3,6 +3,7 @@
 ## Dark Mode: ✅ PERMANENTLY ENABLED
 
 Dark mode is already configured in `app/layout.tsx`:
+
 - `defaultTheme="dark"` ✅
 - `enableSystem={false}` ✅
 
@@ -66,8 +67,3 @@ Make sure these are set in Vercel Dashboard:
 ---
 
 **Ready to deploy!** Run `vercel --prod` or push to GitHub. 🚀
-
-
-
-
-

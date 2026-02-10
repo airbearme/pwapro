@@ -1,1 +1,2 @@
-export const log=(o:any)=>console.log(JSON.stringify({ts:new Date().toISOString(),...o}));
+export const log = (o: any) =>
+  console.log(JSON.stringify({ ts: new Date().toISOString(), ...o }));

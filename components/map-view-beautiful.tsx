@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, memo } from "react";
 import type { AirbearLocation } from "@/lib/supabase/realtime";
 import type { Database } from "@/lib/types/database";
 
@@ -12,7 +12,11 @@ interface MapViewProps {
   onSpotSelect?: (spot: Spot) => void;
 }
 
-export default function MapView({
+/**
+ * ⚡ Bolt Optimization: Wrap MapView in memo to prevent unnecessary re-renders
+ * of the entire Leaflet instance when parent components update unrelated state.
+ */
+const MapView = memo(function MapView({
   spots,
   airbears,
   onSpotSelect,
@@ -74,7 +78,7 @@ export default function MapView({
 
         // Dynamically import Leaflet
         const L = (await import("leaflet")).default;
-        
+
         if (!L || !L.map) {
           throw new Error("Leaflet failed to load");
         }
@@ -99,7 +103,7 @@ export default function MapView({
           zoomControl: true,
           preferCanvas: true,
         });
-        
+
         // Invalidate size to ensure map renders
         map.invalidateSize();
         let resizeObserver: ResizeObserver | null = null;
@@ -124,7 +128,7 @@ export default function MapView({
             maxZoom: 19,
             tileSize: 256,
             zoomOffset: 0,
-          }
+          },
         ).addTo(map);
 
         // Add custom styling for Binghamton
@@ -136,7 +140,7 @@ export default function MapView({
         mapInstanceRef.current.__resizeObserver = resizeObserver;
         mapInstanceRef.current.__resizeHandler = resizeHandler;
         setMapLoaded(true);
-        
+
         // Setup global booking function
         const handleSpotSelect = onSpotSelectRef.current;
         if (typeof window !== "undefined" && handleSpotSelect) {
@@ -151,7 +155,7 @@ export default function MapView({
         console.error("❌ Error initializing map:", error);
         setMapLoaded(false);
         setMapError(
-          error instanceof Error ? error.message : "Map failed to load"
+          error instanceof Error ? error.message : "Map failed to load",
         );
       }
     };
@@ -166,7 +170,7 @@ export default function MapView({
         if (mapInstanceRef.current.__resizeHandler) {
           window.removeEventListener(
             "resize",
-            mapInstanceRef.current.__resizeHandler
+            mapInstanceRef.current.__resizeHandler,
           );
         }
         mapInstanceRef.current.remove();
@@ -181,20 +185,39 @@ export default function MapView({
     const map = mapInstanceRef.current;
     const L = LeafletRef.current;
 
-    // Remove old spot markers
+    /**
+     * ⚡ Bolt Optimization: Pre-calculate airbear counts per spot to reduce
+     * complexity from O(Spots * Airbears) to O(Spots + Airbears).
+     */
+    const airbearsBySpot = new Map<string, AirbearLocation[]>();
+    airbears.forEach((a) => {
+      if (a.current_spot_id && a.is_available) {
+        const list = airbearsBySpot.get(a.current_spot_id) || [];
+        list.push(a);
+        airbearsBySpot.set(a.current_spot_id, list);
+      }
+    });
+
+    /**
+     * ⚡ Bolt Optimization: Sync markers in-place instead of full recreation.
+     * This avoids massive DOM churn and Leaflet event re-binding.
+     */
+    const currentSpotIds = new Set(spots.map((s) => `spot-${s.id}`));
+
+    // Remove markers that no longer exist in the spots array
     markersRef.current.forEach((marker, id) => {
-      if (id.startsWith("spot-")) {
+      if (id.startsWith("spot-") && !currentSpotIds.has(id)) {
         marker.remove();
         markersRef.current.delete(id);
       }
     });
 
-    // Add spot markers with beautiful styling
+    // Add or update spot markers
     spots.forEach((spot) => {
-      const airbearsAtSpot = airbears.filter(
-        (a) => a.current_spot_id === spot.id && a.is_available
-      );
+      const airbearsAtSpot = airbearsBySpot.get(spot.id) || [];
       const hasAvailableAirbears = airbearsAtSpot.length > 0;
+      const markerId = `spot-${spot.id}`;
+      let marker = markersRef.current.get(markerId);
 
       const icon = L.divIcon({
         html: `
@@ -286,10 +309,6 @@ export default function MapView({
         popupAnchor: [0, -56],
       });
 
-      const marker = L.marker([spot.latitude, spot.longitude], { icon }).addTo(
-        map
-      );
-
       const popupContent = `
         <div style="min-width: 240px; padding: 12px; font-family: system-ui, -apple-system, sans-serif;">
           <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #1f2937; background: linear-gradient(135deg, #10b981, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">${
@@ -305,27 +324,27 @@ export default function MapView({
               ? "linear-gradient(135deg, #ecfdf5, #d1fae5)"
               : "#f3f4f6"
           }; border-radius: 10px; border: 2px solid ${
-        hasAvailableAirbears ? "#10b981" : "#9ca3af"
-      };">
+            hasAvailableAirbears ? "#10b981" : "#9ca3af"
+          };">
             <div style="width: 20px; height: 20px; background: ${
               hasAvailableAirbears ? "#10b981" : "#9ca3af"
             }; border-radius: 50%; box-shadow: 0 0 12px ${
-        hasAvailableAirbears ? "#10b981" : "#9ca3af"
-      }; animation: ${
-        hasAvailableAirbears ? "pulse 2s ease-in-out infinite" : "none"
-      };"></div>
+              hasAvailableAirbears ? "#10b981" : "#9ca3af"
+            }; animation: ${
+              hasAvailableAirbears ? "pulse 2s ease-in-out infinite" : "none"
+            };"></div>
             <span style="font-weight: 700; color: ${
               hasAvailableAirbears ? "#047857" : "#4b5563"
             }; font-size: 15px;">${airbearsAtSpot.length} AirBear${
-        airbearsAtSpot.length !== 1 ? "s" : ""
-      } available</span>
+              airbearsAtSpot.length !== 1 ? "s" : ""
+            } available</span>
           </div>
           ${
             spot.amenities && spot.amenities.length > 0
               ? `
             <div style="font-size: 13px; color: #6b7280; background: linear-gradient(135deg, #f9fafb, #f3f4f6); padding: 8px 12px; border-radius: 8px; border-left: 4px solid #10b981;">
               <strong style="color: #1f2937;">✨ Amenities:</strong> ${spot.amenities.join(
-                ", "
+                ", ",
               )}
             </div>
           `
@@ -360,21 +379,30 @@ export default function MapView({
         </div>
       `;
 
-      marker.bindPopup(popupContent + bookingButton, {
-        maxWidth: 300,
-        className: "beautiful-popup",
-      });
+      if (marker) {
+        // Update existing marker icon if status might have changed
+        marker.setIcon(icon);
+        marker.setPopupContent(popupContent + bookingButton);
+      } else {
+        // Create new marker
+        marker = L.marker([spot.latitude, spot.longitude], { icon }).addTo(map);
+        marker.bindPopup(popupContent + bookingButton, {
+          maxWidth: 300,
+          className: "beautiful-popup",
+        });
 
-      // Setup click handler for booking
-      marker.on("click", () => {
-        if (onSpotSelect) {
-          onSpotSelect(spot);
-        }
-      });
+        // Setup click handler for booking
+        marker.on("click", () => {
+          const handleSpotSelect = onSpotSelectRef.current;
+          if (handleSpotSelect) {
+            handleSpotSelect(spot);
+          }
+        });
 
-      markersRef.current.set(`spot-${spot.id}`, marker);
+        markersRef.current.set(markerId, marker);
+      }
     });
-  }, [spots, airbears, onSpotSelect, mapLoaded]);
+  }, [spots, airbears, mapLoaded]); // Removed onSpotSelect as it's tracked via ref
 
   useEffect(() => {
     if (!mapInstanceRef.current || !LeafletRef.current || !mapLoaded) return;
@@ -484,13 +512,13 @@ export default function MapView({
           airbear.battery_level > 50
             ? "#10b981"
             : airbear.battery_level > 20
-            ? "#f59e0b"
-            : "#ef4444";
+              ? "#f59e0b"
+              : "#ef4444";
 
         const popupContent = `
           <div style="min-width: 220px; padding: 12px; font-family: system-ui, -apple-system, sans-serif;">
             <h4 style="font-size: 18px; font-weight: bold; margin-bottom: 12px; color: #1f2937; background: linear-gradient(135deg, #10b981, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">AirBear #${airbear.id.slice(
-              -4
+              -4,
             )}</h4>
             <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px;">
               <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: linear-gradient(135deg, #f9fafb, #f3f4f6); border-radius: 8px; border-left: 4px solid ${batteryColor};">
@@ -502,8 +530,8 @@ export default function MapView({
                     }%; height: 100%; background: linear-gradient(90deg, ${batteryColor}, ${batteryColor}dd); transition: width 0.3s; box-shadow: 0 0 8px ${batteryColor}80;"></div>
                   </div>
                   <span style="font-weight: 700; color: ${batteryColor}; font-size: 15px;">${
-          airbear.battery_level
-        }%</span>
+                    airbear.battery_level
+                  }%</span>
                 </div>
               </div>
               <div style="display: flex; justify-content: space-between; padding: 8px; background: linear-gradient(135deg, #f9fafb, #f3f4f6); border-radius: 8px; border-left: 4px solid ${
@@ -517,14 +545,14 @@ export default function MapView({
                     airbear.is_charging
                       ? "⚡ Charging"
                       : airbear.is_available
-                      ? "✓ Available"
-                      : "🚴 In Use"
+                        ? "✓ Available"
+                        : "🚴 In Use"
                   }
                 </span>
               </div>
               <div style="font-size: 12px; color: #9ca3af; text-align: center; margin-top: 4px; padding-top: 8px; border-top: 1px solid #e5e7eb;">
                 🕐 Last updated: ${new Date(
-                  airbear.updated_at
+                  airbear.updated_at,
                 ).toLocaleTimeString()}
               </div>
             </div>
@@ -575,13 +603,13 @@ export default function MapView({
                 : "Loading beautiful Binghamton map..."}
             </p>
             {mapError && (
-              <p className="mt-2 text-sm text-emerald-200/80">
-                {mapError}
-              </p>
+              <p className="mt-2 text-sm text-emerald-200/80">{mapError}</p>
             )}
           </div>
         </div>
       )}
     </div>
   );
-}
+});
+
+export default MapView;

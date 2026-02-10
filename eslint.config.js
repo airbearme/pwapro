@@ -4,6 +4,7 @@ import tsPlugin from "@typescript-eslint/eslint-plugin";
 
 export default [
   {
+    files: ["**/*.{js,jsx,ts,tsx}"],
     plugins: {
       import: importPlugin,
       "@typescript-eslint": tsPlugin,
@@ -17,6 +18,9 @@ export default [
           jsx: true,
         },
       },
+    },
+    rules: {
+      "@typescript-eslint/no-unused-vars": "off",
     },
   },
   {

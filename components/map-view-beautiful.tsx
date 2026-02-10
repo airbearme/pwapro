@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, memo } from "react";
 import type { AirbearLocation } from "@/lib/supabase/realtime";
 import type { Database } from "@/lib/types/database";
 
@@ -12,7 +12,11 @@ interface MapViewProps {
   onSpotSelect?: (spot: Spot) => void;
 }
 
-export default function MapView({
+/**
+ * ⚡ Bolt Optimization: Wrap MapView in memo to prevent unnecessary re-renders
+ * of the entire Leaflet instance when parent components update unrelated state.
+ */
+const MapView = memo(function MapView({
   spots,
   airbears,
   onSpotSelect,
@@ -181,20 +185,39 @@ export default function MapView({
     const map = mapInstanceRef.current;
     const L = LeafletRef.current;
 
-    // Remove old spot markers
+    /**
+     * ⚡ Bolt Optimization: Pre-calculate airbear counts per spot to reduce
+     * complexity from O(Spots * Airbears) to O(Spots + Airbears).
+     */
+    const airbearsBySpot = new Map<string, AirbearLocation[]>();
+    airbears.forEach((a) => {
+      if (a.current_spot_id && a.is_available) {
+        const list = airbearsBySpot.get(a.current_spot_id) || [];
+        list.push(a);
+        airbearsBySpot.set(a.current_spot_id, list);
+      }
+    });
+
+    /**
+     * ⚡ Bolt Optimization: Sync markers in-place instead of full recreation.
+     * This avoids massive DOM churn and Leaflet event re-binding.
+     */
+    const currentSpotIds = new Set(spots.map(s => `spot-${s.id}`));
+
+    // Remove markers that no longer exist in the spots array
     markersRef.current.forEach((marker, id) => {
-      if (id.startsWith("spot-")) {
+      if (id.startsWith("spot-") && !currentSpotIds.has(id)) {
         marker.remove();
         markersRef.current.delete(id);
       }
     });
 
-    // Add spot markers with beautiful styling
+    // Add or update spot markers
     spots.forEach((spot) => {
-      const airbearsAtSpot = airbears.filter(
-        (a) => a.current_spot_id === spot.id && a.is_available
-      );
+      const airbearsAtSpot = airbearsBySpot.get(spot.id) || [];
       const hasAvailableAirbears = airbearsAtSpot.length > 0;
+      const markerId = `spot-${spot.id}`;
+      let marker = markersRef.current.get(markerId);
 
       const icon = L.divIcon({
         html: `
@@ -286,10 +309,6 @@ export default function MapView({
         popupAnchor: [0, -56],
       });
 
-      const marker = L.marker([spot.latitude, spot.longitude], { icon }).addTo(
-        map
-      );
-
       const popupContent = `
         <div style="min-width: 240px; padding: 12px; font-family: system-ui, -apple-system, sans-serif;">
           <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #1f2937; background: linear-gradient(135deg, #10b981, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">${
@@ -360,21 +379,30 @@ export default function MapView({
         </div>
       `;
 
-      marker.bindPopup(popupContent + bookingButton, {
-        maxWidth: 300,
-        className: "beautiful-popup",
-      });
+      if (marker) {
+        // Update existing marker icon if status might have changed
+        marker.setIcon(icon);
+        marker.setPopupContent(popupContent + bookingButton);
+      } else {
+        // Create new marker
+        marker = L.marker([spot.latitude, spot.longitude], { icon }).addTo(map);
+        marker.bindPopup(popupContent + bookingButton, {
+          maxWidth: 300,
+          className: "beautiful-popup",
+        });
 
-      // Setup click handler for booking
-      marker.on("click", () => {
-        if (onSpotSelect) {
-          onSpotSelect(spot);
-        }
-      });
+        // Setup click handler for booking
+        marker.on("click", () => {
+          const handleSpotSelect = onSpotSelectRef.current;
+          if (handleSpotSelect) {
+            handleSpotSelect(spot);
+          }
+        });
 
-      markersRef.current.set(`spot-${spot.id}`, marker);
+        markersRef.current.set(markerId, marker);
+      }
     });
-  }, [spots, airbears, onSpotSelect, mapLoaded]);
+  }, [spots, airbears, mapLoaded]); // Removed onSpotSelect as it's tracked via ref
 
   useEffect(() => {
     if (!mapInstanceRef.current || !LeafletRef.current || !mapLoaded) return;
@@ -584,4 +612,6 @@ export default function MapView({
       )}
     </div>
   );
-}
+});
+
+export default MapView;

@@ -1,0 +1,44 @@
+{
+  "entry": [
+    "app/**/*.{ts,tsx}",
+    "components/**/*.{ts,tsx}",
+    "lib/**/*.{ts,tsx}",
+    "proxy.ts",
+    "scripts/*.cjs",
+    "scripts/*.js"
+  ],
+  "extensions": [".ts", ".tsx", ".js", ".jsx"],
+  "ignoreUnimported": [
+    "app/layout.original.tsx",
+    "app.layout.analytics.tsx",
+    "public/sw.js",
+    "public/workbox-*.js",
+    "scripts/**",
+    "eslint.config.js",
+    "postcss.config.js",
+    "tailwind.config.ts",
+    "supabase/functions/**",
+    "observability/**",
+    "next.config.mjs"
+  ],
+  "ignoreUnused": [
+    "@radix-ui/react-*",
+    "lucide-react",
+    "next-themes",
+    "tailwindcss-animate",
+    "class-variance-authority",
+    "clsx",
+    "tailwind-merge",
+    "@tailwindcss/postcss",
+    "@tanstack/react-query",
+    "@types/use-sync-external-store",
+    "date-fns",
+    "drizzle-zod",
+    "framer-motion",
+    "nanoid",
+    "react-leaflet",
+    "recharts",
+    "ssh2",
+    "ssh2-sftp-client"
+  ]
+}

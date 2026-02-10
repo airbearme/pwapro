@@ -20,7 +20,7 @@ export default [
     ],
   },
   {
-    files: ["**/*.{js,jsx}"],
+    files: ["**/*.{js,jsx,ts,tsx}"],
     rules: {
       "no-unused-vars": "off",
       "no-console": "off",

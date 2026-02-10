@@ -135,6 +135,10 @@ jobs:
 
       - name: Generate codemaps
         run: npm run codemaps:generate
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: "https://placeholder.supabase.co"
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: "eyJplaceholder"
+          STRIPE_SECRET_KEY: "sk_test_placeholder"
 
       - name: Run codemaps analysis
         run: npm run codemaps:analyze

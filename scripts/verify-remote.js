@@ -9,7 +9,7 @@ dotenv.config();
 const IONOS_CONFIG = {
 	host: "access-5018328928.webspace-host.com",
 	username: "a2096159",
-	password: "Yaa7Rih^_gpej+-",
+	password: "... (your IONOS password)",
 	port: 22,
 };
 

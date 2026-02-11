@@ -131,9 +131,25 @@ JS
 ###############################################################################
 cat > lib/stripe-verify.ts <<'TS'
 import crypto from "crypto";
-export function verifyStripe(sig:string, body:string, secret:string){
-  const h=crypto.createHmac("sha256",secret).update(body).digest("hex");
-  return sig.includes(h);
+export function verifyStripe(sig: string, body: string, secret: string): boolean {
+  try {
+    if (!sig || !body || !secret) return false;
+    const parts = sig.split(",");
+    const tPart = parts.find((p) => p.startsWith("t="));
+    const v1Part = parts.find((p) => p.startsWith("v1="));
+    if (!tPart || !v1Part) return false;
+    const t = tPart.split("=")[1];
+    const v1 = v1Part.split("=")[1];
+    const now = Math.floor(Date.now() / 1000);
+    const timestamp = parseInt(t, 10);
+    if (isNaN(timestamp) || Math.abs(now - timestamp) > 300) return false;
+    const signedPayload = `${t}.${body}`;
+    const expectedSig = crypto.createHmac("sha256", secret).update(signedPayload).digest("hex");
+    const v1Buffer = Buffer.from(v1);
+    const expectedSigBuffer = Buffer.from(expectedSig);
+    if (v1Buffer.length !== expectedSigBuffer.length) return false;
+    return crypto.timingSafeEqual(v1Buffer, expectedSigBuffer);
+  } catch (e) { return false; }
 }
 TS
 
@@ -182,9 +198,17 @@ JS
 # PII SCRUBBING
 ###############################################################################
 cat > lib/pii.ts <<'TS'
-export function scrub(obj:any){
-  const s=JSON.stringify(obj);
-  return s.replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi,"[email]");
+const emailPattern = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi;
+const phonePattern = /\b(?:\+?\d{1,3}[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?){2}\d{4}\b/g;
+const cardPattern = /\b(?:\d[ -]*?){13,19}\b/g;
+
+export function scrub(input: any): string {
+  if (input === null || input === undefined) return "";
+  const s = typeof input === "string" ? input : JSON.stringify(input);
+  return s
+    .replace(emailPattern, "[redacted-email]")
+    .replace(phonePattern, "[redacted-phone]")
+    .replace(cardPattern, "[redacted-card]");
 }
 TS
 

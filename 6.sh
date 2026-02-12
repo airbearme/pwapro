@@ -131,9 +131,42 @@ JS
 ###############################################################################
 cat > lib/stripe-verify.ts <<'TS'
 import crypto from "crypto";
-export function verifyStripe(sig:string, body:string, secret:string){
-  const h=crypto.createHmac("sha256",secret).update(body).digest("hex");
-  return sig.includes(h);
+
+/**
+ * Hardened Stripe webhook verification
+ * - Full signature parsing (t=, v1=)
+ * - 5-minute replay protection window
+ * - Timing-safe comparison to prevent timing attacks
+ */
+export function verifyStripe(sigHeader: string, body: string, secret: string): boolean {
+  if (!sigHeader || !body || !secret) return false;
+
+  const parts = sigHeader.split(",").reduce((acc, part) => {
+    const [key, value] = part.split("=");
+    if (key && value) acc[key.trim()] = value.trim();
+    return acc;
+  }, {} as Record<string, string>);
+
+  const timestamp = parts["t"];
+  const signature = parts["v1"];
+
+  if (!timestamp || !signature) return false;
+
+  const now = Math.floor(Date.now() / 1000);
+  const ts = parseInt(timestamp, 10);
+  if (isNaN(ts) || Math.abs(now - ts) > 300) return false;
+
+  const signedPayload = `${timestamp}.${body}`;
+  const expectedSignature = crypto
+    .createHmac("sha256", secret)
+    .update(signedPayload)
+    .digest("hex");
+
+  const expectedBuffer = Buffer.from(expectedSignature);
+  const signatureBuffer = Buffer.from(signature);
+
+  if (expectedBuffer.length !== signatureBuffer.length) return false;
+  return crypto.timingSafeEqual(expectedBuffer, signatureBuffer);
 }
 TS
 

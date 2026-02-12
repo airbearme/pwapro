@@ -1,0 +1,19 @@
+{
+  "ignoreUnimported": [
+    "app.layout.analytics.tsx",
+    "observability/logger.ts",
+    "proxy.ts",
+    "app/**/*",
+    "components/**/*",
+    "hooks/**/*",
+    "lib/**/*",
+    "scripts/**/*",
+    "supabase/**/*",
+    "public/**/*",
+    "postcss.config.js",
+    "tailwind.config.ts",
+    "next.config.mjs",
+    "eslint.config.js"
+  ],
+  "ignoreUnused": ["*"]
+}

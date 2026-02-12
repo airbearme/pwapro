@@ -1,24 +1,39 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useAuthContext } from "@/components/auth-provider";
-import { getSupabaseClient } from "@/lib/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
-import { loadStripe } from "@stripe/stripe-js";
 import {
   Elements,
   PaymentElement,
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-import { CreditCard, Smartphone, QrCode, CheckCircle, Apple, Wallet, MapPin } from "lucide-react";
+import { loadStripe } from "@stripe/stripe-js";
+import {
+  CreditCard,
+  Smartphone,
+  QrCode,
+  CheckCircle,
+  Apple,
+  Wallet,
+  MapPin,
+} from "lucide-react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+
+import { useAuthContext } from "@/components/auth-provider";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
+import { getSupabaseClient } from "@/lib/supabase/client";
 
 const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "",
 );
 
 interface CheckoutFormProps {
@@ -28,7 +43,12 @@ interface CheckoutFormProps {
   onSuccess: () => void;
 }
 
-function CheckoutForm({ clientSecret, rideId, amount, onSuccess }: CheckoutFormProps) {
+function CheckoutForm({
+  clientSecret,
+  rideId,
+  amount,
+  onSuccess,
+}: CheckoutFormProps) {
   const stripe = useStripe();
   const elements = useElements();
   const { toast } = useToast();
@@ -64,10 +84,10 @@ function CheckoutForm({ clientSecret, rideId, amount, onSuccess }: CheckoutFormP
         const supabase = getSupabaseClient();
         const { error } = await supabase
           .from("rides")
-          .update({ 
+          .update({
             status: "confirmed",
             payment_method: "card",
-            paid_at: new Date().toISOString()
+            paid_at: new Date().toISOString(),
           })
           .eq("id", rideId);
 
@@ -150,7 +170,9 @@ function CheckoutPageContent() {
         const supabase = getSupabaseClient();
         const { data: ride } = await supabase
           .from("rides")
-          .select("*, pickup_spot:spots!pickup_spot_id(*), dropoff_spot:spots!dropoff_spot_id(*)")
+          .select(
+            "*, pickup_spot:spots!pickup_spot_id(*), dropoff_spot:spots!dropoff_spot_id(*)",
+          )
           .eq("id", rideIdParam)
           .single();
 
@@ -207,9 +229,11 @@ function CheckoutPageContent() {
           <div className="space-y-2">
             <div className="w-8 h-8 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin mx-auto"></div>
             <p className="text-xl text-muted-foreground animate-pulse">
-              {authLoading ? "Authenticating..." : 
-               loading ? "Setting up payment..." : 
-               "Initializing payment form..."}
+              {authLoading
+                ? "Authenticating..."
+                : loading
+                  ? "Setting up payment..."
+                  : "Initializing payment form..."}
             </p>
             <p className="text-sm text-muted-foreground">
               {loading && "Securing your payment session"}
@@ -302,7 +326,9 @@ function CheckoutPageContent() {
                     <div className="border-t pt-4 space-y-2">
                       {rideDetails.distance && (
                         <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Distance</span>
+                          <span className="text-muted-foreground">
+                            Distance
+                          </span>
                           <span>{rideDetails.distance.toFixed(1)} km</span>
                         </div>
                       )}
@@ -341,9 +367,14 @@ function CheckoutPageContent() {
 
 export default function CheckoutPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-black text-white flex items-center justify-center">Loading checkout...</div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-black text-white flex items-center justify-center">
+          Loading checkout...
+        </div>
+      }
+    >
       <CheckoutPageContent />
     </Suspense>
   );
 }
-

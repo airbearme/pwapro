@@ -7,7 +7,11 @@ import crypto from "crypto";
  * - 5-minute replay protection (timestamp validation)
  * - Timing-safe comparison to prevent side-channel attacks
  */
-export function verifyStripe(sig: string, body: string, secret: string): boolean {
+export function verifyStripe(
+  sig: string,
+  body: string,
+  secret: string,
+): boolean {
   try {
     if (!sig || !body || !secret) return false;
 

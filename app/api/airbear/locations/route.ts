@@ -4,10 +4,13 @@ import { getSupabaseServer } from "@/lib/supabase/server";
 export async function GET(request: Request) {
   try {
     const supabase = await getSupabaseServer();
-    
+
     // Get the current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
     if (authError || !user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -21,7 +24,10 @@ export async function GET(request: Request) {
 
     if (profileError) {
       console.error("Error fetching user profile:", profileError);
-      return NextResponse.json({ error: profileError.message }, { status: 500 });
+      return NextResponse.json(
+        { error: profileError.message },
+        { status: 500 },
+      );
     }
 
     // If user is a driver with an assigned AirBear, only return their AirBear

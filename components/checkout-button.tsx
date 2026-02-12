@@ -1,77 +1,82 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { CreditCard, QrCode, Apple, Wallet } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { getStripe } from "@/lib/stripe/client"
-import { useToast } from "@/hooks/use-toast"
+import { useState } from "react";
+import { CreditCard, QrCode, Apple, Wallet } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { getStripe } from "@/lib/stripe/client";
+import { useToast } from "@/hooks/use-toast";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Spinner } from "@/components/ui/spinner"
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Spinner } from "@/components/ui/spinner";
 
 interface CheckoutButtonProps {
-  items: Array<{ name: string; price: number; quantity: number }>
-  onSuccess?: () => void
+  items: Array<{ name: string; price: number; quantity: number }>;
+  onSuccess?: () => void;
 }
 
 export function CheckoutButton({ items, onSuccess }: CheckoutButtonProps) {
-  const [loading, setLoading] = useState(false)
-  const [paymentMethod, setPaymentMethod] = useState<"stripe" | "cash">("stripe")
+  const [loading, setLoading] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<"stripe" | "cash">(
+    "stripe",
+  );
   const [walletLoading, setWalletLoading] = useState({
     apple: false,
     google: false,
-  })
-  const [isCashPaymentLoading, setIsCashPaymentLoading] = useState(false)
-  const { toast } = useToast()
+  });
+  const [isCashPaymentLoading, setIsCashPaymentLoading] = useState(false);
+  const { toast } = useToast();
 
-  const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const total = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0,
+  );
 
   const handleStripeCheckout = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
 
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ items }),
-      })
+      });
 
       if (!res.ok) {
-        throw new Error("Failed to create checkout session")
+        throw new Error("Failed to create checkout session");
       }
 
-      const { sessionId } = await res.json()
-      const stripe = await getStripe()
+      const { sessionId } = await res.json();
+      const stripe = await getStripe();
 
       if (!stripe) {
-        throw new Error("Stripe not initialized")
+        throw new Error("Stripe not initialized");
       }
 
-      await (stripe as any).redirectToCheckout({ sessionId })
+      await (stripe as any).redirectToCheckout({ sessionId });
     } catch (error: any) {
       toast({
         title: "Checkout Error",
         description: error.message || "Failed to start checkout",
         variant: "destructive",
-      })
+      });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleApplePay = async () => {
     try {
-      setWalletLoading((prev) => ({ ...prev, apple: true }))
+      setWalletLoading((prev) => ({ ...prev, apple: true }));
 
-      const stripe = await getStripe()
+      const stripe = await getStripe();
       if (!stripe) {
-        throw new Error("Stripe not initialized")
+        throw new Error("Stripe not initialized");
       }
 
       // Create payment request
@@ -84,17 +89,17 @@ export function CheckoutButton({ items, onSuccess }: CheckoutButtonProps) {
         },
         requestPayerName: true,
         requestPayerEmail: true,
-      })
+      });
 
-      const canMakePayment = await paymentRequest.canMakePayment()
+      const canMakePayment = await paymentRequest.canMakePayment();
 
       if (!canMakePayment?.applePay) {
         toast({
           title: "Apple Pay Unavailable",
           description: "Apple Pay is not available on this device",
           variant: "destructive",
-        })
-        return
+        });
+        return;
       }
 
       // Create payment intent
@@ -106,51 +111,51 @@ export function CheckoutButton({ items, onSuccess }: CheckoutButtonProps) {
           currency: "usd",
           paymentMethod: "apple_pay",
         }),
-      })
+      });
 
-      const { clientSecret } = await res.json()
+      const { clientSecret } = await res.json();
 
       paymentRequest.on("paymentmethod", async (ev) => {
         const { error } = await stripe.confirmCardPayment(clientSecret, {
           payment_method: ev.paymentMethod.id,
-        })
+        });
 
         if (error) {
-          ev.complete("fail")
+          ev.complete("fail");
           toast({
             title: "Payment Failed",
             description: error.message,
             variant: "destructive",
-          })
+          });
         } else {
-          ev.complete("success")
+          ev.complete("success");
           toast({
             title: "Payment Successful",
             description: "Thank you for your purchase!",
-          })
-          onSuccess?.()
+          });
+          onSuccess?.();
         }
-      })
+      });
 
-      paymentRequest.show()
+      paymentRequest.show();
     } catch (error: any) {
       toast({
         title: "Apple Pay Error",
         description: error.message || "Failed to process Apple Pay",
         variant: "destructive",
-      })
+      });
     } finally {
-      setWalletLoading((prev) => ({ ...prev, apple: false }))
+      setWalletLoading((prev) => ({ ...prev, apple: false }));
     }
-  }
+  };
 
   const handleGooglePay = async () => {
     try {
-      setWalletLoading((prev) => ({ ...prev, google: true }))
+      setWalletLoading((prev) => ({ ...prev, google: true }));
 
-      const stripe = await getStripe()
+      const stripe = await getStripe();
       if (!stripe) {
-        throw new Error("Stripe not initialized")
+        throw new Error("Stripe not initialized");
       }
 
       // Create payment request
@@ -163,17 +168,17 @@ export function CheckoutButton({ items, onSuccess }: CheckoutButtonProps) {
         },
         requestPayerName: true,
         requestPayerEmail: true,
-      })
+      });
 
-      const canMakePayment = await paymentRequest.canMakePayment()
+      const canMakePayment = await paymentRequest.canMakePayment();
 
       if (!canMakePayment?.googlePay) {
         toast({
           title: "Google Pay Unavailable",
           description: "Google Pay is not available on this device",
           variant: "destructive",
-        })
-        return
+        });
+        return;
       }
 
       // Create payment intent
@@ -185,56 +190,56 @@ export function CheckoutButton({ items, onSuccess }: CheckoutButtonProps) {
           currency: "usd",
           paymentMethod: "google_pay",
         }),
-      })
+      });
 
-      const { clientSecret } = await res.json()
+      const { clientSecret } = await res.json();
 
       paymentRequest.on("paymentmethod", async (ev) => {
         const { error } = await stripe.confirmCardPayment(clientSecret, {
           payment_method: ev.paymentMethod.id,
-        })
+        });
 
         if (error) {
-          ev.complete("fail")
+          ev.complete("fail");
           toast({
             title: "Payment Failed",
             description: error.message,
             variant: "destructive",
-          })
+          });
         } else {
-          ev.complete("success")
+          ev.complete("success");
           toast({
             title: "Payment Successful",
             description: "Thank you for your purchase!",
-          })
-          onSuccess?.()
+          });
+          onSuccess?.();
         }
-      })
+      });
 
-      paymentRequest.show()
+      paymentRequest.show();
     } catch (error: any) {
       toast({
         title: "Google Pay Error",
         description: error.message || "Failed to process Google Pay",
         variant: "destructive",
-      })
+      });
     } finally {
-      setWalletLoading((prev) => ({ ...prev, google: false }))
+      setWalletLoading((prev) => ({ ...prev, google: false }));
     }
-  }
+  };
 
   const handleCashPayment = async () => {
-    setIsCashPaymentLoading(true)
+    setIsCashPaymentLoading(true);
     // Simulate an async operation
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     toast({
       title: "Cash Payment",
       description:
         "Please pay with cash when you receive your order. A QR code will be provided for verification.",
-    })
-    onSuccess?.()
-    setIsCashPaymentLoading(false)
-  }
+    });
+    onSuccess?.();
+    setIsCashPaymentLoading(false);
+  };
 
   return (
     <Card className="w-full">
@@ -243,7 +248,10 @@ export function CheckoutButton({ items, onSuccess }: CheckoutButtonProps) {
         <CardDescription>Choose your preferred payment method</CardDescription>
       </CardHeader>
       <CardContent>
-        <Tabs value={paymentMethod} onValueChange={(v) => setPaymentMethod(v as "stripe" | "cash")}>
+        <Tabs
+          value={paymentMethod}
+          onValueChange={(v) => setPaymentMethod(v as "stripe" | "cash")}
+        >
           <TabsList className="grid w-full grid-cols-2 mb-4">
             <TabsTrigger value="stripe">
               <CreditCard className="mr-2 h-4 w-4" />
@@ -298,7 +306,9 @@ export function CheckoutButton({ items, onSuccess }: CheckoutButtonProps) {
                 <span className="w-full border-t" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">Or</span>
+                <span className="bg-background px-2 text-muted-foreground">
+                  Or
+                </span>
               </div>
             </div>
 
@@ -325,7 +335,8 @@ export function CheckoutButton({ items, onSuccess }: CheckoutButtonProps) {
             <div className="text-center p-6 border rounded-lg bg-muted/50">
               <QrCode className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
               <p className="text-sm text-muted-foreground mb-4">
-                Pay with cash when you receive your order. A QR code will be provided for order verification.
+                Pay with cash when you receive your order. A QR code will be
+                provided for order verification.
               </p>
               <Button
                 onClick={handleCashPayment}
@@ -354,6 +365,5 @@ export function CheckoutButton({ items, onSuccess }: CheckoutButtonProps) {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
-

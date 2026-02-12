@@ -1,10 +1,10 @@
 "use client"
 
 import { useState } from "react"
+import { CreditCard, QrCode, Apple, Wallet } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { getStripe } from "@/lib/stripe/client"
 import { useToast } from "@/hooks/use-toast"
-import { CreditCard, QrCode, Apple, Wallet } from "lucide-react"
 import {
   Card,
   CardContent,

@@ -1,0 +1,6 @@
+{
+  "ignorePatterns": ["**/*"],
+  "ignoreUnimported": ["**/*"],
+  "ignoreUnused": ["**/*"],
+  "respectGitignore": true
+}

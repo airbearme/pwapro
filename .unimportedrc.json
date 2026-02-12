@@ -1,5 +1,8 @@
 {
   "ignoreUnimported": [
+    "app.layout.analytics.tsx",
+    "observability/**/*",
+    "proxy.ts",
     "app/**/*",
     "components/**/*",
     "hooks/**/*",

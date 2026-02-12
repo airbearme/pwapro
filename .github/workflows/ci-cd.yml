@@ -11,6 +11,9 @@ env:
   NODE_VERSION: '20'
   NEXT_PUBLIC_SUPABASE_URL: 'https://placeholder.supabase.co'
   NEXT_PUBLIC_SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsYWNlaG9sZGVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM2MzQ3MjgsImV4cCI6MjA3OTIxMDcyOH0.placeholder'
+  STRIPE_SECRET_KEY: 'sk_test_placeholder'
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: 'pk_test_placeholder'
+  STRIPE_WEBHOOK_SECRET: 'whsec_placeholder'
 
 jobs:
   ci:

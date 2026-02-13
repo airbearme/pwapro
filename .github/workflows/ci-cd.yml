@@ -40,12 +40,18 @@ jobs:
 
       - name: Generate codemaps
         run: npm run codemaps:generate
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY3OTk5OTk5OSwiZXhwIjoyMDk5OTk5OTk5fQ.placeholder
 
       - name: Validate codemaps
         run: npm run codemaps:validate
 
       - name: Build application
         run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY3OTk5OTk5OSwiZXhwIjoyMDk5OTk5OTk5fQ.placeholder
 
       - name: Upload npm logs (on failure)
         if: failure()

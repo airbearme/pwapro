@@ -47,6 +47,28 @@ export async function proxy(request: NextRequest) {
   // Refresh session if needed (automatic token refresh)
   await supabase.auth.getUser()
 
+  // Protect administrative and setup routes
+  const isAdminRoute =
+    request.nextUrl.pathname.startsWith("/api/setup") ||
+    request.nextUrl.pathname.startsWith("/api/spots/bypass-update") ||
+    request.nextUrl.pathname.startsWith("/api/spots/update") ||
+    request.nextUrl.pathname.startsWith("/api/spots/manual-update") ||
+    request.nextUrl.pathname.startsWith("/api/airbear/update-location")
+
+  if (isAdminRoute) {
+    const adminSecret = request.headers.get("X-Admin-Secret")
+    if (!adminSecret || adminSecret !== process.env.ADMIN_SECRET) {
+      const errorResponse = new NextResponse(JSON.stringify({ error: "Unauthorized administrative access" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      })
+      for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
+        errorResponse.headers.set(key, value)
+      }
+      return errorResponse
+    }
+  }
+
   // Protect authenticated routes
   const isProtectedRoute =
     request.nextUrl.pathname.startsWith("/dashboard") ||

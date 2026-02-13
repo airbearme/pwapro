@@ -1,0 +1,12 @@
+{
+  "ignoreUnimported": [
+    "app.layout.analytics.tsx",
+    "app/layout.original.tsx",
+    "scripts/**",
+    "supabase/**",
+    "*.sh",
+    "docs/**",
+    "public/**"
+  ],
+  "ignoreUnused": ["*"]
+}

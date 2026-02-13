@@ -1,0 +1,12 @@
+        "eslint-plugin-import": "^2.32.0",
+        "eslint-plugin-import": "^2.32.0",
+        "eslint-plugin-import": "*",
+        "eslint-plugin-import-x": "*"
+        "eslint-plugin-import": {
+        "eslint-plugin-import-x": {
+    "node_modules/eslint-plugin-import": {
+      "resolved": "https://registry.npmjs.org/eslint-plugin-import/-/eslint-plugin-import-2.32.0.tgz",
+    "node_modules/eslint-plugin-import/node_modules/brace-expansion": {
+    "node_modules/eslint-plugin-import/node_modules/debug": {
+    "node_modules/eslint-plugin-import/node_modules/minimatch": {
+    "node_modules/eslint-plugin-import/node_modules/semver": {

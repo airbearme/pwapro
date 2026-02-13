@@ -18,7 +18,10 @@ export async function POST(req: Request) {
 
     if (!secret) {
       console.error("Missing STRIPE_WEBHOOK_SECRET environment variable");
-      return NextResponse.json({ error: "Configuration error" }, { status: 500 });
+      return NextResponse.json(
+        { error: "Configuration error" },
+        { status: 500 },
+      );
     }
 
     const isValid = verifyStripe(signature, body, secret);
@@ -39,7 +42,13 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ received: true });
   } catch (err) {
-    console.error("Webhook error:", err instanceof Error ? err.message : "Unknown error");
-    return NextResponse.json({ error: "Webhook handler failed" }, { status: 500 });
+    console.error(
+      "Webhook error:",
+      err instanceof Error ? err.message : "Unknown error",
+    );
+    return NextResponse.json(
+      { error: "Webhook handler failed" },
+      { status: 500 },
+    );
   }
 }

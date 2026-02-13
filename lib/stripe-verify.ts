@@ -6,15 +6,22 @@ import crypto from "crypto";
  * - 5-minute replay protection window
  * - Timing-safe comparison to prevent timing attacks
  */
-export function verifyStripe(sigHeader: string, body: string, secret: string): boolean {
+export function verifyStripe(
+  sigHeader: string,
+  body: string,
+  secret: string,
+): boolean {
   if (!sigHeader || !body || !secret) return false;
 
   // 1. Parse signature header
-  const parts = sigHeader.split(",").reduce((acc, part) => {
-    const [key, value] = part.split("=");
-    if (key && value) acc[key.trim()] = value.trim();
-    return acc;
-  }, {} as Record<string, string>);
+  const parts = sigHeader.split(",").reduce(
+    (acc, part) => {
+      const [key, value] = part.split("=");
+      if (key && value) acc[key.trim()] = value.trim();
+      return acc;
+    },
+    {} as Record<string, string>,
+  );
 
   const timestamp = parts["t"];
   const signature = parts["v1"];

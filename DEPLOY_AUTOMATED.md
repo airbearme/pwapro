@@ -20,17 +20,19 @@ That's it! 🎉
 ✅ **Vercel Project** - Created and linked automatically  
 ✅ **Environment Variables** - Added to Vercel automatically  
 ✅ **Stripe Webhook** - Created automatically (if STRIPE_SECRET_KEY set)  
-✅ **Deployment** - Deploys to production automatically  
+✅ **Deployment** - Deploys to production automatically
 
 ## Get Your Tokens (5 minutes)
 
 ### GitHub Token
+
 1. https://github.com/settings/tokens
 2. "Generate new token (classic)"
 3. Scopes: `repo`, `workflow`, `admin:org`
 4. Copy token
 
 ### Vercel Token
+
 1. https://vercel.com/account/tokens
 2. "Create Token"
 3. Copy token
@@ -82,15 +84,18 @@ Deploys to production
 ## Troubleshooting
 
 **Token not working?**
+
 - Check token has correct scopes
 - Verify token hasn't expired
 - Test: `curl -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/user`
 
 **Vercel link fails?**
+
 - Make sure you're logged in: `vercel login`
 - Check token is valid
 
 **Webhook creation fails?**
+
 - Verify domain is accessible
 - Check Stripe API key is correct
 
@@ -103,9 +108,3 @@ Deploys to production
 ---
 
 **Ready to deploy?** Just run the one command above! 🚀
-
-
-
-
-
-

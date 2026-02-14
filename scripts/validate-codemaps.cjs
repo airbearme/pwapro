@@ -292,7 +292,7 @@ class CodeMapsValidator {
         console.log(`✅ Validated source map: ${sourceMapFile}`);
       } catch (error) {
         this.errors.push(
-          `Invalid source map ${sourceMapFile}: ${error.message}`
+          `Invalid source map ${sourceMapFile}: ${error.message}`,
         );
       }
     }
@@ -346,7 +346,7 @@ class CodeMapsValidator {
         const componentsPath = path.join(this.outputDir, index.maps.components);
         if (!fs.existsSync(componentsPath)) {
           this.errors.push(
-            `Components map not found: ${index.maps.components}`
+            `Components map not found: ${index.maps.components}`,
           );
         }
       }
@@ -387,7 +387,7 @@ class CodeMapsValidator {
 
           if (stats.size > this.config.maxFileSize) {
             this.warnings.push(
-              `File ${file.name} is large: ${this.formatBytes(stats.size)}`
+              `File ${file.name} is large: ${this.formatBytes(stats.size)}`,
             );
           }
         }
@@ -428,6 +428,11 @@ class CodeMapsValidator {
         filesChecked: this.countFiles(),
       },
     };
+
+    // Ensure output directory exists before writing
+    if (!fs.existsSync(this.outputDir)) {
+      fs.mkdirSync(this.outputDir, { recursive: true });
+    }
 
     // Write validation report
     const reportPath = path.join(this.outputDir, "validation-report.json");

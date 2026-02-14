@@ -1,7 +1,19 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import {
+  MapPin,
+  Navigation,
+  DollarSign,
+  Clock,
+  ArrowRight,
+  Loader2,
+  Map,
+  Eye,
+  EyeOff,
+} from "lucide-react";
+import Link from "next/link";
 import { useAuthContext } from "@/components/auth-provider";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import {
@@ -15,18 +27,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import {
-  MapPin,
-  Navigation,
-  DollarSign,
-  Clock,
-  ArrowRight,
-  Loader2,
-  Map,
-  Eye,
-  EyeOff,
-} from "lucide-react";
-import Link from "next/link";
 import MapComponent, { type Spot } from "@/components/map-view-beautiful";
 import type { AirbearLocation } from "@/lib/supabase/realtime";
 import { RidePayment } from "@/components/ride-payment";
@@ -70,7 +70,7 @@ function BookRidePageContent() {
         if (airbearsResponse.ok) {
           const airbearsData = await airbearsResponse.json();
           setAirbears(airbearsData.data || []);
-          
+
           // Show driver-specific message if applicable
           if (airbearsData.isDriverView) {
             console.log("Driver view: Showing only assigned AirBear");
@@ -121,23 +121,28 @@ function BookRidePageContent() {
     return 4.0;
   };
 
-  const handleSpotSelect = (spot: Spot) => {
-    if (selectingMode === "pickup") {
-      setPickupSpot(spot);
-      setSelectingMode(null);
-      toast({
-        title: "Pickup Selected",
-        description: `Pickup location set to ${spot.name}`,
-      });
-    } else if (selectingMode === "destination") {
-      setDestinationSpot(spot);
-      setSelectingMode(null);
-      toast({
-        title: "Destination Selected",
-        description: `Destination set to ${spot.name}`,
-      });
-    }
-  };
+  // ⚡ Bolt: Memoize callback to prevent MapComponent from re-rendering
+  // when selecting pickup/destination on the map.
+  const handleSpotSelect = useCallback(
+    (spot: Spot) => {
+      if (selectingMode === "pickup") {
+        setPickupSpot(spot);
+        setSelectingMode(null);
+        toast({
+          title: "Pickup Selected",
+          description: `Pickup location set to ${spot.name}`,
+        });
+      } else if (selectingMode === "destination") {
+        setDestinationSpot(spot);
+        setSelectingMode(null);
+        toast({
+          title: "Destination Selected",
+          description: `Destination set to ${spot.name}`,
+        });
+      }
+    },
+    [selectingMode, toast],
+  );
 
   const startMapSelection = (mode: "pickup" | "destination") => {
     setSelectingMode(mode);
@@ -565,7 +570,13 @@ function BookRidePageContent() {
 
 export default function BookRidePage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-black text-white flex items-center justify-center">Loading booking...</div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-black text-white flex items-center justify-center">
+          Loading booking...
+        </div>
+      }
+    >
       <BookRidePageContent />
     </Suspense>
   );

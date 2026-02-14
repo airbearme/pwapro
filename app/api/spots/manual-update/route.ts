@@ -181,7 +181,7 @@ export async function POST(request: Request) {
         {
           error: "Invalid action. Available actions: update_spots",
         },
-        { status: 400 },
+        { status: 400 }
       );
     }
   } catch (error: any) {

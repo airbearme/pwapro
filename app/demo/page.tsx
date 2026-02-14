@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+
 import RealtimeDemo from "@/components/realtime-demo";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function DemoPage() {
   return (
@@ -35,9 +36,7 @@ export default function DemoPage() {
 
               <h3 className="font-semibold mb-2">Driver Experience</h3>
               <ol className="space-y-2 text-sm text-muted-foreground">
-                <li>
-                  Click &quot;Driver Mode&quot; to simulate location updates
-                </li>
+                <li>Click &quot;Driver Mode&quot; to simulate location updates</li>
                 <li>Share GPS coordinates with riders in real-time</li>
                 <li>Monitor ride progress and completion</li>
               </ol>

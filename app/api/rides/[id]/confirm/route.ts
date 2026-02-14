@@ -1,9 +1,10 @@
-import { getSupabaseServer } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+
+import { getSupabaseServer } from "@/lib/supabase/server";
 
 export async function POST(
   request: Request,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const supabase = await getSupabaseServer();
@@ -35,10 +36,7 @@ export async function POST(
     }
 
     if (ride.status !== "pending") {
-      return NextResponse.json(
-        { error: "Ride already processed" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "Ride already processed" }, { status: 400 });
     }
 
     // Update ride status to confirmed

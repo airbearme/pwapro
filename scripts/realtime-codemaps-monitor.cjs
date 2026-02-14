@@ -5,15 +5,21 @@
  * Monitors codebase changes and updates CodeMaps automatically
  */
 
-const fs = require("fs");
-const path = require("path");
-const { execSync } = require("child_process");
+const fs = require('fs');
+const path = require('path');
+const { execSync } = require('child_process');
 
 class RealTimeCodeMapsMonitor {
   constructor() {
     this.projectRoot = process.cwd();
-    this.outputDir = path.join(this.projectRoot, ".next/codemaps");
-    this.watchedDirs = ["app", "components", "lib", "hooks", "utils"];
+    this.outputDir = path.join(this.projectRoot, '.next/codemaps');
+    this.watchedDirs = [
+      'app',
+      'components',
+      'lib',
+      'hooks',
+      'utils'
+    ];
     this.watchers = [];
     this.debounceTime = 1000; // 1 second debounce
     this.pendingUpdates = new Map();
@@ -24,7 +30,7 @@ class RealTimeCodeMapsMonitor {
    * Start real-time monitoring
    */
   async start() {
-    console.log("👁️  Starting Real-time CodeMaps Monitor...\n");
+    console.log('👁️  Starting Real-time CodeMaps Monitor...\n');
 
     try {
       // Ensure output directory exists
@@ -42,11 +48,12 @@ class RealTimeCodeMapsMonitor {
       // Start monitoring loop
       this.startMonitoringLoop();
 
-      console.log("✅ Real-time CodeMaps Monitor started!");
-      console.log("📁 Watching directories:", this.watchedDirs.join(", "));
-      console.log("🔄 Auto-update enabled with 1s debounce");
+      console.log('✅ Real-time CodeMaps Monitor started!');
+      console.log('📁 Watching directories:', this.watchedDirs.join(', '));
+      console.log('🔄 Auto-update enabled with 1s debounce');
+
     } catch (error) {
-      console.error("❌ Failed to start monitor:", error.message);
+      console.error('❌ Failed to start monitor:', error.message);
       process.exit(1);
     }
   }
@@ -64,16 +71,16 @@ class RealTimeCodeMapsMonitor {
    * Load existing CodeMaps
    */
   async loadExistingCodeMaps() {
-    console.log("📋 Loading existing CodeMaps...");
+    console.log('📋 Loading existing CodeMaps...');
 
-    const indexPath = path.join(this.outputDir, "index.json");
+    const indexPath = path.join(this.outputDir, 'index.json');
     if (fs.existsSync(indexPath)) {
-      const content = fs.readFileSync(indexPath, "utf8");
+      const content = fs.readFileSync(indexPath, 'utf8');
       this.existingCodeMaps = JSON.parse(content);
-      console.log("✅ Existing CodeMaps loaded");
+      console.log('✅ Existing CodeMaps loaded');
     } else {
       this.existingCodeMaps = { components: [], api: [], utilities: [] };
-      console.log("⚠️  No existing CodeMaps found, will create new ones");
+      console.log('⚠️  No existing CodeMaps found, will create new ones');
     }
   }
 
@@ -81,19 +88,15 @@ class RealTimeCodeMapsMonitor {
    * Setup file watchers
    */
   setupWatchers() {
-    console.log("👀 Setting up file watchers...");
+    console.log('👀 Setting up file watchers...');
 
     for (const dir of this.watchedDirs) {
       const dirPath = path.join(this.projectRoot, dir);
 
       if (fs.existsSync(dirPath)) {
-        const watcher = fs.watch(
-          dirPath,
-          { recursive: true },
-          (eventType, filename) => {
-            this.handleFileChange(dir, eventType, filename);
-          },
-        );
+        const watcher = fs.watch(dirPath, { recursive: true }, (eventType, filename) => {
+          this.handleFileChange(dir, eventType, filename);
+        });
 
         this.watchers.push(watcher);
         console.log(`✅ Watching: ${dir}`);
@@ -113,7 +116,7 @@ class RealTimeCodeMapsMonitor {
     const fileExt = path.extname(filename);
 
     // Only watch relevant file types
-    if (![".ts", ".tsx", ".js", "jsx"].includes(fileExt)) {
+    if (!['.ts', '.tsx', '.js', 'jsx'].includes(fileExt)) {
       return;
     }
 
@@ -141,7 +144,7 @@ class RealTimeCodeMapsMonitor {
       dir,
       fullPath,
       eventType,
-      timestamp: Date.now(),
+      timestamp: Date.now()
     };
 
     // Add to pending updates
@@ -155,7 +158,7 @@ class RealTimeCodeMapsMonitor {
    * Start monitoring loop
    */
   startMonitoringLoop() {
-    console.log("🔄 Starting monitoring loop...");
+    console.log('🔄 Starting monitoring loop...');
 
     setInterval(() => {
       this.processPendingUpdates();
@@ -171,15 +174,12 @@ class RealTimeCodeMapsMonitor {
    * Process pending updates
    */
   async processPendingUpdates() {
-    if (
-      !this.pendingCodeMapUpdates ||
-      this.pendingCodeMapUpdates.length === 0
-    ) {
+    if (!this.pendingCodeMapUpdates || this.pendingCodeMapUpdates.length === 0) {
       return;
     }
 
     if (this.isUpdating) {
-      console.log("⏳ Update in progress, skipping...");
+      console.log('⏳ Update in progress, skipping...');
       return;
     }
 
@@ -196,9 +196,10 @@ class RealTimeCodeMapsMonitor {
       // Generate updated report
       await this.generateMonitoringReport();
 
-      console.log("✅ CodeMaps updated successfully");
+      console.log('✅ CodeMaps updated successfully');
+
     } catch (error) {
-      console.error("❌ Failed to update CodeMaps:", error.message);
+      console.error('❌ Failed to update CodeMaps:', error.message);
     } finally {
       this.isUpdating = false;
     }
@@ -208,14 +209,14 @@ class RealTimeCodeMapsMonitor {
    * Update CodeMaps based on file changes
    */
   async updateCodeMaps(updates) {
-    const changedDirs = new Set(updates.map((u) => u.dir));
+    const changedDirs = new Set(updates.map(u => u.dir));
 
     for (const dir of changedDirs) {
-      if (dir === "components") {
+      if (dir === 'components') {
         await this.updateComponentsMap();
-      } else if (dir === "app") {
+      } else if (dir === 'app') {
         await this.updateApiMap();
-      } else if (dir === "lib" || dir === "utils" || dir === "hooks") {
+      } else if (dir === 'lib' || dir === 'utils' || dir === 'hooks') {
         await this.updateUtilitiesMap();
       }
     }
@@ -228,17 +229,17 @@ class RealTimeCodeMapsMonitor {
    * Update components map
    */
   async updateComponentsMap() {
-    const componentsDir = path.join(this.projectRoot, "components");
+    const componentsDir = path.join(this.projectRoot, 'components');
     const componentFiles = this.findComponentFiles(componentsDir);
 
     const componentsMap = {
-      version: "1.0.0",
+      version: '1.0.0',
       generated: new Date().toISOString(),
       lastUpdated: new Date().toISOString(),
-      components: [],
+      components: []
     };
 
-    componentFiles.forEach((file) => {
+    componentFiles.forEach(file => {
       const relativePath = path.relative(this.projectRoot, file);
       const componentName = path.basename(file, path.extname(file));
 
@@ -248,33 +249,31 @@ class RealTimeCodeMapsMonitor {
         type: this.getComponentType(file),
         size: fs.statSync(file).size,
         lastModified: fs.statSync(file).mtime.toISOString(),
-        lastAnalyzed: new Date().toISOString(),
+        lastAnalyzed: new Date().toISOString()
       });
     });
 
-    const componentsPath = path.join(this.outputDir, "components.json");
+    const componentsPath = path.join(this.outputDir, 'components.json');
     fs.writeFileSync(componentsPath, JSON.stringify(componentsMap, null, 2));
 
-    console.log(
-      `🧩 Updated components map: ${componentFiles.length} components`,
-    );
+    console.log(`🧩 Updated components map: ${componentFiles.length} components`);
   }
 
   /**
    * Update API routes map
    */
   async updateApiMap() {
-    const apiDir = path.join(this.projectRoot, "app", "api");
+    const apiDir = path.join(this.projectRoot, 'app', 'api');
     const apiFiles = this.findApiFiles(apiDir);
 
     const apiMap = {
-      version: "1.0.0",
+      version: '1.0.0',
       generated: new Date().toISOString(),
       lastUpdated: new Date().toISOString(),
-      routes: [],
+      routes: []
     };
 
-    apiFiles.forEach((file) => {
+    apiFiles.forEach(file => {
       const relativePath = path.relative(this.projectRoot, file);
       const routePath = this.extractRoutePath(file);
 
@@ -284,11 +283,11 @@ class RealTimeCodeMapsMonitor {
         method: this.extractHttpMethod(file),
         size: fs.statSync(file).size,
         lastModified: fs.statSync(file).mtime.toISOString(),
-        lastAnalyzed: new Date().toISOString(),
+        lastAnalyzed: new Date().toISOString()
       });
     });
 
-    const apiPath = path.join(this.outputDir, "api-routes.json");
+    const apiPath = path.join(this.outputDir, 'api-routes.json');
     fs.writeFileSync(apiPath, JSON.stringify(apiMap, null, 2));
 
     console.log(`🔌 Updated API routes map: ${apiFiles.length} routes`);
@@ -298,25 +297,23 @@ class RealTimeCodeMapsMonitor {
    * Update utilities map
    */
   async updateUtilitiesMap() {
-    const utilDirs = ["lib", "utils", "hooks"].map((dir) =>
-      path.join(this.projectRoot, dir),
-    );
+    const utilDirs = ['lib', 'utils', 'hooks'].map(dir => path.join(this.projectRoot, dir));
     const utilFiles = [];
 
-    utilDirs.forEach((dir) => {
+    utilDirs.forEach(dir => {
       if (fs.existsSync(dir)) {
         utilFiles.push(...this.findUtilFiles(dir));
       }
     });
 
     const utilMap = {
-      version: "1.0.0",
+      version: '1.0.0',
       generated: new Date().toISOString(),
       lastUpdated: new Date().toISOString(),
-      utilities: [],
+      utilities: []
     };
 
-    utilFiles.forEach((file) => {
+    utilFiles.forEach(file => {
       const relativePath = path.relative(this.projectRoot, file);
       const utilName = path.basename(file, path.extname(file));
 
@@ -326,11 +323,11 @@ class RealTimeCodeMapsMonitor {
         type: this.getUtilType(file),
         size: fs.statSync(file).size,
         lastModified: fs.statSync(file).mtime.toISOString(),
-        lastAnalyzed: new Date().toISOString(),
+        lastAnalyzed: new Date().toISOString()
       });
     });
 
-    const utilPath = path.join(this.outputDir, "utilities.json");
+    const utilPath = path.join(this.outputDir, 'utilities.json');
     fs.writeFileSync(utilPath, JSON.stringify(utilMap, null, 2));
 
     console.log(`🛠️  Updated utilities map: ${utilFiles.length} utilities`);
@@ -341,25 +338,25 @@ class RealTimeCodeMapsMonitor {
    */
   async updateMainIndex() {
     const index = {
-      version: "1.0.0",
+      version: '1.0.0',
       generated: new Date().toISOString(),
       lastUpdated: new Date().toISOString(),
-      project: "airbear-pwa",
+      project: 'airbear-pwa',
       monitoring: {
         enabled: true,
         autoUpdate: true,
         debounceTime: this.debounceTime,
-        watchedDirs: this.watchedDirs,
+        watchedDirs: this.watchedDirs
       },
       maps: {
-        components: "components.json",
-        api: "api-routes.json",
-        utilities: "utilities.json",
+        components: 'components.json',
+        api: 'api-routes.json',
+        utilities: 'utilities.json'
       },
-      stats: this.calculateStats(),
+      stats: this.calculateStats()
     };
 
-    const indexPath = path.join(this.outputDir, "index.json");
+    const indexPath = path.join(this.outputDir, 'index.json');
     fs.writeFileSync(indexPath, JSON.stringify(index, null, 2));
   }
 
@@ -367,18 +364,18 @@ class RealTimeCodeMapsMonitor {
    * Calculate current stats
    */
   calculateStats() {
-    const componentsPath = path.join(this.outputDir, "components.json");
-    const apiPath = path.join(this.outputDir, "api-routes.json");
-    const utilPath = path.join(this.outputDir, "utilities.json");
+    const componentsPath = path.join(this.outputDir, 'components.json');
+    const apiPath = path.join(this.outputDir, 'api-routes.json');
+    const utilPath = path.join(this.outputDir, 'utilities.json');
 
     let stats = {
       totalFiles: 0,
       totalSize: 0,
-      lastUpdated: new Date().toISOString(),
+      lastUpdated: new Date().toISOString()
     };
 
     try {
-      [componentsPath, apiPath, utilPath].forEach((filePath) => {
+      [componentsPath, apiPath, utilPath].forEach(filePath => {
         if (fs.existsSync(filePath)) {
           const stat = fs.statSync(filePath);
           stats.totalFiles++;
@@ -396,9 +393,9 @@ class RealTimeCodeMapsMonitor {
    * Setup monitoring dashboard
    */
   setupMonitoringDashboard() {
-    console.log("📊 Setting up monitoring dashboard...");
+    console.log('📊 Setting up monitoring dashboard...');
 
-    const dashboardPath = path.join(this.outputDir, "dashboard.html");
+    const dashboardPath = path.join(this.outputDir, 'dashboard.html');
     const dashboard = this.generateDashboardHTML();
 
     fs.writeFileSync(dashboardPath, dashboard);
@@ -470,15 +467,12 @@ class RealTimeCodeMapsMonitor {
         <div class="bg-gray-800 rounded-lg p-6">
             <h2 class="text-xl font-semibold text-orange-400 mb-4">📁 Watched Directories</h2>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                ${this.watchedDirs
-                  .map(
-                    (dir) =>
-                      `<div class="bg-gray-700 rounded p-3 text-center">
+                ${this.watchedDirs.map(dir =>
+                    `<div class="bg-gray-700 rounded p-3 text-center">
                         <div class="text-2xl mb-2">📁</div>
                         <div class="text-sm">${dir}</div>
-                    </div>`,
-                  )
-                  .join("")}
+                    </div>`
+                ).join('')}
             </div>
         </div>
     </div>
@@ -546,10 +540,10 @@ class RealTimeCodeMapsMonitor {
       watchedDirs: this.watchedDirs,
       pendingUpdates: this.pendingCodeMapUpdates?.length || 0,
       lastUpdate: new Date().toISOString(),
-      status: this.isUpdating ? "updating" : "idle",
+      status: this.isUpdating ? 'updating' : 'idle'
     };
 
-    const reportPath = path.join(this.outputDir, "monitoring-report.json");
+    const reportPath = path.join(this.outputDir, 'monitoring-report.json');
     fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
   }
 
@@ -561,7 +555,7 @@ class RealTimeCodeMapsMonitor {
     const walk = (currentDir) => {
       try {
         const items = fs.readdirSync(currentDir);
-        items.forEach((item) => {
+        items.forEach(item => {
           const itemPath = path.join(currentDir, item);
           const stat = fs.statSync(itemPath);
           if (stat.isDirectory()) {
@@ -583,12 +577,12 @@ class RealTimeCodeMapsMonitor {
     const walk = (currentDir) => {
       try {
         const items = fs.readdirSync(currentDir);
-        items.forEach((item) => {
+        items.forEach(item => {
           const itemPath = path.join(currentDir, item);
           const stat = fs.statSync(itemPath);
           if (stat.isDirectory()) {
             walk(itemPath);
-          } else if (item === "route.ts" || item === "route.js") {
+          } else if (item === 'route.ts' || item === 'route.js') {
             files.push(itemPath);
           }
         });
@@ -605,7 +599,7 @@ class RealTimeCodeMapsMonitor {
     const walk = (currentDir) => {
       try {
         const items = fs.readdirSync(currentDir);
-        items.forEach((item) => {
+        items.forEach(item => {
           const itemPath = path.join(currentDir, item);
           const stat = fs.statSync(itemPath);
           if (stat.isDirectory()) {
@@ -623,67 +617,64 @@ class RealTimeCodeMapsMonitor {
   }
 
   getComponentType(filePath) {
-    if (filePath.includes("ui/")) return "ui";
-    if (filePath.includes("forms/")) return "form";
-    if (filePath.includes("layout/")) return "layout";
-    if (filePath.includes("map/")) return "map";
-    return "component";
+    if (filePath.includes('ui/')) return 'ui';
+    if (filePath.includes('forms/')) return 'form';
+    if (filePath.includes('layout/')) return 'layout';
+    if (filePath.includes('map/')) return 'map';
+    return 'component';
   }
 
   extractRoutePath(filePath) {
-    const relativePath = path.relative(
-      path.join(this.projectRoot, "app", "api"),
-      filePath,
-    );
+    const relativePath = path.relative(path.join(this.projectRoot, 'app', 'api'), filePath);
     const dirPath = path.dirname(relativePath);
-    return `/api/${dirPath.replace(/\\/g, "/")}`;
+    return `/api/${dirPath.replace(/\\/g, '/')}`;
   }
 
   extractHttpMethod(filePath) {
     try {
-      const content = fs.readFileSync(filePath, "utf8");
-      if (content.includes("export async function GET")) return "GET";
-      if (content.includes("export async function POST")) return "POST";
-      if (content.includes("export async function PUT")) return "PUT";
-      if (content.includes("export async function DELETE")) return "DELETE";
-      if (content.includes("export async function PATCH")) return "PATCH";
-      return "UNKNOWN";
+      const content = fs.readFileSync(filePath, 'utf8');
+      if (content.includes('export async function GET')) return 'GET';
+      if (content.includes('export async function POST')) return 'POST';
+      if (content.includes('export async function PUT')) return 'PUT';
+      if (content.includes('export async function DELETE')) return 'DELETE';
+      if (content.includes('export async function PATCH')) return 'PATCH';
+      return 'UNKNOWN';
     } catch {
-      return "UNKNOWN";
+      return 'UNKNOWN';
     }
   }
 
   getUtilType(filePath) {
-    if (filePath.includes("supabase")) return "database";
-    if (filePath.includes("auth")) return "authentication";
-    if (filePath.includes("stripe")) return "payment";
-    if (filePath.includes("utils")) return "utility";
-    return "library";
+    if (filePath.includes('supabase')) return 'database';
+    if (filePath.includes('auth')) return 'authentication';
+    if (filePath.includes('stripe')) return 'payment';
+    if (filePath.includes('utils')) return 'utility';
+    return 'library';
   }
 
   /**
    * Stop monitoring
    */
   stop() {
-    console.log("🛑 Stopping CodeMaps Monitor...");
+    console.log('🛑 Stopping CodeMaps Monitor...');
 
     // Close all watchers
-    this.watchers.forEach((watcher) => {
+    this.watchers.forEach(watcher => {
       watcher.close();
     });
 
     // Clear pending updates
-    this.pendingUpdates.forEach((timeout) => {
+    this.pendingUpdates.forEach(timeout => {
       clearTimeout(timeout);
     });
 
-    console.log("✅ CodeMaps Monitor stopped");
+    console.log('✅ CodeMaps Monitor stopped');
   }
 }
 
 // Handle graceful shutdown
-process.on("SIGINT", () => {
-  console.log("\n🛑 Received SIGINT, stopping monitor...");
+process.on('SIGINT', () => {
+  console.log('\n🛑 Received SIGINT, stopping monitor...');
   if (global.monitor) {
     global.monitor.stop();
     process.exit(0);
@@ -695,8 +686,8 @@ if (require.main === module) {
   const monitor = new RealTimeCodeMapsMonitor();
   global.monitor = monitor;
   monitor.startTime = Date.now();
-  monitor.start().catch((error) => {
-    console.error("❌ Failed to start monitor:", error);
+  monitor.start().catch(error => {
+    console.error('❌ Failed to start monitor:', error);
     process.exit(1);
   });
 }

@@ -1,10 +1,11 @@
-import type React from "react";
+import { Analytics } from "@vercel/analytics/react";
 import type { Metadata, Viewport } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
-import { Analytics } from "@vercel/analytics/react";
+import type React from "react";
+
 import { AuthProvider } from "@/components/auth-provider";
-import { ThemeProvider } from "@/components/theme-provider";
 import ClientErrorLogger from "@/components/client-error-logger";
+import { ThemeProvider } from "@/components/theme-provider";
 import "leaflet/dist/leaflet.css";
 import "./globals.css";
 
@@ -103,9 +104,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body
-        className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased relative overflow-x-hidden`}
-      >
+      <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased relative overflow-x-hidden`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -122,7 +121,9 @@ export default function RootLayout({
           </div>
           <div className="relative z-10 min-h-screen">
             <ClientErrorLogger />
-            <AuthProvider>{children}</AuthProvider>
+            <AuthProvider>
+              {children}
+            </AuthProvider>
           </div>
         </ThemeProvider>
         <Analytics />

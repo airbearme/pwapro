@@ -1,28 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useAuthContext } from "@/components/auth-provider";
-import { getSupabaseClient } from "@/lib/supabase/client";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-  Calendar,
-  MapPin,
-  Leaf,
-  Award,
-  Navigation,
-  Clock,
-  CheckCircle,
-} from "lucide-react";
+import { Calendar, MapPin, Leaf, Award, Navigation, Clock, CheckCircle } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+
+import { useAuthContext } from "@/components/auth-provider";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { getSupabaseClient } from "@/lib/supabase/client";
+
 
 interface Ride {
   id: string;
@@ -216,10 +204,7 @@ export default function DashboardPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button
-                asChild
-                className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600"
-              >
+              <Button asChild className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600">
                 <Link href="/map">View Map & Book</Link>
               </Button>
             </CardContent>
@@ -257,10 +242,7 @@ export default function DashboardPage() {
                 <p className="text-muted-foreground mb-4">
                   Book your first AirBear ride to get started!
                 </p>
-                <Button
-                  asChild
-                  className="bg-gradient-to-r from-emerald-500 to-emerald-600"
-                >
+                <Button asChild className="bg-gradient-to-r from-emerald-500 to-emerald-600">
                   <Link href="/map">Book Your First Ride</Link>
                 </Button>
               </div>
@@ -270,16 +252,11 @@ export default function DashboardPage() {
                   const pickupSpot = spots[ride.pickup_spot_id];
                   const dropoffSpot = spots[ride.dropoff_spot_id];
                   const statusColors: Record<string, string> = {
-                    pending:
-                      "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
-                    accepted:
-                      "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
-                    in_progress:
-                      "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400",
-                    completed:
-                      "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
-                    cancelled:
-                      "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
+                    pending: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
+                    accepted: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
+                    in_progress: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400",
+                    completed: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
+                    cancelled: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
                   };
 
                   return (
@@ -291,10 +268,7 @@ export default function DashboardPage() {
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
                             <Badge
-                              className={
-                                statusColors[ride.status] ||
-                                "bg-gray-100 text-gray-800"
-                              }
+                              className={statusColors[ride.status] || "bg-gray-100 text-gray-800"}
                             >
                               {ride.status.replace("_", " ").toUpperCase()}
                             </Badge>
@@ -306,8 +280,7 @@ export default function DashboardPage() {
                             <div className="flex items-center gap-2">
                               <MapPin className="w-4 h-4 text-emerald-600" />
                               <span className="text-sm">
-                                {pickupSpot?.name || "Unknown"} →{" "}
-                                {dropoffSpot?.name || "Unknown"}
+                                {pickupSpot?.name || "Unknown"} → {dropoffSpot?.name || "Unknown"}
                               </span>
                             </div>
                             {ride.distance && (

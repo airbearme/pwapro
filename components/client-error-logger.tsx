@@ -58,8 +58,8 @@ export default function ClientErrorLogger() {
           reason instanceof Error
             ? reason.message
             : typeof reason === "string"
-              ? reason
-              : "Unhandled promise rejection",
+            ? reason
+            : "Unhandled promise rejection",
         stack: reason instanceof Error ? reason.stack : undefined,
         url: window.location.href,
         userAgent: navigator.userAgent,

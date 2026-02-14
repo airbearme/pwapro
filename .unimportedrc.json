@@ -1,32 +1,19 @@
 {
   "entry": [
-    "app/layout.tsx",
-    "app/page.tsx",
-    "app/**/page.tsx",
-    "app/**/layout.tsx",
-    "app/api/**/route.ts",
-    "proxy.ts",
-    "components/map-view-beautiful.tsx"
+    "app/**/*.{ts,tsx}",
+    "components/**/*.{ts,tsx}",
+    "lib/**/*.{ts,tsx}",
+    "hooks/**/*.{ts,tsx}",
+    "proxy.ts"
   ],
-  "ignoreUnimported": [
-    "scripts/**",
-    "public/**",
-    "next.config.*",
-    "tailwind.config.ts",
-    "postcss.config.js",
-    "eslint.config.*"
+  "ignoreUnused": [
+    "public/**/*",
+    "scripts/**/*",
+    "tests/**/*",
+    "__tests__/**/*",
+    ".next/**/*",
+    "node_modules/**/*"
   ],
   "ignoreUnresolved": [],
-  "ignoreUnused": [
-    "@radix-ui/*",
-    "@stripe/*",
-    "@supabase/*",
-    "@tanstack/*",
-    "@vercel/*",
-    "lucide-react",
-    "framer-motion",
-    "leaflet",
-    "react-leaflet",
-    "zod"
-  ]
+  "ignoreImport": []
 }

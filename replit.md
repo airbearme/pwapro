@@ -9,7 +9,6 @@ Preferred communication style: Simple, everyday language.
 # System Architecture
 
 ## Frontend Architecture
-
 - **Framework**: React 18 with TypeScript and Vite for development/build tooling
 - **UI Components**: Shadcn/ui component library built on Radix UI primitives
 - **Styling**: Tailwind CSS with custom eco-luxury theme (emerald, lime, amber gradients)
@@ -19,7 +18,6 @@ Preferred communication style: Simple, everyday language.
 - **PWA Features**: Service worker, manifest file, offline capabilities
 
 ## Backend Architecture
-
 - **Runtime**: Node.js with Express server
 - **Language**: TypeScript with ES modules
 - **API Pattern**: RESTful API with structured route handlers
@@ -28,14 +26,12 @@ Preferred communication style: Simple, everyday language.
 - **Build Process**: ESBuild for production bundling, TSX for development
 
 ## Data Storage
-
 - **Database**: PostgreSQL (configured via Drizzle but using in-memory for development)
 - **Schema**: Comprehensive schema with users, spots, rickshaws, rides, bodega items, orders, and payments
 - **User Roles**: Role-based system (user, driver, admin) with different UI experiences
 - **Data Models**: Strongly typed with Zod validation schemas
 
 ## Authentication & Authorization
-
 - **Auth Strategy**: Custom implementation with email/password and OAuth support (Google, Apple)
 - **Session Management**: Local storage for client-side session persistence
 - **Role-Based Access**: Different dashboard views and permissions based on user role

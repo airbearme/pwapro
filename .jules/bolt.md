@@ -1,6 +1,9 @@
-# Bolt's Journal - Critical Learnings
+# Bolt's Performance Journal
 
-## 2025-05-15 - Stable Callbacks in Leaflet Marker Synchronization
+## 2025-05-15 - [CI-Build Dependency for Performance Tools]
+**Learning:** Performance analysis tools like `codemaps:generate` in this repository trigger a full `next build`. This means mandatory environment variables defined in `lib/env.ts` must be present and satisfy Zod validation even in CI environments that don't need real credentials.
+**Action:** Always provide placeholder environment variables (with valid formats like `eyJ...` for JWTs) in CI workflows that run build-dependent analysis tools.
 
-**Learning:** In `MapView`, syncing markers in-place is much faster than `clearLayers()` + `addLayer()`, but it introduces a stale closure risk for event listeners (e.g., `click`). Re-attaching listeners on every render defeats the performance gain of in-place updates.
-**Action:** Use the "Ref Pattern" for Leaflet events: attach the listener once during marker creation, and have that listener access the latest props/state via a `useRef`. This keeps the Leaflet lifecycle independent of React's render cycle while ensuring callbacks always use fresh data.
+## 2025-05-15 - [Efficient Map Synchronization]
+**Learning:** React-Leaflet integration often suffers from "stale closure" or "re-initialization storm" when props change. Using a `Map` of markers in a `ref` allows for in-place updates (O(N+M)) instead of full removal/re-addition, significantly reducing layout thrashing on high-frequency updates.
+**Action:** Use `markersRef.current.get(id)` to update existing markers instead of clearing the whole layer on every prop change.

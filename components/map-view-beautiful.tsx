@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState, memo } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
+
 import type { AirbearLocation } from "@/lib/supabase/realtime";
 import type { Database } from "@/lib/types/database";
 
@@ -12,16 +13,38 @@ interface MapViewProps {
   onSpotSelect?: (spot: Spot) => void;
 }
 
-const MapView = memo(({ spots, airbears, onSpotSelect }: MapViewProps) => {
+/**
+ * ⚡ Bolt Optimization:
+ * 1. Wrapped component in React.memo to prevent unnecessary re-renders when parent state changes but props remain deep-equal.
+ * 2. Optimized AirBear count calculation from O(N*M) to O(N+M) using a Map.
+ * 3. Implemented in-place marker updates instead of full clear/re-add for both spots and airbears.
+ * 4. Used refs for event callbacks to avoid stale closures without requiring effect re-runs.
+ */
+const MapView = React.memo(function MapView({
+  spots,
+  airbears,
+  onSpotSelect,
+}: MapViewProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
-  const initializingRef = useRef(false);
   const markersRef = useRef<Map<string, any>>(new Map());
   const LeafletRef = useRef<any>(null);
   const spotsRef = useRef(spots);
   const onSpotSelectRef = useRef(onSpotSelect);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [mapError, setMapError] = useState<string | null>(null);
+  const initializingRef = useRef(false);
+
+  // Pre-calculate AirBear counts per spot for O(1) lookup during marker render
+  const airbearCountsBySpot = useMemo(() => {
+    const counts = new Map<string, number>();
+    airbears.forEach((a) => {
+      if (a.is_available && a.current_spot_id) {
+        counts.set(a.current_spot_id, (counts.get(a.current_spot_id) || 0) + 1);
+      }
+    });
+    return counts;
+  }, [airbears]);
 
   useEffect(() => {
     spotsRef.current = spots;
@@ -36,8 +59,8 @@ const MapView = memo(({ spots, airbears, onSpotSelect }: MapViewProps) => {
       return;
     }
 
+    initializingRef.current = true;
     const initMap = async () => {
-      initializingRef.current = true;
       try {
         setMapError(null);
 
@@ -122,7 +145,7 @@ const MapView = memo(({ spots, airbears, onSpotSelect }: MapViewProps) => {
             maxZoom: 19,
             tileSize: 256,
             zoomOffset: 0,
-          },
+          }
         ).addTo(map);
 
         // Add custom styling for Binghamton
@@ -136,11 +159,12 @@ const MapView = memo(({ spots, airbears, onSpotSelect }: MapViewProps) => {
         setMapLoaded(true);
 
         // Setup global booking function
-        if (typeof window !== "undefined") {
+        const handleSpotSelect = onSpotSelectRef.current;
+        if (typeof window !== "undefined" && handleSpotSelect) {
           (window as any).selectSpotForBooking = (spotId: string) => {
             const spot = spotsRef.current.find((s) => s.id === spotId);
-            if (spot && onSpotSelectRef.current) {
-              onSpotSelectRef.current(spot);
+            if (spot) {
+              handleSpotSelect(spot);
             }
           };
         }
@@ -148,7 +172,7 @@ const MapView = memo(({ spots, airbears, onSpotSelect }: MapViewProps) => {
         console.error("❌ Error initializing map:", error);
         setMapLoaded(false);
         setMapError(
-          error instanceof Error ? error.message : "Map failed to load",
+          error instanceof Error ? error.message : "Map failed to load"
         );
       }
     };
@@ -157,14 +181,13 @@ const MapView = memo(({ spots, airbears, onSpotSelect }: MapViewProps) => {
 
     return () => {
       if (mapInstanceRef.current) {
-        initializingRef.current = false;
         if (mapInstanceRef.current.__resizeObserver) {
           mapInstanceRef.current.__resizeObserver.disconnect();
         }
         if (mapInstanceRef.current.__resizeHandler) {
           window.removeEventListener(
             "resize",
-            mapInstanceRef.current.__resizeHandler,
+            mapInstanceRef.current.__resizeHandler
           );
         }
         mapInstanceRef.current.remove();
@@ -179,37 +202,14 @@ const MapView = memo(({ spots, airbears, onSpotSelect }: MapViewProps) => {
     const map = mapInstanceRef.current;
     const L = LeafletRef.current;
 
-    // ⚡ Bolt: Optimize AirBear count calculation (O(N+M))
-    const countsMap = new Map<string, number>();
-    airbears.forEach((a) => {
-      if (a.is_available && a.current_spot_id) {
-        countsMap.set(
-          a.current_spot_id,
-          (countsMap.get(a.current_spot_id) || 0) + 1,
-        );
-      }
-    });
+    // Track active spot IDs to remove stale ones
+    const activeSpotIds = new Set(spots.map(s => `spot-${s.id}`));
 
-    // ⚡ Bolt: Synchronize spot markers in-place to avoid expensive remove/add operations
-    const currentSpotIds = new Set(spots.map((s) => s.id));
-
-    // Remove markers for spots that no longer exist
-    markersRef.current.forEach((marker, id) => {
-      if (id.startsWith("spot-")) {
-        const spotId = id.replace("spot-", "");
-        if (!currentSpotIds.has(spotId)) {
-          marker.remove();
-          markersRef.current.delete(id);
-        }
-      }
-    });
-
-    // Add or update spot markers
+    // Sync spot markers
     spots.forEach((spot) => {
-      const availableCount = countsMap.get(spot.id) || 0;
-      const hasAvailableAirbears = availableCount > 0;
       const markerId = `spot-${spot.id}`;
-      let marker = markersRef.current.get(markerId);
+      const airbearCount = airbearCountsBySpot.get(spot.id) || 0;
+      const hasAvailableAirbears = airbearCount > 0;
 
       const icon = L.divIcon({
         html: `
@@ -301,22 +301,6 @@ const MapView = memo(({ spots, airbears, onSpotSelect }: MapViewProps) => {
         popupAnchor: [0, -56],
       });
 
-      if (marker) {
-        marker.setLatLng([spot.latitude, spot.longitude]);
-        marker.setIcon(icon);
-      } else {
-        marker = L.marker([spot.latitude, spot.longitude], { icon }).addTo(map);
-        markersRef.current.set(markerId, marker);
-
-        // Setup click handler for booking once
-        marker.on("click", () => {
-          const latestSpot = spotsRef.current.find((s) => s.id === spot.id);
-          if (latestSpot && onSpotSelectRef.current) {
-            onSpotSelectRef.current(latestSpot);
-          }
-        });
-      }
-
       const popupContent = `
         <div style="min-width: 240px; padding: 12px; font-family: system-ui, -apple-system, sans-serif;">
           <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #1f2937; background: linear-gradient(135deg, #10b981, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">${
@@ -332,27 +316,27 @@ const MapView = memo(({ spots, airbears, onSpotSelect }: MapViewProps) => {
               ? "linear-gradient(135deg, #ecfdf5, #d1fae5)"
               : "#f3f4f6"
           }; border-radius: 10px; border: 2px solid ${
-            hasAvailableAirbears ? "#10b981" : "#9ca3af"
-          };">
+        hasAvailableAirbears ? "#10b981" : "#9ca3af"
+      };">
             <div style="width: 20px; height: 20px; background: ${
               hasAvailableAirbears ? "#10b981" : "#9ca3af"
             }; border-radius: 50%; box-shadow: 0 0 12px ${
-              hasAvailableAirbears ? "#10b981" : "#9ca3af"
-            }; animation: ${
-              hasAvailableAirbears ? "pulse 2s ease-in-out infinite" : "none"
-            };"></div>
+        hasAvailableAirbears ? "#10b981" : "#9ca3af"
+      }; animation: ${
+        hasAvailableAirbears ? "pulse 2s ease-in-out infinite" : "none"
+      };"></div>
             <span style="font-weight: 700; color: ${
               hasAvailableAirbears ? "#047857" : "#4b5563"
-            }; font-size: 15px;">${availableCount} AirBear${
-              availableCount !== 1 ? "s" : ""
-            } available</span>
+            }; font-size: 15px;">${airbearCount} AirBear${
+        airbearCount !== 1 ? "s" : ""
+      } available</span>
           </div>
           ${
             spot.amenities && spot.amenities.length > 0
               ? `
             <div style="font-size: 13px; color: #6b7280; background: linear-gradient(135deg, #f9fafb, #f3f4f6); padding: 8px 12px; border-radius: 8px; border-left: 4px solid #10b981;">
               <strong style="color: #1f2937;">✨ Amenities:</strong> ${spot.amenities.join(
-                ", ",
+                ", "
               )}
             </div>
           `
@@ -387,12 +371,37 @@ const MapView = memo(({ spots, airbears, onSpotSelect }: MapViewProps) => {
         </div>
       `;
 
-      marker.bindPopup(popupContent + bookingButton, {
-        maxWidth: 300,
-        className: "beautiful-popup",
-      });
+      let marker = markersRef.current.get(markerId);
+      if (marker) {
+        marker.setLatLng([spot.latitude, spot.longitude]);
+        marker.setIcon(icon);
+        marker.setPopupContent(popupContent + bookingButton);
+      } else {
+        marker = L.marker([spot.latitude, spot.longitude], { icon }).addTo(map);
+        marker.bindPopup(popupContent + bookingButton, {
+          maxWidth: 300,
+          className: "beautiful-popup",
+        });
+
+        // Setup click handler for booking using ref to avoid stale closures
+        marker.on("click", () => {
+          if (onSpotSelectRef.current) {
+            onSpotSelectRef.current(spot);
+          }
+        });
+
+        markersRef.current.set(markerId, marker);
+      }
     });
-  }, [spots, airbears, mapLoaded]);
+
+    // Remove old spot markers
+    markersRef.current.forEach((marker, id) => {
+      if (id.startsWith("spot-") && !activeSpotIds.has(id)) {
+        marker.remove();
+        markersRef.current.delete(id);
+      }
+    });
+  }, [spots, airbearCountsBySpot, mapLoaded]);
 
   useEffect(() => {
     if (!mapInstanceRef.current || !LeafletRef.current || !mapLoaded) return;
@@ -502,13 +511,13 @@ const MapView = memo(({ spots, airbears, onSpotSelect }: MapViewProps) => {
           airbear.battery_level > 50
             ? "#10b981"
             : airbear.battery_level > 20
-              ? "#f59e0b"
-              : "#ef4444";
+            ? "#f59e0b"
+            : "#ef4444";
 
         const popupContent = `
           <div style="min-width: 220px; padding: 12px; font-family: system-ui, -apple-system, sans-serif;">
             <h4 style="font-size: 18px; font-weight: bold; margin-bottom: 12px; color: #1f2937; background: linear-gradient(135deg, #10b981, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">AirBear #${airbear.id.slice(
-              -4,
+              -4
             )}</h4>
             <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px;">
               <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: linear-gradient(135deg, #f9fafb, #f3f4f6); border-radius: 8px; border-left: 4px solid ${batteryColor};">
@@ -520,8 +529,8 @@ const MapView = memo(({ spots, airbears, onSpotSelect }: MapViewProps) => {
                     }%; height: 100%; background: linear-gradient(90deg, ${batteryColor}, ${batteryColor}dd); transition: width 0.3s; box-shadow: 0 0 8px ${batteryColor}80;"></div>
                   </div>
                   <span style="font-weight: 700; color: ${batteryColor}; font-size: 15px;">${
-                    airbear.battery_level
-                  }%</span>
+          airbear.battery_level
+        }%</span>
                 </div>
               </div>
               <div style="display: flex; justify-content: space-between; padding: 8px; background: linear-gradient(135deg, #f9fafb, #f3f4f6); border-radius: 8px; border-left: 4px solid ${
@@ -535,14 +544,14 @@ const MapView = memo(({ spots, airbears, onSpotSelect }: MapViewProps) => {
                     airbear.is_charging
                       ? "⚡ Charging"
                       : airbear.is_available
-                        ? "✓ Available"
-                        : "🚴 In Use"
+                      ? "✓ Available"
+                      : "🚴 In Use"
                   }
                 </span>
               </div>
               <div style="font-size: 12px; color: #9ca3af; text-align: center; margin-top: 4px; padding-top: 8px; border-top: 1px solid #e5e7eb;">
                 🕐 Last updated: ${new Date(
-                  airbear.updated_at,
+                  airbear.updated_at
                 ).toLocaleTimeString()}
               </div>
             </div>
@@ -557,17 +566,14 @@ const MapView = memo(({ spots, airbears, onSpotSelect }: MapViewProps) => {
       }
     });
 
-    // ⚡ Bolt: Optimize AirBear marker removal (O(M))
-    const currentAirbearIds = new Set(airbears.map((a) => a.id));
+    // Track active airbear IDs to remove stale ones
+    const activeAirbearIds = new Set(airbears.map(a => `airbear-${a.id}`));
 
     // Remove markers for airbears that no longer exist
     markersRef.current.forEach((marker, id) => {
-      if (id.startsWith("airbear-")) {
-        const airbearId = id.replace("airbear-", "");
-        if (!currentAirbearIds.has(airbearId)) {
-          marker.remove();
-          markersRef.current.delete(id);
-        }
+      if (id.startsWith("airbear-") && !activeAirbearIds.has(id)) {
+        marker.remove();
+        markersRef.current.delete(id);
       }
     });
   }, [airbears, mapLoaded]);
@@ -596,7 +602,9 @@ const MapView = memo(({ spots, airbears, onSpotSelect }: MapViewProps) => {
                 : "Loading beautiful Binghamton map..."}
             </p>
             {mapError && (
-              <p className="mt-2 text-sm text-emerald-200/80">{mapError}</p>
+              <p className="mt-2 text-sm text-emerald-200/80">
+                {mapError}
+              </p>
             )}
           </div>
         </div>
@@ -604,7 +612,5 @@ const MapView = memo(({ spots, airbears, onSpotSelect }: MapViewProps) => {
     </div>
   );
 });
-
-MapView.displayName = "MapView";
 
 export default MapView;

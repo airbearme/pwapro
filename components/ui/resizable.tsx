@@ -1,8 +1,8 @@
-"use client";
+'use client'
 
-import { GripVertical } from "lucide-react";
+import { GripVertical } from 'lucide-react'
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils'
 
 // Temporary fallback components to avoid build errors
 // These can be replaced with proper resizable components later
@@ -11,31 +11,40 @@ const ResizablePanelGroup = ({
   children,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("flex h-full w-full flex-col", className)} {...props}>
+  <div
+    className={cn(
+      'flex h-full w-full flex-col',
+      className,
+    )}
+    {...props}
+  >
     {children}
   </div>
-);
+)
 
 const ResizablePanel = ({
   className,
   children,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("flex-1", className)} {...props}>
+  <div
+    className={cn('flex-1', className)}
+    {...props}
+  >
     {children}
   </div>
-);
+)
 
 const ResizableHandle = ({
   withHandle,
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement> & {
-  withHandle?: boolean;
+  withHandle?: boolean
 }) => (
   <div
     className={cn(
-      "relative flex w-px items-center justify-center bg-border after:absolute after:inset-y-0 after:left-1/2 after:w-1 after:-translate-x-1/2",
+      'relative flex w-px items-center justify-center bg-border after:absolute after:inset-y-0 after:left-1/2 after:w-1 after:-translate-x-1/2',
       className,
     )}
     {...props}
@@ -46,6 +55,6 @@ const ResizableHandle = ({
       </div>
     )}
   </div>
-);
+)
 
-export { ResizablePanelGroup, ResizablePanel, ResizableHandle };
+export { ResizablePanelGroup, ResizablePanel, ResizableHandle }

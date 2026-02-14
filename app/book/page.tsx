@@ -566,7 +566,13 @@ function BookRidePageContent() {
 
 export default function BookRidePage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-black text-white flex items-center justify-center">Loading booking...</div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-black text-white flex items-center justify-center">
+          Loading booking...
+        </div>
+      }
+    >
       <BookRidePageContent />
     </Suspense>
   );

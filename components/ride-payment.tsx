@@ -1,11 +1,25 @@
 "use client";
 
-import { MapPin, Clock, DollarSign, CreditCard, Smartphone, QrCode, Banknote } from "lucide-react";
+import {
+  MapPin,
+  Clock,
+  DollarSign,
+  CreditCard,
+  Smartphone,
+  QrCode,
+  Banknote,
+} from "lucide-react";
 import { useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 
@@ -32,7 +46,9 @@ export function RidePayment({
   estimatedArrival,
   onPaymentComplete,
 }: RidePaymentProps) {
-  const [paymentMethod, setPaymentMethod] = useState<"card" | "digital" | "cash">("card");
+  const [paymentMethod, setPaymentMethod] = useState<
+    "card" | "digital" | "cash"
+  >("card");
   const [processing, setProcessing] = useState(false);
   const { toast } = useToast();
 
@@ -66,9 +82,9 @@ export function RidePayment({
     try {
       // Update ride status to confirmed for cash payment
       const response = await fetch(`/api/rides/${ride.id}/confirm`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ paymentMethod: 'cash' })
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ paymentMethod: "cash" }),
       });
 
       if (response.ok) {
@@ -134,7 +150,9 @@ export function RidePayment({
               <span>$4.00</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Distance ({ride.distance.toFixed(1)} km)</span>
+              <span className="text-muted-foreground">
+                Distance ({ride.distance.toFixed(1)} km)
+              </span>
               <span>Included</span>
             </div>
             <Separator />
@@ -176,7 +194,9 @@ export function RidePayment({
               <CreditCard className="mr-3 h-5 w-5" />
               <div className="text-left">
                 <div className="font-medium">Credit/Debit Card</div>
-                <div className="text-xs text-muted-foreground">Visa, Mastercard, etc.</div>
+                <div className="text-xs text-muted-foreground">
+                  Visa, Mastercard, etc.
+                </div>
               </div>
             </Button>
 
@@ -189,7 +209,9 @@ export function RidePayment({
               <Smartphone className="mr-3 h-5 w-5" />
               <div className="text-left">
                 <div className="font-medium">Digital Wallet</div>
-                <div className="text-xs text-muted-foreground">Apple Pay, Google Pay</div>
+                <div className="text-xs text-muted-foreground">
+                  Apple Pay, Google Pay
+                </div>
               </div>
             </Button>
 
@@ -202,7 +224,9 @@ export function RidePayment({
               <Banknote className="mr-3 h-5 w-5" />
               <div className="text-left">
                 <div className="font-medium">Pay Cash</div>
-                <div className="text-xs text-muted-foreground">Pay driver directly</div>
+                <div className="text-xs text-muted-foreground">
+                  Pay driver directly
+                </div>
               </div>
             </Button>
           </div>

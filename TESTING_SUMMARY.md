@@ -22,6 +22,7 @@ I've implemented a complete end-to-end user flow for both passengers and drivers
 ### ✅ Features Implemented
 
 **Passenger Features:**
+
 - ✅ View map with spots and AirBears
 - ✅ Click spot markers to book
 - ✅ Select pickup and destination
@@ -32,6 +33,7 @@ I've implemented a complete end-to-end user flow for both passengers and drivers
 - ✅ See ride status updates
 
 **Driver Features:**
+
 - ✅ View pending ride requests
 - ✅ Accept rides
 - ✅ Start rides
@@ -39,6 +41,7 @@ I've implemented a complete end-to-end user flow for both passengers and drivers
 - ✅ Real-time updates (auto-refresh every 5 seconds)
 
 **Payment Features:**
+
 - ✅ Stripe payment integration
 - ✅ Credit card payments
 - ✅ Apple Pay support
@@ -53,6 +56,7 @@ I've implemented a complete end-to-end user flow for both passengers and drivers
 ### As PASSENGER:
 
 1. **Register/Login:**
+
    ```
    Visit: https://airbear.me/auth/signup
    - Sign up with email OR
@@ -61,6 +65,7 @@ I've implemented a complete end-to-end user flow for both passengers and drivers
    ```
 
 2. **View Map:**
+
    ```
    Visit: https://airbear.me/map
    - Map loads with spots and AirBears
@@ -69,6 +74,7 @@ I've implemented a complete end-to-end user flow for both passengers and drivers
    ```
 
 3. **Book Ride:**
+
    ```
    Visit: https://airbear.me/book
    - Select pickup location
@@ -78,6 +84,7 @@ I've implemented a complete end-to-end user flow for both passengers and drivers
    ```
 
 4. **Complete Payment:**
+
    ```
    Visit: https://airbear.me/checkout?rideId=XXX&amount=4.00
    - Enter card: 4242 4242 4242 4242
@@ -98,6 +105,7 @@ I've implemented a complete end-to-end user flow for both passengers and drivers
 ### As DRIVER:
 
 1. **Register as Driver:**
+
    ```
    - Register normally
    - Update role in Supabase:
@@ -105,12 +113,14 @@ I've implemented a complete end-to-end user flow for both passengers and drivers
    ```
 
 2. **Login:**
+
    ```
    Visit: https://airbear.me/auth/login
    - Login with driver credentials
    ```
 
 3. **View Driver Dashboard:**
+
    ```
    Visit: https://airbear.me/driver
    - See pending ride requests
@@ -118,12 +128,14 @@ I've implemented a complete end-to-end user flow for both passengers and drivers
    ```
 
 4. **Accept Ride:**
+
    ```
    - Click "Accept Ride" on a pending ride
    - Ride moves to "Active Ride" section
    ```
 
 5. **Start Ride:**
+
    ```
    - Click "Start Ride" on active ride
    - Status changes to "in_progress"
@@ -141,6 +153,7 @@ I've implemented a complete end-to-end user flow for both passengers and drivers
 ## 🔍 Verification Checklist
 
 ### Authentication ✅
+
 - [ ] Email registration works
 - [ ] Google OAuth works
 - [ ] Apple OAuth works
@@ -149,6 +162,7 @@ I've implemented a complete end-to-end user flow for both passengers and drivers
 - [ ] Logout works
 
 ### Map & Booking ✅
+
 - [ ] Map loads correctly
 - [ ] Spots display on map
 - [ ] AirBears display on map
@@ -159,6 +173,7 @@ I've implemented a complete end-to-end user flow for both passengers and drivers
 - [ ] Ride creation works
 
 ### Payment ✅
+
 - [ ] Checkout page loads
 - [ ] Stripe Elements render
 - [ ] Credit card payment works
@@ -167,6 +182,7 @@ I've implemented a complete end-to-end user flow for both passengers and drivers
 - [ ] Ride status updates after payment
 
 ### Dashboard ✅
+
 - [ ] Dashboard loads
 - [ ] Stats display correctly
 - [ ] Ride history shows
@@ -174,6 +190,7 @@ I've implemented a complete end-to-end user flow for both passengers and drivers
 - [ ] Status badges work
 
 ### Driver Flow ✅
+
 - [ ] Driver dashboard loads
 - [ ] Pending rides show
 - [ ] Accept ride works
@@ -186,15 +203,19 @@ I've implemented a complete end-to-end user flow for both passengers and drivers
 ## 🐛 Known Issues & Fixes
 
 ### Issue: Map booking button doesn't work
+
 **Status:** ✅ Fixed - Map now redirects to booking page
 
 ### Issue: Payment fails
+
 **Fix:** Check Stripe keys are set in environment variables
 
 ### Issue: Driver can't see rides
+
 **Fix:** Verify driver role is set in database
 
 ### Issue: Ride status not updating
+
 **Fix:** Check database triggers and real-time subscriptions
 
 ---
@@ -202,6 +223,7 @@ I've implemented a complete end-to-end user flow for both passengers and drivers
 ## 📊 Database Schema Required
 
 Make sure these tables exist:
+
 - `users` - User accounts
 - `spots` - Pickup/destination locations
 - `airbears` - AirBear vehicles

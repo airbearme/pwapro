@@ -19,7 +19,6 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { getSupabaseClient } from "@/lib/supabase/client";
 
-
 export default function DriverSignupPage() {
   const { user } = useAuthContext();
   const router = useRouter();
@@ -69,7 +68,7 @@ export default function DriverSignupPage() {
 
           if (signInError) {
             throw new Error(
-              "Account exists but sign-in failed. Please contact support."
+              "Account exists but sign-in failed. Please contact support.",
             );
           }
         } else {
@@ -78,7 +77,7 @@ export default function DriverSignupPage() {
       }
 
       // Create user profile
-      const userId = (authData as any)?.user?.id || (user as any)?.id || '';
+      const userId = (authData as any)?.user?.id || (user as any)?.id || "";
       const { error: profileError } = await supabase.from("users").upsert({
         id: userId,
         email: `${formData.username}@airbear.me`,

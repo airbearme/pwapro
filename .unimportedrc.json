@@ -12,7 +12,12 @@
     "tests/**/*",
     "__tests__/**/*",
     ".next/**/*",
-    "node_modules/**/*"
+    "node_modules/**/*",
+    "*.config.js",
+    "*.config.ts",
+    "app.layout.analytics.tsx",
+    "observability/logger.ts",
+    "supabase/functions/**/*"
   ],
   "ignoreUnresolved": [],
   "ignoreImport": []

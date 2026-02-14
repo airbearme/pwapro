@@ -3,6 +3,7 @@
 ## Quick Deploy to Production
 
 ### Prerequisites
+
 - GitHub repository: `github.com/airbearme/pwapro`
 - Vercel account connected to GitHub
 - All environment variables set in Vercel
@@ -10,6 +11,7 @@
 ### Steps
 
 1. **Push to GitHub**
+
    ```bash
    git add .
    git commit -m "Deploy to production"
@@ -31,6 +33,7 @@ npm run deploy:vercel
 ## Environment Variables Setup
 
 ### In Vercel Dashboard:
+
 1. Go to Project Settings > Environment Variables
 2. Add all variables from `.env.local`:
    - `NEXT_PUBLIC_SUPABASE_PWA4_URL`
@@ -42,6 +45,7 @@ npm run deploy:vercel
    - `NEXT_PUBLIC_SITE_URL` (set to `https://airbear.me`)
 
 ### In GitHub Secrets (for CI/CD):
+
 1. Go to Repository Settings > Secrets and variables > Actions
 2. Add:
    - `VERCEL_TOKEN`
@@ -52,6 +56,7 @@ npm run deploy:vercel
 ## CI/CD Workflow
 
 The GitHub Actions workflow (`.github/workflows/ci-cd.yml`) will:
+
 1. Run on every push to `main` branch
 2. Validate code (type-check, lint, build)
 3. Deploy to Vercel production if validation passes
@@ -59,11 +64,13 @@ The GitHub Actions workflow (`.github/workflows/ci-cd.yml`) will:
 ## Troubleshooting
 
 ### Build Fails
+
 - Check GitHub Actions logs
 - Verify all environment variables are set
 - Run `npm run validate:env` locally
 
 ### Deployment Fails
+
 - Verify Vercel secrets in GitHub
 - Check Vercel project settings
 - Ensure domain is configured in Vercel

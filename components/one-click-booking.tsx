@@ -6,7 +6,13 @@ import { useState } from "react";
 import { useAuthContext } from "@/components/auth-provider";
 import { CheckoutButton } from "@/components/checkout-button";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { useToast } from "@/hooks/use-toast";
 import errorLogger from "@/lib/error-logger";

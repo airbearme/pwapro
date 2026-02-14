@@ -104,7 +104,9 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased relative overflow-x-hidden`}>
+      <body
+        className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased relative overflow-x-hidden`}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -121,9 +123,7 @@ export default function RootLayout({
           </div>
           <div className="relative z-10 min-h-screen">
             <ClientErrorLogger />
-            <AuthProvider>
-              {children}
-            </AuthProvider>
+            <AuthProvider>{children}</AuthProvider>
           </div>
         </ThemeProvider>
         <Analytics />

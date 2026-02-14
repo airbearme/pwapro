@@ -26,6 +26,7 @@ git push -u origin main
 ```
 
 Or use the script:
+
 ```bash
 bash scripts/push-and-deploy.sh
 ```
@@ -64,6 +65,7 @@ NODE_ENV=production
 ```
 
 **Important:**
+
 - Set each variable for **Production**, **Preview**, and **Development**
 - Click **"Save"** after adding each variable
 
@@ -91,6 +93,7 @@ NODE_ENV=production
 3. Add/Update these records:
 
 **For root domain (airbear.me):**
+
 ```
 Type: CNAME
 Name: @ (or leave blank)
@@ -99,6 +102,7 @@ TTL: 3600
 ```
 
 **For www subdomain:**
+
 ```
 Type: CNAME
 Name: www
@@ -107,6 +111,7 @@ TTL: 3600
 ```
 
 **Note:** If IONOS doesn't support CNAME for root domain, use A record:
+
 ```
 Type: A
 Name: @
@@ -156,21 +161,25 @@ Check these:
 ## Troubleshooting
 
 ### Build Fails
+
 - Check Vercel build logs
 - Verify all environment variables are set
 - Run `npm run build` locally to test
 
 ### Domain Not Working
+
 - Check DNS propagation: https://dnschecker.org
 - Verify DNS records in IONOS
 - Check domain in Vercel settings
 
 ### Webhook Not Working
+
 - Check Stripe webhook logs
 - Verify `STRIPE_WEBHOOK_SECRET` matches
 - Check Vercel function logs
 
 ### OAuth Not Working
+
 - Verify redirect URLs in Supabase
 - Check `NEXT_PUBLIC_SITE_URL` is `https://airbear.me`
 - Check browser console for errors

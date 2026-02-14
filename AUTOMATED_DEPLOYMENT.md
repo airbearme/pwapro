@@ -45,6 +45,7 @@ bash scripts/setup-supabase-api.sh
 ## Required Tokens
 
 ### GitHub Token
+
 1. Go to: https://github.com/settings/tokens
 2. Click "Generate new token (classic)"
 3. Scopes needed:
@@ -54,12 +55,14 @@ bash scripts/setup-supabase-api.sh
 4. Copy token → `export GITHUB_TOKEN=ghp_...`
 
 ### Vercel Token
+
 1. Go to: https://vercel.com/account/tokens
 2. Click "Create Token"
 3. Name: "AirBear PWA Deployment"
 4. Copy token → `export VERCEL_TOKEN=...`
 
 ### Stripe Secret Key (Optional)
+
 - Already in your `.env.local` as `STRIPE_SECRET_KEY`
 - Used for automated webhook creation
 
@@ -119,6 +122,7 @@ bash scripts/one-click-deploy.sh
 ```
 
 **What it does:**
+
 1. ✅ Creates GitHub repository
 2. ✅ Pushes code
 3. ✅ Sets up Vercel project
@@ -145,18 +149,21 @@ Once automated setup completes:
 ## Troubleshooting
 
 ### GitHub Token Issues
+
 ```bash
 # Test token
 curl -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/user
 ```
 
 ### Vercel Token Issues
+
 ```bash
 # Test token
 vercel whoami --token=$VERCEL_TOKEN
 ```
 
 ### Webhook Creation Fails
+
 - Check Stripe secret key is correct
 - Verify domain is accessible
 - Check Stripe API rate limits

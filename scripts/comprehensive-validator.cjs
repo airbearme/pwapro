@@ -5,9 +5,9 @@
  * Runs thorough validation until everything passes without warnings
  */
 
-const { execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+const { execSync } = require("child_process");
+const fs = require("fs");
+const path = require("path");
 
 class ComprehensiveValidator {
   constructor() {
@@ -16,7 +16,7 @@ class ComprehensiveValidator {
       passed: [],
       failed: [],
       warnings: [],
-      retries: 0
+      retries: 0,
     };
     this.maxRetries = 3;
   }
@@ -25,7 +25,7 @@ class ComprehensiveValidator {
    * Run comprehensive validation
    */
   async validate() {
-    console.log('🔍 Starting Comprehensive Validation...\n');
+    console.log("🔍 Starting Comprehensive Validation...\n");
 
     try {
       // Run validation in a loop until everything passes
@@ -34,7 +34,7 @@ class ComprehensiveValidator {
 
       while (!allPassed && attempt <= this.maxRetries) {
         console.log(`\n📋 Validation Attempt ${attempt}/${this.maxRetries}`);
-        console.log('='.repeat(50));
+        console.log("=".repeat(50));
 
         // Clear previous results
         this.results.failed = [];
@@ -59,13 +59,17 @@ class ComprehensiveValidator {
         await this.runProductionTests();
 
         // Check if everything passed
-        allPassed = this.results.failed.length === 0 && this.results.warnings.length === 0;
+        allPassed =
+          this.results.failed.length === 0 &&
+          this.results.warnings.length === 0;
 
         if (allPassed) {
-          console.log('\n🎉 All validations passed!');
+          console.log("\n🎉 All validations passed!");
           break;
         } else {
-          console.log(`\n⚠️  Validation failed with ${this.results.failed.length} errors and ${this.results.warnings.length} warnings`);
+          console.log(
+            `\n⚠️  Validation failed with ${this.results.failed.length} errors and ${this.results.warnings.length} warnings`,
+          );
 
           if (attempt < this.maxRetries) {
             console.log(`🔄 Retrying... (${attempt + 1}/${this.maxRetries})`);
@@ -80,12 +84,11 @@ class ComprehensiveValidator {
       this.generateFinalReport();
 
       if (!allPassed) {
-        console.log('\n❌ Validation failed after maximum retries');
+        console.log("\n❌ Validation failed after maximum retries");
         process.exit(1);
       }
-
     } catch (error) {
-      console.error('❌ Validation failed:', error.message);
+      console.error("❌ Validation failed:", error.message);
       process.exit(1);
     }
   }
@@ -94,15 +97,15 @@ class ComprehensiveValidator {
    * Run TypeScript type checking
    */
   async runTypeCheck() {
-    console.log('\n🔷 Running TypeScript Type Check...');
+    console.log("\n🔷 Running TypeScript Type Check...");
 
     try {
-      execSync('npm run type-check', { stdio: 'pipe', cwd: this.projectRoot });
-      this.results.passed.push('TypeScript Type Check');
-      console.log('✅ TypeScript Type Check passed');
+      execSync("npm run type-check", { stdio: "pipe", cwd: this.projectRoot });
+      this.results.passed.push("TypeScript Type Check");
+      console.log("✅ TypeScript Type Check passed");
     } catch (error) {
-      this.results.failed.push('TypeScript Type Check');
-      console.log('❌ TypeScript Type Check failed');
+      this.results.failed.push("TypeScript Type Check");
+      console.log("❌ TypeScript Type Check failed");
     }
   }
 
@@ -110,15 +113,15 @@ class ComprehensiveValidator {
    * Run ESLint
    */
   async runLinting() {
-    console.log('\n🔍 Running ESLint...');
+    console.log("\n🔍 Running ESLint...");
 
     try {
-      execSync('npm run lint', { stdio: 'pipe', cwd: this.projectRoot });
-      this.results.passed.push('ESLint');
-      console.log('✅ ESLint passed');
+      execSync("npm run lint", { stdio: "pipe", cwd: this.projectRoot });
+      this.results.passed.push("ESLint");
+      console.log("✅ ESLint passed");
     } catch (error) {
-      this.results.failed.push('ESLint');
-      console.log('❌ ESLint failed');
+      this.results.failed.push("ESLint");
+      console.log("❌ ESLint failed");
     }
   }
 
@@ -126,15 +129,18 @@ class ComprehensiveValidator {
    * Run CodeMaps validation
    */
   async runCodeMapsValidation() {
-    console.log('\n🗺️  Running CodeMaps Validation...');
+    console.log("\n🗺️  Running CodeMaps Validation...");
 
     try {
-      execSync('npm run codemaps:validate', { stdio: 'pipe', cwd: this.projectRoot });
-      this.results.passed.push('CodeMaps Validation');
-      console.log('✅ CodeMaps Validation passed');
+      execSync("npm run codemaps:validate", {
+        stdio: "pipe",
+        cwd: this.projectRoot,
+      });
+      this.results.passed.push("CodeMaps Validation");
+      console.log("✅ CodeMaps Validation passed");
     } catch (error) {
-      this.results.failed.push('CodeMaps Validation');
-      console.log('❌ CodeMaps Validation failed');
+      this.results.failed.push("CodeMaps Validation");
+      console.log("❌ CodeMaps Validation failed");
     }
   }
 
@@ -142,15 +148,15 @@ class ComprehensiveValidator {
    * Run build
    */
   async runBuild() {
-    console.log('\n🔨 Running Build...');
+    console.log("\n🔨 Running Build...");
 
     try {
-      execSync('npm run build', { stdio: 'pipe', cwd: this.projectRoot });
-      this.results.passed.push('Build');
-      console.log('✅ Build passed');
+      execSync("npm run build", { stdio: "pipe", cwd: this.projectRoot });
+      this.results.passed.push("Build");
+      console.log("✅ Build passed");
     } catch (error) {
-      this.results.failed.push('Build');
-      console.log('❌ Build failed');
+      this.results.failed.push("Build");
+      console.log("❌ Build failed");
     }
   }
 
@@ -158,15 +164,15 @@ class ComprehensiveValidator {
    * Run unit tests
    */
   async runUnitTests() {
-    console.log('\n🧪 Running Unit Tests...');
+    console.log("\n🧪 Running Unit Tests...");
 
     try {
-      execSync('npm run test:unit', { stdio: 'pipe', cwd: this.projectRoot });
-      this.results.passed.push('Unit Tests');
-      console.log('✅ Unit Tests passed');
+      execSync("npm run test:unit", { stdio: "pipe", cwd: this.projectRoot });
+      this.results.passed.push("Unit Tests");
+      console.log("✅ Unit Tests passed");
     } catch (error) {
-      this.results.failed.push('Unit Tests');
-      console.log('❌ Unit Tests failed');
+      this.results.failed.push("Unit Tests");
+      console.log("❌ Unit Tests failed");
     }
   }
 
@@ -174,15 +180,15 @@ class ComprehensiveValidator {
    * Run E2E tests
    */
   async runE2ETests() {
-    console.log('\n🎭 Running E2E Tests...');
+    console.log("\n🎭 Running E2E Tests...");
 
     try {
-      execSync('npm run test:e2e', { stdio: 'pipe', cwd: this.projectRoot });
-      this.results.passed.push('E2E Tests');
-      console.log('✅ E2E Tests passed');
+      execSync("npm run test:e2e", { stdio: "pipe", cwd: this.projectRoot });
+      this.results.passed.push("E2E Tests");
+      console.log("✅ E2E Tests passed");
     } catch (error) {
-      this.results.failed.push('E2E Tests');
-      console.log('❌ E2E Tests failed');
+      this.results.failed.push("E2E Tests");
+      console.log("❌ E2E Tests failed");
     }
   }
 
@@ -190,15 +196,18 @@ class ComprehensiveValidator {
    * Run performance tests
    */
   async runPerformanceTests() {
-    console.log('\n⚡ Running Performance Tests...');
+    console.log("\n⚡ Running Performance Tests...");
 
     try {
-      execSync('npm run test:performance', { stdio: 'pipe', cwd: this.projectRoot });
-      this.results.passed.push('Performance Tests');
-      console.log('✅ Performance Tests passed');
+      execSync("npm run test:performance", {
+        stdio: "pipe",
+        cwd: this.projectRoot,
+      });
+      this.results.passed.push("Performance Tests");
+      console.log("✅ Performance Tests passed");
     } catch (error) {
-      this.results.failed.push('Performance Tests');
-      console.log('❌ Performance Tests failed');
+      this.results.failed.push("Performance Tests");
+      console.log("❌ Performance Tests failed");
     }
   }
 
@@ -206,15 +215,18 @@ class ComprehensiveValidator {
    * Run security tests
    */
   async runSecurityTests() {
-    console.log('\n🔒 Running Security Tests...');
+    console.log("\n🔒 Running Security Tests...");
 
     try {
-      execSync('npm run test:security', { stdio: 'pipe', cwd: this.projectRoot });
-      this.results.passed.push('Security Tests');
-      console.log('✅ Security Tests passed');
+      execSync("npm run test:security", {
+        stdio: "pipe",
+        cwd: this.projectRoot,
+      });
+      this.results.passed.push("Security Tests");
+      console.log("✅ Security Tests passed");
     } catch (error) {
-      this.results.failed.push('Security Tests');
-      console.log('❌ Security Tests failed');
+      this.results.failed.push("Security Tests");
+      console.log("❌ Security Tests failed");
     }
   }
 
@@ -222,15 +234,18 @@ class ComprehensiveValidator {
    * Run accessibility tests
    */
   async runAccessibilityTests() {
-    console.log('\n♿ Running Accessibility Tests...');
+    console.log("\n♿ Running Accessibility Tests...");
 
     try {
-      execSync('npm run test:accessibility', { stdio: 'pipe', cwd: this.projectRoot });
-      this.results.passed.push('Accessibility Tests');
-      console.log('✅ Accessibility Tests passed');
+      execSync("npm run test:accessibility", {
+        stdio: "pipe",
+        cwd: this.projectRoot,
+      });
+      this.results.passed.push("Accessibility Tests");
+      console.log("✅ Accessibility Tests passed");
     } catch (error) {
-      this.results.failed.push('Accessibility Tests');
-      console.log('❌ Accessibility Tests failed');
+      this.results.failed.push("Accessibility Tests");
+      console.log("❌ Accessibility Tests failed");
     }
   }
 
@@ -238,15 +253,18 @@ class ComprehensiveValidator {
    * Run database tests
    */
   async runDatabaseTests() {
-    console.log('\n🗄️  Running Database Tests...');
+    console.log("\n🗄️  Running Database Tests...");
 
     try {
-      execSync('npm run test:database', { stdio: 'pipe', cwd: this.projectRoot });
-      this.results.passed.push('Database Tests');
-      console.log('✅ Database Tests passed');
+      execSync("npm run test:database", {
+        stdio: "pipe",
+        cwd: this.projectRoot,
+      });
+      this.results.passed.push("Database Tests");
+      console.log("✅ Database Tests passed");
     } catch (error) {
-      this.results.failed.push('Database Tests');
-      console.log('❌ Database Tests failed');
+      this.results.failed.push("Database Tests");
+      console.log("❌ Database Tests failed");
     }
   }
 
@@ -254,15 +272,15 @@ class ComprehensiveValidator {
    * Run Stripe tests
    */
   async runStripeTests() {
-    console.log('\n💳 Running Stripe Tests...');
+    console.log("\n💳 Running Stripe Tests...");
 
     try {
-      execSync('npm run test:stripe', { stdio: 'pipe', cwd: this.projectRoot });
-      this.results.passed.push('Stripe Tests');
-      console.log('✅ Stripe Tests passed');
+      execSync("npm run test:stripe", { stdio: "pipe", cwd: this.projectRoot });
+      this.results.passed.push("Stripe Tests");
+      console.log("✅ Stripe Tests passed");
     } catch (error) {
-      this.results.failed.push('Stripe Tests');
-      console.log('❌ Stripe Tests failed');
+      this.results.failed.push("Stripe Tests");
+      console.log("❌ Stripe Tests failed");
     }
   }
 
@@ -270,15 +288,15 @@ class ComprehensiveValidator {
    * Run PWA tests
    */
   async runPWATests() {
-    console.log('\n📱 Running PWA Tests...');
+    console.log("\n📱 Running PWA Tests...");
 
     try {
-      execSync('npm run test:pwa', { stdio: 'pipe', cwd: this.projectRoot });
-      this.results.passed.push('PWA Tests');
-      console.log('✅ PWA Tests passed');
+      execSync("npm run test:pwa", { stdio: "pipe", cwd: this.projectRoot });
+      this.results.passed.push("PWA Tests");
+      console.log("✅ PWA Tests passed");
     } catch (error) {
-      this.results.failed.push('PWA Tests');
-      console.log('❌ PWA Tests failed');
+      this.results.failed.push("PWA Tests");
+      console.log("❌ PWA Tests failed");
     }
   }
 
@@ -286,15 +304,18 @@ class ComprehensiveValidator {
    * Run component tests
    */
   async runComponentTests() {
-    console.log('\n🧩 Running Component Tests...');
+    console.log("\n🧩 Running Component Tests...");
 
     try {
-      execSync('npm run test:components', { stdio: 'pipe', cwd: this.projectRoot });
-      this.results.passed.push('Component Tests');
-      console.log('✅ Component Tests passed');
+      execSync("npm run test:components", {
+        stdio: "pipe",
+        cwd: this.projectRoot,
+      });
+      this.results.passed.push("Component Tests");
+      console.log("✅ Component Tests passed");
     } catch (error) {
-      this.results.failed.push('Component Tests');
-      console.log('❌ Component Tests failed');
+      this.results.failed.push("Component Tests");
+      console.log("❌ Component Tests failed");
     }
   }
 
@@ -302,15 +323,18 @@ class ComprehensiveValidator {
    * Run realtime tests
    */
   async runRealtimeTests() {
-    console.log('\n⚡ Running Realtime Tests...');
+    console.log("\n⚡ Running Realtime Tests...");
 
     try {
-      execSync('npm run test:realtime', { stdio: 'pipe', cwd: this.projectRoot });
-      this.results.passed.push('Realtime Tests');
-      console.log('✅ Realtime Tests passed');
+      execSync("npm run test:realtime", {
+        stdio: "pipe",
+        cwd: this.projectRoot,
+      });
+      this.results.passed.push("Realtime Tests");
+      console.log("✅ Realtime Tests passed");
     } catch (error) {
-      this.results.failed.push('Realtime Tests');
-      console.log('❌ Realtime Tests failed');
+      this.results.failed.push("Realtime Tests");
+      console.log("❌ Realtime Tests failed");
     }
   }
 
@@ -318,15 +342,15 @@ class ComprehensiveValidator {
    * Run bundle size tests
    */
   async runBundleSizeTests() {
-    console.log('\n📦 Running Bundle Size Tests...');
+    console.log("\n📦 Running Bundle Size Tests...");
 
     try {
-      execSync('npm run test:bundle', { stdio: 'pipe', cwd: this.projectRoot });
-      this.results.passed.push('Bundle Size Tests');
-      console.log('✅ Bundle Size Tests passed');
+      execSync("npm run test:bundle", { stdio: "pipe", cwd: this.projectRoot });
+      this.results.passed.push("Bundle Size Tests");
+      console.log("✅ Bundle Size Tests passed");
     } catch (error) {
-      this.results.failed.push('Bundle Size Tests');
-      console.log('❌ Bundle Size Tests failed');
+      this.results.failed.push("Bundle Size Tests");
+      console.log("❌ Bundle Size Tests failed");
     }
   }
 
@@ -334,15 +358,18 @@ class ComprehensiveValidator {
    * Run production tests
    */
   async runProductionTests() {
-    console.log('\n🚀 Running Production Tests...');
+    console.log("\n🚀 Running Production Tests...");
 
     try {
-      execSync('npm run test:production', { stdio: 'pipe', cwd: this.projectRoot });
-      this.results.passed.push('Production Tests');
-      console.log('✅ Production Tests passed');
+      execSync("npm run test:production", {
+        stdio: "pipe",
+        cwd: this.projectRoot,
+      });
+      this.results.passed.push("Production Tests");
+      console.log("✅ Production Tests passed");
     } catch (error) {
-      this.results.failed.push('Production Tests');
-      console.log('❌ Production Tests failed');
+      this.results.failed.push("Production Tests");
+      console.log("❌ Production Tests failed");
     }
   }
 
@@ -350,37 +377,46 @@ class ComprehensiveValidator {
    * Generate final report
    */
   generateFinalReport() {
-    console.log('\n' + '='.repeat(60));
-    console.log('📊 COMPREHENSIVE VALIDATION REPORT');
-    console.log('='.repeat(60));
+    console.log("\n" + "=".repeat(60));
+    console.log("📊 COMPREHENSIVE VALIDATION REPORT");
+    console.log("=".repeat(60));
 
     console.log(`\n✅ Passed: ${this.results.passed.length}`);
-    this.results.passed.forEach(test => console.log(`   ✓ ${test}`));
+    this.results.passed.forEach((test) => console.log(`   ✓ ${test}`));
 
     if (this.results.failed.length > 0) {
       console.log(`\n❌ Failed: ${this.results.failed.length}`);
-      this.results.failed.forEach(test => console.log(`   ❌ ${test}`));
+      this.results.failed.forEach((test) => console.log(`   ❌ ${test}`));
     }
 
     if (this.results.warnings.length > 0) {
       console.log(`\n⚠️  Warnings: ${this.results.warnings.length}`);
-      this.results.warnings.forEach(warning => console.log(`   ⚠️  ${warning}`));
+      this.results.warnings.forEach((warning) =>
+        console.log(`   ⚠️  ${warning}`),
+      );
     }
 
     const totalTests = this.results.passed.length + this.results.failed.length;
-    const successRate = totalTests > 0 ? (this.results.passed.length / totalTests * 100).toFixed(1) : 0;
+    const successRate =
+      totalTests > 0
+        ? ((this.results.passed.length / totalTests) * 100).toFixed(1)
+        : 0;
 
     console.log(`\n📈 Success Rate: ${successRate}%`);
     console.log(`🔄 Total Attempts: ${this.results.retries + 1}`);
 
     // Save report to file
-    const reportPath = path.join(this.projectRoot, '.next/codemaps', 'validation-report.json');
+    const reportPath = path.join(
+      this.projectRoot,
+      ".next/codemaps",
+      "validation-report.json",
+    );
     const report = {
       timestamp: new Date().toISOString(),
       results: this.results,
       successRate: parseFloat(successRate),
       totalTests,
-      status: this.results.failed.length === 0 ? 'PASSED' : 'FAILED'
+      status: this.results.failed.length === 0 ? "PASSED" : "FAILED",
     };
 
     fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
@@ -391,15 +427,15 @@ class ComprehensiveValidator {
    * Sleep utility
    */
   sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
 
 // Run validator
 if (require.main === module) {
   const validator = new ComprehensiveValidator();
-  validator.validate().catch(error => {
-    console.error('❌ Comprehensive validation failed:', error);
+  validator.validate().catch((error) => {
+    console.error("❌ Comprehensive validation failed:", error);
     process.exit(1);
   });
 }

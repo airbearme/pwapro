@@ -16,7 +16,7 @@ export default function FloatingMascot() {
     };
 
     checkMobile();
-    window.addEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
 
     // Only add mouse tracking on desktop
     if (!isMobile) {
@@ -27,11 +27,11 @@ export default function FloatingMascot() {
       window.addEventListener("mousemove", handleMouseMove);
       return () => {
         window.removeEventListener("mousemove", handleMouseMove);
-        window.removeEventListener('resize', checkMobile);
+        window.removeEventListener("resize", checkMobile);
       };
     }
 
-    return () => window.removeEventListener('resize', checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, [isMobile]);
 
   // Reduce mouse follow effect on mobile
@@ -39,9 +39,9 @@ export default function FloatingMascot() {
   const followY = isMobile ? 0 : mousePosition.y * 0.01;
 
   return (
-        <Link
-          href="/"
-          className="fixed bottom-6 right-6 z-50 transition-all duration-500 opacity-100 translate-y-0"
+    <Link
+      href="/"
+      className="fixed bottom-6 right-6 z-50 transition-all duration-500 opacity-100 translate-y-0"
       style={{
         transform: `translate(${followX}px, ${followY}px)`,
       }}

@@ -1,0 +1,24 @@
+{
+  "entry": [
+    "app/**/*.{ts,tsx}",
+    "components/**/*.{ts,tsx}",
+    "lib/**/*.{ts,tsx}",
+    "hooks/**/*.{ts,tsx}",
+    "proxy.ts"
+  ],
+  "ignoreUnused": [
+    "public/**/*",
+    "scripts/**/*",
+    "tests/**/*",
+    "__tests__/**/*",
+    ".next/**/*",
+    "node_modules/**/*",
+    "*.config.js",
+    "*.config.ts",
+    "app.layout.analytics.tsx",
+    "observability/logger.ts",
+    "supabase/functions/**/*"
+  ],
+  "ignoreUnresolved": [],
+  "ignoreImport": []
+}

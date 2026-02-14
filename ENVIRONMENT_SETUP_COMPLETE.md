@@ -5,16 +5,19 @@
 I've cleaned up and configured your environment variables:
 
 ### 1. **Cleaned .env.local** ✅
+
 - Removed auto-managed `VERCEL_OIDC_TOKEN` (handled by Vercel)
 - Kept only essential variables
 - Created `.env.example` template for future reference
 
 ### 2. **Cleaned Vercel Environment Variables** ✅
+
 - Removed 25+ outdated/duplicate variables
 - Kept only 8 essential variables
 - Variables are now properly organized
 
 ### 3. **Created Automation Scripts** ✅
+
 - `scripts/setup-environment.sh` - One-command setup for all platforms
 - `scripts/clean-env.sh` - Clean outdated variables
 - `scripts/deploy-production.sh` - Production deployment
@@ -22,13 +25,14 @@ I've cleaned up and configured your environment variables:
 ## 📋 Current Environment Variables
 
 ### Essential Variables (✅ Already Configured)
+
 ```bash
 # Supabase Configuration
 NEXT_PUBLIC_SUPABASE_PWA4_URL=https://fofmrqgcidfenbevayrg.supabase.co
 NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=[Get from Supabase Dashboard → Project Settings → API]
 SUPABASE_PWA4_SERVICE_ROLE_KEY=[Get from Supabase Dashboard → Project Settings → API]
 
-# Stripe Configuration  
+# Stripe Configuration
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=[Get from Stripe Dashboard → Developers → API Keys]
 STRIPE_SECRET_KEY=[Get from Stripe Dashboard → Developers → API Keys]
 STRIPE_WEBHOOK_SECRET=[Get from Stripe Dashboard → Developers → Webhooks]
@@ -47,31 +51,37 @@ Go to: https://github.com/airbearme/pwapro/settings/secrets/actions
 Add these repository secrets:
 
 1. `NEXT_PUBLIC_SUPABASE_PWA4_URL`
+
    ```
    https://fofmrqgcidfenbevayrg.supabase.co
    ```
 
 2. `NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY`
+
    ```
    [Get from Supabase Dashboard → Project Settings → API]
    ```
 
 3. `SUPABASE_PWA4_SERVICE_ROLE_KEY`
+
    ```
    [Get from Supabase Dashboard → Project Settings → API]
    ```
 
 4. `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
+
    ```
    [Get from Stripe Dashboard → Developers → API Keys]
    ```
 
 5. `STRIPE_SECRET_KEY`
+
    ```
    [Get from Stripe Dashboard → Developers → API Keys]
    ```
 
 6. `STRIPE_WEBHOOK_SECRET`
+
    ```
    [Get from Stripe Dashboard → Developers → Webhooks]
    ```
@@ -86,18 +96,20 @@ Add these repository secrets:
 Go to: https://supabase.com/dashboard/project/fofmrqgcidfenbevayrg/auth/url-configuration
 
 **Site URL:**
+
 ```
 https://airbear.me
 ```
 
 **Redirect URLs (add all):**
+
 ```
 http://localhost:3000/auth/callback
 https://airbear.me/auth/callback
 https://www.airbear.me/auth/callback
 ```
 
-### **Step 3: Deploy to Production** 
+### **Step 3: Deploy to Production**
 
 ```bash
 # Option A: Use the production script
@@ -143,7 +155,7 @@ After setup, verify these work:
 ✅ **One-command setup** - Use `./scripts/setup-environment.sh` for future projects  
 ✅ **Automatic deployment** - GitHub Actions will deploy automatically  
 ✅ **Consistent configuration** - Same variables across local, GitHub, and Vercel  
-✅ **Security maintained** - Sensitive keys properly stored as secrets  
+✅ **Security maintained** - Sensitive keys properly stored as secrets
 
 ---
 

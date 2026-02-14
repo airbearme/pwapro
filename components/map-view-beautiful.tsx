@@ -74,7 +74,7 @@ const MapView = memo(function MapView({
 
         // Dynamically import Leaflet
         const L = (await import("leaflet")).default;
-        
+
         if (!L || !L.map) {
           throw new Error("Leaflet failed to load");
         }
@@ -101,7 +101,7 @@ const MapView = memo(function MapView({
           zoomControl: true,
           preferCanvas: true,
         });
-        
+
         // Invalidate size to ensure map renders
         map.invalidateSize();
         let resizeObserver: ResizeObserver | null = null;
@@ -126,7 +126,7 @@ const MapView = memo(function MapView({
             maxZoom: 19,
             tileSize: 256,
             zoomOffset: 0,
-          }
+          },
         ).addTo(map);
 
         map.on("load", () => {
@@ -137,7 +137,7 @@ const MapView = memo(function MapView({
         mapInstanceRef.current.__resizeObserver = resizeObserver;
         mapInstanceRef.current.__resizeHandler = resizeHandler;
         setMapLoaded(true);
-        
+
         // Setup global booking function
         if (typeof window !== "undefined") {
           (window as any).selectSpotForBooking = (spotId: string) => {
@@ -151,7 +151,7 @@ const MapView = memo(function MapView({
         console.error("❌ Error initializing map:", error);
         setMapLoaded(false);
         setMapError(
-          error instanceof Error ? error.message : "Map failed to load"
+          error instanceof Error ? error.message : "Map failed to load",
         );
       }
     };
@@ -166,7 +166,7 @@ const MapView = memo(function MapView({
         if (mapInstanceRef.current.__resizeHandler) {
           window.removeEventListener(
             "resize",
-            mapInstanceRef.current.__resizeHandler
+            mapInstanceRef.current.__resizeHandler,
           );
         }
         mapInstanceRef.current.remove();
@@ -184,14 +184,17 @@ const MapView = memo(function MapView({
 
     // ⚡ Bolt: Pre-calculate available airbears per spot in O(N+M) complexity
     const airbearsPerSpot = new Map<string, number>();
-    airbears.forEach(a => {
+    airbears.forEach((a) => {
       if (a.is_available && a.current_spot_id) {
-        airbearsPerSpot.set(a.current_spot_id, (airbearsPerSpot.get(a.current_spot_id) || 0) + 1);
+        airbearsPerSpot.set(
+          a.current_spot_id,
+          (airbearsPerSpot.get(a.current_spot_id) || 0) + 1,
+        );
       }
     });
 
     // Track which spots we've processed to remove stale ones later
-    const currentSpotIds = new Set(spots.map(s => `spot-${s.id}`));
+    const currentSpotIds = new Set(spots.map((s) => `spot-${s.id}`));
 
     // Add/Update spot markers
     spots.forEach((spot) => {
@@ -305,27 +308,27 @@ const MapView = memo(function MapView({
               ? "linear-gradient(135deg, #ecfdf5, #d1fae5)"
               : "#f3f4f6"
           }; border-radius: 10px; border: 2px solid ${
-        hasAvailableAirbears ? "#10b981" : "#9ca3af"
-      };">
+            hasAvailableAirbears ? "#10b981" : "#9ca3af"
+          };">
             <div style="width: 20px; height: 20px; background: ${
               hasAvailableAirbears ? "#10b981" : "#9ca3af"
             }; border-radius: 50%; box-shadow: 0 0 12px ${
-        hasAvailableAirbears ? "#10b981" : "#9ca3af"
-      }; animation: ${
-        hasAvailableAirbears ? "pulse 2s ease-in-out infinite" : "none"
-      };"></div>
+              hasAvailableAirbears ? "#10b981" : "#9ca3af"
+            }; animation: ${
+              hasAvailableAirbears ? "pulse 2s ease-in-out infinite" : "none"
+            };"></div>
             <span style="font-weight: 700; color: ${
               hasAvailableAirbears ? "#047857" : "#4b5563"
             }; font-size: 15px;">${airbearCount} AirBear${
-        airbearCount !== 1 ? "s" : ""
-      } available</span>
+              airbearCount !== 1 ? "s" : ""
+            } available</span>
           </div>
           ${
             spot.amenities && spot.amenities.length > 0
               ? `
             <div style="font-size: 13px; color: #6b7280; background: linear-gradient(135deg, #f9fafb, #f3f4f6); padding: 8px 12px; border-radius: 8px; border-left: 4px solid #10b981;">
               <strong style="color: #1f2937;">✨ Amenities:</strong> ${spot.amenities.join(
-                ", "
+                ", ",
               )}
             </div>
           `
@@ -398,7 +401,7 @@ const MapView = memo(function MapView({
     const map = mapInstanceRef.current;
     const L = LeafletRef.current;
 
-    const currentAirbearIds = new Set(airbears.map(a => `airbear-${a.id}`));
+    const currentAirbearIds = new Set(airbears.map((a) => `airbear-${a.id}`));
 
     // Update airbear markers
     airbears.forEach((airbear) => {
@@ -494,13 +497,13 @@ const MapView = memo(function MapView({
         airbear.battery_level > 50
           ? "#10b981"
           : airbear.battery_level > 20
-          ? "#f59e0b"
-          : "#ef4444";
+            ? "#f59e0b"
+            : "#ef4444";
 
       const popupContent = `
         <div style="min-width: 220px; padding: 12px; font-family: system-ui, -apple-system, sans-serif;">
           <h4 style="font-size: 18px; font-weight: bold; margin-bottom: 12px; color: #1f2937; background: linear-gradient(135deg, #10b981, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">AirBear #${airbear.id.slice(
-            -4
+            -4,
           )}</h4>
           <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px;">
             <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: linear-gradient(135deg, #f9fafb, #f3f4f6); border-radius: 8px; border-left: 4px solid ${batteryColor};">
@@ -512,8 +515,8 @@ const MapView = memo(function MapView({
                   }%; height: 100%; background: linear-gradient(90deg, ${batteryColor}, ${batteryColor}dd); transition: width 0.3s; box-shadow: 0 0 8px ${batteryColor}80;"></div>
                 </div>
                 <span style="font-weight: 700; color: ${batteryColor}; font-size: 15px;">${
-        airbear.battery_level
-      }%</span>
+                  airbear.battery_level
+                }%</span>
               </div>
             </div>
             <div style="display: flex; justify-content: space-between; padding: 8px; background: linear-gradient(135deg, #f9fafb, #f3f4f6); border-radius: 8px; border-left: 4px solid ${
@@ -527,14 +530,14 @@ const MapView = memo(function MapView({
                   airbear.is_charging
                     ? "⚡ Charging"
                     : airbear.is_available
-                    ? "✓ Available"
-                    : "🚴 In Use"
+                      ? "✓ Available"
+                      : "🚴 In Use"
                 }
               </span>
             </div>
             <div style="font-size: 12px; color: #9ca3af; text-align: center; margin-top: 4px; padding-top: 8px; border-top: 1px solid #e5e7eb;">
               🕐 Last updated: ${new Date(
-                airbear.updated_at
+                airbear.updated_at,
               ).toLocaleTimeString()}
             </div>
           </div>
@@ -591,9 +594,7 @@ const MapView = memo(function MapView({
                 : "Loading beautiful Binghamton map..."}
             </p>
             {mapError && (
-              <p className="mt-2 text-sm text-emerald-200/80">
-                {mapError}
-              </p>
+              <p className="mt-2 text-sm text-emerald-200/80">{mapError}</p>
             )}
           </div>
         </div>

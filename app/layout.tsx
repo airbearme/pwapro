@@ -5,6 +5,9 @@ import { Analytics } from "@vercel/analytics/react";
 import { AuthProvider } from "@/components/auth-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import ClientErrorLogger from "@/components/client-error-logger";
+import FloatingMascot from "@/components/floating-mascot";
+import PWAInstallPrompt from "@/components/pwa-install-prompt";
+import { Toaster } from "@/components/ui/toaster";
 import "leaflet/dist/leaflet.css";
 import "./globals.css";
 
@@ -107,7 +110,7 @@ export default function RootLayout({
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
-          enableSystem
+          enableSystem={false}
           disableTransitionOnChange
         >
           <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
@@ -122,6 +125,9 @@ export default function RootLayout({
             <ClientErrorLogger />
             <AuthProvider>
               {children}
+              <FloatingMascot />
+              <PWAInstallPrompt />
+              <Toaster />
             </AuthProvider>
           </div>
         </ThemeProvider>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthContext } from "@/components/auth-provider";
 import { getSupabaseClient } from "@/lib/supabase/client";
@@ -121,7 +121,9 @@ function BookRidePageContent() {
     return 4.0;
   };
 
-  const handleSpotSelect = (spot: Spot) => {
+  // ⚡ Bolt: Memoize callback to prevent MapComponent from re-rendering
+  // when selecting pickup/destination on the map.
+  const handleSpotSelect = useCallback((spot: Spot) => {
     if (selectingMode === "pickup") {
       setPickupSpot(spot);
       setSelectingMode(null);
@@ -137,7 +139,7 @@ function BookRidePageContent() {
         description: `Destination set to ${spot.name}`,
       });
     }
-  };
+  }, [selectingMode, toast]);
 
   const startMapSelection = (mode: "pickup" | "destination") => {
     setSelectingMode(mode);

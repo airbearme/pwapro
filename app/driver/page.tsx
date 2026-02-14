@@ -238,7 +238,7 @@ export default function DriverDashboardPage() {
             timeout: 10000,
             maximumAge: 0,
           });
-        }
+        },
       );
 
       const response = await fetch("/api/airbear/location", {
@@ -361,15 +361,15 @@ export default function DriverDashboardPage() {
                       driverAirbear.is_available
                         ? "bg-green-100 text-green-800"
                         : driverAirbear.is_charging
-                        ? "bg-yellow-100 text-yellow-800"
-                        : "bg-red-100 text-red-800"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : "bg-red-100 text-red-800"
                     }
                   >
                     {driverAirbear.is_charging
                       ? "Charging"
                       : driverAirbear.is_available
-                      ? "Available"
-                      : "In Use"}
+                        ? "Available"
+                        : "In Use"}
                   </Badge>
                 </div>
                 <div className="text-center">
@@ -429,7 +429,8 @@ export default function DriverDashboardPage() {
             <CardContent>
               <div className="text-center py-6">
                 <p className="text-muted-foreground mb-4">
-                  Please contact an administrator to get your AirBear vehicle assignment.
+                  Please contact an administrator to get your AirBear vehicle
+                  assignment.
                 </p>
                 <Button variant="outline" disabled>
                   Contact Admin
@@ -459,8 +460,7 @@ export default function DriverDashboardPage() {
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Clock className="w-4 h-4" />
-                  Requested:{" "}
-                  {new Date(activeRide.created_at).toLocaleString()}
+                  Requested: {new Date(activeRide.created_at).toLocaleString()}
                 </div>
                 <div className="flex items-center gap-2">
                   <Badge

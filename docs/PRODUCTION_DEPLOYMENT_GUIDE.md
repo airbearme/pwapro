@@ -215,26 +215,31 @@ If issues occur:
 ## Troubleshooting
 
 ### Build Fails
+
 - Check build logs in Vercel
 - Verify environment variables
 - Test build locally: `npm run build`
 
 ### Database Connection Issues
+
 - Verify Supabase environment variables
 - Check network policies
 - Test connection in Supabase SQL Editor
 
 ### OAuth Not Working
+
 - Verify redirect URLs match exactly
 - Check OAuth credentials
 - Ensure providers are enabled in Supabase
 
 ### Stripe Webhook Failures
+
 - Verify webhook secret is correct
 - Check endpoint URL is accessible
 - Review webhook logs in Stripe
 
 ### Map Not Loading
+
 - Check browser console for errors
 - Verify Leaflet CSS is loaded
 - Test location permissions

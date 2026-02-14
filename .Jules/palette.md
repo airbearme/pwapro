@@ -1,4 +1,5 @@
-## 2026-05-22 - [Foundation Restoration & Theme Locking]
+## 2026-02-14 - Foundation Restoration & Accessibility
 
-**Learning:** In this repository, brand consistency relies on a "Core UI Foundation" (defined in `CORE_UI_FOUNDATION.md`) that may be accidentally omitted from layouts. Additionally, the dark-mode identity is mandatory; using `enableSystem={false}` in `ThemeProvider` is critical to prevent system light-mode settings from breaking the intended aesthetic.
-**Action:** Always verify that `FloatingMascot`, `PWAInstallPrompt`, and `Toaster` are present in the root layout, and ensure `ThemeProvider` is locked to dark mode.
+**Learning:** Core brand components (Mascot, Toaster) were missing from the layout, and icon-only interactive elements lacked context for screen readers. In a dark-mode first application, system theme detection can sometimes break the intended brand aesthetic if not locked.
+
+**Action:** Restored mandatory components to `app/layout.tsx` to satisfy `CORE_UI_FOUNDATION.md`. Added `aria-label` to mascot links and `aria-hidden` to decorative wheels. Standardized loading states to use the centralized `Spinner` component for consistent user feedback.

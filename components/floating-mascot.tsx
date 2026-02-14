@@ -15,7 +15,7 @@ export default function FloatingMascot() {
     };
 
     checkMobile();
-    window.addEventListener("resize", checkMobile);
+    window.addEventListener('resize', checkMobile);
 
     // Only add mouse tracking on desktop
     if (!isMobile) {
@@ -26,11 +26,11 @@ export default function FloatingMascot() {
       window.addEventListener("mousemove", handleMouseMove);
       return () => {
         window.removeEventListener("mousemove", handleMouseMove);
-        window.removeEventListener("resize", checkMobile);
+        window.removeEventListener('resize', checkMobile);
       };
     }
 
-    return () => window.removeEventListener("resize", checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, [isMobile]);
 
   // Reduce mouse follow effect on mobile
@@ -40,8 +40,8 @@ export default function FloatingMascot() {
   return (
     <Link
       href="/"
-      aria-label="Go to homepage"
       className="fixed bottom-6 right-6 z-50 transition-all duration-500 opacity-100 translate-y-0"
+      aria-label="Go to homepage"
       style={{
         transform: `translate(${followX}px, ${followY}px)`,
       }}
@@ -54,7 +54,13 @@ export default function FloatingMascot() {
         <div className="relative w-16 h-16 md:w-20 md:h-20 rounded-full border-4 border-emerald-400/50 dark:border-emerald-500/50 bg-gradient-to-br from-emerald-500/20 to-lime-500/20 backdrop-blur-sm shadow-2xl hover-lift group-hover:scale-110 transition-transform duration-300 overflow-hidden">
           {/* Spinning wheel in background */}
           <div className="absolute inset-0 flex items-center justify-center opacity-20 group-hover:opacity-40 transition-opacity">
-            <AirbearWheel size="lg" glowing animated className="opacity-50" />
+            <AirbearWheel
+              size="lg"
+              glowing
+              animated
+              className="opacity-50"
+              aria-hidden="true"
+            />
           </div>
 
           {/* Mascot image */}

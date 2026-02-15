@@ -1,0 +1,24 @@
+{
+  "entry": [
+    "app/**/*.{ts,tsx}",
+    "components/**/*.{ts,tsx}",
+    "lib/**/*.{ts,tsx}",
+    "hooks/**/*.{ts,tsx}",
+    "proxy.ts"
+  ],
+  "ignoreUnimported": [
+    "app/api/**/*",
+    "scripts/**/*",
+    "public/**/*",
+    "supabase/**/*"
+  ],
+  "ignoreUnused": [
+    "@radix-ui/*",
+    "lucide-react",
+    "framer-motion",
+    "tailwindcss-animate",
+    "class-variance-authority",
+    "clsx",
+    "tailwind-merge"
+  ]
+}

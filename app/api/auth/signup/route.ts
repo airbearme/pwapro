@@ -1,5 +1,5 @@
-import { getSupabaseServer } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import { getSupabaseServer } from "@/lib/supabase/server";
 
 export async function POST(request: Request) {
   try {
@@ -10,7 +10,7 @@ export async function POST(request: Request) {
         {
           error: "Email, password, and full name are required",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -36,7 +36,7 @@ export async function POST(request: Request) {
         {
           error: error.message || "Registration failed",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -61,7 +61,7 @@ export async function POST(request: Request) {
         {
           error: "Failed to create user profile",
         },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -79,7 +79,7 @@ export async function POST(request: Request) {
       {
         error: error.message || "Registration failed",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

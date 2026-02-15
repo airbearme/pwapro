@@ -3,11 +3,21 @@ import crypto from "crypto";
 
 describe("verifyStripe", () => {
   const secret = "whsec_test_secret";
-  const body = JSON.stringify({ id: "evt_123", type: "payment_intent.succeeded" });
+  const body = JSON.stringify({
+    id: "evt_123",
+    type: "payment_intent.succeeded",
+  });
 
-  const generateSignature = (payload: string, secret: string, timestamp: number) => {
+  const generateSignature = (
+    payload: string,
+    secret: string,
+    timestamp: number,
+  ) => {
     const signedPayload = `${timestamp}.${payload}`;
-    const hmac = crypto.createHmac("sha256", secret).update(signedPayload).digest("hex");
+    const hmac = crypto
+      .createHmac("sha256", secret)
+      .update(signedPayload)
+      .digest("hex");
     return `t=${timestamp},v1=${hmac}`;
   };
 

@@ -1,12 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import { MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import { useAuthContext } from "@/components/auth-provider";
-import { MapPin } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import { CheckoutButton } from "@/components/checkout-button";
 import errorLogger from "@/lib/error-logger";
@@ -139,4 +145,3 @@ export function OneClickBooking({
     </Button>
   );
 }
-

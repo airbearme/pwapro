@@ -1,7 +1,6 @@
 # Stripe Webhook Setup Guide - Detailed Instructions
 
 ## Overview
-
 Webhooks allow Stripe to notify your server when payment events occur (successful payments, refunds, disputes, etc.). This is critical for production payment processing.
 
 ---
@@ -35,26 +34,22 @@ Webhooks allow Stripe to notify your server when payment events occur (successfu
 **IMPORTANT:** You need a backend server URL for webhooks. Since IONOS only hosts static files, you have two options:
 
 #### Option A: Deploy Backend to Vercel (Recommended - Free)
-
 \`\`\`
 https://your-app-name.vercel.app/api/webhooks/stripe
 \`\`\`
 
 #### Option B: Use a Webhook Relay Service (Temporary Testing)
-
 \`\`\`
 https://webhook.site/your-unique-id
 \`\`\`
 (This is ONLY for testing - not for production)
 
 #### Option C: Deploy to Railway/Render
-
 \`\`\`
 https://your-app.railway.app/api/webhooks/stripe
 \`\`\`
 
 **For now, if you don't have a backend deployed yet:**
-
 - Enter a placeholder: `https://placeholder.com/webhook`
 - We'll update it later when you deploy the backend
 
@@ -63,24 +58,20 @@ https://your-app.railway.app/api/webhooks/stripe
 Click **"Select events"** and choose these events:
 
 #### ✅ **Payment Events (Required)**
-
 - `payment_intent.succeeded` - Payment completed successfully
 - `payment_intent.payment_failed` - Payment failed
 - `payment_intent.canceled` - Payment was canceled
 
 #### ✅ **Charge Events (Recommended)**
-
 - `charge.succeeded` - Charge completed
 - `charge.failed` - Charge failed
 - `charge.refunded` - Charge was refunded
 
 #### ✅ **Dispute Events (Important)**
-
 - `charge.dispute.created` - Customer disputed a charge
 - `charge.dispute.closed` - Dispute was resolved
 
 #### ⚠️ **Optional Events**
-
 - `customer.created` - New customer created
 - `customer.updated` - Customer info updated
 - `invoice.paid` - For subscriptions (not needed for rides)
@@ -128,17 +119,13 @@ whsec_1234567890abcdefghijklmnopqrstuvwxyz1234567890abcdefghijklmnop
 ### Update `.env` file:
 
 \`\`\`bash
-
 # Add this line (replace with your actual secret)
-
 STRIPE_WEBHOOK_SECRET=whsec_your_actual_secret_here
 \`\`\`
 
 **Full Stripe section in `.env` should look like:**
 \`\`\`bash
-
 # Stripe Configuration
-
 VITE_STRIPE_PUBLIC_KEY=pk_live_your_actual_public_key_here
 STRIPE_SECRET_KEY=sk_live_your_actual_secret_key_here
 STRIPE_WEBHOOK_SECRET=whsec_your_actual_secret_here
@@ -199,21 +186,16 @@ Your webhook won't work until you have a backend server running. Here's how:
 ### Test with Stripe CLI (Advanced)
 
 \`\`\`bash
-
 # Install Stripe CLI
-
 brew install stripe/stripe-cli/stripe
 
 # Login
-
 stripe login
 
 # Forward webhooks to local server
-
 stripe listen --forward-to localhost:5000/api/webhooks/stripe
 
 # Trigger test event
-
 stripe trigger payment_intent.succeeded
 \`\`\`
 
@@ -225,15 +207,15 @@ Your backend already has webhook handling in `server/routes.ts`:
 
 \`\`\`typescript
 app.post("/api/webhooks/stripe", async (req, res) => {
-const sig = req.headers['stripe-signature'];
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  const sig = req.headers['stripe-signature'];
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-try {
-const event = stripe.webhooks.constructEvent(
-req.body,
-sig,
-webhookSecret
-);
+  try {
+    const event = stripe.webhooks.constructEvent(
+      req.body,
+      sig,
+      webhookSecret
+    );
 
     // Handle the event
     switch (event.type) {
@@ -247,10 +229,9 @@ webhookSecret
     }
 
     res.json({ received: true });
-
-} catch (err) {
-res.status(400).send(`Webhook Error: ${err.message}`);
-}
+  } catch (err) {
+    res.status(400).send(`Webhook Error: ${err.message}`);
+  }
 });
 \`\`\`
 
@@ -259,7 +240,6 @@ res.status(400).send(`Webhook Error: ${err.message}`);
 ## Security Best Practices
 
 ### ✅ DO:
-
 - Always verify webhook signatures
 - Use HTTPS only (Stripe requires it)
 - Keep webhook secret in environment variables
@@ -267,7 +247,6 @@ res.status(400).send(`Webhook Error: ${err.message}`);
 - Return 200 status quickly (process async if needed)
 
 ### ❌ DON'T:
-
 - Expose webhook secret in code
 - Skip signature verification
 - Use HTTP (must be HTTPS)
@@ -280,7 +259,6 @@ res.status(400).send(`Webhook Error: ${err.message}`);
 ### Webhook Not Receiving Events
 
 **Check:**
-
 1. ✅ Endpoint URL is correct and accessible
 2. ✅ Server is running and responding
 3. ✅ HTTPS is enabled (Stripe requires it)
@@ -295,20 +273,17 @@ curl -X POST https://your-backend-url/api/webhooks/stripe
 ### Signature Verification Failing
 
 **Common causes:**
-
 - Wrong webhook secret
 - Request body was modified
 - Using test secret with live webhooks
 
 **Fix:**
-
 - Copy secret again from Stripe Dashboard
 - Ensure raw request body is used (not parsed JSON)
 
 ### Events Not Triggering
 
 **Check:**
-
 1. Events are selected in webhook configuration
 2. Using live mode (not test mode)
 3. Payments are actually completing
@@ -325,7 +300,6 @@ curl -X POST https://your-backend-url/api/webhooks/stripe
 4. See all webhook attempts, responses, and errors
 
 ### Webhook Logs Show:
-
 - ✅ Timestamp
 - ✅ Event type
 - ✅ HTTP status code
@@ -337,13 +311,11 @@ curl -X POST https://your-backend-url/api/webhooks/stripe
 ## Quick Reference
 
 ### Webhook URL Format
-
 \`\`\`
 https://your-backend-domain.com/api/webhooks/stripe
 \`\`\`
 
 ### Essential Events
-
 \`\`\`
 payment_intent.succeeded
 payment_intent.payment_failed
@@ -352,13 +324,11 @@ charge.dispute.created
 \`\`\`
 
 ### Environment Variable
-
 \`\`\`bash
-STRIPE*WEBHOOK_SECRET=whsec*...
+STRIPE_WEBHOOK_SECRET=whsec_...
 \`\`\`
 
 ### Stripe Dashboard URLs
-
 - Webhooks: https://dashboard.stripe.com/webhooks
 - API Keys: https://dashboard.stripe.com/apikeys
 - Events: https://dashboard.stripe.com/events
@@ -379,13 +349,11 @@ STRIPE*WEBHOOK_SECRET=whsec*...
 ## Summary
 
 **What You Need:**
-
 1. Backend server URL (deploy to Vercel/Railway)
 2. Webhook secret from Stripe (starts with `whsec_`)
 3. Selected events (payment_intent.succeeded, etc.)
 
 **Where to Configure:**
-
 - Stripe: https://dashboard.stripe.com/webhooks
 - Code: `server/routes.ts` (already implemented)
 - Environment: `.env` file

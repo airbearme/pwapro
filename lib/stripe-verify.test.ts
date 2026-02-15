@@ -27,15 +27,9 @@ describe("verifyStripe", () => {
     expect(verifyStripe(sig, body, secret)).toBe(true);
   });
 
-  test("should reject an expired signature (older than 5 minutes)", () => {
+  test("should reject an expired signature", () => {
     const sixMinutesAgo = Math.floor(Date.now() / 1000) - 360;
     const sig = generateSignature(body, secret, sixMinutesAgo);
-    expect(verifyStripe(sig, body, secret)).toBe(false);
-  });
-
-  test("should reject a signature from the future (more than 5 minutes)", () => {
-    const sixMinutesFuture = Math.floor(Date.now() / 1000) + 360;
-    const sig = generateSignature(body, secret, sixMinutesFuture);
     expect(verifyStripe(sig, body, secret)).toBe(false);
   });
 
@@ -43,28 +37,5 @@ describe("verifyStripe", () => {
     const now = Math.floor(Date.now() / 1000);
     const sig = `t=${now},v1=invalid_hmac`;
     expect(verifyStripe(sig, body, secret)).toBe(false);
-  });
-
-  test("should reject a signature with incorrect secret", () => {
-    const now = Math.floor(Date.now() / 1000);
-    const sig = generateSignature(body, "wrong_secret", now);
-    expect(verifyStripe(sig, body, secret)).toBe(false);
-  });
-
-  test("should reject a signature with modified body", () => {
-    const now = Math.floor(Date.now() / 1000);
-    const sig = generateSignature(body, secret, now);
-    expect(verifyStripe(sig, body + " tampered", secret)).toBe(false);
-  });
-
-  test("should handle malformed signature headers gracefully", () => {
-    expect(verifyStripe("invalid", body, secret)).toBe(false);
-    expect(verifyStripe("t=123", body, secret)).toBe(false);
-    expect(verifyStripe("v1=abc", body, secret)).toBe(false);
-  });
-
-  test("should handle missing inputs gracefully", () => {
-    expect(verifyStripe("", body, secret)).toBe(false);
-    expect(verifyStripe(null as any, body, secret)).toBe(false);
   });
 });

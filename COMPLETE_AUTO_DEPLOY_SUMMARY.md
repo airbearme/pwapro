@@ -68,7 +68,6 @@ Push to main
 ### What Gets Synced:
 
 **GitHub Secrets** → **Vercel Environment Variables**
-
 - ✅ Supabase credentials
 - ✅ Stripe credentials
 - ✅ Site configuration
@@ -81,7 +80,6 @@ Push to main
 Go to: `https://github.com/YOUR_REPO/settings/secrets/actions`
 
 Add these 10 secrets:
-
 - [ ] `VERCEL_TOKEN`
 - [ ] `VERCEL_ORG_ID`
 - [ ] `VERCEL_PROJECT_ID`
@@ -109,7 +107,6 @@ Add these 10 secrets:
 ## 🎯 Result
 
 **After setup:**
-
 - ✅ Every push to `main` = Automatic deployment
 - ✅ Secrets automatically synced to Vercel
 - ✅ UI/UX validated before deployment
@@ -127,13 +124,11 @@ Add these 10 secrets:
 ## 🔍 Monitoring
 
 **Check Status:**
-
 - **GitHub Actions** → See all workflow runs
 - **Vercel Dashboard** → See deployments
 - **Production Site** → https://airbear.me
 
 **Daily Checks:**
-
 - Workflow runs automatically at 3 AM UTC
 - Checks production health
 - Verifies secrets are synced
@@ -141,20 +136,17 @@ Add these 10 secrets:
 ## 🆘 Troubleshooting
 
 **Workflow fails?**
-
 1. Check Actions tab for error details
 2. Verify all secrets are added
 3. Check secret names match exactly
 4. Run "Sync Secrets" workflow manually
 
 **Deployment not working?**
-
 1. Verify Vercel credentials are correct
 2. Check Vercel project exists
 3. Ensure Vercel token has permissions
 
 **UI/UX not loading?**
-
 1. Check "Validate UI/UX" workflow
 2. Verify CSS animations are defined
 3. Check browser console for errors

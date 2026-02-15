@@ -3,8 +3,6 @@
 import type React from "react";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Apple, Chrome, Car } from "lucide-react";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +14,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useRouter } from "next/navigation";
+import { Apple, Chrome, Car } from "lucide-react";
 
 const ENABLE_APPLE_SIGN_IN = false;
 const EXPECTED_ROLE = "driver";
@@ -47,7 +47,7 @@ export default function DriverLoginPage() {
       if (error) {
         console.error("Google OAuth error:", error);
         setError(
-          error.message || "Failed to sign in with Google. Please try again.",
+          error.message || "Failed to sign in with Google. Please try again."
         );
         setLoading(false);
       } else if (data?.url) {
@@ -75,7 +75,7 @@ export default function DriverLoginPage() {
       if (error) {
         console.error("Apple OAuth error:", error);
         setError(
-          error.message || "Failed to sign in with Apple. Please try again.",
+          error.message || "Failed to sign in with Apple. Please try again."
         );
         setLoading(false);
       } else if (data?.url) {

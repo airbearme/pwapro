@@ -10,7 +10,13 @@
     "app/api/**/*",
     "scripts/**/*",
     "public/**/*",
-    "supabase/**/*"
+    "supabase/**/*",
+    "app.layout.analytics.tsx",
+    "eslint.config.js",
+    "postcss.config.js",
+    "tailwind.config.ts",
+    "next.config.*",
+    "observability/logger.ts"
   ],
   "ignoreUnused": [
     "@radix-ui/*",
@@ -19,6 +25,16 @@
     "tailwindcss-animate",
     "class-variance-authority",
     "clsx",
-    "tailwind-merge"
+    "tailwind-merge",
+    "@tailwindcss/postcss",
+    "@tanstack/react-query",
+    "@types/use-sync-external-store",
+    "date-fns",
+    "drizzle-zod",
+    "nanoid",
+    "react-leaflet",
+    "recharts",
+    "ssh2",
+    "ssh2-sftp-client"
   ]
 }

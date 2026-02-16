@@ -14,7 +14,7 @@ const env = stripeEnvSchema.parse({
 })
 
 export const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-  // @ts-ignore - Handle version mismatch between local and CI environments
-  apiVersion: "2025-12-15.clover",
+  // ⚡ Bolt: Use type assertion to bypass environment-specific API version type mismatches
+  apiVersion: "2025-12-15.clover" as any,
   typescript: true,
 })

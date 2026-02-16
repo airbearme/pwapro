@@ -4,7 +4,7 @@ import SftpClient from "ssh2-sftp-client";
 const IONOS_CONFIG = {
 	host: "access-5018328928.webspace-host.com",
 	username: "a2096159",
-	password: "process.env.IONOS_PASSWORD",
+	password: process.env.IONOS_PASSWORD,
 	port: 22,
 };
 

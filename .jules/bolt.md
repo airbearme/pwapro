@@ -1,3 +1,3 @@
-## 2025-05-15 - React + Leaflet Initialization Race Conditions
+## 2026-02-16 - React + Leaflet Initialization Race Conditions
 **Learning:** Asynchronous Leaflet initialization in Next.js/React can cause "Map container is already initialized" errors if multiple initialization attempts occur during rapid mount/unmount cycles (e.g., Strict Mode). Even if a ref is used to store the map instance, a local `isMounted` flag and a comprehensive cleanup function (calling `remove()`) are necessary to ensure stability.
 **Action:** Always use an `isMounted` guard and return a cleanup function that calls `mapInstance.remove()` when using dynamic Leaflet imports in React effects.

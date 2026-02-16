@@ -79,9 +79,12 @@ export default function MapPage() {
   }, [airbears]);
 
   // ⚡ Bolt: Memoize the spot selection callback to prevent unnecessary MapView re-renders
-  const handleSpotSelect = useCallback((spot: Spot) => {
-    router.push(`/book?pickup=${spot.id}`);
-  }, [router]);
+  const handleSpotSelect = useCallback(
+    (spot: Spot) => {
+      router.push(`/book?pickup=${spot.id}`);
+    },
+    [router],
+  );
 
   // Enable push notifications for airbear availability
   useAirbearNotifications(airbears);
@@ -128,7 +131,11 @@ export default function MapPage() {
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               className="glass-morphism hover-lift"
             >
-              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              {theme === "dark" ? (
+                <Sun className="h-4 w-4" />
+              ) : (
+                <Moon className="h-4 w-4" />
+              )}
             </Button>
           </div>
           <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-emerald-600 via-lime-500 to-amber-500 bg-clip-text text-transparent animate-pulse-glow">
@@ -182,7 +189,7 @@ export default function MapPage() {
                   {airbears.length > 0
                     ? Math.round(
                         airbears.reduce((sum, a) => sum + a.battery_level, 0) /
-                          airbears.length
+                          airbears.length,
                       )
                     : 0}
                   %

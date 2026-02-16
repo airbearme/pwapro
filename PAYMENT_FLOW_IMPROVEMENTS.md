@@ -134,8 +134,8 @@ The complete booking and payment flow is now **fully functional and robust**:
 
 ### **📱 User Journey**
 ```
-/book → Select Spots → Book Ride → /book (payment) → 
-Choose Payment → /checkout → Payment Success → 
+/book → Select Spots → Book Ride → /book (payment) →
+Choose Payment → /checkout → Payment Success →
 /order/success → Track Ride
 ```
 

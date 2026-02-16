@@ -87,8 +87,3 @@ All fixes have been:
 3. Test signup form dark theme
 4. Test health endpoint with/without database
 5. Test Google/Apple OAuth login
-
-
-
-
-

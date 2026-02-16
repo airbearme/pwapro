@@ -115,9 +115,3 @@ The system automatically:
 4. Updates `airbear.me`
 
 **No manual deployment steps needed!** 🎉
-
-
-
-
-
-

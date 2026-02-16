@@ -23,7 +23,7 @@ const [walletLoading, setWalletLoading] = useState({
   google: false,
 })
 
-// In checkout/page.tsx  
+// In checkout/page.tsx
 const [loading, setLoading] = useState(true)
 const [authLoading, setAuthLoading] = useState(false)
 ```
@@ -49,7 +49,7 @@ GET /api/airbear/locations
 - Returns isDriverView flag for UI handling
 - Drivers see only their assigned vehicle
 
-POST /api/airbear/update-location  
+POST /api/airbear/update-location
 - Updates GPS coordinates for assigned AirBear
 - Requires driver authentication
 - Updates battery and heading data
@@ -82,7 +82,7 @@ if (userProfile?.role === "driver" && userProfile.assigned_airbear_id) {
   // Return single assigned AirBear
 }
 
-// Customer view: All available AirBears  
+// Customer view: All available AirBears
 .eq("is_available", true)
 ```
 
@@ -148,7 +148,7 @@ const [loading, setLoading] = useState(false)
 
 ### Loading State Metrics
 - **Auth Loading**: Should complete < 2 seconds
-- **Payment Setup**: Stripe initialization < 3 seconds  
+- **Payment Setup**: Stripe initialization < 3 seconds
 - **API Response**: AirBear locations < 1 second
 
 ### Error Tracking

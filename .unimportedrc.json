@@ -1,0 +1,40 @@
+{
+  "entry": [
+    "app/**/*.{ts,tsx}",
+    "components/**/*.{ts,tsx}",
+    "lib/**/*.{ts,tsx}",
+    "hooks/**/*.{ts,tsx}",
+    "proxy.ts"
+  ],
+  "ignoreUnimported": [
+    "app/api/**/*",
+    "scripts/**/*",
+    "public/**/*",
+    "supabase/**/*",
+    "app.layout.analytics.tsx",
+    "eslint.config.js",
+    "postcss.config.js",
+    "tailwind.config.ts",
+    "next.config.*",
+    "observability/logger.ts"
+  ],
+  "ignoreUnused": [
+    "@radix-ui/*",
+    "lucide-react",
+    "framer-motion",
+    "tailwindcss-animate",
+    "class-variance-authority",
+    "clsx",
+    "tailwind-merge",
+    "@tailwindcss/postcss",
+    "@tanstack/react-query",
+    "@types/use-sync-external-store",
+    "date-fns",
+    "drizzle-zod",
+    "nanoid",
+    "react-leaflet",
+    "recharts",
+    "ssh2",
+    "ssh2-sftp-client"
+  ]
+}

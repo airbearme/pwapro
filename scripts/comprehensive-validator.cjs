@@ -66,7 +66,7 @@ class ComprehensiveValidator {
           break;
         } else {
           console.log(`\n⚠️  Validation failed with ${this.results.failed.length} errors and ${this.results.warnings.length} warnings`);
-          
+
           if (attempt < this.maxRetries) {
             console.log(`🔄 Retrying... (${attempt + 1}/${this.maxRetries})`);
             await this.sleep(2000); // Wait 2 seconds before retry
@@ -95,7 +95,7 @@ class ComprehensiveValidator {
    */
   async runTypeCheck() {
     console.log('\n🔷 Running TypeScript Type Check...');
-    
+
     try {
       execSync('npm run type-check', { stdio: 'pipe', cwd: this.projectRoot });
       this.results.passed.push('TypeScript Type Check');
@@ -111,7 +111,7 @@ class ComprehensiveValidator {
    */
   async runLinting() {
     console.log('\n🔍 Running ESLint...');
-    
+
     try {
       execSync('npm run lint', { stdio: 'pipe', cwd: this.projectRoot });
       this.results.passed.push('ESLint');
@@ -127,7 +127,7 @@ class ComprehensiveValidator {
    */
   async runCodeMapsValidation() {
     console.log('\n🗺️  Running CodeMaps Validation...');
-    
+
     try {
       execSync('npm run codemaps:validate', { stdio: 'pipe', cwd: this.projectRoot });
       this.results.passed.push('CodeMaps Validation');
@@ -143,7 +143,7 @@ class ComprehensiveValidator {
    */
   async runBuild() {
     console.log('\n🔨 Running Build...');
-    
+
     try {
       execSync('npm run build', { stdio: 'pipe', cwd: this.projectRoot });
       this.results.passed.push('Build');
@@ -159,7 +159,7 @@ class ComprehensiveValidator {
    */
   async runUnitTests() {
     console.log('\n🧪 Running Unit Tests...');
-    
+
     try {
       execSync('npm run test:unit', { stdio: 'pipe', cwd: this.projectRoot });
       this.results.passed.push('Unit Tests');
@@ -175,7 +175,7 @@ class ComprehensiveValidator {
    */
   async runE2ETests() {
     console.log('\n🎭 Running E2E Tests...');
-    
+
     try {
       execSync('npm run test:e2e', { stdio: 'pipe', cwd: this.projectRoot });
       this.results.passed.push('E2E Tests');
@@ -191,7 +191,7 @@ class ComprehensiveValidator {
    */
   async runPerformanceTests() {
     console.log('\n⚡ Running Performance Tests...');
-    
+
     try {
       execSync('npm run test:performance', { stdio: 'pipe', cwd: this.projectRoot });
       this.results.passed.push('Performance Tests');
@@ -207,7 +207,7 @@ class ComprehensiveValidator {
    */
   async runSecurityTests() {
     console.log('\n🔒 Running Security Tests...');
-    
+
     try {
       execSync('npm run test:security', { stdio: 'pipe', cwd: this.projectRoot });
       this.results.passed.push('Security Tests');
@@ -223,7 +223,7 @@ class ComprehensiveValidator {
    */
   async runAccessibilityTests() {
     console.log('\n♿ Running Accessibility Tests...');
-    
+
     try {
       execSync('npm run test:accessibility', { stdio: 'pipe', cwd: this.projectRoot });
       this.results.passed.push('Accessibility Tests');
@@ -239,7 +239,7 @@ class ComprehensiveValidator {
    */
   async runDatabaseTests() {
     console.log('\n🗄️  Running Database Tests...');
-    
+
     try {
       execSync('npm run test:database', { stdio: 'pipe', cwd: this.projectRoot });
       this.results.passed.push('Database Tests');
@@ -255,7 +255,7 @@ class ComprehensiveValidator {
    */
   async runStripeTests() {
     console.log('\n💳 Running Stripe Tests...');
-    
+
     try {
       execSync('npm run test:stripe', { stdio: 'pipe', cwd: this.projectRoot });
       this.results.passed.push('Stripe Tests');
@@ -271,7 +271,7 @@ class ComprehensiveValidator {
    */
   async runPWATests() {
     console.log('\n📱 Running PWA Tests...');
-    
+
     try {
       execSync('npm run test:pwa', { stdio: 'pipe', cwd: this.projectRoot });
       this.results.passed.push('PWA Tests');
@@ -287,7 +287,7 @@ class ComprehensiveValidator {
    */
   async runComponentTests() {
     console.log('\n🧩 Running Component Tests...');
-    
+
     try {
       execSync('npm run test:components', { stdio: 'pipe', cwd: this.projectRoot });
       this.results.passed.push('Component Tests');
@@ -303,7 +303,7 @@ class ComprehensiveValidator {
    */
   async runRealtimeTests() {
     console.log('\n⚡ Running Realtime Tests...');
-    
+
     try {
       execSync('npm run test:realtime', { stdio: 'pipe', cwd: this.projectRoot });
       this.results.passed.push('Realtime Tests');
@@ -319,7 +319,7 @@ class ComprehensiveValidator {
    */
   async runBundleSizeTests() {
     console.log('\n📦 Running Bundle Size Tests...');
-    
+
     try {
       execSync('npm run test:bundle', { stdio: 'pipe', cwd: this.projectRoot });
       this.results.passed.push('Bundle Size Tests');
@@ -335,7 +335,7 @@ class ComprehensiveValidator {
    */
   async runProductionTests() {
     console.log('\n🚀 Running Production Tests...');
-    
+
     try {
       execSync('npm run test:production', { stdio: 'pipe', cwd: this.projectRoot });
       this.results.passed.push('Production Tests');

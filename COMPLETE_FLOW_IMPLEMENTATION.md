@@ -146,7 +146,7 @@ Follow the complete guide in `COMPLETE_USER_FLOW_TEST.md`
 
 ### Database Tables Used:
 - `users` - User accounts
-- `spots` - Pickup/destination locations  
+- `spots` - Pickup/destination locations
 - `airbears` - AirBear vehicles
 - `rides` - Ride bookings
 - `payments` - Payment records
@@ -181,7 +181,3 @@ git push origin main
 ---
 
 **Status:** ✅ **COMPLETE** - Ready for comprehensive testing!
-
-
-
-

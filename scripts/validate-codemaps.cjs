@@ -77,6 +77,10 @@ class CodeMapsValidator {
    */
   async checkOutputDirectory() {
     if (!fs.existsSync(this.outputDir)) {
+      fs.mkdirSync(this.outputDir, { recursive: true });
+    }
+
+    if (!fs.existsSync(this.outputDir)) {
       this.errors.push("CodeMaps output directory does not exist");
       return;
     }

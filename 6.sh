@@ -131,21 +131,14 @@ JS
 ###############################################################################
 cat > lib/stripe-verify.ts <<'TS'
 import crypto from "crypto";
+/** Hardened Stripe webhook signature verification */
 export function verifyStripe(sig: string, body: string, secret: string): boolean {
   try {
-    const pairs = sig.split(",").map((pair) => pair.split("="));
-    const t = pairs.find((p) => p[0] === "t")?.[1];
-    const v1 = pairs.find((p) => p[0] === "v1")?.[1];
-    if (!t || !v1) return false;
-    const timestamp = parseInt(t, 10);
-    const now = Math.floor(Date.now() / 1000);
-    if (isNaN(timestamp) || Math.abs(now - timestamp) > 300) return false;
-    const signedPayload = `${t}.${body}`;
-    const expectedSignature = crypto.createHmac("sha256", secret).update(signedPayload).digest("hex");
-    const v1Buffer = Buffer.from(v1);
-    const expectedBuffer = Buffer.from(expectedSignature);
-    if (v1Buffer.length !== expectedBuffer.length) return false;
-    return crypto.timingSafeEqual(v1Buffer, expectedBuffer);
+    const p = Object.fromEntries(sig.split(",").map((s) => s.split("=")));
+    const t = parseInt(p.t, 10), v1 = p.v1;
+    if (!v1 || isNaN(t) || Math.abs(Date.now() / 1000 - t) > 300) return false;
+    const h = crypto.createHmac("sha256", secret).update(`${t}.${body}`).digest("hex");
+    return v1.length === h.length && crypto.timingSafeEqual(Buffer.from(v1), Buffer.from(h));
   } catch { return false; }
 }
 TS

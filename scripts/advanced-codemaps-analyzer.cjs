@@ -14,9 +14,9 @@ class AdvancedCodeMapsAnalyzer {
     this.projectRoot = process.cwd();
     this.outputDir = path.join(this.projectRoot, '.next/codemaps');
     this.metrics = {
-      components: {},
-      api: {},
-      utilities: {},
+      components: [],
+      api: [],
+      utilities: [],
       dependencies: {},
       performance: {},
       security: {},
@@ -69,6 +69,11 @@ class AdvancedCodeMapsAnalyzer {
    */
   async loadExistingCodeMaps() {
     console.log('📋 Loading existing CodeMaps...');
+
+    // Ensure output directory exists
+    if (!fs.existsSync(this.outputDir)) {
+      fs.mkdirSync(this.outputDir, { recursive: true });
+    }
 
     const files = ['components.json', 'api-routes.json', 'utilities.json'];
     

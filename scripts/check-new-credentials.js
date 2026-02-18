@@ -2,16 +2,19 @@ import { createClient } from "@supabase/supabase-js";
 
 const credentials = [
 	{
-		name: "archon-chatty", key: process.env.ARCHON_CHATTY_KEY || "[KEY_REQUIRED]",
+		name: "archon-chatty",
 		url: "https://etzsxcurkrjfmanhrgou.supabase.co",
+		key: process.env.ARCHON_CHATTY_KEY || "[KEY_REQUIRED]",
 	},
 	{
-		name: "supabase-purple-zebra", key: process.env.PURPLE_ZEBRA_KEY || "[KEY_REQUIRED]",
+		name: "supabase-purple-zebra",
 		url: "https://gtomvmymfcjswvxuclii.supabase.co",
+		key: process.env.PURPLE_ZEBRA_KEY || "[KEY_REQUIRED]",
 	},
 	{
-		name: "airbearme-project", key: process.env.AIRBEARME_PROJECT_KEY || "[KEY_REQUIRED]",
+		name: "airbearme-project",
 		url: "https://xckggdmqfqajatytmiko.supabase.co",
+		key: process.env.AIRBEARME_PROJECT_KEY || "[KEY_REQUIRED]",
 	},
 ];
 

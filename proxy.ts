@@ -1,6 +1,7 @@
-import { createServerClient } from "@supabase/ssr"
-import { NextResponse, type NextRequest } from "next/server"
-import { SECURITY_HEADERS } from "./lib/security-headers"
+import { createServerClient } from "@supabase/ssr";
+import { NextResponse, type NextRequest } from "next/server";
+
+import { SECURITY_HEADERS } from "./lib/security-headers";
 
 /**
  * Production-grade middleware for:
@@ -9,62 +10,79 @@ import { SECURITY_HEADERS } from "./lib/security-headers"
  * - Secure cookie handling
  */
 export async function proxy(request: NextRequest) {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!supabaseUrl || !supabaseAnonKey) {
-    console.error("Missing Supabase environment variables in middleware")
-    return NextResponse.next()
+    console.error("Missing Supabase environment variables in middleware");
+    return NextResponse.next();
   }
 
   let supabaseResponse = NextResponse.next({
     request,
-  })
+  });
 
   const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
     cookies: {
       getAll() {
-        return request.cookies.getAll()
+        return request.cookies.getAll();
       },
-      setAll(cookiesToSet: Array<{ name: string; value: string; options?: Record<string, unknown> }>) {
+      setAll(
+        cookiesToSet: Array<{
+          name: string;
+          value: string;
+          options?: Record<string, unknown>;
+        }>,
+      ) {
         cookiesToSet.forEach(({ name, value }) => {
-          request.cookies.set(name, value)
-        })
+          request.cookies.set(name, value);
+        });
         supabaseResponse = NextResponse.next({
           request,
-        })
+        });
         cookiesToSet.forEach(({ name, value, options }) => {
           if (options) {
-            supabaseResponse.cookies.set(name, value, options as Parameters<typeof supabaseResponse.cookies.set>[2])
+            supabaseResponse.cookies.set(
+              name,
+              value,
+              options as Parameters<typeof supabaseResponse.cookies.set>[2],
+            );
           } else {
-            supabaseResponse.cookies.set(name, value)
+            supabaseResponse.cookies.set(name, value);
           }
-        })
+        });
       },
     },
-  })
+  });
 
   // Refresh session if needed (automatic token refresh)
-  await supabase.auth.getUser()
+  await supabase.auth.getUser();
 
   // Protect administrative and setup endpoints
   const isAdminRoute =
     request.nextUrl.pathname.startsWith("/api/setup/") ||
-    ["/api/spots/update", "/api/spots/manual-update", "/api/spots/bypass-update"].includes(
-      request.nextUrl.pathname
-    )
+    [
+      "/api/spots/update",
+      "/api/spots/manual-update",
+      "/api/spots/bypass-update",
+    ].includes(request.nextUrl.pathname);
 
   if (isAdminRoute) {
-    const adminSecret = request.headers.get("X-Admin-Secret")
+    const adminSecret = request.headers.get("X-Admin-Secret");
     // ADMIN_SECRET must be set in environment variables for these endpoints to be accessible
-    const expectedSecret = process.env.ADMIN_SECRET
+    const expectedSecret = process.env.ADMIN_SECRET;
 
     if (!expectedSecret || adminSecret !== expectedSecret) {
-      console.warn(`Unauthorized admin access attempt to ${request.nextUrl.pathname}`)
-      return new NextResponse(JSON.stringify({ error: "Unauthorized administrative access" }), {
-        status: 401,
-        headers: { "Content-Type": "application/json" },
-      })
+      console.warn(
+        `Unauthorized admin access attempt to ${request.nextUrl.pathname}`,
+      );
+      return new NextResponse(
+        JSON.stringify({ error: "Unauthorized administrative access" }),
+        {
+          status: 401,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
     }
   }
 
@@ -72,28 +90,31 @@ export async function proxy(request: NextRequest) {
   const isProtectedRoute =
     request.nextUrl.pathname.startsWith("/dashboard") ||
     request.nextUrl.pathname.startsWith("/driver") ||
-    request.nextUrl.pathname.startsWith("/map") && request.nextUrl.searchParams.has("auth")
+    (request.nextUrl.pathname.startsWith("/map") &&
+      request.nextUrl.searchParams.has("auth"));
 
   if (isProtectedRoute) {
     const {
       data: { user },
-    } = await supabase.auth.getUser()
+    } = await supabase.auth.getUser();
 
     if (!user) {
-      const url = request.nextUrl.clone()
-      url.pathname = "/auth/login"
-      url.searchParams.set("redirect", request.nextUrl.pathname)
-      return NextResponse.redirect(url)
+      const url = request.nextUrl.clone();
+      url.pathname = "/auth/login";
+      url.searchParams.set("redirect", request.nextUrl.pathname);
+      return NextResponse.redirect(url);
     }
   }
 
   // Add security headers
   for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
-    supabaseResponse.headers.set(key, value)
+    supabaseResponse.headers.set(key, value);
   }
-  return supabaseResponse
+  return supabaseResponse;
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"],
-}
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+  ],
+};

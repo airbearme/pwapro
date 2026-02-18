@@ -106,7 +106,7 @@ jobs:
 
       - name: Sort imports
         run: |
-          npx eslint --fix --ext .ts,.tsx,.js,.jsx --rule 'import/order: error'
+          npx eslint --fix .
 
       - name: Commit import sorting (if on main branch)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -134,10 +134,9 @@ jobs:
         run: npm ci
 
       - name: Run codemaps analysis
-        run: npm run codemaps:analyze
-
-      - name: Bundle analyzer
-        run: npx webpack-bundle-analyzer --mode static
+        run: |
+          npm run codemaps:generate
+          npm run codemaps:analyze
 
       - name: Upload bundle analysis
         uses: actions/upload-artifact@v4

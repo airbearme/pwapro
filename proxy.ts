@@ -47,6 +47,27 @@ export async function proxy(request: NextRequest) {
   // Refresh session if needed (automatic token refresh)
   await supabase.auth.getUser()
 
+  // Protect administrative and setup endpoints
+  const isAdminRoute =
+    request.nextUrl.pathname.startsWith("/api/setup/") ||
+    ["/api/spots/update", "/api/spots/manual-update", "/api/spots/bypass-update"].includes(
+      request.nextUrl.pathname
+    )
+
+  if (isAdminRoute) {
+    const adminSecret = request.headers.get("X-Admin-Secret")
+    // ADMIN_SECRET must be set in environment variables for these endpoints to be accessible
+    const expectedSecret = process.env.ADMIN_SECRET
+
+    if (!expectedSecret || adminSecret !== expectedSecret) {
+      console.warn(`Unauthorized admin access attempt to ${request.nextUrl.pathname}`)
+      return new NextResponse(JSON.stringify({ error: "Unauthorized administrative access" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      })
+    }
+  }
+
   // Protect authenticated routes
   const isProtectedRoute =
     request.nextUrl.pathname.startsWith("/dashboard") ||

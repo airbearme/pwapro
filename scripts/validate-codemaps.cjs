@@ -36,6 +36,10 @@ class CodeMapsValidator {
    * Validate all CodeMaps
    */
   async validate() {
+    // Ensure output directory exists
+    if (!fs.existsSync(this.outputDir)) {
+      fs.mkdirSync(this.outputDir, { recursive: true });
+    }
     console.log("🔍 Validating CodeMaps...\n");
 
     try {

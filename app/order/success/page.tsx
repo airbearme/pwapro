@@ -8,7 +8,6 @@ import { useEffect, useState, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-
 function OrderSuccessPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -127,7 +126,13 @@ function OrderSuccessPageContent() {
 
 export default function OrderSuccessPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-black text-white flex items-center justify-center">Loading success page...</div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-black text-white flex items-center justify-center">
+          Loading success page...
+        </div>
+      }
+    >
       <OrderSuccessPageContent />
     </Suspense>
   );

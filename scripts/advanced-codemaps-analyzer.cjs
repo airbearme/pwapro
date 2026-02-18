@@ -138,7 +138,9 @@ class AdvancedCodeMapsAnalyzer {
     }
 
     complexityReport.average =
-      complexityReport.total / this.metrics.components.length;
+      this.metrics.components.length > 0
+        ? complexityReport.total / this.metrics.components.length
+        : 0;
 
     // Calculate averages by type
     for (const [type, data] of Object.entries(complexityReport.byType)) {
@@ -738,7 +740,11 @@ class AdvancedCodeMapsAnalyzer {
     const insights = [];
 
     // Component insights
-    if (this.metrics.complexity.high.length > 0) {
+    if (
+      this.metrics.complexity &&
+      this.metrics.complexity.high &&
+      this.metrics.complexity.high.length > 0
+    ) {
       insights.push({
         type: "complexity",
         level: "warning",

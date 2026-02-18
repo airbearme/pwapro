@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     if (!airbear_id || !latitude || !longitude) {
       return NextResponse.json(
         { error: "Missing required fields: airbear_id, latitude, longitude" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -36,7 +36,7 @@ export async function POST(request: Request) {
     ) {
       return NextResponse.json(
         { error: "Invalid coordinates" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
       if (battery_level < 0 || battery_level > 100) {
         return NextResponse.json(
           { error: "Battery level must be between 0 and 100" },
-          { status: 400 }
+          { status: 400 },
         );
       }
       updateData.battery_level = battery_level;

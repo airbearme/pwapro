@@ -180,7 +180,7 @@ importers:
         specifier: 12.0.1
         version: 12.0.1
       stripe:
-        specifier: ^20.1.2
+        specifier: ^20.3.1
         version: 20.3.1(@types/node@25.3.0)
       tailwind-merge:
         specifier: ^3.4.0

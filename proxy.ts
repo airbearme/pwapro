@@ -17,6 +17,27 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next()
   }
 
+  // Protect administrative endpoints (fail-secure)
+  const isAdminRoute =
+    request.nextUrl.pathname.startsWith("/api/setup/") ||
+    [
+      "/api/spots/update",
+      "/api/spots/manual-update",
+      "/api/spots/bypass-update",
+    ].includes(request.nextUrl.pathname)
+
+  if (isAdminRoute) {
+    const adminSecret = process.env.ADMIN_SECRET
+    const requestSecret = request.headers.get("X-Admin-Secret")
+
+    if (!adminSecret || requestSecret !== adminSecret) {
+      return new NextResponse(
+        JSON.stringify({ error: "Unauthorized: Admin access required" }),
+        { status: 401, headers: { "Content-Type": "application/json" } }
+      )
+    }
+  }
+
   let supabaseResponse = NextResponse.next({
     request,
   })

@@ -106,7 +106,7 @@ jobs:
 
       - name: Sort imports
         run: |
-          npx eslint --fix --ext .ts,.tsx,.js,.jsx --rule 'import/order: error'
+          npm run lint -- --fix
 
       - name: Commit import sorting (if on main branch)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -132,6 +132,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Generate codemaps
+        run: npm run codemaps:generate
 
       - name: Run codemaps analysis
         run: npm run codemaps:analyze

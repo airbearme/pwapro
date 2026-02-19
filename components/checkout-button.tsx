@@ -262,10 +262,11 @@ export function CheckoutButton({ items, onSuccess }: CheckoutButtonProps) {
                 className="h-16"
                 onClick={handleApplePay}
                 disabled={walletLoading.apple || loading}
+                aria-label="Pay with Apple Pay"
               >
                 <div className="text-center">
                   {walletLoading.apple ? (
-                    <div className="w-6 h-6 border-2 border-gray-400 border-t-transparent rounded-full animate-spin mx-auto mb-1"></div>
+                    <Spinner className="h-6 w-6 mx-auto mb-1" />
                   ) : (
                     <Apple className="h-6 w-6 mx-auto mb-1" />
                   )}
@@ -279,10 +280,11 @@ export function CheckoutButton({ items, onSuccess }: CheckoutButtonProps) {
                 className="h-16"
                 onClick={handleGooglePay}
                 disabled={walletLoading.google || loading}
+                aria-label="Pay with Google Pay"
               >
                 <div className="text-center">
                   {walletLoading.google ? (
-                    <div className="w-6 h-6 border-2 border-gray-400 border-t-transparent rounded-full animate-spin mx-auto mb-1"></div>
+                    <Spinner className="h-6 w-6 mx-auto mb-1" />
                   ) : (
                     <Wallet className="h-6 w-6 mx-auto mb-1" />
                   )}
@@ -309,7 +311,7 @@ export function CheckoutButton({ items, onSuccess }: CheckoutButtonProps) {
             >
               {loading ? (
                 <>
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                  <Spinner className="mr-2 h-4 w-4" />
                   Processing...
                 </>
               ) : (
@@ -356,4 +358,3 @@ export function CheckoutButton({ items, onSuccess }: CheckoutButtonProps) {
     </Card>
   )
 }
-

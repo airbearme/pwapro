@@ -8,7 +8,16 @@ on:
   workflow_dispatch:
 
 env:
-  NODE_VERSION: '20'
+  NODE_VERSION: "20"
+  NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy
+  NEXT_PUBLIC_SUPABASE_PWA4_URL: https://placeholder.supabase.co
+  NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy
+  SUPABASE_PWA4_SERVICE_ROLE_KEY: dummy
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: pk_test_dummy
+  STRIPE_SECRET_KEY: sk_test_dummy
+  NEXT_PUBLIC_SITE_URL: https://airbear.me
+  NODE_ENV: production
 
 jobs:
   ci:
@@ -18,34 +27,39 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "pnpm"
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --no-frozen-lockfile
 
       - name: Show versions
         run: |
           node --version
-          npm --version
+          pnpm --version
 
       - name: TypeScript type check
-        run: npm run type-check
+        run: pnpm run type-check
 
       - name: ESLint
-        run: npm run lint
-
-      - name: Validate codemaps
-        run: npm run codemaps:validate
+        run: pnpm run lint
 
       - name: Generate codemaps
-        run: npm run codemaps:generate
+        run: pnpm run codemaps:generate
+
+      - name: Validate codemaps
+        run: pnpm run codemaps:validate
 
       - name: Build application
-        run: npm run build
+        run: pnpm run build
 
       - name: Upload npm logs (on failure)
         if: failure()

@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { Button } from "@/components/ui/button";
 import { X, Download, Smartphone } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import AirbearWheel from "@/components/airbear-wheel";
 
 interface BeforeInstallPromptEvent extends Event {

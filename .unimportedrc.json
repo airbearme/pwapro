@@ -1,0 +1,40 @@
+{
+  "entry": [
+    "app/**/*.{ts,tsx}",
+    "components/**/*.{ts,tsx}",
+    "lib/**/*.{ts,tsx}",
+    "hooks/**/*.{ts,tsx}",
+    "proxy.ts",
+    "scripts/**/*.{js,cjs,mjs,ts}"
+  ],
+  "ignorePatterns": [
+    "node_modules/**",
+    ".next/**",
+    "coverage/**",
+    "playwright-report/**",
+    "public/**",
+    "attached_assets/**"
+  ],
+  "ignoreUnimported": [
+    "eslint.config.js",
+    "next.config.mjs",
+    "postcss.config.js",
+    "tailwind.config.ts",
+    "app.layout.analytics.tsx",
+    "observability/logger.ts",
+    "supabase/functions/create-payment-intent/index.ts",
+    "supabase/functions/stripe-webhook/index.ts"
+  ],
+  "ignoreUnused": [
+    "@tailwindcss/postcss",
+    "@tanstack/react-query",
+    "@types/use-sync-external-store",
+    "date-fns",
+    "drizzle-zod",
+    "framer-motion",
+    "nanoid",
+    "react-leaflet",
+    "recharts",
+    "tailwindcss-animate"
+  ]
+}

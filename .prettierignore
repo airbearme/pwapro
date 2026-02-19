@@ -1,0 +1,11 @@
+.next/
+node_modules/
+playwright-report/
+coverage/
+dist/
+public/
+components/ui/
+supabase/functions/
+attached_assets/
+*.sql
+*.tar.gz

@@ -14,9 +14,9 @@ class AdvancedCodeMapsAnalyzer {
     this.projectRoot = process.cwd();
     this.outputDir = path.join(this.projectRoot, '.next/codemaps');
     this.metrics = {
-      components: {},
-      api: {},
-      utilities: {},
+      components: [],
+      api: [],
+      utilities: [],
       dependencies: {},
       performance: {},
       security: {},
@@ -79,11 +79,11 @@ class AdvancedCodeMapsAnalyzer {
         const data = JSON.parse(content);
 
         if (file === 'components.json') {
-          this.metrics.components = data.components || [];
+          this.metrics.components = Array.isArray(data.components) ? data.components : [];
         } else if (file === 'api-routes.json') {
-          this.metrics.api = data.routes || [];
+          this.metrics.api = Array.isArray(data.routes) ? data.routes : [];
         } else if (file === 'utilities.json') {
-          this.metrics.utilities = data.utilities || [];
+          this.metrics.utilities = Array.isArray(data.utilities) ? data.utilities : [];
         }
       }
     }
@@ -650,6 +650,10 @@ class AdvancedCodeMapsAnalyzer {
    */
   async createAdvancedReports() {
     console.log('📊 Creating advanced reports...');
+
+    if (!fs.existsSync(this.outputDir)) {
+      fs.mkdirSync(this.outputDir, { recursive: true });
+    }
 
     const reports = {
       timestamp: new Date().toISOString(),

@@ -9,6 +9,15 @@ on:
 
 env:
   NODE_VERSION: "20"
+  NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy
+  NEXT_PUBLIC_SUPABASE_PWA4_URL: https://placeholder.supabase.co
+  NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy
+  SUPABASE_PWA4_SERVICE_ROLE_KEY: dummy
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: pk_test_dummy
+  STRIPE_SECRET_KEY: sk_test_dummy
+  NEXT_PUBLIC_SITE_URL: https://airbear.me
+  NODE_ENV: production
 
 jobs:
   ci:
@@ -40,30 +49,12 @@ jobs:
 
       - name: Generate codemaps
         run: npm run codemaps:generate
-        env:
-          NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy
-          NEXT_PUBLIC_SUPABASE_PWA4_URL: https://placeholder.supabase.co
-          NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy
-          SUPABASE_PWA4_SERVICE_ROLE_KEY: dummy
-          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: pk_test_dummy
-          STRIPE_SECRET_KEY: sk_test_dummy
-          NEXT_PUBLIC_SITE_URL: https://airbear.me
 
       - name: Validate codemaps
         run: npm run codemaps:validate
 
       - name: Build application
         run: npm run build
-        env:
-          NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy
-          NEXT_PUBLIC_SUPABASE_PWA4_URL: https://placeholder.supabase.co
-          NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy
-          SUPABASE_PWA4_SERVICE_ROLE_KEY: dummy
-          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: pk_test_dummy
-          STRIPE_SECRET_KEY: sk_test_dummy
-          NEXT_PUBLIC_SITE_URL: https://airbear.me
 
       - name: Upload npm logs (on failure)
         if: failure()

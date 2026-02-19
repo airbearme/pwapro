@@ -38,9 +38,10 @@ export default function FloatingMascot() {
   const followY = isMobile ? 0 : mousePosition.y * 0.01;
 
   return (
-        <Link
-          href="/"
-          className="fixed bottom-6 right-6 z-50 transition-all duration-500 opacity-100 translate-y-0"
+    <Link
+      href="/"
+      className="fixed bottom-6 right-6 z-50 transition-all duration-500 opacity-100 translate-y-0"
+      aria-label="Go to homepage"
       style={{
         transform: `translate(${followX}px, ${followY}px)`,
       }}

@@ -241,15 +241,16 @@ export default function DriverDashboardPage() {
         }
       );
 
-      const response = await fetch("/api/airbear/update-location", {
+      const response = await fetch("/api/airbear/location", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          airbear_id: driverAirbear.id,
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
+          heading: driverAirbear.heading,
+          battery_level: driverAirbear.battery_level,
         }),
       });
 

@@ -9,6 +9,28 @@ import { SECURITY_HEADERS } from "./lib/security-headers"
  * - Secure cookie handling
  */
 export async function proxy(request: NextRequest) {
+  // Protect administrative and setup endpoints
+  // This check is independent of Supabase and should run first
+  const isAdminRoute =
+    request.nextUrl.pathname.startsWith("/api/setup/") ||
+    request.nextUrl.pathname.startsWith("/api/spots/update") ||
+    request.nextUrl.pathname.startsWith("/api/spots/manual-update") ||
+    request.nextUrl.pathname.startsWith("/api/spots/bypass-update") ||
+    request.nextUrl.pathname.startsWith("/api/airbear/update-location") ||
+    request.nextUrl.pathname.startsWith("/api/install/")
+
+  if (isAdminRoute) {
+    const adminSecret = process.env.ADMIN_SECRET
+    const providedSecret = request.headers.get("X-Admin-Secret")
+
+    if (!adminSecret || providedSecret !== adminSecret) {
+      return new NextResponse(JSON.stringify({ error: "Unauthorized: Admin secret required" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      })
+    }
+  }
+
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
@@ -51,7 +73,9 @@ export async function proxy(request: NextRequest) {
   const isProtectedRoute =
     request.nextUrl.pathname.startsWith("/dashboard") ||
     request.nextUrl.pathname.startsWith("/driver") ||
-    request.nextUrl.pathname.startsWith("/map") && request.nextUrl.searchParams.has("auth")
+    request.nextUrl.pathname.startsWith("/api/rides/") ||
+    request.nextUrl.pathname.startsWith("/api/airbear/location") ||
+    (request.nextUrl.pathname.startsWith("/map") && request.nextUrl.searchParams.has("auth"))
 
   if (isProtectedRoute) {
     const {

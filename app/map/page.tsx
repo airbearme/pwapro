@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useAuthContext } from "@/components/auth-provider";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import { subscribeToAirbearLocations } from "@/lib/supabase/realtime";
@@ -80,11 +80,6 @@ export default function MapPage() {
 
   // Enable push notifications for airbear availability
   useAirbearNotifications(airbears);
-
-  // ⚡ Bolt: Stable callback to prevent MapComponent re-renders
-  const handleSpotSelect = useCallback((spot: Spot) => {
-    router.push(`/book?pickup=${spot.id}`);
-  }, [router]);
 
   if (loading || authLoading) {
     return (
@@ -197,7 +192,9 @@ export default function MapPage() {
           <MapComponent
             spots={spots}
             airbears={airbears}
-            onSpotSelect={handleSpotSelect}
+            onSpotSelect={(spot) => {
+              router.push(`/book?pickup=${spot.id}`);
+            }}
           />
         </Card>
 

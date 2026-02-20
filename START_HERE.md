@@ -35,7 +35,6 @@ chmod +x deploy.sh
 ```
 
 This single command will:
-
 1. ✓ Verify all code compiles
 2. ✓ Run all tests
 3. ✓ Commit changes to Git
@@ -99,14 +98,12 @@ Visit: https://airbear.me/products
 ### OAuth Setup (5 minutes)
 
 **Google:**
-
 1. Supabase Dashboard → Authentication → Providers
 2. Enable Google
 3. Add Client ID and Secret
 4. Add redirect: `https://airbear.me/auth/callback`
 
 **Apple:**
-
 1. Same steps as Google
 2. Enable Apple
 3. Add Service ID and Key
@@ -254,4 +251,4 @@ chmod +x deploy.sh && ./deploy.sh
 
 ---
 
-_Built for AirBear - Sustainable transportation in Binghamton, NY_ 🐻
+*Built for AirBear - Sustainable transportation in Binghamton, NY* 🐻

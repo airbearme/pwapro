@@ -15,7 +15,6 @@ This guide will walk you through deploying the AirBear PWA to production at airb
 Ensure all environment variables are set in Vercel:
 
 ### Supabase (PWAPRO Instance)
-
 \`\`\`bash
 NEXT_PUBLIC_SUPABASE_PWA4_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=your_anon_key
@@ -23,17 +22,14 @@ SUPABASE_PWA4_SERVICE_ROLE_KEY=your_service_role_key
 \`\`\`
 
 ### Stripe
-
 \`\`\`bash
-NEXT*PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live*...
-STRIPE*SECRET_KEY=sk_live*...
-STRIPE*WEBHOOK_SECRET=whsec*...
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...
+STRIPE_SECRET_KEY=sk_live_...
+STRIPE_WEBHOOK_SECRET=whsec_...
 \`\`\`
 
 ### OAuth (for Google/Apple Sign-In)
-
 Configure in Supabase Dashboard:
-
 - Google: Add OAuth client credentials
 - Apple: Add Sign in with Apple credentials
 
@@ -42,13 +38,10 @@ Configure in Supabase Dashboard:
 Run the database setup script to create all tables with RLS policies:
 
 \`\`\`bash
-
 # Connect to your Supabase project
-
 psql postgres://[YOUR_CONNECTION_STRING]
 
 # Run the schema
-
 \i scripts/01-setup-database.sql
 \`\`\`
 
@@ -68,7 +61,6 @@ Or use the Supabase SQL Editor to paste the contents of `scripts/01-setup-databa
 In Supabase Dashboard → Authentication → URL Configuration:
 
 **Authorized URLs:**
-
 - `https://airbear.me`
 - `https://www.airbear.me`
 - `https://airbear.me/auth/callback`
@@ -102,7 +94,6 @@ git push origin main
 ## Step 7: Verify Deployment
 
 ### Check Health Endpoint
-
 \`\`\`bash
 curl https://airbear.me/api/health
 \`\`\`
@@ -110,32 +101,29 @@ curl https://airbear.me/api/health
 Expected response:
 \`\`\`json
 {
-"status": "healthy",
-"timestamp": "2025-01-XX...",
-"services": {
-"database": "connected",
-"stripe": "configured",
-"auth": "ready"
-}
+  "status": "healthy",
+  "timestamp": "2025-01-XX...",
+  "services": {
+    "database": "connected",
+    "stripe": "configured",
+    "auth": "ready"
+  }
 }
 \`\`\`
 
 ### Test Map Display
-
 1. Navigate to `https://airbear.me/map`
 2. Verify map loads without errors
 3. Check browser console for any warnings
 4. Confirm real-time updates work (markers animate)
 
 ### Test Authentication
-
 1. Go to `https://airbear.me/auth/login`
 2. Test Google Sign-In
 3. Test Apple Sign-In (if configured)
 4. Verify profile creation in Supabase
 
 ### Test Payments
-
 1. Navigate to products page
 2. Add item to cart
 3. Proceed to checkout
@@ -145,16 +133,13 @@ Expected response:
 ## Step 8: Monitor Real-Time Features
 
 ### Map Tracking
-
 - Open map page on multiple devices
 - Verify locations update across all clients
 - Check that battery levels display correctly
 - Confirm available vs in-use states
 
 ### Database Subscriptions
-
 Check Supabase Dashboard → Database → Replication:
-
 - Ensure `airbears` table has realtime enabled
 - Verify `spots` table has realtime enabled
 - Check `rides` table has realtime enabled
@@ -162,28 +147,24 @@ Check Supabase Dashboard → Database → Replication:
 ## Troubleshooting
 
 ### Map Not Displaying
-
 1. Check browser console for Leaflet errors
 2. Verify CDN access to OpenStreetMap tiles
 3. Confirm latitude/longitude values are valid
 4. Check that `leaflet` package is installed
 
 ### Real-Time Updates Not Working
-
 1. Verify Supabase realtime is enabled
 2. Check WebSocket connection in Network tab
 3. Confirm RLS policies allow SELECT
 4. Test database trigger functions
 
 ### Authentication Issues
-
 1. Verify OAuth redirect URLs match exactly
 2. Check Supabase Auth logs
 3. Confirm environment variables are correct
 4. Test with incognito mode
 
 ### Payment Failures
-
 1. Check Stripe webhook logs
 2. Verify webhook secret matches
 3. Confirm Stripe keys are production keys
@@ -192,19 +173,15 @@ Check Supabase Dashboard → Database → Replication:
 ## Performance Optimization
 
 ### Enable Vercel Edge Functions
-
 Configure in `vercel.json` for faster API responses near users.
 
 ### PWA Configuration
-
 The app includes service workers for offline functionality:
-
 - Cached routes work offline
 - Map tiles cache for offline viewing
 - Background sync for ride updates
 
 ### CDN and Caching
-
 - Static assets are served from Vercel CDN
 - API routes use Edge caching where appropriate
 - Database queries use Supabase connection pooling
@@ -222,17 +199,14 @@ The app includes service workers for offline functionality:
 ## Monitoring
 
 ### Setup Vercel Analytics
-
 Already included via `@vercel/analytics` package.
 
 ### Monitor Supabase
-
 - Check query performance in Dashboard
 - Monitor connection pool usage
 - Set up alerts for high error rates
 
 ### Track Stripe Events
-
 - Monitor payment success rate
 - Check for failed webhooks
 - Set up Stripe Radar for fraud detection
@@ -240,7 +214,6 @@ Already included via `@vercel/analytics` package.
 ## Continuous Updates
 
 The CI/CD pipeline automatically:
-
 1. Runs tests on every commit
 2. Deploys to preview URL for PRs
 3. Deploys to production on main branch merge
@@ -258,7 +231,6 @@ Deployment typically takes 2-3 minutes.
 ## Support
 
 If you encounter issues:
-
 1. Check deployment logs in Vercel
 2. Review Supabase logs for database errors
 3. Check Stripe logs for payment issues

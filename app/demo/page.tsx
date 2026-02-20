@@ -35,9 +35,7 @@ export default function DemoPage() {
 
               <h3 className="font-semibold mb-2">Driver Experience</h3>
               <ol className="space-y-2 text-sm text-muted-foreground">
-                <li>
-                  Click &quot;Driver Mode&quot; to simulate location updates
-                </li>
+                <li>Click &quot;Driver Mode&quot; to simulate location updates</li>
                 <li>Share GPS coordinates with riders in real-time</li>
                 <li>Monitor ride progress and completion</li>
               </ol>

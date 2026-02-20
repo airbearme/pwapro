@@ -5,7 +5,6 @@ Complete this checklist before deploying to airbear.me.
 ## Pre-Deployment
 
 ### Environment Setup
-
 - [ ] Supabase PWAPRO project created and configured
 - [ ] All environment variables added to Vercel
 - [ ] Custom domain airbear.me configured in Vercel
@@ -13,7 +12,6 @@ Complete this checklist before deploying to airbear.me.
 - [ ] DNS records pointing to Vercel
 
 ### Supabase Configuration
-
 - [ ] Database schema deployed via SQL scripts
 - [ ] RLS policies enabled and tested
 - [ ] Realtime enabled for required tables
@@ -22,7 +20,6 @@ Complete this checklist before deploying to airbear.me.
 - [ ] Service role key secured (not in Git)
 
 ### Stripe Configuration
-
 - [ ] Stripe account in production mode
 - [ ] Products and prices created
 - [ ] Webhook endpoint configured: https://airbear.me/api/stripe/webhook
@@ -32,7 +29,6 @@ Complete this checklist before deploying to airbear.me.
 - [ ] Test payments completed successfully
 
 ### OAuth Setup
-
 - [ ] Google OAuth credentials created
 - [ ] Google authorized redirect URIs added
 - [ ] Apple Sign In configured
@@ -40,7 +36,6 @@ Complete this checklist before deploying to airbear.me.
 - [ ] Both providers tested in Supabase Auth
 
 ### Code Quality
-
 - [ ] All TypeScript errors resolved
 - [ ] No console errors in browser
 - [ ] All dependencies updated to latest stable
@@ -50,15 +45,11 @@ Complete this checklist before deploying to airbear.me.
 ## Deployment Steps
 
 ### 1. GitHub Repository
-
 \`\`\`bash
-
 # Create new repo (if using pwapro)
-
 gh repo create airbearme/pwapro --public
 
 # Or push to existing pwapro
-
 git remote add origin https://github.com/airbearme/pwapro.git
 git add .
 git commit -m "Production-ready deployment"
@@ -66,7 +57,6 @@ git push -u origin main
 \`\`\`
 
 ### 2. Vercel Project Setup
-
 - [ ] Import GitHub repository in Vercel
 - [ ] Select Next.js framework preset
 - [ ] Configure build settings (auto-detected)
@@ -74,28 +64,22 @@ git push -u origin main
 - [ ] Enable automatic deployments from main branch
 
 ### 3. Domain Configuration
-
 \`\`\`bash
-
 # Add custom domain
-
 vercel domains add airbear.me
 
 # Configure DNS (at domain registrar)
-
 A Record: @ → 76.76.21.21
 CNAME: www → cname.vercel-dns.com
 \`\`\`
 
 ### 4. Database Initialization
-
 - [ ] Run SQL migration: `scripts/01-setup-database.sql`
 - [ ] Verify tables created
 - [ ] Test RLS policies
 - [ ] Seed initial data (if needed)
 
 ### 5. Integration Testing
-
 - [ ] Health check endpoint: https://airbear.me/api/health
 - [ ] User registration flow
 - [ ] OAuth login (Google)
@@ -109,14 +93,12 @@ CNAME: www → cname.vercel-dns.com
 ## Post-Deployment
 
 ### Monitoring Setup
-
 - [ ] Vercel Analytics enabled
 - [ ] Error tracking configured
 - [ ] Performance monitoring active
 - [ ] Uptime monitoring setup
 
 ### Security Verification
-
 - [ ] SSL/TLS certificate valid
 - [ ] Security headers configured
 - [ ] CORS policies correct
@@ -124,7 +106,6 @@ CNAME: www → cname.vercel-dns.com
 - [ ] RLS policies enforced
 
 ### Performance Testing
-
 - [ ] Lighthouse score > 90
 - [ ] First Contentful Paint < 1.5s
 - [ ] Time to Interactive < 3s
@@ -132,7 +113,6 @@ CNAME: www → cname.vercel-dns.com
 - [ ] Images optimized
 
 ### User Acceptance Testing
-
 - [ ] Sign up as new user
 - [ ] Complete full purchase flow
 - [ ] Test on iOS device
@@ -141,7 +121,6 @@ CNAME: www → cname.vercel-dns.com
 - [ ] Verify mobile responsiveness
 
 ### Documentation
-
 - [ ] README updated with production URLs
 - [ ] API documentation complete
 - [ ] Deployment guide accessible
@@ -193,7 +172,7 @@ If issues occur:
 
 ---
 
-**Deployment Date:** ******\_\_\_******
-**Deployed By:** ******\_\_\_******
-**Version:** ******\_\_\_******
-**Notes:** ******\_\_\_******
+**Deployment Date:** _______________
+**Deployed By:** _______________
+**Version:** _______________
+**Notes:** _______________

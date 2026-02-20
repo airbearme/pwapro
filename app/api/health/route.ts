@@ -32,7 +32,7 @@ export async function GET() {
         timestamp: new Date().toISOString(),
         error: error.message,
       },
-      { status: 503 },
+      { status: 503 }
     );
   }
 }

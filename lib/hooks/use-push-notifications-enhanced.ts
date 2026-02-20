@@ -17,13 +17,9 @@ interface PushNotificationState {
 
 export function usePushNotificationsEnhanced() {
   const [state, setState] = useState<PushNotificationState>({
-    isSupported:
-      typeof window !== "undefined" &&
-      "serviceWorker" in navigator &&
-      "PushManager" in window,
+    isSupported: typeof window !== "undefined" && "serviceWorker" in navigator && "PushManager" in window,
     isSubscribed: false,
-    permission:
-      typeof window !== "undefined" ? Notification.permission : "default",
+    permission: typeof window !== "undefined" ? Notification.permission : "default",
     subscription: null,
   });
 
@@ -76,8 +72,7 @@ export function usePushNotificationsEnhanced() {
     if (permission !== "granted") {
       toast({
         title: "Permission Denied",
-        description:
-          "Please enable notifications to receive driver availability alerts.",
+        description: "Please enable notifications to receive driver availability alerts.",
         variant: "destructive",
       });
       return false;
@@ -108,9 +103,7 @@ export function usePushNotificationsEnhanced() {
 
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(
-          vapidPublicKey,
-        ) as BufferSource,
+        applicationServerKey: urlBase64ToUint8Array(vapidPublicKey) as BufferSource,
       });
 
       // Save subscription to database

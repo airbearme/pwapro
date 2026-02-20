@@ -42,7 +42,7 @@ After clicking "Add endpoint", you'll be redirected to a new page showing your w
 1. Look for the section labeled **"Signing secret"**
 2. Click the **"Reveal"** button
 3. Click the **copy icon** to copy the secret
-4. It will look like: `whsec_...` (starts with "whsec\_")
+4. It will look like: `whsec_...` (starts with "whsec_")
 
 ---
 
@@ -67,11 +67,10 @@ Your webhook is configured. When you deploy your backend server later, you'll up
 ## What You Should See:
 
 After adding the endpoint, the Stripe page should show:
-
 - ✅ Endpoint URL: https://placeholder.airbear.me/api/webhooks/stripe
 - ✅ Events: 5 selected
 - ✅ Status: Active (but will show errors until backend is deployed)
-- ✅ Signing secret: whsec\_... (revealed)
+- ✅ Signing secret: whsec_... (revealed)
 
 ---
 

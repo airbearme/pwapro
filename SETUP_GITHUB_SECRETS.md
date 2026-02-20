@@ -78,7 +78,6 @@ This will sync all secrets to Vercel automatically.
 After setup, verify everything works:
 
 1. **Push a commit to main branch:**
-
    ```bash
    git add .
    git commit -m "Test auto-deploy workflow"
@@ -128,25 +127,21 @@ After setup, verify everything works:
 ## 📝 Troubleshooting
 
 ### Workflow fails at "Validate Environment Variables"
-
 - ✅ Check all required secrets are added to GitHub
 - ✅ Verify secret names match exactly (case-sensitive)
 - ✅ Check secret values are correct (no extra spaces)
 
 ### Workflow fails at "Deploy to Vercel"
-
 - ✅ Verify `VERCEL_TOKEN` is valid
 - ✅ Check `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID` are correct
 - ✅ Ensure Vercel project exists and is linked
 
 ### Secrets not syncing to Vercel
-
 - ✅ Run "Sync Secrets" workflow manually
 - ✅ Check Vercel token has correct permissions
 - ✅ Verify Vercel project ID is correct
 
 ### Production site not updating
-
 - ✅ Check deployment succeeded in GitHub Actions
 - ✅ Verify Vercel deployment completed
 - ✅ Check Vercel environment variables are set

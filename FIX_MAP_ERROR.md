@@ -1,6 +1,7 @@
 # 🔧 Fix Map Loading Error
 
 ## Problem
+
 Map is not loading and showing an error on `airbear.me`.
 
 ## Root Causes Identified
@@ -13,28 +14,34 @@ Map is not loading and showing an error on `airbear.me`.
 ## Fixes Applied
 
 ### 1. ✅ Enhanced Error Handling
+
 - Added user-visible error messages
 - Better error logging
 - Set `mapLoaded` state on error
 
 ### 2. ✅ Improved CSS Loading
+
 - Added `integrity` and `crossOrigin` attributes
 - Added CSS load wait with timeout fallback
 - Continue even if CSS fails (graceful degradation)
 
 ### 3. ✅ Map Container Validation
+
 - Check map container has height before initialization
 - Throw clear error if container is invalid
 
 ### 4. ✅ Map Size Invalidation
+
 - Call `map.invalidateSize()` after initialization
 - Ensures map renders correctly after container sizing
 
 ### 5. ✅ Leaflet Import Validation
+
 - Check if Leaflet loaded correctly
 - Throw error if `L.map` is not available
 
 ## Files Changed
+
 - `components/map-view-beautiful.tsx` - Enhanced error handling and initialization
 
 ## Next Steps
@@ -58,6 +65,7 @@ git push origin main
 ## Expected Result
 
 After deployment:
+
 - ✅ Map loads without errors
 - ✅ Error messages shown if something fails
 - ✅ Map renders correctly with proper sizing
@@ -67,12 +75,14 @@ After deployment:
 ## Troubleshooting
 
 ### Map still not loading?
+
 - Check browser console for specific error
 - Verify Leaflet CSS is loading (Network tab)
 - Check map container has height (Inspector)
 - Verify Supabase connection for data
 
 ### Map loads but no markers?
+
 - Check Supabase connection
 - Verify `spots` and `airbears` data is loading
 - Check browser console for data errors

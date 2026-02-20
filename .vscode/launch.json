@@ -18,9 +18,7 @@
         "${workspaceFolder}/**",
         "!**/node_modules/**"
       ],
-      "skipFiles": [
-        "<node_internals>/**"
-      ]
+      "skipFiles": ["<node_internals>/**"]
     },
     {
       "name": "Debug Server-Side (CodeMaps)",

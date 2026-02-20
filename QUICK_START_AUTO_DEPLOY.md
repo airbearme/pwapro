@@ -1,6 +1,7 @@
 # ⚡ Quick Start - Auto Deploy Setup
 
 ## 🎯 Goal
+
 Set up automatic deployment so every push to `main` automatically tests, builds, and deploys to production.
 
 ## ⚡ 5-Minute Setup
@@ -12,21 +13,25 @@ Go to: `https://github.com/YOUR_USERNAME/YOUR_REPO/settings/secrets/actions`
 Add these 10 secrets:
 
 **Vercel:**
+
 - `VERCEL_TOKEN` → https://vercel.com/account/tokens
 - `VERCEL_ORG_ID` → Vercel Dashboard → Settings → General
 - `VERCEL_PROJECT_ID` → Vercel Dashboard → Project → Settings → General
 
 **Supabase:**
+
 - `NEXT_PUBLIC_SUPABASE_PWA4_URL` → Supabase Dashboard → Project Settings → API
 - `NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY` → Supabase Dashboard → Project Settings → API
 - `SUPABASE_PWA4_SERVICE_ROLE_KEY` → Supabase Dashboard → Project Settings → API
 
 **Stripe:**
+
 - `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` → Stripe Dashboard → Developers → API keys
 - `STRIPE_SECRET_KEY` → Stripe Dashboard → Developers → API keys
 - `STRIPE_WEBHOOK_SECRET` → Stripe Dashboard → Developers → Webhooks
 
 **Site:**
+
 - `NEXT_PUBLIC_SITE_URL` → `https://airbear.me` (or leave default)
 
 ### Step 2: Sync Secrets to Vercel (1 min)
@@ -49,6 +54,7 @@ Watch it deploy automatically! 🎉
 ## ✅ What Happens Now
 
 **Every time you push to `main`:**
+
 1. ✅ Validates environment variables
 2. ✅ Runs tests
 3. ✅ Validates UI/UX effects
@@ -68,15 +74,18 @@ Watch it deploy automatically! 🎉
 ## 🆘 Troubleshooting
 
 **Workflow fails?**
+
 - Check all secrets are added
 - Verify secret names match exactly
 - Check Actions tab for error details
 
 **Secrets not syncing?**
+
 - Run "Sync Secrets" workflow manually
 - Check Vercel token permissions
 
 **Deployment not working?**
+
 - Verify Vercel project ID is correct
 - Check Vercel token is valid
 

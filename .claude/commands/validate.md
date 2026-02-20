@@ -7,6 +7,7 @@ If this passes, the application works.
 ```
 
 Runs:
+
 - lint
 - type-check
 - build

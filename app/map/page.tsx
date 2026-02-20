@@ -1,19 +1,18 @@
 "use client";
 
 import { useEffect, useState, useMemo, useCallback } from "react";
-import { Battery, MapPin, Navigation, Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-
 import { useAuthContext } from "@/components/auth-provider";
-import MapComponent, { type Spot } from "@/components/map-view-beautiful";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
-import { useAirbearNotifications } from "@/lib/hooks/use-airbear-notifications";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import { subscribeToAirbearLocations } from "@/lib/supabase/realtime";
+import { useAirbearNotifications } from "@/lib/hooks/use-airbear-notifications";
+import { Card } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
+import { Battery, MapPin, Navigation, Moon, Sun } from "lucide-react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { useTheme } from "next-themes";
+import MapComponent, { type Spot } from "@/components/map-view-beautiful";
 import type { AirbearLocation } from "@/lib/supabase/realtime";
 
 export default function MapPage() {
@@ -79,9 +78,12 @@ export default function MapPage() {
     return airbears.filter((a) => a.is_available && !a.is_charging);
   }, [airbears]);
 
-  const handleSpotSelect = useCallback((spot: Spot) => {
-    router.push(`/book?pickup=${spot.id}`);
-  }, [router]);
+  const handleSpotSelect = useCallback(
+    (spot: Spot) => {
+      router.push(`/book?pickup=${spot.id}`);
+    },
+    [router],
+  );
 
   // Enable push notifications for airbear availability
   useAirbearNotifications(airbears);
@@ -128,7 +130,11 @@ export default function MapPage() {
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               className="glass-morphism hover-lift"
             >
-              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              {theme === "dark" ? (
+                <Sun className="h-4 w-4" />
+              ) : (
+                <Moon className="h-4 w-4" />
+              )}
             </Button>
           </div>
           <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-emerald-600 via-lime-500 to-amber-500 bg-clip-text text-transparent animate-pulse-glow">
@@ -182,7 +188,7 @@ export default function MapPage() {
                   {airbears.length > 0
                     ? Math.round(
                         airbears.reduce((sum, a) => sum + a.battery_level, 0) /
-                          airbears.length
+                          airbears.length,
                       )
                     : 0}
                   %

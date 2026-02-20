@@ -1,6 +1,7 @@
 # Supabase Setup Guide for AirBear PWA
 
 ## Prerequisites
+
 - Supabase project created at https://supabase.com
 - Project URL and keys from your Supabase dashboard
 
@@ -22,6 +23,7 @@ SUPABASE_PWA4_SERVICE_ROLE_KEY=your_service_role_key
 4. Click "Run" to execute
 
 This will create:
+
 - All necessary tables (spots, airbears, users, rides, payments, bodega_items, orders)
 - Row Level Security (RLS) policies
 - Realtime subscriptions setup
@@ -66,10 +68,10 @@ Run this query in SQL Editor to verify everything is working:
 
 \`\`\`sql
 -- Check spots
-SELECT COUNT(*) as spot_count FROM public.spots;
+SELECT COUNT(\*) as spot_count FROM public.spots;
 
 -- Check airbears
-SELECT * FROM public.airbears;
+SELECT \* FROM public.airbears;
 
 -- Check RLS policies
 SELECT tablename, policyname
@@ -78,6 +80,7 @@ WHERE schemaname = 'public';
 \`\`\`
 
 You should see:
+
 - 16 spots
 - 1 airbear
 - Multiple RLS policies enabled
@@ -93,16 +96,19 @@ You should see:
 ## Troubleshooting
 
 ### Connection Issues
+
 - Verify environment variables are set correctly
 - Check Supabase project is not paused
 - Verify API keys are from the correct project
 
 ### RLS Errors
+
 - Ensure user is authenticated before accessing protected tables
 - Check RLS policies match your access patterns
 - Use service role key for admin operations (server-side only)
 
 ### Realtime Not Working
+
 - Verify realtime is enabled for airbears table
 - Check browser console for subscription errors
 - Ensure RLS policies allow reading the table
@@ -116,4 +122,4 @@ You should see:
 - [ ] RLS policies tested
 - [ ] Seed data populated
 - [ ] Service role key secured (server-side only)
-\`\`\`
+      \`\`\`

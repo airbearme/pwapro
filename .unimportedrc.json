@@ -1,0 +1,48 @@
+{
+  "entry": [
+    "app/**/*.{ts,tsx}",
+    "components/**/*.{ts,tsx}",
+    "lib/**/*.{ts,tsx}",
+    "hooks/**/*.{ts,tsx}",
+    "proxy.ts"
+  ],
+  "ignorePatterns": [
+    "**/*.test.*",
+    "**/*.spec.*",
+    "**/node_modules/**",
+    "**/.next/**",
+    "**/playwright-report/**",
+    "**/coverage/**",
+    "**/public/**",
+    "scripts/**",
+    "supabase/**"
+  ],
+  "ignoreUnimported": [
+    "app.layout.analytics.tsx",
+    "components/map-view-client.tsx",
+    "lib/csp.ts",
+    "eslint.config.js",
+    "observability/logger.ts",
+    "postcss.config.js",
+    "tailwind.config.ts"
+  ],
+  "ignoreUnused": [
+    "@radix-ui/*",
+    "lucide-react",
+    "framer-motion",
+    "tailwindcss-animate",
+    "class-variance-authority",
+    "clsx",
+    "tailwind-merge",
+    "@tailwindcss/postcss",
+    "@tanstack/react-query",
+    "@types/use-sync-external-store",
+    "date-fns",
+    "drizzle-zod",
+    "nanoid",
+    "react-leaflet",
+    "recharts",
+    "ssh2",
+    "ssh2-sftp-client"
+  ]
+}

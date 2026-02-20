@@ -140,9 +140,7 @@ export default function HomePage() {
       </div>
 
       {/* Sparkle rings */}
-      <div className="absolute inset-0 pointer-events-none">
-        {sparkleRings}
-      </div>
+      <div className="absolute inset-0 pointer-events-none">{sparkleRings}</div>
 
       <div className="container mx-auto px-4 py-16 relative z-10">
         <div className="flex flex-col items-center justify-center text-center space-y-8">
@@ -252,21 +250,27 @@ export default function HomePage() {
               <div className="text-3xl sm:text-4xl font-bold text-lime-500 relative z-10">
                 582kg
               </div>
-              <div className="text-sm text-muted-foreground relative z-10">CO₂ Saved</div>
+              <div className="text-sm text-muted-foreground relative z-10">
+                CO₂ Saved
+              </div>
             </div>
             <div className="text-center hover-lift p-4 rounded-lg glass-morphism relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-amber-400/10 via-rose-400/10 to-transparent opacity-70"></div>
               <div className="text-3xl sm:text-4xl font-bold text-amber-500 relative z-10">
                 16
               </div>
-              <div className="text-sm text-muted-foreground relative z-10">Active Spots</div>
+              <div className="text-sm text-muted-foreground relative z-10">
+                Active Spots
+              </div>
             </div>
             <div className="text-center hover-lift p-4 rounded-lg glass-morphism relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/10 via-lime-400/10 to-transparent opacity-70"></div>
               <div className="text-3xl sm:text-4xl font-bold text-emerald-500 relative z-10">
                 100%
               </div>
-              <div className="text-sm text-muted-foreground relative z-10">Solar Powered</div>
+              <div className="text-sm text-muted-foreground relative z-10">
+                Solar Powered
+              </div>
             </div>
           </div>
 

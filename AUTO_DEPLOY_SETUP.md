@@ -3,6 +3,7 @@
 ## Overview
 
 This setup creates a **fully automated CI/CD pipeline** that:
+
 - ✅ **Safely stores** all secrets in GitHub
 - ✅ **Automatically syncs** secrets to Vercel
 - ✅ **Tests** everything before deploying
@@ -35,21 +36,25 @@ Go to: **GitHub Repository** → **Settings** → **Secrets and variables** → 
 ### Required Secrets (10 total):
 
 #### Vercel (3):
+
 1. `VERCEL_TOKEN` - From https://vercel.com/account/tokens
 2. `VERCEL_ORG_ID` - From Vercel Dashboard → Settings → General
 3. `VERCEL_PROJECT_ID` - From Vercel Dashboard → Project → Settings → General
 
 #### Supabase (3):
+
 4. `NEXT_PUBLIC_SUPABASE_PWA4_URL` - From Supabase Dashboard → Project Settings → API
 5. `NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY` - From Supabase Dashboard → Project Settings → API
 6. `SUPABASE_PWA4_SERVICE_ROLE_KEY` - From Supabase Dashboard → Project Settings → API
 
 #### Stripe (3):
+
 7. `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` - From Stripe Dashboard → Developers → API keys
 8. `STRIPE_SECRET_KEY` - From Stripe Dashboard → Developers → API keys
 9. `STRIPE_WEBHOOK_SECRET` - From Stripe Dashboard → Developers → Webhooks
 
 #### Site (1):
+
 10. `NEXT_PUBLIC_SITE_URL` - Optional (defaults to `https://airbear.me`)
 
 **See `SETUP_GITHUB_SECRETS.md` for detailed instructions.**
@@ -77,6 +82,7 @@ git push origin main
 ```
 
 Watch the workflow run in **Actions** tab. It should:
+
 - ✅ Validate environment variables
 - ✅ Run tests
 - ✅ Build application
@@ -118,6 +124,7 @@ Watch the workflow run in **Actions** tab. It should:
 ## 📊 Workflow Status
 
 You can check workflow status:
+
 - **GitHub Actions** tab → See all workflow runs
 - **Green checkmark** = Success
 - **Red X** = Failed (check logs)
@@ -134,11 +141,13 @@ If you need to deploy immediately without tests:
 ## 🔍 Monitoring
 
 ### Check Deployment Status:
+
 - **GitHub Actions** → See workflow runs
 - **Vercel Dashboard** → See deployments
 - **Production Site** → https://airbear.me
 
 ### Check Secrets Status:
+
 - **GitHub** → Settings → Secrets → See all secrets
 - **Vercel** → Project → Settings → Environment Variables → See synced variables
 
@@ -157,6 +166,7 @@ After setup, verify:
 ## 🎉 Result
 
 After setup:
+
 - ✅ **Every push to `main`** = Automatic test → build → deploy
 - ✅ **Secrets automatically synced** to Vercel
 - ✅ **UI/UX validated** before deployment
@@ -166,7 +176,3 @@ After setup:
 ---
 
 **Setup complete! Your app will now automatically deploy on every push!** 🚀
-
-
-
-

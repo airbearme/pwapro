@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { useAuthContext } from "@/components/auth-provider";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import { subscribeToAirbearLocations } from "@/lib/supabase/realtime";
@@ -78,6 +78,13 @@ export default function MapPage() {
     return airbears.filter((a) => a.is_available && !a.is_charging);
   }, [airbears]);
 
+  const handleSpotSelect = useCallback(
+    (spot: Spot) => {
+      router.push(`/book?pickup=${spot.id}`);
+    },
+    [router],
+  );
+
   // Enable push notifications for airbear availability
   useAirbearNotifications(airbears);
 
@@ -123,7 +130,11 @@ export default function MapPage() {
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               className="glass-morphism hover-lift"
             >
-              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              {theme === "dark" ? (
+                <Sun className="h-4 w-4" />
+              ) : (
+                <Moon className="h-4 w-4" />
+              )}
             </Button>
           </div>
           <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-emerald-600 via-lime-500 to-amber-500 bg-clip-text text-transparent animate-pulse-glow">
@@ -177,7 +188,7 @@ export default function MapPage() {
                   {airbears.length > 0
                     ? Math.round(
                         airbears.reduce((sum, a) => sum + a.battery_level, 0) /
-                          airbears.length
+                          airbears.length,
                       )
                     : 0}
                   %
@@ -192,9 +203,7 @@ export default function MapPage() {
           <MapComponent
             spots={spots}
             airbears={airbears}
-            onSpotSelect={(spot) => {
-              router.push(`/book?pickup=${spot.id}`);
-            }}
+            onSpotSelect={handleSpotSelect}
           />
         </Card>
 

@@ -111,7 +111,8 @@
 
   .hover-lift:hover {
     transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    box-shadow:
+      0 20px 25px -5px rgba(0, 0, 0, 0.1),
       0 10px 10px -5px rgba(0, 0, 0, 0.04);
   }
 
@@ -146,7 +147,9 @@
     border-radius: 50%;
     background: rgba(16, 185, 129, 0.3);
     transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
+    transition:
+      width 0.6s,
+      height 0.6s;
   }
 
   .ripple-effect:active::after {
@@ -247,7 +250,9 @@
 
   /* Text Outline */
   .text-outline-strong {
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45), 0 0 12px rgba(0, 0, 0, 0.28);
+    text-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.45),
+      0 0 12px rgba(0, 0, 0, 0.28);
   }
 }
 
@@ -358,13 +363,18 @@
 @keyframes neon-glow {
   0%,
   100% {
-    box-shadow: 0 0 5px currentColor, 0 0 10px currentColor,
+    box-shadow:
+      0 0 5px currentColor,
+      0 0 10px currentColor,
       0 0 15px currentColor;
     filter: drop-shadow(0 0 5px currentColor);
   }
   50% {
-    box-shadow: 0 0 10px currentColor, 0 0 20px currentColor,
-      0 0 30px currentColor, 0 0 40px currentColor;
+    box-shadow:
+      0 0 10px currentColor,
+      0 0 20px currentColor,
+      0 0 30px currentColor,
+      0 0 40px currentColor;
     filter: drop-shadow(0 0 10px currentColor)
       drop-shadow(0 0 20px currentColor);
   }
@@ -386,7 +396,8 @@
   }
   50% {
     opacity: 0.9;
-    filter: drop-shadow(0 0 16px rgba(16, 185, 129, 0.8)) drop-shadow(0 0 24px rgba(16, 185, 129, 0.4));
+    filter: drop-shadow(0 0 16px rgba(16, 185, 129, 0.8))
+      drop-shadow(0 0 24px rgba(16, 185, 129, 0.4));
   }
   100% {
     opacity: 1;
@@ -395,7 +406,8 @@
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {
@@ -424,7 +436,8 @@
 }
 
 @keyframes rickshaw-bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   25% {
@@ -507,7 +520,9 @@
 
 .leaflet-popup-content-wrapper {
   border-radius: 16px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
   backdrop-filter: blur(10px);
   background: rgba(255, 255, 255, 0.95);
   border: 2px solid rgba(16, 185, 129, 0.2);
@@ -515,7 +530,10 @@
 
 .leaflet-popup-content {
   margin: 0;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
 .leaflet-popup-tip {
@@ -531,7 +549,8 @@
     rgba(255, 255, 255, 0.95)
   );
   border: 2px solid rgba(16, 185, 129, 0.3);
-  box-shadow: 0 20px 50px rgba(16, 185, 129, 0.2),
+  box-shadow:
+    0 20px 50px rgba(16, 185, 129, 0.2),
     0 0 0 1px rgba(16, 185, 129, 0.1);
 }
 
@@ -550,20 +569,22 @@
   .animate-solar-rays {
     animation-duration: 3s !important;
   }
-  
+
   /* Reduce blur effects on mobile */
   .backdrop-blur-sm,
   .backdrop-blur-md,
   .backdrop-blur-lg {
     backdrop-filter: blur(4px) !important;
   }
-  
+
   /* Optimize shadows for mobile */
   .shadow-2xl,
   .shadow-lg {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+    box-shadow:
+      0 10px 15px -3px rgba(0, 0, 0, 0.1),
+      0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
   }
-  
+
   /* Disable hover effects on touch devices */
   @media (hover: none) {
     .hover\:scale-110:hover,
@@ -571,7 +592,7 @@
     .hover\:scale-125:hover {
       transform: scale(1) !important;
     }
-    
+
     .hover\:bg-emerald-500\/40:hover {
       background-color: rgba(16, 185, 129, 0.2) !important;
     }

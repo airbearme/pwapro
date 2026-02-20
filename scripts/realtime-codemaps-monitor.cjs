@@ -51,7 +51,7 @@ class RealTimeCodeMapsMonitor {
       console.log('✅ Real-time CodeMaps Monitor started!');
       console.log('📁 Watching directories:', this.watchedDirs.join(', '));
       console.log('🔄 Auto-update enabled with 1s debounce');
-      
+
     } catch (error) {
       console.error('❌ Failed to start monitor:', error.message);
       process.exit(1);
@@ -92,12 +92,12 @@ class RealTimeCodeMapsMonitor {
 
     for (const dir of this.watchedDirs) {
       const dirPath = path.join(this.projectRoot, dir);
-      
+
       if (fs.existsSync(dirPath)) {
         const watcher = fs.watch(dirPath, { recursive: true }, (eventType, filename) => {
           this.handleFileChange(dir, eventType, filename);
         });
-        
+
         this.watchers.push(watcher);
         console.log(`✅ Watching: ${dir}`);
       } else {
@@ -114,7 +114,7 @@ class RealTimeCodeMapsMonitor {
 
     const fullPath = path.join(dir, filename);
     const fileExt = path.extname(filename);
-    
+
     // Only watch relevant file types
     if (!['.ts', '.tsx', '.js', 'jsx'].includes(fileExt)) {
       return;
@@ -189,15 +189,15 @@ class RealTimeCodeMapsMonitor {
 
     try {
       console.log(`🔄 Processing ${updates.length} file changes...`);
-      
+
       // Update relevant CodeMaps
       await this.updateCodeMaps(updates);
-      
+
       // Generate updated report
       await this.generateMonitoringReport();
-      
+
       console.log('✅ CodeMaps updated successfully');
-      
+
     } catch (error) {
       console.error('❌ Failed to update CodeMaps:', error.message);
     } finally {
@@ -231,7 +231,7 @@ class RealTimeCodeMapsMonitor {
   async updateComponentsMap() {
     const componentsDir = path.join(this.projectRoot, 'components');
     const componentFiles = this.findComponentFiles(componentsDir);
-    
+
     const componentsMap = {
       version: '1.0.0',
       generated: new Date().toISOString(),
@@ -242,7 +242,7 @@ class RealTimeCodeMapsMonitor {
     componentFiles.forEach(file => {
       const relativePath = path.relative(this.projectRoot, file);
       const componentName = path.basename(file, path.extname(file));
-      
+
       componentsMap.components.push({
         name: componentName,
         path: relativePath,
@@ -255,7 +255,7 @@ class RealTimeCodeMapsMonitor {
 
     const componentsPath = path.join(this.outputDir, 'components.json');
     fs.writeFileSync(componentsPath, JSON.stringify(componentsMap, null, 2));
-    
+
     console.log(`🧩 Updated components map: ${componentFiles.length} components`);
   }
 
@@ -265,7 +265,7 @@ class RealTimeCodeMapsMonitor {
   async updateApiMap() {
     const apiDir = path.join(this.projectRoot, 'app', 'api');
     const apiFiles = this.findApiFiles(apiDir);
-    
+
     const apiMap = {
       version: '1.0.0',
       generated: new Date().toISOString(),
@@ -276,7 +276,7 @@ class RealTimeCodeMapsMonitor {
     apiFiles.forEach(file => {
       const relativePath = path.relative(this.projectRoot, file);
       const routePath = this.extractRoutePath(file);
-      
+
       apiMap.routes.push({
         path: routePath,
         file: relativePath,
@@ -289,7 +289,7 @@ class RealTimeCodeMapsMonitor {
 
     const apiPath = path.join(this.outputDir, 'api-routes.json');
     fs.writeFileSync(apiPath, JSON.stringify(apiMap, null, 2));
-    
+
     console.log(`🔌 Updated API routes map: ${apiFiles.length} routes`);
   }
 
@@ -299,13 +299,13 @@ class RealTimeCodeMapsMonitor {
   async updateUtilitiesMap() {
     const utilDirs = ['lib', 'utils', 'hooks'].map(dir => path.join(this.projectRoot, dir));
     const utilFiles = [];
-    
+
     utilDirs.forEach(dir => {
       if (fs.existsSync(dir)) {
         utilFiles.push(...this.findUtilFiles(dir));
       }
     });
-    
+
     const utilMap = {
       version: '1.0.0',
       generated: new Date().toISOString(),
@@ -316,7 +316,7 @@ class RealTimeCodeMapsMonitor {
     utilFiles.forEach(file => {
       const relativePath = path.relative(this.projectRoot, file);
       const utilName = path.basename(file, path.extname(file));
-      
+
       utilMap.utilities.push({
         name: utilName,
         path: relativePath,
@@ -329,7 +329,7 @@ class RealTimeCodeMapsMonitor {
 
     const utilPath = path.join(this.outputDir, 'utilities.json');
     fs.writeFileSync(utilPath, JSON.stringify(utilMap, null, 2));
-    
+
     console.log(`🛠️  Updated utilities map: ${utilFiles.length} utilities`);
   }
 
@@ -397,7 +397,7 @@ class RealTimeCodeMapsMonitor {
 
     const dashboardPath = path.join(this.outputDir, 'dashboard.html');
     const dashboard = this.generateDashboardHTML();
-    
+
     fs.writeFileSync(dashboardPath, dashboard);
     console.log(`✅ Dashboard created: ${dashboardPath}`);
   }
@@ -467,7 +467,7 @@ class RealTimeCodeMapsMonitor {
         <div class="bg-gray-800 rounded-lg p-6">
             <h2 class="text-xl font-semibold text-orange-400 mb-4">📁 Watched Directories</h2>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                ${this.watchedDirs.map(dir => 
+                ${this.watchedDirs.map(dir =>
                     `<div class="bg-gray-700 rounded p-3 text-center">
                         <div class="text-2xl mb-2">📁</div>
                         <div class="text-sm">${dir}</div>
@@ -657,17 +657,17 @@ class RealTimeCodeMapsMonitor {
    */
   stop() {
     console.log('🛑 Stopping CodeMaps Monitor...');
-    
+
     // Close all watchers
     this.watchers.forEach(watcher => {
       watcher.close();
     });
-    
+
     // Clear pending updates
     this.pendingUpdates.forEach(timeout => {
       clearTimeout(timeout);
     });
-    
+
     console.log('✅ CodeMaps Monitor stopped');
   }
 }

@@ -1,9 +1,27 @@
 import importPlugin from "eslint-plugin-import";
+import tsParser from "@typescript-eslint/parser";
+import tsPlugin from "@typescript-eslint/eslint-plugin";
 
 export default [
   {
+    files: ["**/*.{ts,tsx,js,jsx}"],
     plugins: {
       import: importPlugin,
+      "@typescript-eslint": tsPlugin,
+    },
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: "latest",
+        sourceType: "module",
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+    rules: {
+      "no-unused-vars": "off",
+      "no-console": "off",
     },
   },
   {
@@ -25,12 +43,5 @@ export default [
       "**/observability/**",
       "**/supabase/functions/**",
     ],
-  },
-  {
-    files: ["**/*.{js,jsx}"],
-    rules: {
-      "no-unused-vars": "off",
-      "no-console": "off",
-    },
   },
 ];

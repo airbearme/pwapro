@@ -8,9 +8,33 @@ import { SECURITY_HEADERS } from "./lib/security-headers"
  * - Protected route authentication
  * - Secure cookie handling
  */
+import { env } from "@/lib/env"
+
 export async function proxy(request: NextRequest) {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  // Administrative route protection - Check FIRST to avoid fail-open
+  const isAdminRoute =
+    request.nextUrl.pathname.startsWith("/api/setup") ||
+    request.nextUrl.pathname.startsWith("/api/install") ||
+    request.nextUrl.pathname.startsWith("/api/spots/update") ||
+    request.nextUrl.pathname.startsWith("/api/spots/manual-update") ||
+    request.nextUrl.pathname.startsWith("/api/spots/bypass-update") ||
+    request.nextUrl.pathname.startsWith("/api/airbear/update-location")
+
+  if (isAdminRoute) {
+    const adminSecret = env.ADMIN_SECRET
+    const adminSecretHeader = request.headers.get("X-Admin-Secret")
+
+    if (!adminSecret || adminSecretHeader !== adminSecret) {
+      console.warn(`Unauthorized administrative access attempt to ${request.nextUrl.pathname}`)
+      return NextResponse.json(
+        { error: "Unauthorized administrative access" },
+        { status: 401 }
+      )
+    }
+  }
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_PWA4_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY
 
   if (!supabaseUrl || !supabaseAnonKey) {
     console.error("Missing Supabase environment variables in middleware")

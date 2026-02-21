@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr"
 import { NextResponse, type NextRequest } from "next/server"
 import { SECURITY_HEADERS } from "./lib/security-headers"
+import { env } from "@/lib/env"
 
 /**
  * Production-grade middleware for:
@@ -8,8 +9,6 @@ import { SECURITY_HEADERS } from "./lib/security-headers"
  * - Protected route authentication
  * - Secure cookie handling
  */
-import { env } from "@/lib/env"
-
 export async function proxy(request: NextRequest) {
   // Administrative route protection - Check FIRST to avoid fail-open
   const isAdminRoute =

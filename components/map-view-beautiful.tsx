@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, memo } from "react";
 import type { AirbearLocation } from "@/lib/supabase/realtime";
 import type { Database } from "@/lib/types/database";
 
@@ -12,7 +12,7 @@ interface MapViewProps {
   onSpotSelect?: (spot: Spot) => void;
 }
 
-export default function MapView({
+const MapView = memo(function MapView({
   spots,
   airbears,
   onSpotSelect,
@@ -68,8 +68,8 @@ export default function MapView({
         };
 
         const containerReady = await waitForContainer();
-        if (!containerReady) {
-          throw new Error("Map container is not visible yet");
+        if (!containerReady || mapInstanceRef.current) {
+          return;
         }
 
         // Dynamically import Leaflet
@@ -79,6 +79,8 @@ export default function MapView({
           throw new Error("Leaflet failed to load");
         }
         LeafletRef.current = L;
+
+        if (mapInstanceRef.current) return;
 
         // Fix default marker icons
         delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -181,20 +183,38 @@ export default function MapView({
     const map = mapInstanceRef.current;
     const L = LeafletRef.current;
 
-    // Remove old spot markers
+    // Sync spot markers instead of wiping all of them
+    const currentSpotIds = new Set(spots.map((s) => `spot-${s.id}`));
+
+    // Remove markers for spots that no longer exist
     markersRef.current.forEach((marker, id) => {
-      if (id.startsWith("spot-")) {
+      if (id.startsWith("spot-") && !currentSpotIds.has(id)) {
         marker.remove();
         markersRef.current.delete(id);
       }
     });
 
-    // Add spot markers with beautiful styling
+    // Add or update spot markers with beautiful styling
     spots.forEach((spot) => {
+      const markerId = `spot-${spot.id}`;
+      let marker = markersRef.current.get(markerId);
+
       const airbearsAtSpot = airbears.filter(
         (a) => a.current_spot_id === spot.id && a.is_available
       );
-      const hasAvailableAirbears = airbearsAtSpot.length > 0;
+      const availabilityCount = airbearsAtSpot.length;
+      const hasAvailableAirbears = availabilityCount > 0;
+      // ⚡ Bolt: Simple hash to detect changes in name/description/amenities
+      const dataHash = `${spot.name}|${spot.description}|${spot.amenities?.join(",")}`;
+
+      // ⚡ Bolt: Only update marker if availability or data changed
+      if (
+        marker &&
+        (marker as any).__availabilityCount === availabilityCount &&
+        (marker as any).__dataHash === dataHash
+      ) {
+        return;
+      }
 
       const icon = L.divIcon({
         html: `
@@ -286,10 +306,6 @@ export default function MapView({
         popupAnchor: [0, -56],
       });
 
-      const marker = L.marker([spot.latitude, spot.longitude], { icon }).addTo(
-        map
-      );
-
       const popupContent = `
         <div style="min-width: 240px; padding: 12px; font-family: system-ui, -apple-system, sans-serif;">
           <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #1f2937; background: linear-gradient(135deg, #10b981, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">${
@@ -365,14 +381,28 @@ export default function MapView({
         className: "beautiful-popup",
       });
 
-      // Setup click handler for booking
-      marker.on("click", () => {
-        if (onSpotSelect) {
-          onSpotSelect(spot);
-        }
-      });
+      if (marker) {
+        marker.setIcon(icon);
+        marker.setPopupContent(popupContent + bookingButton);
+      } else {
+        marker = L.marker([spot.latitude, spot.longitude], { icon }).addTo(map);
+        marker.bindPopup(popupContent + bookingButton, {
+          maxWidth: 300,
+          className: "beautiful-popup",
+        });
 
-      markersRef.current.set(`spot-${spot.id}`, marker);
+        // Setup click handler for booking
+        marker.on("click", () => {
+          if (onSpotSelect) {
+            onSpotSelect(spot);
+          }
+        });
+
+        markersRef.current.set(markerId, marker);
+      }
+
+      (marker as any).__availabilityCount = availabilityCount;
+      (marker as any).__dataHash = dataHash;
     });
   }, [spots, airbears, onSpotSelect, mapLoaded]);
 
@@ -382,10 +412,22 @@ export default function MapView({
     const map = mapInstanceRef.current;
     const L = LeafletRef.current;
 
+    // ⚡ Bolt: Only render free-roaming AirBears as separate markers.
+    // AirBears at spots are already represented by the spot marker's availability badge.
+    const roamingAirbears = airbears.filter((a) => !a.current_spot_id);
+
     // Update airbear markers
-    airbears.forEach((airbear) => {
+    roamingAirbears.forEach((airbear) => {
       const markerId = `airbear-${airbear.id}`;
       let marker = markersRef.current.get(markerId);
+
+      // ⚡ Bolt: Skip expensive setIcon if visual state hasn't changed
+      const visualState = `${airbear.is_available}-${airbear.is_charging}-${airbear.battery_level}`;
+
+      if (marker && (marker as any).__visualState === visualState) {
+        marker.setLatLng([airbear.latitude, airbear.longitude]);
+        return;
+      }
 
       const icon = L.divIcon({
         html: `
@@ -537,16 +579,16 @@ export default function MapView({
         });
         markersRef.current.set(markerId, marker);
       }
+
+      (marker as any).__visualState = visualState;
     });
 
-    // Remove markers for airbears that no longer exist
+    // Remove markers for airbears that are no longer roaming or no longer exist
+    const roamingIds = new Set(roamingAirbears.map((a) => `airbear-${a.id}`));
     markersRef.current.forEach((marker, id) => {
-      if (id.startsWith("airbear-")) {
-        const airbearId = id.replace("airbear-", "");
-        if (!airbears.find((a) => a.id === airbearId)) {
-          marker.remove();
-          markersRef.current.delete(id);
-        }
+      if (id.startsWith("airbear-") && !roamingIds.has(id)) {
+        marker.remove();
+        markersRef.current.delete(id);
       }
     });
   }, [airbears, mapLoaded]);
@@ -584,4 +626,8 @@ export default function MapView({
       )}
     </div>
   );
-}
+});
+
+MapView.displayName = "MapView";
+
+export default MapView;

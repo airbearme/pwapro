@@ -35,7 +35,6 @@ Dark mode is **permanently enabled** in `app/layout.tsx`:
 ```
 
 This ensures:
-
 - ✅ All users see dark mode by default
 - ✅ No system theme detection
 - ✅ Consistent dark theme experience
@@ -47,19 +46,16 @@ This ensures:
 Make sure these are set in Vercel Dashboard → Project Settings → Environment Variables:
 
 **Supabase:**
-
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
 
 **Stripe:**
-
 - `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
 - `STRIPE_SECRET_KEY`
 - `STRIPE_WEBHOOK_SECRET`
 
 **Site:**
-
 - `NEXT_PUBLIC_SITE_URL=https://airbear.me`
 - `NODE_ENV=production`
 
@@ -72,7 +68,6 @@ Make sure these are set in Vercel Dashboard → Project Settings → Environment
 ### 3. GitHub Repository (for auto-deploy)
 
 If using GitHub Actions:
-
 - Repository: `airbearme/pwapro` (or your repo)
 - Secrets configured:
   - `VERCEL_TOKEN`
@@ -128,19 +123,16 @@ After deployment, verify:
 ## Troubleshooting
 
 ### Build Fails
-
 - Check Vercel build logs
 - Verify all environment variables are set
 - Run `npm run build` locally to test
 
 ### Dark Mode Not Working
-
 - Verify `app/layout.tsx` has `defaultTheme="dark"` and `enableSystem={false}`
 - Clear browser cache
 - Check browser DevTools → Application → Local Storage
 
 ### Deployment Not Triggering
-
 - Check GitHub Actions workflow is enabled
 - Verify Vercel project is connected to GitHub
 - Check Vercel dashboard for deployment status

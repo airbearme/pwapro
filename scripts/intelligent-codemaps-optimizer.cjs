@@ -5,25 +5,25 @@
  * Optimizes code structure, performance, and maintainability
  */
 
-const fs = require("fs");
-const path = require("path");
-const { execSync } = require("child_process");
+const fs = require('fs');
+const path = require('path');
+const { execSync } = require('child_process');
 
 class IntelligentCodeMapsOptimizer {
   constructor() {
     this.projectRoot = process.cwd();
-    this.outputDir = path.join(this.projectRoot, ".next/codemaps");
+    this.outputDir = path.join(this.projectRoot, '.next/codemaps');
     this.optimizations = {
       performance: [],
       structure: [],
       security: [],
       maintainability: [],
-      dependencies: [],
+      dependencies: []
     };
     this.metrics = {
       before: {},
       after: {},
-      improvements: [],
+      improvements: []
     };
   }
 
@@ -31,7 +31,7 @@ class IntelligentCodeMapsOptimizer {
    * Run intelligent optimization
    */
   async optimize() {
-    console.log("🧠 Running Intelligent CodeMaps Optimization...\n");
+    console.log('🧠 Running Intelligent CodeMaps Optimization...\n');
 
     try {
       // Load current CodeMaps
@@ -52,12 +52,11 @@ class IntelligentCodeMapsOptimizer {
       // Create improvement suggestions
       await this.createImprovementSuggestions();
 
-      console.log("✅ Intelligent CodeMaps Optimization Complete!");
-      console.log(
-        `📁 Optimization report: ${this.outputDir}/optimization-report.html`,
-      );
+      console.log('✅ Intelligent CodeMaps Optimization Complete!');
+      console.log(`📁 Optimization report: ${this.outputDir}/optimization-report.html`);
+
     } catch (error) {
-      console.error("❌ Optimization failed:", error.message);
+      console.error('❌ Optimization failed:', error.message);
       process.exit(1);
     }
   }
@@ -66,37 +65,35 @@ class IntelligentCodeMapsOptimizer {
    * Load current CodeMaps
    */
   async loadCurrentCodeMaps() {
-    console.log("📋 Loading current CodeMaps...");
+    console.log('📋 Loading current CodeMaps...');
 
-    const files = ["components.json", "api-routes.json", "utilities.json"];
+    const files = ['components.json', 'api-routes.json', 'utilities.json'];
     this.currentCodeMaps = {};
 
     for (const file of files) {
       const filePath = path.join(this.outputDir, file);
       if (fs.existsSync(filePath)) {
-        const content = fs.readFileSync(filePath, "utf8");
+        const content = fs.readFileSync(filePath, 'utf8');
         const data = JSON.parse(content);
 
-        if (file === "components.json") {
+        if (file === 'components.json') {
           this.currentCodeMaps.components = data.components || [];
-        } else if (file === "api-routes.json") {
+        } else if (file === 'api-routes.json') {
           this.currentCodeMaps.api = data.routes || [];
-        } else if (file === "utilities.json") {
+        } else if (file === 'utilities.json') {
           this.currentCodeMaps.utilities = data.utilities || [];
         }
       }
     }
 
-    console.log(
-      `✅ Loaded ${this.currentCodeMaps.components?.length || 0} components, ${this.currentCodeMaps.api?.length || 0} API routes, ${this.currentCodeMaps.utilities?.length || 0} utilities`,
-    );
+    console.log(`✅ Loaded ${this.currentCodeMaps.components?.length || 0} components, ${this.currentCodeMaps.api?.length || 0} API routes, ${this.currentCodeMaps.utilities?.length || 0} utilities`);
   }
 
   /**
    * Analyze current state
    */
   async analyzeCurrentState() {
-    console.log("🔍 Analyzing current codebase state...");
+    console.log('🔍 Analyzing current codebase state...');
 
     this.metrics.before = {
       componentCount: this.currentCodeMaps.components?.length || 0,
@@ -106,17 +103,17 @@ class IntelligentCodeMapsOptimizer {
       complexity: await this.calculateOverallComplexity(),
       dependencies: await this.analyzeDependencies(),
       performance: await this.analyzePerformance(),
-      security: await this.analyzeSecurityIssues(),
+      security: await this.analyzeSecurityIssues()
     };
 
-    console.log("✅ Current state analysis complete");
+    console.log('✅ Current state analysis complete');
   }
 
   /**
    * Generate optimization recommendations
    */
   async generateOptimizations() {
-    console.log("💡 Generating optimization recommendations...");
+    console.log('💡 Generating optimization recommendations...');
 
     // Performance optimizations
     await this.generatePerformanceOptimizations();
@@ -133,9 +130,7 @@ class IntelligentCodeMapsOptimizer {
     // Dependency optimizations
     await this.generateDependencyOptimizations();
 
-    console.log(
-      `✅ Generated ${this.getTotalOptimizations()} optimization recommendations`,
-    );
+    console.log(`✅ Generated ${this.getTotalOptimizations()} optimization recommendations`);
   }
 
   /**
@@ -146,70 +141,67 @@ class IntelligentCodeMapsOptimizer {
 
     // Analyze bundle size
     const bundleSize = this.metrics.before.totalSize;
-    if (bundleSize > 5000) {
-      // > 5MB
+    if (bundleSize > 5000) { // > 5MB
       performanceOptimizations.push({
-        type: "bundle-size",
-        priority: "high",
-        title: "Reduce Bundle Size",
+        type: 'bundle-size',
+        priority: 'high',
+        title: 'Reduce Bundle Size',
         description: `Current bundle size is ${bundleSize}KB, consider optimization`,
-        impact: "high",
-        effort: "medium",
+        impact: 'high',
+        effort: 'medium',
         recommendations: [
-          "Implement code splitting",
-          "Remove unused dependencies",
-          "Optimize images and assets",
-          "Enable compression",
+          'Implement code splitting',
+          'Remove unused dependencies',
+          'Optimize images and assets',
+          'Enable compression'
         ],
-        estimatedSavings: `${Math.round(bundleSize * 0.3)}KB`,
+        estimatedSavings: `${Math.round(bundleSize * 0.3)}KB`
       });
     }
 
     // Analyze component complexity
-    const highComplexityComponents =
-      this.currentCodeMaps.components?.filter(
-        (c) => c.size > 10000, // > 10KB
-      ) || [];
+    const highComplexityComponents = this.currentCodeMaps.components?.filter(c =>
+      c.size > 10000 // > 10KB
+    ) || [];
 
     if (highComplexityComponents.length > 0) {
       performanceOptimizations.push({
-        type: "component-complexity",
-        priority: "medium",
-        title: "Optimize Complex Components",
+        type: 'component-complexity',
+        priority: 'medium',
+        title: 'Optimize Complex Components',
         description: `${highComplexityComponents.length} components are oversized`,
-        impact: "medium",
-        effort: "high",
+        impact: 'medium',
+        effort: 'high',
         recommendations: [
-          "Break down large components",
-          "Implement lazy loading",
-          "Use memoization",
-          "Extract reusable logic",
+          'Break down large components',
+          'Implement lazy loading',
+          'Use memoization',
+          'Extract reusable logic'
         ],
-        components: highComplexityComponents.map((c) => c.name),
+        components: highComplexityComponents.map(c => c.name)
       });
     }
 
     // Analyze API performance
-    const slowApis =
-      this.currentCodeMaps.api?.filter(
-        (route) => route.size > 5000, // > 5KB
-      ) || [];
+    const slowApis = this.currentCodeMaps.api?.filter(route =>
+      route.size > 5000 // > 5KB
+    ) || [];
 
     if (slowApis.length > 0) {
       performanceOptimizations.push({
-        type: "api-performance",
-        priority: "medium",
-        title: "Optimize API Performance",
+        type: 'api-performance',
+        priority: 'medium',
+        title: 'Optimize API Performance',
         description: `${slowApis.length} API routes are complex`,
-        impact: "medium",
-        effort: "medium",
+        impact: 'medium',
+        effort: 'medium',
         recommendations: [
-          "Implement caching",
-          "Optimize database queries",
-          "Add response compression",
-          "Use connection pooling",
+          'Implement caching',
+          'Optimize database queries',
+          'Add response compression',
+          'Use connection pooling'
         ],
-        apis: slowApis.map((a) => a.path),
+        apis: slowApis.map(a => a.path)
       });
     }
 
@@ -224,54 +216,53 @@ class IntelligentCodeMapsOptimizer {
 
     // Analyze component organization
     const componentTypes = {};
-    this.currentCodeMaps.components?.forEach((comp) => {
-      const type = comp.type || "component";
+    this.currentCodeMaps.components?.forEach(comp => {
+      const type = comp.type || 'component';
       componentTypes[type] = (componentTypes[type] || 0) + 1;
     });
 
     // Check for missing directories
-    const expectedTypes = ["ui", "form", "layout", "map"];
-    const missingTypes = expectedTypes.filter((type) => !componentTypes[type]);
+    const expectedTypes = ['ui', 'form', 'layout', 'map'];
+    const missingTypes = expectedTypes.filter(type => !componentTypes[type]);
 
     if (missingTypes.length > 0) {
       structureOptimizations.push({
-        type: "directory-structure",
-        priority: "low",
-        title: "Improve Directory Structure",
-        description: `Missing component directories: ${missingTypes.join(", ")}`,
-        impact: "low",
-        effort: "low",
+        type: 'directory-structure',
+        priority: 'low',
+        title: 'Improve Directory Structure',
+        description: `Missing component directories: ${missingTypes.join(', ')}`,
+        impact: 'low',
+        effort: 'low',
         recommendations: [
-          "Create organized component directories",
-          "Implement consistent naming",
-          "Add index files for exports",
-          "Use barrel exports",
+          'Create organized component directories',
+          'Implement consistent naming',
+          'Add index files for exports',
+          'Use barrel exports'
         ],
-        missingTypes,
+        missingTypes
       });
     }
 
     // Analyze file naming consistency
-    const inconsistentNames =
-      this.currentCodeMaps.components?.filter(
-        (comp) => !/^[a-z][a-z0-9-]*$/.test(comp.name),
-      ) || [];
+    const inconsistentNames = this.currentCodeMaps.components?.filter(comp =>
+      !/^[a-z][a-z0-9-]*$/.test(comp.name)
+    ) || [];
 
     if (inconsistentNames.length > 0) {
       structureOptimizations.push({
-        type: "naming-consistency",
-        priority: "medium",
-        title: "Improve Naming Consistency",
+        type: 'naming-consistency',
+        priority: 'medium',
+        title: 'Improve Naming Consistency',
         description: `${inconsistentNames.length} components have inconsistent naming`,
-        impact: "medium",
-        effort: "medium",
+        impact: 'medium',
+        effort: 'medium',
         recommendations: [
-          "Use kebab-case for file names",
-          "Implement naming conventions",
-          "Add ESLint rules for naming",
-          "Document naming standards",
+          'Use kebab-case for file names',
+          'Implement naming conventions',
+          'Add ESLint rules for naming',
+          'Document naming standards'
         ],
-        components: inconsistentNames.map((c) => c.name),
+        components: inconsistentNames.map(c => c.name)
       });
     }
 
@@ -286,16 +277,16 @@ class IntelligentCodeMapsOptimizer {
 
     // Analyze API security
     const insecureApis = [];
-    this.currentCodeMaps.api?.forEach((route) => {
+    this.currentCodeMaps.api?.forEach(route => {
       const filePath = path.join(this.projectRoot, route.file);
       if (fs.existsSync(filePath)) {
-        const content = fs.readFileSync(filePath, "utf8");
+        const content = fs.readFileSync(filePath, 'utf8');
 
         // Check for common security issues
-        if (!content.includes("auth") && !content.includes("validate")) {
+        if (!content.includes('auth') && !content.includes('validate')) {
           insecureApis.push({
             path: route.path,
-            issue: "Missing authentication/validation",
+            issue: 'Missing authentication/validation'
           });
         }
       }
@@ -303,19 +294,19 @@ class IntelligentCodeMapsOptimizer {
 
     if (insecureApis.length > 0) {
       securityOptimizations.push({
-        type: "api-security",
-        priority: "high",
-        title: "Improve API Security",
+        type: 'api-security',
+        priority: 'high',
+        title: 'Improve API Security',
         description: `${insecureApis.length} API routes have security issues`,
-        impact: "high",
-        effort: "high",
+        impact: 'high',
+        effort: 'high',
         recommendations: [
-          "Add authentication middleware",
-          "Implement input validation",
-          "Add rate limiting",
-          "Use HTTPS everywhere",
+          'Add authentication middleware',
+          'Implement input validation',
+          'Add rate limiting',
+          'Use HTTPS everywhere'
         ],
-        insecureApis,
+        insecureApis
       });
     }
 
@@ -323,19 +314,19 @@ class IntelligentCodeMapsOptimizer {
     const envUsage = await this.analyzeEnvironmentUsage();
     if (envUsage.insecure.length > 0) {
       securityOptimizations.push({
-        type: "environment-security",
-        priority: "medium",
-        title: "Secure Environment Variables",
-        description: "Insecure environment variable usage detected",
-        impact: "medium",
-        effort: "low",
+        type: 'environment-security',
+        priority: 'medium',
+        title: 'Secure Environment Variables',
+        description: 'Insecure environment variable usage detected',
+        impact: 'medium',
+        effort: 'low',
         recommendations: [
-          "Use environment-specific configs",
-          "Validate environment variables",
-          "Use secret management services",
-          "Avoid hardcoding secrets",
+          'Use environment-specific configs',
+          'Validate environment variables',
+          'Use secret management services',
+          'Avoid hardcoding secrets'
         ],
-        issues: envUsage.insecure,
+        issues: envUsage.insecure
       });
     }
 
@@ -352,19 +343,19 @@ class IntelligentCodeMapsOptimizer {
     const duplication = await this.analyzeCodeDuplication();
     if (duplication.percentage > 20) {
       maintainabilityOptimizations.push({
-        type: "code-duplication",
-        priority: "medium",
-        title: "Reduce Code Duplication",
+        type: 'code-duplication',
+        priority: 'medium',
+        title: 'Reduce Code Duplication',
         description: `${duplication.percentage}% code duplication detected`,
-        impact: "medium",
-        effort: "high",
+        impact: 'medium',
+        effort: 'high',
         recommendations: [
-          "Extract common components",
-          "Create utility functions",
-          "Implement design patterns",
-          "Use shared libraries",
+          'Extract common components',
+          'Create utility functions',
+          'Implement design patterns',
+          'Use shared libraries'
         ],
-        duplication,
+        duplication
       });
     }
 
@@ -372,19 +363,19 @@ class IntelligentCodeMapsOptimizer {
     const testCoverage = await this.analyzeTestCoverage();
     if (testCoverage.percentage < 80) {
       maintainabilityOptimizations.push({
-        type: "test-coverage",
-        priority: "medium",
-        title: "Improve Test Coverage",
+        type: 'test-coverage',
+        priority: 'medium',
+        title: 'Improve Test Coverage',
         description: `Current test coverage: ${testCoverage.percentage}%`,
-        impact: "medium",
-        effort: "medium",
+        impact: 'medium',
+        effort: 'medium',
         recommendations: [
-          "Add unit tests for utilities",
-          "Implement integration tests",
-          "Add E2E tests for critical paths",
-          "Set up coverage reporting",
+          'Add unit tests for utilities',
+          'Implement integration tests',
+          'Add E2E tests for critical paths',
+          'Set up coverage reporting'
         ],
-        coverage: testCoverage,
+        coverage: testCoverage
       });
     }
 
@@ -392,19 +383,19 @@ class IntelligentCodeMapsOptimizer {
     const documentation = await this.analyzeDocumentation();
     if (documentation.coverage < 70) {
       maintainabilityOptimizations.push({
-        type: "documentation",
-        priority: "low",
-        title: "Improve Documentation",
+        type: 'documentation',
+        priority: 'low',
+        title: 'Improve Documentation',
         description: `Documentation coverage: ${documentation.coverage}%`,
-        impact: "low",
-        effort: "medium",
+        impact: 'low',
+        effort: 'medium',
         recommendations: [
-          "Add JSDoc comments",
-          "Create API documentation",
-          "Document component props",
-          "Add usage examples",
+          'Add JSDoc comments',
+          'Create API documentation',
+          'Document component props',
+          'Add usage examples'
         ],
-        documentation,
+        documentation
       });
     }
 
@@ -418,27 +409,27 @@ class IntelligentCodeMapsOptimizer {
     const dependencyOptimizations = [];
 
     // Analyze package.json
-    const packageJsonPath = path.join(this.projectRoot, "package.json");
+    const packageJsonPath = path.join(this.projectRoot, 'package.json');
     if (fs.existsSync(packageJsonPath)) {
-      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
+      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
 
       // Check for unused dependencies
       const unusedDeps = await this.findUnusedDependencies(packageJson);
       if (unusedDeps.length > 0) {
         dependencyOptimizations.push({
-          type: "unused-dependencies",
-          priority: "medium",
-          title: "Remove Unused Dependencies",
+          type: 'unused-dependencies',
+          priority: 'medium',
+          title: 'Remove Unused Dependencies',
           description: `${unusedDeps.length} unused dependencies found`,
-          impact: "low",
-          effort: "low",
+          impact: 'low',
+          effort: 'low',
           recommendations: [
-            "Remove unused packages",
-            "Update dependency versions",
-            "Audit security vulnerabilities",
-            "Optimize bundle size",
+            'Remove unused packages',
+            'Update dependency versions',
+            'Audit security vulnerabilities',
+            'Optimize bundle size'
           ],
-          dependencies: unusedDeps,
+          dependencies: unusedDeps
         });
       }
 
@@ -446,19 +437,19 @@ class IntelligentCodeMapsOptimizer {
       const outdatedDeps = await this.findOutdatedDependencies(packageJson);
       if (outdatedDeps.length > 0) {
         dependencyOptimizations.push({
-          type: "outdated-dependencies",
-          priority: "low",
-          title: "Update Outdated Dependencies",
+          type: 'outdated-dependencies',
+          priority: 'low',
+          title: 'Update Outdated Dependencies',
           description: `${outdatedDeps.length} dependencies are outdated`,
-          impact: "low",
-          effort: "medium",
+          impact: 'low',
+          effort: 'medium',
           recommendations: [
-            "Update to latest versions",
-            "Check breaking changes",
-            "Test after updates",
-            "Use semantic versioning",
+            'Update to latest versions',
+            'Check breaking changes',
+            'Test after updates',
+            'Use semantic versioning'
           ],
-          dependencies: outdatedDeps,
+          dependencies: outdatedDeps
         });
       }
     }
@@ -470,14 +461,14 @@ class IntelligentCodeMapsOptimizer {
    * Apply automatic optimizations
    */
   async applyAutomaticOptimizations() {
-    console.log("🔧 Applying automatic optimizations...");
+    console.log('🔧 Applying automatic optimizations...');
 
     let appliedCount = 0;
 
     // Apply low-effort optimizations automatically
     for (const category of Object.values(this.optimizations)) {
       for (const optimization of category) {
-        if (optimization.effort === "low" && optimization.priority === "low") {
+        if (optimization.effort === 'low' && optimization.priority === 'low') {
           await this.applyOptimization(optimization);
           appliedCount++;
         }
@@ -492,19 +483,17 @@ class IntelligentCodeMapsOptimizer {
    */
   async applyOptimization(optimization) {
     switch (optimization.type) {
-      case "naming-consistency":
+      case 'naming-consistency':
         await this.applyNamingOptimization(optimization);
         break;
-      case "directory-structure":
+      case 'directory-structure':
         await this.applyStructureOptimization(optimization);
         break;
-      case "unused-dependencies":
+      case 'unused-dependencies':
         await this.applyDependencyOptimization(optimization);
         break;
       default:
-        console.log(
-          `⚠️  Cannot auto-apply optimization type: ${optimization.type}`,
-        );
+        console.log(`⚠️  Cannot auto-apply optimization type: ${optimization.type}`);
     }
   }
 
@@ -513,7 +502,7 @@ class IntelligentCodeMapsOptimizer {
    */
   async applyNamingOptimization(optimization) {
     // Create naming convention guide
-    const guidePath = path.join(this.projectRoot, "NAMING_CONVENTIONS.md");
+    const guidePath = path.join(this.projectRoot, 'NAMING_CONVENTIONS.md');
     const guide = `# Naming Conventions Guide
 
 ## Component Files
@@ -546,12 +535,12 @@ Generated by CodeMaps Optimizer
   async applyStructureOptimization(optimization) {
     // Create missing directories
     for (const type of optimization.missingTypes) {
-      const dirPath = path.join(this.projectRoot, "components", type);
+      const dirPath = path.join(this.projectRoot, 'components', type);
       if (!fs.existsSync(dirPath)) {
         fs.mkdirSync(dirPath, { recursive: true });
 
         // Create index file
-        const indexPath = path.join(dirPath, "index.ts");
+        const indexPath = path.join(dirPath, 'index.ts');
         fs.writeFileSync(indexPath, `// ${type} components\nexport {};`);
 
         console.log(`✅ Created directory: ${dirPath}`);
@@ -564,7 +553,7 @@ Generated by CodeMaps Optimizer
    */
   async applyDependencyOptimization(optimization) {
     // Create dependency cleanup script
-    const scriptPath = path.join(this.projectRoot, "cleanup-dependencies.js");
+    const scriptPath = path.join(this.projectRoot, 'cleanup-dependencies.js');
     const script = `#!/usr/bin/env node
 
 // Dependency cleanup script
@@ -591,27 +580,27 @@ unused.forEach(dep => {
    * Generate optimization report
    */
   async generateOptimizationReport() {
-    console.log("📊 Generating optimization report...");
+    console.log('📊 Generating optimization report...');
 
     const report = {
       timestamp: new Date().toISOString(),
-      project: "airbear-pwa",
-      version: "2.0.0",
+      project: 'airbear-pwa',
+      version: '2.0.0',
       metrics: this.metrics,
       optimizations: this.optimizations,
       summary: this.generateOptimizationSummary(),
-      recommendations: this.generatePrioritizedRecommendations(),
+      recommendations: this.generatePrioritizedRecommendations()
     };
 
     // Write JSON report
-    const jsonPath = path.join(this.outputDir, "optimization-report.json");
+    const jsonPath = path.join(this.outputDir, 'optimization-report.json');
     fs.writeFileSync(jsonPath, JSON.stringify(report, null, 2));
 
     // Write HTML report
-    const htmlPath = path.join(this.outputDir, "optimization-report.html");
+    const htmlPath = path.join(this.outputDir, 'optimization-report.html');
     fs.writeFileSync(htmlPath, this.generateOptimizationHTML(report));
 
-    console.log("✅ Optimization report generated");
+    console.log('✅ Optimization report generated');
   }
 
   /**
@@ -623,25 +612,25 @@ unused.forEach(dep => {
       byPriority: {
         high: 0,
         medium: 0,
-        low: 0,
+        low: 0
       },
       byCategory: {
         performance: this.optimizations.performance.length,
         structure: this.optimizations.structure.length,
         security: this.optimizations.security.length,
         maintainability: this.optimizations.maintainability.length,
-        dependencies: this.optimizations.dependencies.length,
+        dependencies: this.optimizations.dependencies.length
       },
       estimatedImpact: {
-        performance: "medium",
-        maintainability: "high",
-        security: "high",
-      },
+        performance: 'medium',
+        maintainability: 'high',
+        security: 'high'
+      }
     };
 
     // Count by priority
-    Object.values(this.optimizations).forEach((category) => {
-      category.forEach((opt) => {
+    Object.values(this.optimizations).forEach(category => {
+      category.forEach(opt => {
         summary.byPriority[opt.priority]++;
       });
     });
@@ -658,15 +647,14 @@ unused.forEach(dep => {
       ...this.optimizations.structure,
       ...this.optimizations.security,
       ...this.optimizations.maintainability,
-      ...this.optimizations.dependencies,
+      ...this.optimizations.dependencies
     ];
 
     return allOptimizations
       .sort((a, b) => {
         // Sort by priority first, then by impact
         const priorityOrder = { high: 3, medium: 2, low: 1 };
-        const priorityDiff =
-          priorityOrder[b.priority] - priorityOrder[a.priority];
+        const priorityDiff = priorityOrder[b.priority] - priorityOrder[a.priority];
 
         if (priorityDiff !== 0) return priorityDiff;
 
@@ -746,7 +734,7 @@ unused.forEach(dep => {
                 <div class="space-y-2">
                     <div class="flex justify-between">
                         <span>Security Score:</span>
-                        <span class="text-purple-400">${report.metrics.before.security?.score || "N/A"}/100</span>
+                        <span class="text-purple-400">${report.metrics.before.security?.score || 'N/A'}/100</span>
                     </div>
                     <div class="flex justify-between">
                         <span>Issues Found:</span>
@@ -764,15 +752,15 @@ unused.forEach(dep => {
                 <div class="space-y-2">
                     <div class="flex justify-between">
                         <span>Test Coverage:</span>
-                        <span class="text-orange-400">${report.metrics.before.maintainability?.testCoverage || "N/A"}%</span>
+                        <span class="text-orange-400">${report.metrics.before.maintainability?.testCoverage || 'N/A'}%</span>
                     </div>
                     <div class="flex justify-between">
                         <span>Documentation:</span>
-                        <span class="text-orange-400">${report.metrics.before.maintainability?.documentation || "N/A"}%</span>
+                        <span class="text-orange-400">${report.metrics.before.maintainability?.documentation || 'N/A'}%</span>
                     </div>
                     <div class="flex justify-between">
                         <span>Code Duplication:</span>
-                        <span class="text-yellow-400">${report.metrics.before.maintainability?.duplication || "N/A"}%</span>
+                        <span class="text-yellow-400">${report.metrics.before.maintainability?.duplication || 'N/A'}%</span>
                     </div>
                 </div>
             </div>
@@ -781,16 +769,14 @@ unused.forEach(dep => {
         <div class="bg-gray-800 rounded-lg p-6 mb-8">
             <h2 class="text-2xl font-semibold text-emerald-400 mb-6">🎯 Top Recommendations</h2>
             <div class="space-y-4">
-                ${report.recommendations
-                  .map(
-                    (rec, index) => `
+                ${report.recommendations.map((rec, index) => `
                     <div class="priority-${rec.priority} bg-gray-700 rounded-lg p-4">
                         <div class="flex justify-between items-start mb-2">
                             <h3 class="text-lg font-semibold">${rec.title}</h3>
                             <span class="px-2 py-1 rounded text-xs font-semibold
-                                ${rec.priority === "high" ? "bg-red-600 text-white" : ""}
-                                ${rec.priority === "medium" ? "bg-yellow-600 text-white" : ""}
-                                ${rec.priority === "low" ? "bg-green-600 text-white" : ""}
+                                ${rec.priority === 'high' ? 'bg-red-600 text-white' : ''}
+                                ${rec.priority === 'medium' ? 'bg-yellow-600 text-white' : ''}
+                                ${rec.priority === 'low' ? 'bg-green-600 text-white' : ''}
                             ">
                                 ${rec.priority.toUpperCase()}
                             </span>
@@ -809,49 +795,39 @@ unused.forEach(dep => {
                         <div>
                             <h4 class="font-semibold mb-2">Recommendations:</h4>
                             <ul class="list-disc list-inside space-y-1 text-sm">
-                                ${rec.recommendations.map((rec) => `<li>${rec}</li>`).join("")}
+                                ${rec.recommendations.map(rec => `<li>${rec}</li>`).join('')}
                             </ul>
                         </div>
                     </div>
-                `,
-                  )
-                  .join("")}
+                `).join('')}
             </div>
         </div>
 
         <div class="bg-gray-800 rounded-lg p-6">
             <h2 class="text-2xl font-semibold text-emerald-400 mb-6">📋 Detailed Optimizations</h2>
             <div class="space-y-6">
-                ${Object.entries(this.optimizations)
-                  .map(
-                    ([category, optimizations]) => `
+                ${Object.entries(this.optimizations).map(([category, optimizations]) => `
                     <div>
                         <h3 class="text-xl font-semibold text-emerald-300 mb-4 capitalize">${category}</h3>
                         <div class="space-y-3">
-                            ${optimizations
-                              .map(
-                                (opt) => `
+                            ${optimizations.map(opt => `
                                 <div class="priority-${opt.priority} bg-gray-700 rounded-lg p-4">
                                     <div class="flex justify-between items-start mb-2">
                                         <h4 class="text-lg font-semibold">${opt.title}</h4>
                                         <span class="px-2 py-1 rounded text-xs font-semibold
-                                            ${opt.priority === "high" ? "bg-red-600 text-white" : ""}
-                                            ${opt.priority === "medium" ? "bg-yellow-600 text-white" : ""}
-                                            ${opt.priority === "low" ? "bg-green-600 text-white" : ""}
+                                            ${opt.priority === 'high' ? 'bg-red-600 text-white' : ''}
+                                            ${opt.priority === 'medium' ? 'bg-yellow-600 text-white' : ''}
+                                            ${opt.priority === 'low' ? 'bg-green-600 text-white' : ''}
                                         ">
                                             ${opt.priority.toUpperCase()}
                                         </span>
                                     </div>
                                     <p class="text-gray-300">${opt.description}</p>
                                 </div>
-                            `,
-                              )
-                              .join("")}
+                            `).join('')}
                         </div>
                     </div>
-                `,
-                  )
-                  .join("")}
+                `).join('')}
             </div>
         </div>
     </div>
@@ -870,23 +846,23 @@ unused.forEach(dep => {
    * Create improvement suggestions
    */
   async createImprovementSuggestions() {
-    console.log("💡 Creating improvement suggestions...");
+    console.log('💡 Creating improvement suggestions...');
 
     const suggestions = {
       immediate: [],
       shortTerm: [],
       longTerm: [],
-      quickWins: [],
+      quickWins: []
     };
 
     // Categorize optimizations by effort and impact
-    Object.values(this.optimizations).forEach((category) => {
-      category.forEach((opt) => {
-        if (opt.effort === "low" && opt.impact === "high") {
+    Object.values(this.optimizations).forEach(category => {
+      category.forEach(opt => {
+        if (opt.effort === 'low' && opt.impact === 'high') {
           suggestions.quickWins.push(opt);
-        } else if (opt.effort === "low") {
+        } else if (opt.effort === 'low') {
           suggestions.immediate.push(opt);
-        } else if (opt.effort === "medium") {
+        } else if (opt.effort === 'medium') {
           suggestions.shortTerm.push(opt);
         } else {
           suggestions.longTerm.push(opt);
@@ -895,10 +871,7 @@ unused.forEach(dep => {
     });
 
     // Write suggestions file
-    const suggestionsPath = path.join(
-      this.outputDir,
-      "improvement-suggestions.json",
-    );
+    const suggestionsPath = path.join(this.outputDir, 'improvement-suggestions.json');
     fs.writeFileSync(suggestionsPath, JSON.stringify(suggestions, null, 2));
 
     console.log(`✅ Created improvement suggestions: ${suggestionsPath}`);
@@ -908,10 +881,7 @@ unused.forEach(dep => {
    * Helper methods
    */
   getTotalOptimizations() {
-    return Object.values(this.optimizations).reduce(
-      (total, category) => total + category.length,
-      0,
-    );
+    return Object.values(this.optimizations).reduce((total, category) => total + category.length, 0);
   }
 
   async calculateTotalSize() {
@@ -973,8 +943,8 @@ unused.forEach(dep => {
 // Run optimizer
 if (require.main === module) {
   const optimizer = new IntelligentCodeMapsOptimizer();
-  optimizer.optimize().catch((error) => {
-    console.error("❌ Optimization failed:", error);
+  optimizer.optimize().catch(error => {
+    console.error('❌ Optimization failed:', error);
     process.exit(1);
   });
 }

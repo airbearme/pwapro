@@ -1,5 +1,9 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   MapPin,
   Navigation,
@@ -8,11 +12,6 @@ import {
   Wifi,
   Activity,
 } from "lucide-react";
-import { useState, useEffect } from "react";
-
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface RealtimeEvent {
   type: "user_booking" | "driver_location" | "ride_status";
@@ -237,9 +236,9 @@ export default function RealtimeDemo() {
                         ?.status === "in_progress"
                         ? "default"
                         : events.find((e) => e.type === "ride_status")?.data
-                              ?.status === "completed"
-                          ? "secondary"
-                          : "outline"
+                            ?.status === "completed"
+                        ? "secondary"
+                        : "outline"
                     }
                   >
                     {events.find((e) => e.type === "ride_status")?.data
@@ -252,9 +251,9 @@ export default function RealtimeDemo() {
                       ?.status === "in_progress"
                       ? "🚗 Ride In Progress"
                       : events.find((e) => e.type === "ride_status")?.data
-                            ?.status === "completed"
-                        ? "✅ Ride Completed"
-                        : "No Active Rides"}
+                          ?.status === "completed"
+                      ? "✅ Ride Completed"
+                      : "No Active Rides"}
                   </h3>
                   <p className="text-sm text-muted-foreground">
                     {events.find((e) => e.type === "ride_status")?.data
@@ -262,7 +261,7 @@ export default function RealtimeDemo() {
                       ? `Driver is en route to ${events
                           .find((e) => e.type === "ride_status")
                           ?.data?.current_location?.latitude?.toFixed(
-                            4,
+                            4
                           )}, ${events
                           .find((e) => e.type === "ride_status")
                           ?.data?.current_location?.longitude?.toFixed(4)}`
@@ -303,10 +302,10 @@ export default function RealtimeDemo() {
                           event.type === "user_booking"
                             ? "default"
                             : event.type === "driver_location"
-                              ? "secondary"
-                              : event.type === "ride_status"
-                                ? "outline"
-                                : "secondary"
+                            ? "secondary"
+                            : event.type === "ride_status"
+                            ? "outline"
+                            : "secondary"
                         }
                       >
                         {event.type.replace("_", " ").toUpperCase()}
@@ -340,9 +339,9 @@ export default function RealtimeDemo() {
                           <strong>Ride Status:</strong> {event.data.status}
                           {event.data.current_location
                             ? `Location: ${event.data.current_location.latitude.toFixed(
-                                4,
+                                4
                               )}, ${event.data.current_location.longitude.toFixed(
-                                4,
+                                4
                               )}`
                             : "No location data"}
                         </div>

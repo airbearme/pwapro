@@ -3,7 +3,6 @@
 ## Dark Mode: ✅ PERMANENTLY ENABLED
 
 Dark mode is already configured in `app/layout.tsx`:
-
 - `defaultTheme="dark"` ✅
 - `enableSystem={false}` ✅
 

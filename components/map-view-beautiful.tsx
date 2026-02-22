@@ -19,7 +19,7 @@ interface MapViewProps {
  * Uses a marker reconciliation strategy (dirty checking) to avoid O(N) re-renders
  * of markers during real-time updates.
  */
-export default function MapView({ spots, airbears, onSpotSelect }: MapViewProps) {
+function MapView({ spots, airbears, onSpotSelect }: MapViewProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
   const markersRef = useRef<Map<string, any>>(new Map());
@@ -29,7 +29,7 @@ export default function MapView({ spots, airbears, onSpotSelect }: MapViewProps)
   const [mapLoaded, setMapLoaded] = useState(false);
   const [mapError, setMapError] = useState<string | null>(null);
 
-  // Keep refs up to date for event handlers
+  // Keep refs up to date for event handlers to avoid dependency in hooks
   useEffect(() => {
     spotsRef.current = spots;
   }, [spots]);
@@ -385,4 +385,6 @@ function createAirbearPopupHtml(airbear: AirbearLocation) {
   `;
 }
 
-export const MapViewMemo = React.memo(MapView);
+const MapViewMemo = React.memo(MapView);
+export default MapViewMemo;
+export { type MapViewProps };

@@ -3,7 +3,6 @@
 ## Implemented Features
 
 ### One-Click Authentication
-
 - Google Sign-In with automatic credential handling
 - Apple Sign-In with automatic credential handling
 - Email/Password authentication as alternative
@@ -11,7 +10,6 @@
 - Secure session management with Supabase
 
 ### User Experience
-
 - Beautiful, branded login/signup pages
 - Clear visual feedback during authentication
 - Error handling with user-friendly messages
@@ -19,7 +17,6 @@
 - Email confirmation for new signups
 
 ### Security Features
-
 - OAuth 2.0 implementation through Supabase
 - Secure token storage
 - Automatic session refresh
@@ -62,14 +59,12 @@
 In Supabase Dashboard → Authentication → URL Configuration:
 
 Add these redirect URLs:
-
 - `https://airbear.me/auth/callback`
 - `http://localhost:3000/auth/callback`
 
 ### Email Templates
 
 Customize email templates in Supabase Dashboard → Authentication → Email Templates:
-
 - Confirmation email
 - Password reset email
 - Magic link email

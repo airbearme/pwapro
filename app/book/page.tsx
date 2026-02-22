@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useCallback } from "react";
 
 import { useAuthContext } from "@/components/auth-provider";
 import MapComponent, { type Spot } from "@/components/map-view-beautiful";
@@ -122,23 +122,26 @@ function BookRidePageContent() {
     return 4.0;
   };
 
-  const handleSpotSelect = (spot: Spot) => {
-    if (selectingMode === "pickup") {
-      setPickupSpot(spot);
-      setSelectingMode(null);
-      toast({
-        title: "Pickup Selected",
-        description: `Pickup location set to ${spot.name}`,
-      });
-    } else if (selectingMode === "destination") {
-      setDestinationSpot(spot);
-      setSelectingMode(null);
-      toast({
-        title: "Destination Selected",
-        description: `Destination set to ${spot.name}`,
-      });
-    }
-  };
+  const handleSpotSelect = useCallback(
+    (spot: Spot) => {
+      if (selectingMode === "pickup") {
+        setPickupSpot(spot);
+        setSelectingMode(null);
+        toast({
+          title: "Pickup Selected",
+          description: `Pickup location set to ${spot.name}`,
+        });
+      } else if (selectingMode === "destination") {
+        setDestinationSpot(spot);
+        setSelectingMode(null);
+        toast({
+          title: "Destination Selected",
+          description: `Destination set to ${spot.name}`,
+        });
+      }
+    },
+    [selectingMode, toast],
+  );
 
   const startMapSelection = (mode: "pickup" | "destination") => {
     setSelectingMode(mode);

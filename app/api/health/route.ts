@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-
 import { createClient } from "@/lib/supabase/server";
 
 export async function GET() {
@@ -33,7 +32,7 @@ export async function GET() {
         timestamp: new Date().toISOString(),
         error: error.message,
       },
-      { status: 503 },
+      { status: 503 }
     );
   }
 }

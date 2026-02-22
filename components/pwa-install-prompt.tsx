@@ -1,10 +1,9 @@
 "use client";
 
-import { X, Download, Smartphone } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
-
-import AirbearWheel from "@/components/airbear-wheel";
 import { Button } from "@/components/ui/button";
+import { X, Download, Smartphone } from "lucide-react";
+import AirbearWheel from "@/components/airbear-wheel";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -72,7 +71,7 @@ export default function PWAInstallPrompt() {
     return () => {
       window.removeEventListener(
         "beforeinstallprompt",
-        handleBeforeInstallPrompt,
+        handleBeforeInstallPrompt
       );
       clearTimeout(timer);
     };
@@ -94,7 +93,7 @@ export default function PWAInstallPrompt() {
         "To install AirBear:\n\n" +
           "iOS Safari: Tap Share → Add to Home Screen\n\n" +
           "Android Chrome: Tap Menu → Install App\n\n" +
-          "Desktop: Look for install icon in address bar",
+          "Desktop: Look for install icon in address bar"
       );
     }
   };

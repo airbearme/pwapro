@@ -9,7 +9,6 @@ This document guides you through testing all functionality as both a passenger a
 ### Step 1: Register/Login ✅
 
 **Option A: Email Registration**
-
 1. Visit: `https://airbear.me/auth/signup`
 2. Fill in:
    - Email: `test@example.com`
@@ -21,21 +20,18 @@ This document guides you through testing all functionality as both a passenger a
 6. Should redirect to `/dashboard`
 
 **Option B: Google OAuth**
-
 1. Visit: `https://airbear.me/auth/signup`
 2. Click "Continue with Google"
 3. Select Google account
 4. Should redirect to `/dashboard`
 
 **Option C: Apple OAuth**
-
 1. Visit: `https://airbear.me/auth/signup`
 2. Click "Continue with Apple"
 3. Authenticate with Apple
 4. Should redirect to `/dashboard`
 
 **Verification:**
-
 - ✅ User redirected to `/dashboard`
 - ✅ User profile created in database
 - ✅ Session persists on refresh
@@ -53,7 +49,6 @@ This document guides you through testing all functionality as both a passenger a
    - ✅ Stats show available AirBears count
 
 **Verification:**
-
 - ✅ Map renders correctly
 - ✅ Markers display
 - ✅ Real-time updates work
@@ -64,13 +59,11 @@ This document guides you through testing all functionality as both a passenger a
 ### Step 3: Book a Ride ✅
 
 **Option A: From Map Page**
-
 1. Visit: `https://airbear.me/map`
 2. Click "Book a Ride" button
 3. OR click a spot marker → Click "Book from Here"
 
 **Option B: Direct Booking Page**
-
 1. Visit: `https://airbear.me/book`
 2. Select pickup location from list
 3. Select destination from list
@@ -86,7 +79,6 @@ This document guides you through testing all functionality as both a passenger a
    - ✅ Redirects to `/checkout?rideId=XXX&amount=4.00`
 
 **Verification:**
-
 - ✅ Ride appears in database
 - ✅ Correct pickup/destination
 - ✅ Fare calculated correctly
@@ -129,7 +121,6 @@ This document guides you through testing all functionality as both a passenger a
    - ✅ Toast notification shows success
 
 **Verification:**
-
 - ✅ Payment processed via Stripe
 - ✅ Ride status updated
 - ✅ Payment record created
@@ -157,7 +148,6 @@ This document guides you through testing all functionality as both a passenger a
    - ✅ Date/time shown
 
 **Verification:**
-
 - ✅ Dashboard loads correctly
 - ✅ Stats are accurate
 - ✅ Ride history displays
@@ -170,7 +160,6 @@ This document guides you through testing all functionality as both a passenger a
 ### Step 1: Register as Driver ✅
 
 **Option A: Email Registration**
-
 1. Visit: `https://airbear.me/auth/signup`
 2. Register with email: `driver@airbear.me`
 3. After registration, update user role in Supabase:
@@ -179,12 +168,10 @@ This document guides you through testing all functionality as both a passenger a
    ```
 
 **Option B: OAuth (then update role)**
-
 1. Register with Google/Apple
 2. Update role in Supabase dashboard
 
 **Verification:**
-
 - ✅ User created
 - ✅ Role set to "driver"
 
@@ -208,7 +195,6 @@ This document guides you through testing all functionality as both a passenger a
    - ✅ Shows active ride if one exists
 
 **Verification:**
-
 - ✅ Dashboard loads
 - ✅ Pending rides displayed
 - ✅ Real-time updates work
@@ -228,7 +214,6 @@ This document guides you through testing all functionality as both a passenger a
    - ✅ Toast notification shows success
 
 **Verification:**
-
 - ✅ Ride status updated in database
 - ✅ Driver assigned correctly
 - ✅ UI updates immediately
@@ -245,7 +230,6 @@ This document guides you through testing all functionality as both a passenger a
    - ✅ Button changes to "Complete Ride"
 
 **Verification:**
-
 - ✅ Status updated correctly
 - ✅ Timestamps accurate
 
@@ -263,7 +247,6 @@ This document guides you through testing all functionality as both a passenger a
    - ✅ Toast notification shows success
 
 **Verification:**
-
 - ✅ Ride completed in database
 - ✅ AirBear availability updated
 - ✅ UI updates correctly
@@ -273,7 +256,6 @@ This document guides you through testing all functionality as both a passenger a
 ## 🔄 Complete End-to-End Test
 
 ### Passenger Flow:
-
 1. ✅ Register → Login
 2. ✅ View Map
 3. ✅ Book Ride
@@ -282,7 +264,6 @@ This document guides you through testing all functionality as both a passenger a
 6. ✅ See Ride Status Updates
 
 ### Driver Flow:
-
 1. ✅ Register as Driver → Login
 2. ✅ View Driver Dashboard
 3. ✅ Accept Pending Ride
@@ -290,7 +271,6 @@ This document guides you through testing all functionality as both a passenger a
 5. ✅ Complete Ride
 
 ### Combined Flow:
-
 1. **Passenger** books ride → Status: "pending"
 2. **Driver** sees ride in dashboard
 3. **Driver** accepts ride → Status: "accepted"
@@ -304,19 +284,15 @@ This document guides you through testing all functionality as both a passenger a
 ## 🐛 Common Issues & Fixes
 
 ### Issue: "Unauthorized" error
-
 **Fix:** Check user is logged in, verify session
 
 ### Issue: Payment fails
-
 **Fix:** Check Stripe keys are set, verify test card numbers
 
 ### Issue: Ride not appearing
-
 **Fix:** Check database connection, verify ride was created
 
 ### Issue: Driver can't accept ride
-
 **Fix:** Verify driver role is set, check ride status is "pending"
 
 ---
@@ -324,7 +300,6 @@ This document guides you through testing all functionality as both a passenger a
 ## ✅ Success Criteria
 
 **All flows work when:**
-
 - ✅ Registration/Login works (email + OAuth)
 - ✅ Map loads and shows spots/AirBears
 - ✅ Booking creates ride in database

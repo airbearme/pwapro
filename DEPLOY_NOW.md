@@ -3,13 +3,11 @@
 ## Quick Start (5 Minutes)
 
 ### Step 1: Push to GitHub
-
 ```bash
 git push origin main
 ```
 
 ### Step 2: Create GitHub Repository (if not exists)
-
 1. Go to https://github.com/new
 2. Owner: `airbearme`
 3. Repository name: `pwapro`
@@ -18,14 +16,12 @@ git push origin main
 6. Click "Create repository"
 
 ### Step 3: Push Code
-
 ```bash
 git remote add origin https://github.com/airbearme/pwapro.git
 git push -u origin main
 ```
 
 ### Step 4: Deploy to Vercel
-
 1. Go to https://vercel.com/dashboard
 2. Click "Add New" → "Project"
 3. Import `airbearme/pwapro`
@@ -33,7 +29,6 @@ git push -u origin main
 5. Deploy!
 
 ### Step 5: Configure Domain
-
 1. In Vercel: Settings → Domains → Add `airbear.me`
 2. In IONOS: DNS → Add CNAME: `@` → `cname.vercel-dns.com`
 3. Wait 5-60 minutes for DNS propagation
@@ -73,7 +68,6 @@ NODE_ENV=production
 ## Verify Deployment
 
 After deployment, check:
-
 - ✅ https://airbear.me loads
 - ✅ OAuth login works
 - ✅ Map displays with real-time updates

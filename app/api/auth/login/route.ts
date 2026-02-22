@@ -1,6 +1,5 @@
-import { NextResponse } from "next/server";
-
 import { getSupabaseServer } from "@/lib/supabase/server";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
@@ -11,7 +10,7 @@ export async function POST(request: Request) {
         {
           error: "Email and password are required",
         },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
@@ -32,7 +31,7 @@ export async function POST(request: Request) {
         {
           error: "Invalid email or password",
         },
-        { status: 401 },
+        { status: 401 }
       );
     }
 
@@ -57,7 +56,7 @@ export async function POST(request: Request) {
       {
         error: error.message || "Login failed",
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

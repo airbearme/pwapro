@@ -8,10 +8,7 @@ import { useEffect, useState, useMemo } from "react";
 import { useCallback } from "react";
 
 import { useAuthContext } from "@/components/auth-provider";
-import MapComponent, {
-  type Spot,
-  MapViewMemo,
-} from "@/components/map-view-beautiful";
+import MapComponent, { type Spot } from "@/components/map-view-beautiful";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
@@ -198,7 +195,7 @@ export default function MapPage() {
 
         {/* Map */}
         <Card className="p-6">
-          <MapViewMemo
+          <MapComponent
             spots={spots}
             airbears={airbears}
             onSpotSelect={useCallback(

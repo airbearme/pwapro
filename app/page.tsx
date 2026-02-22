@@ -11,8 +11,8 @@
 
 import React, { useMemo } from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { MapPin, ShoppingBag, Leaf, Zap, Crown } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import AirbearWheel from "@/components/airbear-wheel";
 
 export default function HomePage() {

@@ -1,12 +1,13 @@
-import type React from "react";
+import { Analytics } from "@vercel/analytics/react";
 import type { Metadata, Viewport } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
-import { Analytics } from "@vercel/analytics/react";
-import { ThemeProvider } from "@/components/theme-provider";
+import type React from "react";
+
 import { AuthProvider } from "@/components/auth-provider";
-import { Toaster } from "@/components/ui/toaster";
-import PWAInstallPrompt from "@/components/pwa-install-prompt";
 import FloatingMascot from "@/components/floating-mascot";
+import PWAInstallPrompt from "@/components/pwa-install-prompt";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 
 const inter = Inter({
@@ -126,11 +127,11 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-              {children}
-              <FloatingMascot />
-              <PWAInstallPrompt />
-              <Toaster />
-              <Analytics />
+            {children}
+            <FloatingMascot />
+            <PWAInstallPrompt />
+            <Toaster />
+            <Analytics />
           </AuthProvider>
         </ThemeProvider>
       </body>

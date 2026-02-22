@@ -65,7 +65,7 @@ Type: A
 Name: @
 Value: 76.76.19.19
 
-Type: CNAME  
+Type: CNAME
 Name: www
 Value: cname.vercel-dns.com
 ```
@@ -132,13 +132,15 @@ chmod +x scripts/test-production.sh
 ## 🧪 Manual Testing Checklist
 
 ### Authentication
+
 - [ ] Click "Continue with Google" - should redirect to Google
-- [ ] Click "Continue with Apple" - should redirect to Apple  
+- [ ] Click "Continue with Apple" - should redirect to Apple
 - [ ] Sign in with email/password
 - [ ] Sign up with new account
 - [ ] Verify profile is created in Supabase
 
 ### Map Tracking
+
 - [ ] Visit /map - map loads without errors
 - [ ] See AirBear markers on map
 - [ ] See spot locations
@@ -146,6 +148,7 @@ chmod +x scripts/test-production.sh
 - [ ] Wait 30 seconds - verify real-time updates
 
 ### Payments
+
 - [ ] Visit /products page
 - [ ] Click "Buy Now" button
 - [ ] Checkout page opens
@@ -156,6 +159,7 @@ chmod +x scripts/test-production.sh
 - [ ] Check order created in database
 
 ### Performance
+
 - [ ] Lighthouse score > 90
 - [ ] No console errors
 - [ ] Mobile responsive
@@ -269,12 +273,14 @@ git push origin main
 ## 🆘 Support
 
 - Vercel: vercel.com/help
-- Supabase: supabase.com/support  
+- Supabase: supabase.com/support
 - Stripe: support.stripe.com
 
 ---
 
 **You're now live at https://airbear.me! 🎊**
-```
+
+````
 
 ```json file="" isHidden
+````

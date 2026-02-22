@@ -1,3 +1,5 @@
-## 2026-05-21 - MapView Marker Reconciliation Optimization
-**Learning:** React effects that manage Leaflet markers often fall into the trap of removing and re-adding all markers on every state change (O(N) operations on every update). This is especially expensive in real-time apps where state updates are frequent. Additionally, async initialization of Leaflet in Strict Mode or HMR can lead to "Map container is already initialized" errors if not guarded by a synchronous check and multiple async checks.
-**Action:** Use a "dirty checking" pattern by storing metadata (`__visualState`, `__dataHash`) on marker instances and performing in-place updates (O(1) per changed item, O(N+M) total sync). Implement multiple guards in async initialization to prevent double-initialization.
+## 2026-02-21 - MapView Marker Reconciliation
+
+**Learning:** Initializing Leaflet markers by clearing all and re-adding is O(N) and causes significant UI lag and flickering during real-time updates. Using a `Map` to track markers and performing "dirty checking" on marker data allows for O(1) updates per entity change.
+
+**Action:** Implement marker reconciliation with dirty checking in high-frequency map components. Track visual state on marker instances to avoid redundant `setIcon` calls. Use `React.memo` and `useCallback` to prevent unnecessary re-renders of the map container itself.

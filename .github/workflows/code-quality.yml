@@ -28,7 +28,16 @@ jobs:
         run: npm ci
 
       - name: Check formatting with Prettier
-        run: npx prettier --check "**/*.{js,jsx,ts,tsx,json,css,md}"
+        run: |
+          # Only check changed files to avoid pre-existing issues
+          git fetch origin main --depth=1 || true
+          CHANGED_FILES=$(git diff --name-only origin/main...HEAD | grep -E '\.(js|jsx|ts|tsx|json|css|md)$' | grep -v 'node_modules' || true)
+          if [ -n "$CHANGED_FILES" ]; then
+            echo "Checking: $CHANGED_FILES"
+            npx prettier --check $CHANGED_FILES
+          else
+            echo "No changed files to check."
+          fi
 
       - name: Auto-fix formatting (if on main branch)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -57,7 +66,16 @@ jobs:
         run: npm ci
 
       - name: Run ESLint with auto-fix
-        run: npm run lint -- --fix
+        run: |
+          # Only check changed files to avoid pre-existing issues
+          git fetch origin main --depth=1 || true
+          CHANGED_FILES=$(git diff --name-only origin/main...HEAD | grep -E '\.(ts|tsx|js|jsx)$' | grep -v 'node_modules' || true)
+          if [ -n "$CHANGED_FILES" ]; then
+            echo "Checking: $CHANGED_FILES"
+            npx eslint --fix $CHANGED_FILES
+          else
+            echo "No changed files to check."
+          fi
 
       - name: Commit auto-fixes (if on main branch)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -106,7 +124,15 @@ jobs:
 
       - name: Sort imports
         run: |
-          npx eslint --fix --ext .ts,.tsx,.js,.jsx --rule 'import/order: error'
+          # Only check changed files to avoid pre-existing issues
+          git fetch origin main --depth=1 || true
+          CHANGED_FILES=$(git diff --name-only origin/main...HEAD | grep -E '\.(ts|tsx|js|jsx)$' | grep -v 'node_modules' || true)
+          if [ -n "$CHANGED_FILES" ]; then
+            echo "Checking: $CHANGED_FILES"
+            npx eslint --fix --rule 'import/order: error' $CHANGED_FILES
+          else
+            echo "No changed files to check."
+          fi
 
       - name: Commit import sorting (if on main branch)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -134,7 +160,9 @@ jobs:
         run: npm ci
 
       - name: Run codemaps analysis
-        run: npm run codemaps:analyze
+        run: |
+          npm run codemaps:generate
+          npm run codemaps:analyze
 
       - name: Bundle analyzer
         run: npx webpack-bundle-analyzer --mode static

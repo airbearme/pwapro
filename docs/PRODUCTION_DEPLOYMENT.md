@@ -56,7 +56,7 @@ NEXT_PUBLIC_SITE_URL=https://airbear.me
 NODE_ENV=production
 ```
 
-**Important:** 
+**Important:**
 - Set all variables for **Production**, **Preview**, and **Development** environments
 - Use **live** Stripe keys (pk_live_, sk_live_)
 
@@ -273,9 +273,3 @@ The `.github/workflows/ci-cd.yml` will:
 
 **Last Updated:** 2025-01-26
 **Status:** Production Ready ✅
-
-
-
-
-
-

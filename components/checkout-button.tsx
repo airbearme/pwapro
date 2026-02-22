@@ -356,4 +356,3 @@ export function CheckoutButton({ items, onSuccess }: CheckoutButtonProps) {
     </Card>
   )
 }
-

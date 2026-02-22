@@ -150,7 +150,3 @@ After setup, verify everything works:
 ---
 
 **After setup, every push to `main` will automatically test, build, and deploy!** 🎉
-
-
-
-

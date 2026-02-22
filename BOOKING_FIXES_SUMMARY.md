@@ -7,7 +7,7 @@
 - **Solution**: Updated to use `/api/rides/create` endpoint which handles authentication properly
 - **Result**: API correctly returns 401 for unauthenticated requests
 
-### 2. **AirBear Assignment Logic** ✅ FIXED  
+### 2. **AirBear Assignment Logic** ✅ FIXED
 - **Problem**: API was creating rides first, then checking for available AirBears
 - **Solution**: Reversed order - check availability first, then create ride
 - **Result**: Prevents orphaned rides when no AirBears available
@@ -88,7 +88,7 @@ curl -X POST http://localhost:3000/api/rides/create \
 ## 📊 Current Status
 
 - ✅ Authentication: Fixed
-- ✅ API Logic: Fixed  
+- ✅ API Logic: Fixed
 - ✅ Error Handling: Improved
 - 🚨 Database Schema: **Requires manual fix**
 

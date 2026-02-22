@@ -115,8 +115,3 @@ Once DNS propagates (24-48 hours), it will also be available at:
 **URL**: https://airbear-pwa.vercel.app
 
 🎉 **Congratulations! Your AirBear PWA is live!** 🐻
-
-
-
-
-

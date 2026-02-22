@@ -53,9 +53,3 @@ Before any deployment, verify:
 - First Input Delay: < 100ms
 
 **Note**: These targets must be met WITH all animations enabled.
-
-
-
-
-
-

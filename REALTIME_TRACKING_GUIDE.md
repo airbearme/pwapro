@@ -57,8 +57,8 @@ The schema is already configured in `supabase-schema.sql`. The `airbears` table 
 ### Step 3: Assign Driver Role
 To make a user a driver:
 \`\`\`sql
-UPDATE public.users 
-SET role = 'driver' 
+UPDATE public.users
+SET role = 'driver'
 WHERE email = 'driver@airbear.me';
 \`\`\`
 
@@ -100,14 +100,14 @@ The existing map (`/map`) will automatically:
 When you get more AirBears:
 
 \`\`\`sql
-INSERT INTO public.airbears (id, current_spot_id, latitude, longitude, battery_level, is_available) 
+INSERT INTO public.airbears (id, current_spot_id, latitude, longitude, battery_level, is_available)
 VALUES ('airbear-002', 'vestal-center', 42.091851, -75.951729, 100, true);
 \`\`\`
 
 Then assign a driver to it:
 \`\`\`sql
-UPDATE public.users 
-SET assigned_airbear_id = 'airbear-002' 
+UPDATE public.users
+SET assigned_airbear_id = 'airbear-002'
 WHERE email = 'driver2@airbear.me';
 \`\`\`
 

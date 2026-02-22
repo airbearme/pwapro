@@ -73,5 +73,3 @@ try {
 	console.error(`❌ Failed to validate error logger: ${error.message}`);
 	process.exit(1);
 }
-
-

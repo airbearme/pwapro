@@ -74,5 +74,3 @@ try {
 	console.error("❌ Auto-repair failed:", error.message);
 	process.exit(1);
 }
-
-

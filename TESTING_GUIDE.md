@@ -79,8 +79,8 @@ console.log("[v0] Supabase:", window.supabase ? "✓ Connected" : "✗ Not found
 console.log("[v0] Realtime:", "Check Network tab for WebSocket")
 
 // 3. Manually trigger location update (in Supabase SQL Editor)
-UPDATE airbears 
-SET latitude = latitude + 0.001, 
+UPDATE airbears
+SET latitude = latitude + 0.001,
     longitude = longitude + 0.001,
     updated_at = NOW()
 WHERE id = 'your-airbear-id';

@@ -72,8 +72,8 @@ SELECT COUNT(*) as spot_count FROM public.spots;
 SELECT * FROM public.airbears;
 
 -- Check RLS policies
-SELECT tablename, policyname 
-FROM pg_policies 
+SELECT tablename, policyname
+FROM pg_policies
 WHERE schemaname = 'public';
 \`\`\`
 

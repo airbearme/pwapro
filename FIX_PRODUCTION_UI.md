@@ -76,7 +76,3 @@ After deployment, all special effects should be visible:
 ---
 
 **Status:** ✅ Fixed - Ready to deploy!
-
-
-
-

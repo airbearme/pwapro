@@ -166,7 +166,3 @@ After setup:
 ---
 
 **Setup complete! Your app will now automatically deploy on every push!** 🚀
-
-
-
-

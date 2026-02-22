@@ -36,9 +36,3 @@
 3. Verify UI renders perfectly (it will!)
 
 **The beautiful UI you had is still there - we just need to get past this build quirk!**
-
-
-
-
-
-

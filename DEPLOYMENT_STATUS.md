@@ -20,7 +20,7 @@
 ✓ Collecting build traces
 ✓ Finalizing page optimization
 
-Route (app)                                 Size  First Load JS    
+Route (app)                                 Size  First Load JS
 ┌ ƒ /                                     4.1 kB         118 kB
 ├ ƒ /_not-found                            200 B         102 kB
 ├ ƒ /checkout                            9.86 kB         176 kB

@@ -65,7 +65,7 @@ Type: A
 Name: @
 Value: 76.76.19.19
 
-Type: CNAME  
+Type: CNAME
 Name: www
 Value: cname.vercel-dns.com
 ```
@@ -133,7 +133,7 @@ chmod +x scripts/test-production.sh
 
 ### Authentication
 - [ ] Click "Continue with Google" - should redirect to Google
-- [ ] Click "Continue with Apple" - should redirect to Apple  
+- [ ] Click "Continue with Apple" - should redirect to Apple
 - [ ] Sign in with email/password
 - [ ] Sign up with new account
 - [ ] Verify profile is created in Supabase
@@ -269,7 +269,7 @@ git push origin main
 ## 🆘 Support
 
 - Vercel: vercel.com/help
-- Supabase: supabase.com/support  
+- Supabase: supabase.com/support
 - Stripe: support.stripe.com
 
 ---

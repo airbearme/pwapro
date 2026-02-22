@@ -86,5 +86,3 @@ async function testSchema() {
 }
 
 testSchema();
-
-

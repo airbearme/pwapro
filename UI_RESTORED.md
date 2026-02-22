@@ -36,9 +36,3 @@ There's a Next.js 15 build quirk with error page prerendering. This **DOES NOT**
 The UI is **fully restored and ready to deploy!** 🚀
 
 Visit **https://airbear.me** after deployment to see all the beautiful effects!
-
-
-
-
-
-

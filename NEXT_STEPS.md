@@ -138,4 +138,3 @@ Test these on https://airbear.me:
 **Status:** Ready to deploy! 🎉
 
 **Next:** Configure Supabase redirect URLs → Deploy → Test OAuth
-

@@ -20,7 +20,7 @@ That's it! 🎉
 ✅ **Vercel Project** - Created and linked automatically  
 ✅ **Environment Variables** - Added to Vercel automatically  
 ✅ **Stripe Webhook** - Created automatically (if STRIPE_SECRET_KEY set)  
-✅ **Deployment** - Deploys to production automatically  
+✅ **Deployment** - Deploys to production automatically
 
 ## Get Your Tokens (5 minutes)
 
@@ -103,9 +103,3 @@ Deploys to production
 ---
 
 **Ready to deploy?** Just run the one command above! 🚀
-
-
-
-
-
-

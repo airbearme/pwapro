@@ -90,5 +90,3 @@ if (process.env.GITHUB_ACTIONS) {
 }
 
 process.exit(0);
-
-

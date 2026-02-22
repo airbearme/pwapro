@@ -165,7 +165,3 @@ Add these 10 secrets:
 - ✅ **Everything Linked**: Supabase ↔ Vercel ↔ GitHub ↔ Production
 
 **Just push to `main` and watch it deploy automatically!** 🚀
-
-
-
-

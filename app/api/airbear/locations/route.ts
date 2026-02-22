@@ -4,10 +4,10 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request) {
   try {
     const supabase = await getSupabaseServer();
-    
+
     // Get the current user
     const { data: { user }, error: authError } = await supabase.auth.getUser();
-    
+
     if (authError || !user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }

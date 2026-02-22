@@ -164,4 +164,3 @@ Your deployment is successful when:
 **🎉 Congratulations! Your AirBear PWA is live!**
 
 Visit: **https://airbear.me** and start testing!
-

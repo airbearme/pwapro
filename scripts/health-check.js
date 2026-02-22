@@ -66,5 +66,3 @@ runHealthChecks().catch((error) => {
 	console.error("Health check failed:", error);
 	process.exit(1);
 });
-
-

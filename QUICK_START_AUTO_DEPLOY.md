@@ -83,7 +83,3 @@ Watch it deploy automatically! 🎉
 ---
 
 **That's it! Your app now auto-deploys on every push!** ✨
-
-
-
-

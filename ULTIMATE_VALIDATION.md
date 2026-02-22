@@ -346,8 +346,3 @@ The E2E testing is comprehensive enough that:
 **Ready**: Production-ready validation
 
 **Run `npm run test:validate` or `/validate` to validate everything!** 🚀
-
-
-
-
-

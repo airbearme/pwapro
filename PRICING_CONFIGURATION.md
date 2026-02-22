@@ -40,7 +40,7 @@ For rides outside the 16 standard spots, you can:
 
 1. **Add More Spots to Database:**
    \`\`\`sql
-   INSERT INTO public.spots (id, name, latitude, longitude, description, amenities, is_active) 
+   INSERT INTO public.spots (id, name, latitude, longitude, description, amenities, is_active)
    VALUES ('custom-location', 'Custom Location Name', 42.123456, -75.123456, 'Description', ARRAY['Amenity1'], true);
    \`\`\`
 

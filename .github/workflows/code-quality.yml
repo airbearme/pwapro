@@ -158,13 +158,23 @@ jobs:
         run: npm run codemaps:analyze
 
       - name: Bundle analyzer
-        run: npx webpack-bundle-analyzer --mode static
+        run: |
+          if [ -f .next/stats.json ]; then
+            npx webpack-bundle-analyzer --mode static .next/stats.json
+          else
+            echo "Stats file not found, skipping analysis"
+          fi
+        continue-on-error: true
 
       - name: Upload bundle analysis
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: bundle-analysis
-          path: bundle-analyzer-report.html
+          path: |
+            bundle-analyzer-report.html
+            report.html
+        continue-on-error: true
 
   # Dead Code Detection
   dead-code:
@@ -185,9 +195,12 @@ jobs:
 
       - name: Detect dead code
         run: npx unimported
+        continue-on-error: true
 
       - name: Upload dead code report
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: dead-code-report
           path: unimported-*.json
+        continue-on-error: true

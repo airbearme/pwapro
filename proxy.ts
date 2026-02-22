@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr"
 import { NextResponse, type NextRequest } from "next/server"
 import { SECURITY_HEADERS } from "./lib/security-headers"
+import { env } from "./lib/env"
 
 /**
  * Production-grade middleware for:
@@ -9,6 +10,32 @@ import { SECURITY_HEADERS } from "./lib/security-headers"
  * - Secure cookie handling
  */
 export async function proxy(request: NextRequest) {
+  // 1. Admin/Setup Path Protection (X-Admin-Secret)
+  // These endpoints perform destructive or sensitive administrative operations
+  // Protected in middleware to prevent fail-open vulnerabilities
+  const adminSecret = env.ADMIN_SECRET
+  const adminHeader = request.headers.get("X-Admin-Secret")
+  const path = request.nextUrl.pathname
+
+  const isAdminPath =
+    path.startsWith("/api/setup") ||
+    path.startsWith("/api/install") ||
+    path.startsWith("/api/spots/update") ||
+    path.startsWith("/api/spots/manual-update") ||
+    path.startsWith("/api/spots/bypass-update") ||
+    path.startsWith("/api/airbear/update-location")
+
+  if (isAdminPath) {
+    // Fail-secure: If secret is not set in env, or header doesn't match, deny access
+    if (!adminSecret || adminHeader !== adminSecret) {
+      console.warn(`Unauthorized admin access attempt to ${path}`)
+      return new NextResponse(JSON.stringify({ error: "Unauthorized: Admin access required" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      })
+    }
+  }
+
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 

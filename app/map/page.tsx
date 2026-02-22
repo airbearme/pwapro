@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { useAuthContext } from "@/components/auth-provider";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import { subscribeToAirbearLocations } from "@/lib/supabase/realtime";
@@ -192,9 +192,9 @@ export default function MapPage() {
           <MapComponent
             spots={spots}
             airbears={airbears}
-            onSpotSelect={(spot) => {
+            onSpotSelect={useCallback((spot: Spot) => {
               router.push(`/book?pickup=${spot.id}`);
-            }}
+            }, [router])}
           />
         </Card>
 

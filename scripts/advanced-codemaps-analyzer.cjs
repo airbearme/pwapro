@@ -17,10 +17,44 @@ class AdvancedCodeMapsAnalyzer {
       components: [],
       api: [],
       utilities: [],
-      dependencies: {},
-      performance: {},
-      security: {},
-      coverage: {},
+      dependencies: {
+        categories: {
+          ui: [],
+          database: [],
+          auth: [],
+          payment: [],
+          testing: [],
+          build: [],
+          other: []
+        },
+        security: []
+      },
+      performance: {
+        api: {
+          byMethod: {},
+          complex: [],
+          simple: [],
+          byPath: {}
+        }
+      },
+      security: {
+        issues: [],
+        bestPractices: [],
+        byFile: {}
+      },
+      coverage: {
+        byType: {
+          components: { total: 0, tested: 0 },
+          api: { total: 0, tested: 0 },
+          utilities: { total: 0, tested: 0 }
+        }
+      },
+      complexity: {
+        high: [],
+        medium: [],
+        low: [],
+        byType: {}
+      }
     };
   }
 

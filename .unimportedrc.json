@@ -22,7 +22,14 @@
     "app/not-found.tsx",
     "app/test/page.tsx",
     "components/map-view-client.tsx",
-    "components/ui/chart.tsx"
+    "components/ui/chart.tsx",
+    "eslint.config.js",
+    "middleware.ts",
+    "observability/logger.ts",
+    "postcss.config.js",
+    "supabase/functions/create-payment-intent/index.ts",
+    "supabase/functions/stripe-webhook/index.ts",
+    "tailwind.config.ts"
   ],
   "ignoreUnused": [
     "@radix-ui/react-accordion",

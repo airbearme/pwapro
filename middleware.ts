@@ -18,11 +18,13 @@ export async function middleware(req: NextRequest) {
   })
   const { data: { user } } = await supabase.auth.getUser()
   const p = req.nextUrl.pathname
-  if (p.startsWith("/api/setup/") || p.startsWith("/api/install/") || p.startsWith("/api/spots/")) {
-    if (req.headers.get("X-Admin-Secret") !== process.env.ADMIN_SECRET) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  const isAdmin = ["/api/setup/", "/api/install/", "/api/spots/update", "/api/airbear/update-location"].some(s => p.startsWith(s))
+  if (isAdmin && req.headers.get("X-Admin-Secret") !== process.env.ADMIN_SECRET) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
   const isAuth = ["/dashboard", "/driver"].some(s => p.startsWith(s)) || (p.startsWith("/map") && req.nextUrl.searchParams.has("auth"))
-  if ((isAuth || p.startsWith("/api/rides/")) && !user) {
+  const isAuthApi = p.startsWith("/api/rides/") || p === "/api/airbear/location"
+  if ((isAuth || isAuthApi) && !user) {
     if (p.startsWith("/api/")) return NextResponse.json({ error: "Auth required" }, { status: 401 })
     const l = req.nextUrl.clone()
     l.pathname = "/auth/login"; l.searchParams.set("redirect", p)

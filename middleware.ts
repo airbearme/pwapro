@@ -1,7 +1,6 @@
 import { createServerClient } from "@supabase/ssr"
 import { NextResponse, type NextRequest } from "next/server"
 import { SECURITY_HEADERS } from "./lib/security-headers"
-
 export async function middleware(req: NextRequest) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_PWA4_URL
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY
@@ -19,9 +18,8 @@ export async function middleware(req: NextRequest) {
   })
   const { data: { user } } = await supabase.auth.getUser()
   const p = req.nextUrl.pathname
-  if (["/api/setup/", "/api/install/", "/api/spots/"].some(s => p.startsWith(s))) {
-    if (req.headers.get("X-Admin-Secret") !== process.env.ADMIN_SECRET)
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  if (p.startsWith("/api/setup/") || p.startsWith("/api/install/") || p.startsWith("/api/spots/")) {
+    if (req.headers.get("X-Admin-Secret") !== process.env.ADMIN_SECRET) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
   const isAuth = ["/dashboard", "/driver"].some(s => p.startsWith(s)) || (p.startsWith("/map") && req.nextUrl.searchParams.has("auth"))
   if ((isAuth || p.startsWith("/api/rides/")) && !user) {

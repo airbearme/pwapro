@@ -414,6 +414,7 @@ class CodeMapsValidator {
    * Generate validation report
    */
   async generateValidationReport() {
+    fs.mkdirSync(this.outputDir, { recursive: true });
     const report = {
       timestamp: new Date().toISOString(),
       project: "airbear-pwa",

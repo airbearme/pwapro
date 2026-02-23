@@ -1,4 +1,4 @@
 ## 2025-02-23 - Hardcoded Secrets and Inactive Middleware
-**Vulnerability:** Found hardcoded IONOS SFTP password and Supabase Service Role keys in deployment scripts and documentation. Also found the authentication middleware was misnamed as `proxy.ts`, causing it to be ignored by Next.js and leaving routes unprotected.
-**Learning:** Legacy scripts and documentation often accumulate secrets that are forgotten after the environment is supposedly "secured". Standard framework files like `middleware.ts` can be accidentally renamed or left inactive during refactors.
-**Prevention:** Use environment variables for all sensitive data and enforce their presence via Zod schemas (`lib/env.ts`). Always verify that security-critical files follow framework-standard naming conventions to ensure they are active.
+**Vulnerability:** Found hardcoded Supabase Service Role keys and Stripe secrets in documentation and deployment scripts. Also identified that the authentication middleware was misnamed as `proxy.ts`, causing Next.js to ignore it and leaving routes unprotected.
+**Learning:** Standard framework files like `middleware.ts` are essential for security enforcement in Next.js; renaming them can silently disable authentication. Legacy scripts often contain "one-off" secrets that are forgotten.
+**Prevention:** Use `middleware.ts` for centralized authentication enforcement. Use Zod schemas in `lib/env.ts` to validate required environment variables and prevent hardcoding.

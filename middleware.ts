@@ -2,100 +2,35 @@ import { createServerClient } from "@supabase/ssr"
 import { NextResponse, type NextRequest } from "next/server"
 import { SECURITY_HEADERS } from "./lib/security-headers"
 
-/**
- * Production-grade middleware for:
- * - Supabase session refresh (automatic token refresh)
- * - Protected route authentication
- * - Admin API protection (X-Admin-Secret)
- * - Secure cookie handling
- */
-export async function middleware(request: NextRequest) {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_PWA4_URL
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY
-
-  if (!supabaseUrl || !supabaseAnonKey) {
-    console.error("Missing Supabase environment variables in middleware")
-    return NextResponse.next()
-  }
-
-  let supabaseResponse = NextResponse.next({
-    request,
-  })
-
-  const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
+export async function middleware(req: NextRequest) {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_PWA4_URL
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY
+  if (!url || !key) return NextResponse.next()
+  let res = NextResponse.next({ request: req })
+  const supabase = createServerClient(url, key, {
     cookies: {
-      getAll() {
-        return request.cookies.getAll()
-      },
-      setAll(cookiesToSet: Array<{ name: string; value: string; options?: Record<string, unknown> }>) {
-        cookiesToSet.forEach(({ name, value }) => {
-          request.cookies.set(name, value)
-        })
-        supabaseResponse = NextResponse.next({
-          request,
-        })
-        cookiesToSet.forEach(({ name, value, options }) => {
-          if (options) {
-            supabaseResponse.cookies.set(name, value, options as Parameters<typeof supabaseResponse.cookies.set>[2])
-          } else {
-            supabaseResponse.cookies.set(name, value)
-          }
-        })
+      getAll: () => req.cookies.getAll(),
+      setAll: (cs) => {
+        cs.forEach(c => req.cookies.set(c.name, c.value))
+        res = NextResponse.next({ request: req })
+        cs.forEach(c => res.cookies.set(c.name, c.value, c.options as any))
       },
     },
   })
-
-  // Admin API Protection
-  const isAdminApi =
-    request.nextUrl.pathname.startsWith("/api/setup/") ||
-    request.nextUrl.pathname.startsWith("/api/install/") ||
-    request.nextUrl.pathname.startsWith("/api/spots/update") ||
-    request.nextUrl.pathname.startsWith("/api/spots/manual-update") ||
-    request.nextUrl.pathname.startsWith("/api/spots/bypass-update") ||
-    request.nextUrl.pathname === "/api/airbear/update-location"
-
-  if (isAdminApi) {
-    const adminSecret = process.env.ADMIN_SECRET
-    const requestSecret = request.headers.get("X-Admin-Secret")
-
-    if (!adminSecret || requestSecret !== adminSecret) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    }
-  }
-
-  // Refresh session if needed (automatic token refresh)
-  // Store user for reuse in route protection logic
   const { data: { user } } = await supabase.auth.getUser()
-
-  // Protect authenticated routes (Pages)
-  const isProtectedRoute =
-    request.nextUrl.pathname.startsWith("/dashboard") ||
-    request.nextUrl.pathname.startsWith("/driver") ||
-    request.nextUrl.pathname.startsWith("/map") && request.nextUrl.searchParams.has("auth")
-
-  if (isProtectedRoute && !user) {
-    const url = request.nextUrl.clone()
-    url.pathname = "/auth/login"
-    url.searchParams.set("redirect", request.nextUrl.pathname)
-    return NextResponse.redirect(url)
+  const p = req.nextUrl.pathname
+  if (["/api/setup/", "/api/install/", "/api/spots/"].some(s => p.startsWith(s))) {
+    if (req.headers.get("X-Admin-Secret") !== process.env.ADMIN_SECRET)
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
-
-  // Protect authenticated API routes
-  const isAuthApi =
-    request.nextUrl.pathname.startsWith("/api/rides/") ||
-    request.nextUrl.pathname === "/api/airbear/location"
-
-  if (isAuthApi && !user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  const isAuth = ["/dashboard", "/driver"].some(s => p.startsWith(s)) || (p.startsWith("/map") && req.nextUrl.searchParams.has("auth"))
+  if ((isAuth || p.startsWith("/api/rides/")) && !user) {
+    if (p.startsWith("/api/")) return NextResponse.json({ error: "Auth required" }, { status: 401 })
+    const l = req.nextUrl.clone()
+    l.pathname = "/auth/login"; l.searchParams.set("redirect", p)
+    return NextResponse.redirect(l)
   }
-
-  // Add security headers
-  for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
-    supabaseResponse.headers.set(key, value)
-  }
-  return supabaseResponse
+  Object.entries(SECURITY_HEADERS).forEach(([k, v]) => res.headers.set(k, v))
+  return res
 }
-
-export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"],
-}
+export const config = { matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"] }

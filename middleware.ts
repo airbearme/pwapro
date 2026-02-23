@@ -6,11 +6,12 @@ import { SECURITY_HEADERS } from "./lib/security-headers"
  * Production-grade middleware for:
  * - Supabase session refresh (automatic token refresh)
  * - Protected route authentication
+ * - Admin API protection (X-Admin-Secret)
  * - Secure cookie handling
  */
-export async function proxy(request: NextRequest) {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+export async function middleware(request: NextRequest) {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_PWA4_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY
 
   if (!supabaseUrl || !supabaseAnonKey) {
     console.error("Missing Supabase environment variables in middleware")
@@ -44,26 +45,48 @@ export async function proxy(request: NextRequest) {
     },
   })
 
-  // Refresh session if needed (automatic token refresh)
-  await supabase.auth.getUser()
+  // Admin API Protection
+  const isAdminApi =
+    request.nextUrl.pathname.startsWith("/api/setup/") ||
+    request.nextUrl.pathname.startsWith("/api/install/") ||
+    request.nextUrl.pathname.startsWith("/api/spots/update") ||
+    request.nextUrl.pathname.startsWith("/api/spots/manual-update") ||
+    request.nextUrl.pathname.startsWith("/api/spots/bypass-update") ||
+    request.nextUrl.pathname === "/api/airbear/update-location"
 
-  // Protect authenticated routes
+  if (isAdminApi) {
+    const adminSecret = process.env.ADMIN_SECRET
+    const requestSecret = request.headers.get("X-Admin-Secret")
+
+    if (!adminSecret || requestSecret !== adminSecret) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+  }
+
+  // Refresh session if needed (automatic token refresh)
+  // Store user for reuse in route protection logic
+  const { data: { user } } = await supabase.auth.getUser()
+
+  // Protect authenticated routes (Pages)
   const isProtectedRoute =
     request.nextUrl.pathname.startsWith("/dashboard") ||
     request.nextUrl.pathname.startsWith("/driver") ||
     request.nextUrl.pathname.startsWith("/map") && request.nextUrl.searchParams.has("auth")
 
-  if (isProtectedRoute) {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
+  if (isProtectedRoute && !user) {
+    const url = request.nextUrl.clone()
+    url.pathname = "/auth/login"
+    url.searchParams.set("redirect", request.nextUrl.pathname)
+    return NextResponse.redirect(url)
+  }
 
-    if (!user) {
-      const url = request.nextUrl.clone()
-      url.pathname = "/auth/login"
-      url.searchParams.set("redirect", request.nextUrl.pathname)
-      return NextResponse.redirect(url)
-    }
+  // Protect authenticated API routes
+  const isAuthApi =
+    request.nextUrl.pathname.startsWith("/api/rides/") ||
+    request.nextUrl.pathname === "/api/airbear/location"
+
+  if (isAuthApi && !user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
   // Add security headers

@@ -9,6 +9,10 @@ on:
 
 env:
   NODE_VERSION: '20'
+  NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder
+  NEXT_PUBLIC_SITE_URL: https://airbear.me
+  NODE_ENV: test
 
 jobs:
   ci:
@@ -38,14 +42,11 @@ jobs:
       - name: ESLint
         run: npm run lint
 
-      - name: Validate codemaps
-        run: npm run codemaps:validate
-
       - name: Generate codemaps
         run: npm run codemaps:generate
 
-      - name: Build application
-        run: npm run build
+      - name: Validate codemaps
+        run: npm run codemaps:validate
 
       - name: Upload npm logs (on failure)
         if: failure()

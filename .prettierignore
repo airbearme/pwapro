@@ -1,0 +1,8 @@
+node_modules
+.next
+.vercel
+playwright-report
+coverage
+dist
+public
+*.tar.gz

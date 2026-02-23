@@ -14,6 +14,9 @@ const envSchema = z.object({
   // Site
   NEXT_PUBLIC_SITE_URL: z.string().url(),
   NODE_ENV: z.enum(["development", "production", "test"]),
+
+  // Admin
+  ADMIN_SECRET: z.string().min(1).optional(),
 })
 
 export const env = envSchema.parse({
@@ -25,4 +28,5 @@ export const env = envSchema.parse({
   STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
   NODE_ENV: process.env.NODE_ENV,
+  ADMIN_SECRET: process.env.ADMIN_SECRET,
 })

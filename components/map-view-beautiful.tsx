@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState, memo } from "react";
-
 import type { AirbearLocation } from "@/lib/supabase/realtime";
 import type { Database } from "@/lib/types/database";
 
@@ -36,6 +35,8 @@ const MapView = memo(({ spots, airbears, onSpotSelect }: MapViewProps) => {
       return;
     }
 
+    // ⚡ Bolt: Use a ref to track if the map has already been initialized
+    // to prevent redundant initializations in Strict Mode or during HMR.
     const initMap = async () => {
       try {
         setMapError(null);
@@ -177,7 +178,7 @@ const MapView = memo(({ spots, airbears, onSpotSelect }: MapViewProps) => {
     const map = mapInstanceRef.current;
     const L = LeafletRef.current;
 
-    // ⚡ Bolt: Update spot markers in-place (O(N+M)) instead of O(N) remove/re-add.
+    // ⚡ Bolt: Update markers in-place (O(N+M)) instead of O(N) remove/re-add.
     // This significantly reduces DOM churn and layout recalculations.
     const spotIds = new Set(spots.map((s) => s.id));
 
@@ -208,7 +209,9 @@ const MapView = memo(({ spots, airbears, onSpotSelect }: MapViewProps) => {
       const icon = L.divIcon({
         html: `
           <div class="spot-marker-container">
-            <div class="spot-marker-icon ${hasAvailableAirbears ? "spot-available" : "spot-unavailable"}">
+            <div class="spot-marker-icon ${
+              hasAvailableAirbears ? "spot-available" : "spot-unavailable"
+            }">
               <img src="/airbear-mascot.png" class="spot-marker-image" alt="AirBear" />
             </div>
             ${
@@ -318,7 +321,7 @@ const MapView = memo(({ spots, airbears, onSpotSelect }: MapViewProps) => {
         markersRef.current.set(markerId, marker);
       }
     });
-  }, [spots, airbears, onSpotSelect, mapLoaded]);
+  }, [spots, airbears, mapLoaded]);
 
   useEffect(() => {
     if (!mapInstanceRef.current || !LeafletRef.current || !mapLoaded) return;
@@ -338,7 +341,9 @@ const MapView = memo(({ spots, airbears, onSpotSelect }: MapViewProps) => {
       const icon = L.divIcon({
         html: `
           <div class="airbear-marker-container">
-            <div class="airbear-marker-icon ${airbear.is_available ? "airbear-available" : "airbear-unavailable"}">
+            <div class="airbear-marker-icon ${
+              airbear.is_available ? "airbear-available" : "airbear-unavailable"
+            }">
               <img src="/airbear-mascot.png" class="airbear-marker-image" alt="AirBear" />
             </div>
             ${
@@ -590,4 +595,5 @@ const MapView = memo(({ spots, airbears, onSpotSelect }: MapViewProps) => {
 });
 
 MapView.displayName = "MapView";
+
 export default MapView;

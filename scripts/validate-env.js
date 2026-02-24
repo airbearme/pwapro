@@ -17,6 +17,7 @@ const requiredEnvVars = [
 	"NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
 	"STRIPE_SECRET_KEY",
 	"STRIPE_WEBHOOK_SECRET",
+	"ADMIN_SECRET",
 ];
 
 const optionalEnvVars = ["NEXT_PUBLIC_SITE_URL", "NODE_ENV"];

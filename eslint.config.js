@@ -1,4 +1,16 @@
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const importPlugin = require("eslint-plugin-import");
+
 export default [
+  {
+    plugins: {
+      import: importPlugin,
+    },
+    languageOptions: {
+      parser: require("@typescript-eslint/parser"),
+    },
+  },
   {
     ignores: [
       "**/.next/**",
@@ -20,10 +32,27 @@ export default [
     ],
   },
   {
-    files: ["**/*.{js,jsx}"],
+    files: ["**/*.{js,jsx,ts,tsx}"],
     rules: {
       "no-unused-vars": "off",
       "no-console": "off",
+      "import/order": [
+        "error",
+        {
+          groups: [
+            "builtin",
+            "external",
+            "internal",
+            "parent",
+            "sibling",
+            "index",
+            "object",
+            "type",
+          ],
+          "newlines-between": "always",
+          alphabetize: { order: "asc", caseInsensitive: true },
+        },
+      ],
     },
   },
 ];

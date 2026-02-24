@@ -125,7 +125,13 @@ function OrderSuccessPageContent() {
 
 export default function OrderSuccessPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-black text-white flex items-center justify-center">Loading success page...</div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-black text-white flex items-center justify-center">
+          Loading success page...
+        </div>
+      }
+    >
       <OrderSuccessPageContent />
     </Suspense>
   );

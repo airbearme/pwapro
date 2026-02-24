@@ -70,7 +70,7 @@ function BookRidePageContent() {
         if (airbearsResponse.ok) {
           const airbearsData = await airbearsResponse.json();
           setAirbears(airbearsData.data || []);
-          
+
           // Show driver-specific message if applicable
           if (airbearsData.isDriverView) {
             console.log("Driver view: Showing only assigned AirBear");
@@ -565,7 +565,13 @@ function BookRidePageContent() {
 
 export default function BookRidePage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-black text-white flex items-center justify-center">Loading booking...</div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-black text-white flex items-center justify-center">
+          Loading booking...
+        </div>
+      }
+    >
       <BookRidePageContent />
     </Suspense>
   );

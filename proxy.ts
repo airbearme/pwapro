@@ -22,7 +22,7 @@ function timingSafeEqual(a: string, b: string): boolean {
  * - Administrative route protection via X-Admin-Secret
  * - Security headers enforcement
  */
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_PWA4_URL
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY
 

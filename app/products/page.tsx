@@ -1,5 +1,5 @@
-import { CheckoutButton } from "@/components/checkout-button"
 import { createClient } from "@/lib/supabase/server"
+import { CheckoutButton } from "@/components/checkout-button"
 
 export default async function ProductsPage() {
   const supabase = await createClient()

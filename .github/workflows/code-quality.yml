@@ -24,20 +24,16 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
-
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: npm ci
 
       - name: Check formatting with Prettier
-        run: pnpm format
+        run: npx prettier --check "**/*.{js,jsx,ts,tsx,json,css,md}"
 
       - name: Auto-fix formatting (if on main branch)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
+          npx prettier --write "**/*.{js,jsx,ts,tsx,json,css,md}"
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add .
@@ -57,16 +53,11 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
-
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: npm ci
 
       - name: Run ESLint with auto-fix
-        run: pnpm lint -- --fix
+        run: npm run lint -- --fix
 
       - name: Commit auto-fixes (if on main branch)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -90,16 +81,40 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
-
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: npm ci
 
       - name: TypeScript strict mode check
-        run: pnpm exec tsc --noEmit --strict
+        run: npx tsc --noEmit --strict
+
+  # Import Sorting
+  import-sort:
+    name: Import Sorting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Sort imports
+        run: |
+          npx eslint --fix --ext .ts,.tsx,.js,.jsx --rule 'import/order: error'
+
+      - name: Commit import sorting (if on main branch)
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .
+          git commit -m "refactor: sort imports" || echo "No import changes to commit"
 
   # Code Analysis
   analyze:
@@ -115,19 +130,20 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
-
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
-
-      - name: Generate codemaps
-        run: pnpm codemaps:generate
+        run: npm ci
 
       - name: Run codemaps analysis
-        run: pnpm codemaps:analyze
+        run: npm run codemaps:analyze
+
+      - name: Bundle analyzer
+        run: npx webpack-bundle-analyzer --mode static
+
+      - name: Upload bundle analysis
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-analysis
+          path: bundle-analyzer-report.html
 
   # Dead Code Detection
   dead-code:
@@ -143,16 +159,11 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
-
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: npm ci
 
       - name: Detect dead code
-        run: npx unimported || true
+        run: npx unimported
 
       - name: Upload dead code report
         uses: actions/upload-artifact@v4

@@ -1,9 +1,8 @@
 "use client"
 
-import type { User } from "@supabase/supabase-js"
 import { createContext, useContext, type ReactNode } from "react"
-
 import { useAuth } from "@/lib/hooks/use-auth"
+import type { User } from "@supabase/supabase-js"
 import type { Database } from "@/lib/types/database"
 
 type UserProfile = Database["public"]["Tables"]["users"]["Row"]

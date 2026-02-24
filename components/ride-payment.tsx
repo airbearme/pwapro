@@ -1,13 +1,12 @@
 "use client";
 
-import { MapPin, Clock, DollarSign, CreditCard, Smartphone, QrCode, Banknote } from "lucide-react";
 import { useState } from "react";
-
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
+import { MapPin, Clock, DollarSign, CreditCard, Smartphone, QrCode, Banknote } from "lucide-react";
 
 interface RidePaymentProps {
   ride: {

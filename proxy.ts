@@ -6,12 +6,12 @@ import { SECURITY_HEADERS } from "./lib/security-headers"
  * Timing-safe string comparison
  */
 function timingSafeEqual(a: string, b: string): boolean {
-  if (a.length !== b.length) return false;
-  let result = 0;
+  if (a.length !== b.length) return false
+  let result = 0
   for (let i = 0; i < a.length; i++) {
-    result |= a.charCodeAt(i) ^ b.charCodeAt(i);
+    result |= a.charCodeAt(i) ^ b.charCodeAt(i)
   }
-  return result === 0;
+  return result === 0
 }
 
 /**
@@ -49,10 +49,10 @@ export async function proxy(request: NextRequest) {
     const authHeader = request.headers.get("X-Admin-Secret")
 
     if (!adminSecret || !authHeader || !timingSafeEqual(adminSecret, authHeader)) {
-      return new NextResponse(
-        JSON.stringify({ error: "Unauthorized: Invalid or missing Admin Secret" }),
-        { status: 401, headers: { "Content-Type": "application/json" } }
-      )
+      return new NextResponse(JSON.stringify({ error: "Unauthorized: Invalid or missing Admin Secret" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      })
     }
   }
 
@@ -86,7 +86,7 @@ export async function proxy(request: NextRequest) {
   const isProtectedRoute =
     request.nextUrl.pathname.startsWith("/dashboard") ||
     request.nextUrl.pathname.startsWith("/driver") ||
-    request.nextUrl.pathname.startsWith("/map") && request.nextUrl.searchParams.has("auth")
+    (request.nextUrl.pathname.startsWith("/map") && request.nextUrl.searchParams.has("auth"))
 
   if (isProtectedRoute) {
     const {

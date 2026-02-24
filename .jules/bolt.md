@@ -1,0 +1,3 @@
+## 2025-05-22 - Optimized Leaflet Map Marker Updates
+**Learning:** In React applications with high-frequency real-time updates (like GPS tracking), Leaflet's `setIcon` and `setPopupContent` calls can become a bottleneck as they trigger DOM updates and style recalculations on every change. Standard React re-renders are also expensive for complex maps.
+**Action:** Use `React.memo` to prevent unnecessary component re-renders. Implement manual "dirty checking" on Leaflet marker instances by storing a hash of the data that affects the visual state. Only call expensive Leaflet API methods when this hash changes. Also, consolidate dynamic marker styles into a single global `<style>` block to avoid redundant style tags in the DOM.

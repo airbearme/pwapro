@@ -14,9 +14,9 @@ class AdvancedCodeMapsAnalyzer {
     this.projectRoot = process.cwd();
     this.outputDir = path.join(this.projectRoot, '.next/codemaps');
     this.metrics = {
-      components: {},
-      api: {},
-      utilities: {},
+      components: [],
+      api: [],
+      utilities: [],
       dependencies: {},
       performance: {},
       security: {},
@@ -661,6 +661,9 @@ class AdvancedCodeMapsAnalyzer {
     };
 
     // Write comprehensive report
+    if (!fs.existsSync(this.outputDir)) {
+      fs.mkdirSync(this.outputDir, { recursive: true });
+    }
     const reportPath = path.join(this.outputDir, 'advanced-analysis.json');
     fs.writeFileSync(reportPath, JSON.stringify(reports, null, 2));
 

@@ -430,6 +430,9 @@ class CodeMapsValidator {
     };
 
     // Write validation report
+    if (!fs.existsSync(this.outputDir)) {
+      fs.mkdirSync(this.outputDir, { recursive: true });
+    }
     const reportPath = path.join(this.outputDir, "validation-report.json");
     fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
 

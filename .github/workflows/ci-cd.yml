@@ -22,30 +22,31 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --no-frozen-lockfile
 
       - name: Show versions
         run: |
           node --version
-          npm --version
+          pnpm --version
 
       - name: TypeScript type check
-        run: npm run type-check
+        run: pnpm type-check
 
       - name: ESLint
-        run: npm run lint
-
-      - name: Validate codemaps
-        run: npm run codemaps:validate
+        run: pnpm lint
 
       - name: Generate codemaps
-        run: npm run codemaps:generate
+        run: pnpm codemaps:generate
 
-      - name: Build application
-        run: npm run build
+      - name: Validate codemaps
+        run: pnpm codemaps:validate
 
       - name: Upload npm logs (on failure)
         if: failure()

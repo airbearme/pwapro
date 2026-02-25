@@ -39,6 +39,12 @@ class CodeMapsValidator {
     console.log("🔍 Validating CodeMaps...\n");
 
     try {
+      // Ensure output directory exists
+      if (!fs.existsSync(this.outputDir)) {
+        fs.mkdirSync(this.outputDir, { recursive: true });
+        console.log("📁 Created output directory");
+      }
+
       // Check if output directory exists
       await this.checkOutputDirectory();
 
@@ -141,12 +147,14 @@ class CodeMapsValidator {
     const files = [];
 
     try {
-      const items = fs.readdirSync(this.outputDir);
-      items.forEach((item) => {
-        if (item.endsWith(".json")) {
-          files.push(item);
-        }
-      });
+      if (fs.existsSync(this.outputDir)) {
+        const items = fs.readdirSync(this.outputDir);
+        items.forEach((item) => {
+          if (item.endsWith(".json")) {
+            files.push(item);
+          }
+        });
+      }
     } catch (error) {
       this.errors.push(`Could not read output directory: ${error.message}`);
     }
@@ -306,6 +314,7 @@ class CodeMapsValidator {
 
     try {
       const walk = (currentDir) => {
+        if (!fs.existsSync(currentDir)) return;
         const items = fs.readdirSync(currentDir);
 
         items.forEach((item) => {
@@ -378,20 +387,22 @@ class CodeMapsValidator {
    */
   async validateFileSizes() {
     try {
-      const files = fs.readdirSync(this.outputDir, { withFileTypes: true });
+      if (fs.existsSync(this.outputDir)) {
+        const files = fs.readdirSync(this.outputDir, { withFileTypes: true });
 
-      files.forEach((file) => {
-        if (file.isFile()) {
-          const filePath = path.join(this.outputDir, file.name);
-          const stats = fs.statSync(filePath);
+        files.forEach((file) => {
+          if (file.isFile()) {
+            const filePath = path.join(this.outputDir, file.name);
+            const stats = fs.statSync(filePath);
 
-          if (stats.size > this.config.maxFileSize) {
-            this.warnings.push(
-              `File ${file.name} is large: ${this.formatBytes(stats.size)}`
-            );
+            if (stats.size > this.config.maxFileSize) {
+              this.warnings.push(
+                `File ${file.name} is large: ${this.formatBytes(stats.size)}`
+              );
+            }
           }
-        }
-      });
+        });
+      }
 
       console.log("✅ File sizes validated");
     } catch (error) {
@@ -441,8 +452,11 @@ class CodeMapsValidator {
    */
   countFiles() {
     try {
-      const files = fs.readdirSync(this.outputDir, { withFileTypes: true });
-      return files.filter((file) => file.isFile()).length;
+      if (fs.existsSync(this.outputDir)) {
+        const files = fs.readdirSync(this.outputDir, { withFileTypes: true });
+        return files.filter((file) => file.isFile()).length;
+      }
+      return 0;
     } catch {
       return 0;
     }

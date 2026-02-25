@@ -80,7 +80,9 @@ export async function proxy(request: NextRequest) {
   })
 
   // Refresh session if needed (automatic token refresh)
-  await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
   // Protect authenticated routes
   const isProtectedRoute =
@@ -88,17 +90,11 @@ export async function proxy(request: NextRequest) {
     request.nextUrl.pathname.startsWith("/driver") ||
     (request.nextUrl.pathname.startsWith("/map") && request.nextUrl.searchParams.has("auth"))
 
-  if (isProtectedRoute) {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-
-    if (!user) {
-      const url = request.nextUrl.clone()
-      url.pathname = "/auth/login"
-      url.searchParams.set("redirect", request.nextUrl.pathname)
-      return NextResponse.redirect(url)
-    }
+  if (isProtectedRoute && !user) {
+    const url = request.nextUrl.clone()
+    url.pathname = "/auth/login"
+    url.searchParams.set("redirect", request.nextUrl.pathname)
+    return NextResponse.redirect(url)
   }
 
   // Add security headers

@@ -1,17 +1,17 @@
 import { createServerClient } from "@supabase/ssr"
 import { NextResponse, type NextRequest } from "next/server"
 import { SECURITY_HEADERS } from "./lib/security-headers"
-import { env } from "@/lib/env"
 
 /**
  * Timing-safe string comparison to prevent side-channel attacks.
- * Uses a constant-time algorithm to compare two strings.
+ * Uses a constant-time algorithm to compare two strings of the same length.
  */
 function timingSafeEqual(a: string, b: string): boolean {
-  const aLen = a.length
-  const bLen = b.length
-  let result = aLen ^ bLen
-  for (let i = 0; i < Math.min(aLen, bLen); i++) {
+  if (a.length !== b.length) {
+    return false
+  }
+  let result = 0
+  for (let i = 0; i < a.length; i++) {
     result |= a.charCodeAt(i) ^ b.charCodeAt(i)
   }
   return result === 0
@@ -25,8 +25,13 @@ function timingSafeEqual(a: string, b: string): boolean {
  * - Administrative endpoint protection (X-Admin-Secret)
  */
 export async function middleware(request: NextRequest) {
-  const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_PWA4_URL
-  const supabaseAnonKey = env.NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_PWA4_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    console.error("Missing Supabase environment variables in middleware")
+    return NextResponse.next()
+  }
 
   let supabaseResponse = NextResponse.next({
     request,
@@ -39,7 +44,7 @@ export async function middleware(request: NextRequest) {
     request.nextUrl.pathname.startsWith("/api/airbear/update-location")
 
   if (isAdminRoute) {
-    const adminSecret = env.ADMIN_SECRET
+    const adminSecret = process.env.ADMIN_SECRET
     const providedSecret = request.headers.get("X-Admin-Secret")
 
     if (!adminSecret || !providedSecret || !timingSafeEqual(adminSecret, providedSecret)) {

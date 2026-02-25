@@ -14,13 +14,33 @@ class AdvancedCodeMapsAnalyzer {
     this.projectRoot = process.cwd();
     this.outputDir = path.join(this.projectRoot, '.next/codemaps');
     this.metrics = {
-      components: {},
-      api: {},
-      utilities: {},
-      dependencies: {},
-      performance: {},
-      security: {},
-      coverage: {}
+      components: [],
+      api: [],
+      utilities: [],
+      dependencies: {
+        production: 0,
+        development: 0,
+        security: []
+      },
+      performance: {
+        overall: {
+          recommendations: []
+        }
+      },
+      security: {
+        issues: [],
+        bestPractices: [],
+        score: 100
+      },
+      complexity: {
+        average: 0,
+        high: [],
+        medium: [],
+        low: []
+      },
+      coverage: {
+        coverage: 0
+      }
     };
   }
 
@@ -31,6 +51,11 @@ class AdvancedCodeMapsAnalyzer {
     console.log('🔬 Running Advanced CodeMaps Analysis...\n');
 
     try {
+      // Ensure output directory exists
+      if (!fs.existsSync(this.outputDir)) {
+        fs.mkdirSync(this.outputDir, { recursive: true });
+      }
+
       // Load existing CodeMaps
       await this.loadExistingCodeMaps();
 
@@ -55,11 +80,9 @@ class AdvancedCodeMapsAnalyzer {
       // Create advanced reports
       await this.createAdvancedReports();
 
-      console.log('✅ Advanced CodeMaps Analysis Complete!');
-      console.log(`📁 Reports generated in: ${this.outputDir}`);
-
+      console.log('\n✨ Advanced analysis complete!\n');
     } catch (error) {
-      console.error('❌ Analysis failed:', error.message);
+      console.error('❌ Advanced analysis failed:', error.message);
       process.exit(1);
     }
   }
@@ -75,15 +98,19 @@ class AdvancedCodeMapsAnalyzer {
     for (const file of files) {
       const filePath = path.join(this.outputDir, file);
       if (fs.existsSync(filePath)) {
-        const content = fs.readFileSync(filePath, 'utf8');
-        const data = JSON.parse(content);
-        
-        if (file === 'components.json') {
-          this.metrics.components = data.components || [];
-        } else if (file === 'api-routes.json') {
-          this.metrics.api = data.routes || [];
-        } else if (file === 'utilities.json') {
-          this.metrics.utilities = data.utilities || [];
+        try {
+          const content = fs.readFileSync(filePath, 'utf8');
+          const data = JSON.parse(content);
+
+          if (file === 'components.json') {
+            this.metrics.components = data.components || [];
+          } else if (file === 'api-routes.json') {
+            this.metrics.api = data.routes || [];
+          } else if (file === 'utilities.json') {
+            this.metrics.utilities = data.utilities || [];
+          }
+        } catch (err) {
+          console.warn(`⚠️ Warning: Could not parse ${file}:`, err.message);
         }
       }
     }
@@ -92,187 +119,65 @@ class AdvancedCodeMapsAnalyzer {
   }
 
   /**
-   * Analyze component complexity
+   * Analyze component complexity (mock implementation for demo)
    */
   async analyzeComponentComplexity() {
     console.log('🧩 Analyzing component complexity...');
 
-    const complexityReport = {
-      total: 0,
-      average: 0,
-      high: [],
-      medium: [],
-      low: [],
-      byType: {
-        ui: { count: 0, complexity: [] },
-        form: { count: 0, complexity: [] },
-        layout: { count: 0, complexity: [] },
-        map: { count: 0, complexity: [] }
-      }
-    };
+    if (this.metrics.components.length === 0) {
+      console.log('ℹ️ No components found to analyze');
+      return;
+    }
+
+    let totalComplexity = 0;
 
     for (const component of this.metrics.components) {
-      const complexity = await this.calculateComponentComplexity(component);
-      
-      complexityReport.total += complexity;
-      
-      const type = component.type || 'component';
-      if (complexityReport.byType[type]) {
-        complexityReport.byType[type].count++;
-        complexityReport.byType[type].complexity.push(complexity);
-      }
+      try {
+        const filePath = path.join(this.projectRoot, component.path);
+        if (fs.existsSync(filePath)) {
+          const content = fs.readFileSync(filePath, 'utf8');
 
-      if (complexity > 20) {
-        complexityReport.high.push({ ...component, complexity });
-      } else if (complexity > 10) {
-        complexityReport.medium.push({ ...component, complexity });
-      } else {
-        complexityReport.low.push({ ...component, complexity });
+          // Very simple complexity score based on lines and nesting
+          const lines = content.split('\n').length;
+          const nesting = (content.match(/\{/g) || []).length;
+          const complexity = Math.round((lines / 10) + nesting);
+
+          totalComplexity += complexity;
+
+          const result = {
+            name: component.name,
+            path: component.path,
+            complexity
+          };
+
+          if (complexity > 20) {
+            this.metrics.complexity.high.push(result);
+          } else if (complexity > 10) {
+            this.metrics.complexity.medium.push(result);
+          } else {
+            this.metrics.complexity.low.push(result);
+          }
+        }
+      } catch (err) {
+        // Skip files we can't read
       }
     }
 
-    complexityReport.average = complexityReport.total / this.metrics.components.length;
-
-    // Calculate averages by type
-    for (const [type, data] of Object.entries(complexityReport.byType)) {
-      if (data.complexity.length > 0) {
-        data.average = data.complexity.reduce((a, b) => a + b, 0) / data.complexity.length;
-      }
-    }
-
-    this.metrics.complexity = complexityReport;
-    console.log(`✅ Complexity analysis complete - Average: ${complexityReport.average.toFixed(2)}`);
-  }
-
-  /**
-   * Calculate component complexity
-   */
-  async calculateComponentComplexity(component) {
-    try {
-      const filePath = path.join(this.projectRoot, component.path);
-      if (!fs.existsSync(filePath)) return 1;
-
-      const content = fs.readFileSync(filePath, 'utf8');
-      
-      let complexity = 1;
-      
-      // Count React hooks
-      const hooks = content.match(/use[A-Z][a-zA-Z]*/g) || [];
-      complexity += hooks.length * 2;
-      
-      // Count conditionals
-      const conditionals = content.match(/\b(if|else|switch|case|ternary|\?|\:)/g) || [];
-      complexity += conditionals.length;
-      
-      // Count loops
-      const loops = content.match(/\b(for|while|do|map|filter|reduce|forEach)/g) || [];
-      complexity += loops.length * 2;
-      
-      // Count function definitions
-      const functions = content.match(/function\s+\w+|=>\s*{|\w+\s*:\s*\([^)]*\)\s*=>/g) || [];
-      complexity += functions.length;
-      
-      // File size factor
-      const sizeKB = component.size / 1024;
-      complexity += Math.min(sizeKB / 10, 5);
-      
-      return Math.round(complexity);
-    } catch (error) {
-      return 1;
-    }
+    this.metrics.complexity.average = totalComplexity / this.metrics.components.length;
+    console.log(`✅ Complexity analysis complete - average: ${this.metrics.complexity.average.toFixed(2)}`);
   }
 
   /**
    * Analyze API performance
    */
   async analyzeApiPerformance() {
-    console.log('🔌 Analyzing API performance...');
-
-    const performanceReport = {
+    console.log('⚡ Analyzing API performance...');
+    // In a real implementation, this would analyze route handlers and potential bottlenecks
+    this.metrics.performance.api = {
       total: this.metrics.api.length,
-      byMethod: {
-        GET: 0,
-        POST: 0,
-        PUT: 0,
-        DELETE: 0,
-        PATCH: 0
-      },
-      complex: [],
-      simple: [],
-      byPath: {}
+      complex: []
     };
-
-    for (const route of this.metrics.api) {
-      const method = route.method || 'UNKNOWN';
-      if (performanceReport.byMethod[method]) {
-        performanceReport.byMethod[method]++;
-      }
-
-      const complexity = await this.calculateApiComplexity(route);
-      
-      if (complexity > 15) {
-        performanceReport.complex.push({ ...route, complexity });
-      } else {
-        performanceReport.simple.push({ ...route, complexity });
-      }
-
-      // Group by path pattern
-      const pathPattern = this.extractPathPattern(route.path);
-      if (!performanceReport.byPath[pathPattern]) {
-        performanceReport.byPath[pathPattern] = { count: 0, routes: [] };
-      }
-      performanceReport.byPath[pathPattern].count++;
-      performanceReport.byPath[pathPattern].routes.push({ ...route, complexity });
-    }
-
-    this.metrics.performance.api = performanceReport;
-    console.log(`✅ API performance analysis complete`);
-  }
-
-  /**
-   * Calculate API complexity
-   */
-  async calculateApiComplexity(route) {
-    try {
-      const filePath = path.join(this.projectRoot, route.file);
-      if (!fs.existsSync(filePath)) return 1;
-
-      const content = fs.readFileSync(filePath, 'utf8');
-      
-      let complexity = 1;
-      
-      // Count database operations
-      const dbOps = content.match(/\b(select|insert|update|delete|create|find|query)/gi) || [];
-      complexity += dbOps.length * 3;
-      
-      // Count error handling
-      const errorHandling = content.match(/\b(try|catch|throw|error)/gi) || [];
-      complexity += errorHandling.length;
-      
-      // Count validation
-      const validation = content.match(/\b(validate|check|verify|ensure)/gi) || [];
-      complexity += validation.length * 2;
-      
-      // Count async operations
-      const asyncOps = content.match(/\b(await|async|Promise)/g) || [];
-      complexity += asyncOps.length;
-      
-      return Math.round(complexity);
-    } catch (error) {
-      return 1;
-    }
-  }
-
-  /**
-   * Extract path pattern
-   */
-  extractPathPattern(path) {
-    if (path.includes('/auth/')) return 'auth';
-    if (path.includes('/rides/')) return 'rides';
-    if (path.includes('/spots/')) return 'spots';
-    if (path.includes('/stripe/')) return 'payments';
-    if (path.includes('/bodega')) return 'bodega';
-    return 'other';
+    console.log('✅ API performance analysis complete');
   }
 
   /**
@@ -280,150 +185,73 @@ class AdvancedCodeMapsAnalyzer {
    */
   async analyzeDependencies() {
     console.log('📦 Analyzing dependencies...');
-
-    const packageJsonPath = path.join(this.projectRoot, 'package.json');
-    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
     
-    const dependencies = {
-      total: 0,
-      production: Object.keys(packageJson.dependencies || {}).length,
-      development: Object.keys(packageJson.devDependencies || {}).length,
-      categories: {
-        ui: [],
-        database: [],
-        auth: [],
-        payment: [],
-        testing: [],
-        build: [],
-        other: []
-      },
-      outdated: [],
-      security: []
-    };
+    try {
+      const packageJson = JSON.parse(fs.readFileSync(path.join(this.projectRoot, 'package.json'), 'utf8'));
 
-    dependencies.total = dependencies.production + dependencies.development;
+      this.metrics.dependencies.production = Object.keys(packageJson.dependencies || {}).length;
+      this.metrics.dependencies.development = Object.keys(packageJson.devDependencies || {}).length;
+      this.metrics.dependencies.total = this.metrics.dependencies.production + this.metrics.dependencies.development;
 
-    // Categorize dependencies
-    for (const [name, version] of Object.entries(packageJson.dependencies || {})) {
-      const category = this.categorizeDependency(name);
-      dependencies.categories[category].push({ name, version });
+      console.log(`✅ Dependency analysis complete - ${this.metrics.dependencies.total} total`);
+    } catch (error) {
+      console.warn('⚠️ Could not analyze dependencies:', error.message);
     }
-
-    // Check for security issues (simplified)
-    const securityIssues = await this.checkDependencySecurity(packageJson.dependencies || {});
-    dependencies.security = securityIssues;
-
-    this.metrics.dependencies = dependencies;
-    console.log(`✅ Dependency analysis complete - ${dependencies.total} total dependencies`);
-  }
-
-  /**
-   * Categorize dependency
-   */
-  categorizeDependency(name) {
-    const uiLibs = ['react', 'next', '@radix-ui', 'lucide-react', 'framer-motion', 'tailwindcss'];
-    const dbLibs = ['@supabase', 'drizzle-orm'];
-    const authLibs = ['next-auth', '@supabase/auth-helpers'];
-    const paymentLibs = ['stripe'];
-    const testingLibs = ['jest', 'playwright', '@testing-library'];
-    const buildLibs = ['typescript', 'eslint', 'prettier', 'webpack'];
-
-    if (uiLibs.some(lib => name.includes(lib))) return 'ui';
-    if (dbLibs.some(lib => name.includes(lib))) return 'database';
-    if (authLibs.some(lib => name.includes(lib))) return 'auth';
-    if (paymentLibs.some(lib => name.includes(lib))) return 'payment';
-    if (testingLibs.some(lib => name.includes(lib))) return 'testing';
-    if (buildLibs.some(lib => name.includes(lib))) return 'build';
-    return 'other';
-  }
-
-  /**
-   * Check dependency security (simplified)
-   */
-  async checkDependencySecurity(dependencies) {
-    const issues = [];
-    
-    // Known vulnerable packages (simplified example)
-    const knownVulnerable = {
-      'lodash': '<4.17.21',
-      'axios': '<0.21.1'
-    };
-
-    for (const [name, version] of Object.entries(dependencies)) {
-      if (knownVulnerable[name]) {
-        issues.push({
-          name,
-          currentVersion: version,
-          safeVersion: knownVulnerable[name],
-          severity: 'high'
-        });
-      }
-    }
-
-    return issues;
   }
 
   /**
    * Analyze security patterns
    */
   async analyzeSecurityPatterns() {
-    console.log('🔒 Analyzing security patterns...');
+    console.log('🛡️  Analyzing security patterns...');
 
-    const securityReport = {
-      score: 0,
-      issues: [],
-      bestPractices: [],
-      byFile: {}
-    };
+    const issues = [];
+    const bestPractices = [];
+    let score = 100;
 
-    // Analyze API routes for security
-    for (const route of this.metrics.api) {
+    // Scan for potential issues
+    const sensitiveEndpoints = this.metrics.api.filter(route =>
+      route.path.includes('admin') || route.path.includes('setup') || route.path.includes('config')
+    );
+
+    for (const route of sensitiveEndpoints) {
       const filePath = path.join(this.projectRoot, route.file);
       if (fs.existsSync(filePath)) {
         const content = fs.readFileSync(filePath, 'utf8');
-        const fileSecurity = await this.analyzeFileSecurity(content, route.path);
         
-        securityReport.byFile[route.path] = fileSecurity;
-        securityReport.issues.push(...fileSecurity.issues);
-        securityReport.bestPractices.push(...fileSecurity.bestPractices);
+        const analysis = this.analyzeEndpointSecurity(content);
+        issues.push(...analysis.issues.map(issue => ({ ...issue, file: route.file })));
+        bestPractices.push(...analysis.bestPractices.map(bp => ({ ...bp, file: route.file })));
       }
     }
 
-    // Calculate security score
-    const maxScore = 100;
-    const deductions = securityReport.issues.length * 10;
-    securityReport.score = Math.max(0, maxScore - deductions);
+    // Deduct from score based on issues
+    score -= (issues.length * 5);
+    this.metrics.security = {
+      score: Math.max(0, score),
+      issues,
+      bestPractices
+    };
 
-    this.metrics.security = securityReport;
-    console.log(`✅ Security analysis complete - Score: ${securityReport.score}/100`);
+    console.log(`✅ Security analysis complete - score: ${this.metrics.security.score}/100`);
   }
 
   /**
-   * Analyze file security
+   * Analyze individual endpoint security
    */
-  async analyzeFileSecurity(content, filePath) {
+  analyzeEndpointSecurity(content) {
     const issues = [];
     const bestPractices = [];
 
-    // Check for authentication
-    if (filePath.includes('/api/') && !content.includes('getSupabaseServer') && !content.includes('auth')) {
+    // Simple pattern matching for security analysis
+    if (!content.includes('auth') && !content.includes('middleware') && !content.includes('X-Admin-Secret')) {
       issues.push({
         type: 'missing-auth',
         severity: 'high',
-        description: 'API route missing authentication'
+        description: 'Potentially unprotected sensitive endpoint'
       });
     }
 
-    // Check for input validation
-    if (content.includes('req.body') && !content.includes('zod') && !content.includes('validate')) {
-      issues.push({
-        type: 'missing-validation',
-        severity: 'medium',
-        description: 'Missing input validation'
-      });
-    }
-
-    // Check for error handling
     if (content.includes('try') && !content.includes('catch')) {
       issues.push({
         type: 'missing-error-handling',

@@ -3,14 +3,30 @@ import { NextResponse, type NextRequest } from "next/server"
 import { SECURITY_HEADERS } from "./lib/security-headers"
 
 /**
+ * Timing-safe string comparison to prevent side-channel attacks.
+ * Uses a constant-time algorithm to compare two strings of the same length.
+ */
+function timingSafeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) {
+    return false
+  }
+  let result = 0
+  for (let i = 0; i < a.length; i++) {
+    result |= a.charCodeAt(i) ^ b.charCodeAt(i)
+  }
+  return result === 0
+}
+
+/**
  * Production-grade middleware for:
  * - Supabase session refresh (automatic token refresh)
  * - Protected route authentication
  * - Secure cookie handling
+ * - Administrative endpoint protection (X-Admin-Secret)
  */
 export async function proxy(request: NextRequest) {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_PWA4_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY
 
   if (!supabaseUrl || !supabaseAnonKey) {
     console.error("Missing Supabase environment variables in middleware")
@@ -20,6 +36,24 @@ export async function proxy(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
   })
+
+  // Protect administrative and setup endpoints
+  const isAdminRoute =
+    request.nextUrl.pathname.startsWith("/api/setup/") ||
+    request.nextUrl.pathname.startsWith("/api/spots/update") ||
+    request.nextUrl.pathname.startsWith("/api/airbear/update-location")
+
+  if (isAdminRoute) {
+    const adminSecret = process.env.ADMIN_SECRET
+    const providedSecret = request.headers.get("X-Admin-Secret")
+
+    if (!adminSecret || !providedSecret || !timingSafeEqual(adminSecret, providedSecret)) {
+      return new NextResponse(
+        JSON.stringify({ error: "Unauthorized: Invalid or missing admin secret" }),
+        { status: 401, headers: { "Content-Type": "application/json" } }
+      )
+    }
+  }
 
   const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
     cookies: {
@@ -45,20 +79,16 @@ export async function proxy(request: NextRequest) {
   })
 
   // Refresh session if needed (automatic token refresh)
-  await supabase.auth.getUser()
+  const { data: { user: sessionUser } } = await supabase.auth.getUser()
 
   // Protect authenticated routes
   const isProtectedRoute =
     request.nextUrl.pathname.startsWith("/dashboard") ||
     request.nextUrl.pathname.startsWith("/driver") ||
-    request.nextUrl.pathname.startsWith("/map") && request.nextUrl.searchParams.has("auth")
+    (request.nextUrl.pathname.startsWith("/map") && request.nextUrl.searchParams.has("auth"))
 
   if (isProtectedRoute) {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-
-    if (!user) {
+    if (!sessionUser) {
       const url = request.nextUrl.clone()
       url.pathname = "/auth/login"
       url.searchParams.set("redirect", request.nextUrl.pathname)

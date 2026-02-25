@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, memo } from "react";
+import { useEffect, useRef, useState, memo, useMemo } from "react";
 import type { AirbearLocation } from "@/lib/supabase/realtime";
 import type { Database } from "@/lib/types/database";
 
@@ -12,11 +12,11 @@ interface MapViewProps {
   onSpotSelect?: (spot: Spot) => void;
 }
 
-const MapView = memo(({
-  spots,
-  airbears,
-  onSpotSelect,
-}: MapViewProps) => {
+/**
+ * MapView component optimized for real-time tracking.
+ * Implements marker recycling and multi-tier dirty checking to minimize DOM updates.
+ */
+function MapView({ spots, airbears, onSpotSelect }: MapViewProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
   const markersRef = useRef<Map<string, any>>(new Map());
@@ -74,7 +74,7 @@ const MapView = memo(({
 
         // Dynamically import Leaflet
         const L = (await import("leaflet")).default;
-        
+
         if (!L || !L.map) {
           throw new Error("Leaflet failed to load");
         }
@@ -99,7 +99,7 @@ const MapView = memo(({
           zoomControl: true,
           preferCanvas: true,
         });
-        
+
         // Invalidate size to ensure map renders
         map.invalidateSize();
         let resizeObserver: ResizeObserver | null = null;
@@ -114,7 +114,7 @@ const MapView = memo(({
           window.addEventListener("resize", resizeHandler);
         }
 
-        // Use beautiful CartoDB Positron tiles (free, beautiful, no API key needed)
+        // Use beautiful CartoDB Positron tiles
         L.tileLayer(
           "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
           {
@@ -124,10 +124,9 @@ const MapView = memo(({
             maxZoom: 19,
             tileSize: 256,
             zoomOffset: 0,
-          }
+          },
         ).addTo(map);
 
-        // Add custom styling for Binghamton
         map.on("load", () => {
           setMapLoaded(true);
         });
@@ -136,7 +135,7 @@ const MapView = memo(({
         mapInstanceRef.current.__resizeObserver = resizeObserver;
         mapInstanceRef.current.__resizeHandler = resizeHandler;
         setMapLoaded(true);
-        
+
         // Setup global booking function
         const handleSpotSelect = onSpotSelectRef.current;
         if (typeof window !== "undefined" && handleSpotSelect) {
@@ -151,7 +150,7 @@ const MapView = memo(({
         console.error("❌ Error initializing map:", error);
         setMapLoaded(false);
         setMapError(
-          error instanceof Error ? error.message : "Map failed to load"
+          error instanceof Error ? error.message : "Map failed to load",
         );
       }
     };
@@ -166,7 +165,7 @@ const MapView = memo(({
         if (mapInstanceRef.current.__resizeHandler) {
           window.removeEventListener(
             "resize",
-            mapInstanceRef.current.__resizeHandler
+            mapInstanceRef.current.__resizeHandler,
           );
         }
         mapInstanceRef.current.remove();
@@ -175,420 +174,505 @@ const MapView = memo(({
     };
   }, []);
 
+  // Optimized update logic for markers
   useEffect(() => {
     if (!mapInstanceRef.current || !LeafletRef.current || !mapLoaded) return;
 
     const map = mapInstanceRef.current;
     const L = LeafletRef.current;
+    const currentMarkers = markersRef.current;
+    const newMarkerIds = new Set<string>();
 
-    // ⚡ Bolt: Use a Set for O(1) lookup of current spots
-    const currentSpotIds = new Set(spots.map(s => `spot-${s.id}`));
-
-    // ⚡ Bolt: Remove only markers that are no longer in the spots list
-    markersRef.current.forEach((marker, id) => {
-      if (id.startsWith("spot-") && !currentSpotIds.has(id)) {
-        marker.remove();
-        markersRef.current.delete(id);
-      }
-    });
-
-    // Add/Update spot markers with beautiful styling
+    // Render Spots
     spots.forEach((spot) => {
       const markerId = `spot-${spot.id}`;
+      newMarkerIds.add(markerId);
+
       const airbearsAtSpot = airbears.filter(
-        (a) => a.current_spot_id === spot.id && a.is_available
+        (a) => a.current_spot_id === spot.id && a.is_available,
       );
-      const count = airbearsAtSpot.length;
-      const hasAvailableAirbears = count > 0;
+      const hasAvailableAirbears = airbearsAtSpot.length > 0;
 
-      // ⚡ Bolt: Dirty checking - separate icon state from popup content state
-      const iconState = `${count}-${hasAvailableAirbears}`;
-      const dataHash = `${spot.name}-${spot.description}-${spot.amenities?.join(",")}`;
-      let marker = markersRef.current.get(markerId);
+      // Visual state for dirty checking setIcon
+      const iconState = `${hasAvailableAirbears ? "available" : "empty"}-${airbearsAtSpot.length}`;
 
-      if (marker && marker.__iconState === iconState && marker.__dataHash === dataHash) return;
+      // Data hash for dirty checking setPopupContent
+      const dataHash = `${spot.name}|${spot.description}|${airbearsAtSpot.length}|${spot.amenities?.join(",")}`;
 
-      const icon = L.divIcon({
-        html: `
-          <div style="position: relative; cursor: pointer; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));">
-            <div style="
-              width: 56px;
-              height: 56px;
-              background: ${
-                hasAvailableAirbears
-                  ? "linear-gradient(135deg, #10b981, #059669, #047857)"
-                  : "linear-gradient(135deg, #9ca3af, #6b7280)"
-              };
-              border: 5px solid white;
-              border-radius: 50%;
-              box-shadow: 0 6px 20px rgba(0,0,0,0.3), 
-                          0 0 0 3px ${
-                            hasAvailableAirbears
-                              ? "rgba(16, 185, 129, 0.3)"
-                              : "rgba(107, 114, 128, 0.3)"
-                          },
-                          inset 0 2px 4px rgba(255,255,255,0.3);
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-size: 28px;
-              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-              animation: ${
-                hasAvailableAirbears
-                  ? "map-pulse-glow 2s ease-in-out infinite"
-                  : "none"
-              };
-              overflow: hidden;
-            " 
-            onmouseover="this.style.transform='scale(1.15)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.4), 0 0 0 5px ${
-              hasAvailableAirbears
-                ? "rgba(16, 185, 129, 0.5)"
-                : "rgba(107, 114, 128, 0.5)"
-            }'" 
-            onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 6px 20px rgba(0,0,0,0.3), 0 0 0 3px ${
-              hasAvailableAirbears
-                ? "rgba(16, 185, 129, 0.3)"
-                : "rgba(107, 114, 128, 0.3)"
-            }'">
-              <img src="/airbear-mascot.png" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;" alt="AirBear" />
-            </div>
-            ${
-              hasAvailableAirbears
-                ? `
-              <div style="
-                position: absolute;
-                top: -10px;
-                right: -10px;
-                background: linear-gradient(135deg, #ef4444, #dc2626);
-                color: white;
-                border-radius: 50%;
-                width: 28px;
-                height: 28px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 14px;
-                font-weight: bold;
-                border: 4px solid white;
-                box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
-                animation: map-pulse 1.5s ease-in-out infinite;
-              "><img src="/airbear-mascot.png" style="width: 16px; height: 16px; border-radius: 50%; object-fit: cover;" alt="AirBear" /></div>
-            `
-                : ""
-            }
+      let marker = currentMarkers.get(markerId);
+
+      const iconHtml = `
+        <div class="spot-marker-container">
+          <div class="spot-marker-outer ${hasAvailableAirbears ? "spot-available" : "spot-empty"}"
+               onmouseover="this.classList.add('spot-hover')"
+               onmouseout="this.classList.remove('spot-hover')">
+            <img src="/airbear-mascot.png" class="spot-marker-image" alt="AirBear" />
           </div>
-        `,
-        className: "bg-transparent border-0",
-        iconSize: [56, 56],
-        iconAnchor: [28, 56],
-        popupAnchor: [0, -56],
-      });
+          ${hasAvailableAirbears ? `<div class="spot-badge-container"><img src="/airbear-mascot.png" class="spot-badge-image" alt="AirBear" /></div>` : ""}
+        </div>
+      `;
 
-      if (marker) {
-        if (marker.__iconState !== iconState) {
-          marker.setIcon(icon);
-        }
-      } else {
+      if (!marker) {
+        const icon = L.divIcon({
+          html: iconHtml,
+          className: "bg-transparent border-0",
+          iconSize: [56, 56],
+          iconAnchor: [28, 56],
+          popupAnchor: [0, -56],
+        });
         marker = L.marker([spot.latitude, spot.longitude], { icon }).addTo(map);
-        markersRef.current.set(markerId, marker);
-      }
+        (marker as any).__iconState = iconState;
+        (marker as any).__dataHash = dataHash;
 
-      // Store states for dirty checking
-      marker.__iconState = iconState;
-      marker.__dataHash = dataHash;
-
-      const popupContent = `
-        <div style="min-width: 240px; padding: 12px; font-family: system-ui, -apple-system, sans-serif;">
-          <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #1f2937; background: linear-gradient(135deg, #10b981, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">${
-            spot.name
-          }</h3>
-          ${
-            spot.description
-              ? `<p style="margin-bottom: 12px; color: #6b7280; font-size: 14px; line-height: 1.5;">${spot.description}</p>`
-              : ""
-          }
-          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px; padding: 10px; background: ${
-            hasAvailableAirbears
-              ? "linear-gradient(135deg, #ecfdf5, #d1fae5)"
-              : "#f3f4f6"
-          }; border-radius: 10px; border: 2px solid ${
-        hasAvailableAirbears ? "#10b981" : "#9ca3af"
-      };">
-            <div style="width: 20px; height: 20px; background: ${
-              hasAvailableAirbears ? "#10b981" : "#9ca3af"
-            }; border-radius: 50%; box-shadow: 0 0 12px ${
-        hasAvailableAirbears ? "#10b981" : "#9ca3af"
-      }; animation: ${
-        hasAvailableAirbears ? "pulse 2s ease-in-out infinite" : "none"
-      };"></div>
-            <span style="font-weight: 700; color: ${
-              hasAvailableAirbears ? "#047857" : "#4b5563"
-            }; font-size: 15px;">${airbearsAtSpot.length} AirBear${
-        airbearsAtSpot.length !== 1 ? "s" : ""
-      } available</span>
-          </div>
-          ${
-            spot.amenities && spot.amenities.length > 0
-              ? `
-            <div style="font-size: 13px; color: #6b7280; background: linear-gradient(135deg, #f9fafb, #f3f4f6); padding: 8px 12px; border-radius: 8px; border-left: 4px solid #10b981;">
-              <strong style="color: #1f2937;">✨ Amenities:</strong> ${spot.amenities.join(
-                ", "
-              )}
-            </div>
-          `
-              : ""
-          }
-        </div>
-      `;
-
-      // Add booking button to popup
-      const bookingButton = `
-        <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #e5e7eb;">
-          <button 
-            onclick="window.selectSpotForBooking('${spot.id}')"
-            style="
-              width: 100%;
-              padding: 10px 16px;
-              background: linear-gradient(135deg, #10b981, #059669);
-              color: white;
-              border: none;
-              border-radius: 8px;
-              font-weight: 600;
-              font-size: 14px;
-              cursor: pointer;
-              transition: all 0.2s;
-              box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
-            "
-            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(16, 185, 129, 0.5)'"
-            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(16, 185, 129, 0.3)'"
-          >
-            📍 Book from Here
-          </button>
-        </div>
-      `;
-
-      marker.bindPopup(popupContent + bookingButton, {
-        maxWidth: 300,
-        className: "beautiful-popup",
-      });
-
-      // Setup click handler for booking
-      marker.on("click", () => {
-        if (onSpotSelect) {
-          onSpotSelect(spot);
+        marker.on("click", () => {
+          if (onSpotSelectRef.current) onSpotSelectRef.current(spot);
+        });
+        currentMarkers.set(markerId, marker);
+      } else {
+        // Recycle marker
+        if (
+          marker.getLatLng().lat !== spot.latitude ||
+          marker.getLatLng().lng !== spot.longitude
+        ) {
+          marker.setLatLng([spot.latitude, spot.longitude]);
         }
-      });
-
-    });
-  }, [spots, airbears, onSpotSelect, mapLoaded]);
-
-  useEffect(() => {
-    if (!mapInstanceRef.current || !LeafletRef.current || !mapLoaded) return;
-
-    const map = mapInstanceRef.current;
-    const L = LeafletRef.current;
-
-    // Update airbear markers
-    airbears.forEach((airbear) => {
-      // ⚡ Bolt: Only show free-roaming AirBears to avoid overlap with spot markers
-      // Units at spots are already represented by the spot's badge count.
-      if (airbear.current_spot_id) {
-        const existing = markersRef.current.get(`airbear-${airbear.id}`);
-        if (existing) {
-          existing.remove();
-          markersRef.current.delete(`airbear-${airbear.id}`);
+        if ((marker as any).__iconState !== iconState) {
+          marker.setIcon(
+            L.divIcon({
+              html: iconHtml,
+              className: "bg-transparent border-0",
+              iconSize: [56, 56],
+              iconAnchor: [28, 56],
+              popupAnchor: [0, -56],
+            }),
+          );
+          (marker as any).__iconState = iconState;
         }
-        return;
       }
 
-      const markerId = `airbear-${airbear.id}`;
-      let marker = markersRef.current.get(markerId);
-
-      // ⚡ Bolt: Dirty checking - separate icon state from popup/data state
-      const iconState = `${airbear.is_available}-${airbear.is_charging}`;
-      const dataHash = `${airbear.battery_level}-${airbear.is_available}-${airbear.is_charging}-${airbear.updated_at}`;
-
-      if (marker && marker.__iconState === iconState && marker.__dataHash === dataHash) {
-        marker.setLatLng([airbear.latitude, airbear.longitude]);
-        return;
-      }
-
-      const icon = L.divIcon({
-        html: `
-          <div style="position: relative; cursor: pointer; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));">
-            <div style="
-              width: 48px;
-              height: 48px;
-              background: linear-gradient(135deg, ${
-                airbear.is_available ? "#10b981" : "#6b7280"
-              }, ${airbear.is_available ? "#059669" : "#4b5563"});
-              border: 4px solid white;
-              border-radius: 50%;
-              box-shadow: 0 6px 18px rgba(0,0,0,0.35), 
-                          0 0 0 4px ${
-                            airbear.is_available
-                              ? "rgba(16, 185, 129, 0.25)"
-                              : "rgba(107, 114, 128, 0.25)"
-                          },
-                          inset 0 2px 4px rgba(255,255,255,0.3);
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-size: 24px;
-              animation: ${
-                airbear.is_available
-                  ? "map-pulse-glow 2s ease-in-out infinite"
-                  : "none"
-              };
-              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            " 
-            onmouseover="this.style.transform='scale(1.2)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.4), 0 0 0 6px ${
-              airbear.is_available
-                ? "rgba(16, 185, 129, 0.4)"
-                : "rgba(107, 114, 128, 0.4)"
-            }'" 
-            onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 6px 18px rgba(0,0,0,0.35), 0 0 0 4px ${
-              airbear.is_available
-                ? "rgba(16, 185, 129, 0.25)"
-                : "rgba(107, 114, 128, 0.25)"
-            }'">
-              <img src="/airbear-mascot.png" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover;" alt="AirBear" />
+      // Update popup if data changed
+      if ((marker as any).__dataHash !== dataHash) {
+        const popupContent = `
+          <div class="map-popup-content">
+            <h3 class="map-popup-title">${spot.name}</h3>
+            ${spot.description ? `<p class="map-popup-description">${spot.description}</p>` : ""}
+            <div class="map-popup-status-row ${hasAvailableAirbears ? "status-available" : "status-empty"}">
+              <div class="status-indicator ${hasAvailableAirbears ? "indicator-available" : "indicator-empty"}"></div>
+              <span class="status-text">${airbearsAtSpot.length} AirBear${airbearsAtSpot.length !== 1 ? "s" : ""} available</span>
             </div>
             ${
-              airbear.is_charging
+              spot.amenities && spot.amenities.length > 0
                 ? `
-              <div style="
-                position: absolute;
-                top: -8px;
-                right: -8px;
-                background: linear-gradient(135deg, #fbbf24, #f59e0b);
-                border-radius: 50%;
-                width: 22px;
-                height: 22px;
-                border: 3px solid white;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 12px;
-                box-shadow: 0 4px 12px rgba(251, 191, 36, 0.6);
-                animation: map-pulse 1.5s ease-in-out infinite;
-              ">⚡</div>
+              <div class="map-popup-amenities">
+                <strong>✨ Amenities:</strong> ${spot.amenities.join(", ")}
+              </div>
             `
                 : ""
             }
+            <div class="map-popup-footer">
+              <button onclick="window.selectSpotForBooking('${spot.id}')" class="map-booking-button">📍 Book from Here</button>
+            </div>
           </div>
-        `,
-        className: "bg-transparent border-0",
-        iconSize: [48, 48],
-        iconAnchor: [24, 24],
-        popupAnchor: [0, -24],
-      });
+        `;
+        marker.bindPopup(popupContent, {
+          maxWidth: 300,
+          className: "beautiful-popup",
+        });
+        (marker as any).__dataHash = dataHash;
+      }
+    });
 
-      if (marker) {
-        marker.setLatLng([airbear.latitude, airbear.longitude]);
-        if (marker.__iconState !== iconState) {
-          marker.setIcon(icon);
-        }
-      } else {
+    // Render AirBears
+    airbears.forEach((airbear) => {
+      const markerId = `airbear-${airbear.id}`;
+      newMarkerIds.add(markerId);
+
+      const iconState = `${airbear.is_available ? "available" : "busy"}-${airbear.is_charging ? "charging" : "normal"}`;
+      const dataHash = `${airbear.id}|${airbear.battery_level}|${airbear.is_available}|${airbear.is_charging}|${airbear.updated_at}`;
+
+      const iconHtml = `
+        <div class="airbear-marker-container">
+          <div class="airbear-marker-outer ${airbear.is_available ? "airbear-available" : "airbear-busy"}"
+               onmouseover="this.classList.add('airbear-hover')"
+               onmouseout="this.classList.remove('airbear-hover')">
+            <img src="/airbear-mascot.png" class="airbear-marker-image" alt="AirBear" />
+          </div>
+          ${airbear.is_charging ? `<div class="airbear-charging-badge">⚡</div>` : ""}
+        </div>
+      `;
+
+      let marker = currentMarkers.get(markerId);
+
+      if (!marker) {
+        const icon = L.divIcon({
+          html: iconHtml,
+          className: "bg-transparent border-0",
+          iconSize: [48, 48],
+          iconAnchor: [24, 24],
+          popupAnchor: [0, -24],
+        });
         marker = L.marker([airbear.latitude, airbear.longitude], {
           icon,
         }).addTo(map);
-        markersRef.current.set(markerId, marker);
-      }
-
-      // Update popup content if data changed
-      if (!marker.__dataHash || marker.__dataHash !== dataHash) {
-          const batteryColor =
-            airbear.battery_level > 50
-              ? "#10b981"
-              : airbear.battery_level > 20
-              ? "#f59e0b"
-              : "#ef4444";
-
-          const popupContent = `
-            <div style="min-width: 220px; padding: 12px; font-family: system-ui, -apple-system, sans-serif;">
-              <h4 style="font-size: 18px; font-weight: bold; margin-bottom: 12px; color: #1f2937; background: linear-gradient(135deg, #10b981, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">AirBear #${airbear.id.slice(
-                -4
-              )}</h4>
-              <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: linear-gradient(135deg, #f9fafb, #f3f4f6); border-radius: 8px; border-left: 4px solid ${batteryColor};">
-                  <span style="color: #6b7280; font-weight: 600;">🔋 Battery:</span>
-                  <div style="display: flex; align-items: center; gap: 8px;">
-                    <div style="width: 70px; height: 12px; background: #e5e7eb; border-radius: 6px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">
-                      <div style="width: ${
-                        airbear.battery_level
-                      }%; height: 100%; background: linear-gradient(90deg, ${batteryColor}, ${batteryColor}dd); transition: width 0.3s; box-shadow: 0 0 8px ${batteryColor}80;"></div>
-                    </div>
-                    <span style="font-weight: 700; color: ${batteryColor}; font-size: 15px;">${
-            airbear.battery_level
-          }%</span>
-                  </div>
-                </div>
-                <div style="display: flex; justify-content: space-between; padding: 8px; background: linear-gradient(135deg, #f9fafb, #f3f4f6); border-radius: 8px; border-left: 4px solid ${
-                  airbear.is_available ? "#10b981" : "#6b7280"
-                };">
-                  <span style="color: #6b7280; font-weight: 600;">Status:</span>
-                  <span style="font-weight: 700; color: ${
-                    airbear.is_available ? "#10b981" : "#6b7280"
-                  };">
-                    ${
-                      airbear.is_charging
-                        ? "⚡ Charging"
-                        : airbear.is_available
-                        ? "✓ Available"
-                        : "🚴 In Use"
-                    }
-                  </span>
-                </div>
-                <div style="font-size: 12px; color: #9ca3af; text-align: center; margin-top: 4px; padding-top: 8px; border-top: 1px solid #e5e7eb;">
-                  🕐 Last updated: ${new Date(
-                    airbear.updated_at
-                  ).toLocaleTimeString()}
-                </div>
-              </div>
-            </div>
-          `;
-          if (marker.getPopup()) {
-            marker.setPopupContent(popupContent);
-          } else {
-            marker.bindPopup(popupContent, {
-              maxWidth: 280,
-              className: "beautiful-popup",
-            });
-          }
-      }
-
-      // Store states for dirty checking
-      marker.__iconState = iconState;
-      marker.__dataHash = dataHash;
-    });
-
-    // Remove markers for airbears that no longer exist
-    markersRef.current.forEach((marker, id) => {
-      if (id.startsWith("airbear-")) {
-        const airbearId = id.replace("airbear-", "");
-        if (!airbears.find((a) => a.id === airbearId)) {
-          marker.remove();
-          markersRef.current.delete(id);
+        (marker as any).__iconState = iconState;
+        (marker as any).__dataHash = dataHash;
+        currentMarkers.set(markerId, marker);
+      } else {
+        if (
+          marker.getLatLng().lat !== airbear.latitude ||
+          marker.getLatLng().lng !== airbear.longitude
+        ) {
+          marker.setLatLng([airbear.latitude, airbear.longitude]);
+        }
+        if ((marker as any).__iconState !== iconState) {
+          marker.setIcon(
+            L.divIcon({
+              html: iconHtml,
+              className: "bg-transparent border-0",
+              iconSize: [48, 48],
+              iconAnchor: [24, 24],
+              popupAnchor: [0, -24],
+            }),
+          );
+          (marker as any).__iconState = iconState;
         }
       }
+
+      if ((marker as any).__dataHash !== dataHash) {
+        const batteryColor =
+          airbear.battery_level > 50
+            ? "#10b981"
+            : airbear.battery_level > 20
+              ? "#f59e0b"
+              : "#ef4444";
+        const popupContent = `
+          <div class="map-popup-content airbear-popup">
+            <h4 class="map-popup-title airbear-title">AirBear #${airbear.id.slice(-4)}</h4>
+            <div class="airbear-details">
+              <div class="detail-row" style="border-left: 4px solid ${batteryColor}">
+                <span class="detail-label">🔋 Battery:</span>
+                <div class="battery-container">
+                  <div class="battery-bar-bg"><div class="battery-bar-fill" style="width: ${airbear.battery_level}%; background: ${batteryColor};"></div></div>
+                  <span class="battery-percent" style="color: ${batteryColor}">${airbear.battery_level}%</span>
+                </div>
+              </div>
+              <div class="detail-row" style="border-left: 4px solid ${airbear.is_available ? "#10b981" : "#6b7280"}">
+                <span class="detail-label">Status:</span>
+                <span class="status-value" style="color: ${airbear.is_available ? "#10b981" : "#6b7280"}">${airbear.is_charging ? "⚡ Charging" : airbear.is_available ? "✓ Available" : "🚴 In Use"}</span>
+              </div>
+              <div class="last-updated">🕐 Last updated: ${new Date(airbear.updated_at).toLocaleTimeString()}</div>
+            </div>
+          </div>
+        `;
+        marker.bindPopup(popupContent, {
+          maxWidth: 280,
+          className: "beautiful-popup",
+        });
+        (marker as any).__dataHash = dataHash;
+      }
     });
-  }, [airbears, mapLoaded]);
+
+    // Cleanup removed markers
+    currentMarkers.forEach((marker, id) => {
+      if (!newMarkerIds.has(id)) {
+        marker.remove();
+        currentMarkers.delete(id);
+      }
+    });
+  }, [spots, airbears, mapLoaded]);
 
   return (
     <div className="relative">
-      <style>{`
-        @keyframes map-pulse {
-          0%, 100% { transform: scale(1); opacity: 1; }
-          50% { transform: scale(1.1); opacity: 0.9; }
+      <style jsx global>{`
+        .spot-marker-container {
+          position: relative;
+          cursor: pointer;
+          filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
         }
-        @keyframes map-pulse-glow {
-          0%, 100% {
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3), 0 0 0 3px rgba(16, 185, 129, 0.3), 0 0 20px rgba(16, 185, 129, 0.4);
+        .spot-marker-outer {
+          width: 56px;
+          height: 56px;
+          border: 5px solid white;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          overflow: hidden;
+        }
+        .spot-available {
+          background: linear-gradient(135deg, #10b981, #059669, #047857);
+          box-shadow:
+            0 6px 20px rgba(0, 0, 0, 0.3),
+            0 0 0 3px rgba(16, 185, 129, 0.3);
+          animation: pulse-glow 2s ease-in-out infinite;
+        }
+        .spot-empty {
+          background: linear-gradient(135deg, #9ca3af, #6b7280);
+          box-shadow:
+            0 6px 20px rgba(0, 0, 0, 0.3),
+            0 0 0 3px rgba(107, 114, 128, 0.3);
+        }
+        .spot-hover {
+          transform: scale(1.15);
+          box-shadow:
+            0 8px 25px rgba(0, 0, 0, 0.4),
+            0 0 0 5px rgba(16, 185, 129, 0.5) !important;
+        }
+        .spot-marker-image {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+        .spot-badge-container {
+          position: absolute;
+          top: -10px;
+          right: -10px;
+          background: linear-gradient(135deg, #ef4444, #dc2626);
+          border-radius: 50%;
+          width: 28px;
+          height: 28px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 4px solid white;
+          box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
+          animation: pulse 1.5s ease-in-out infinite;
+        }
+        .spot-badge-image {
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+
+        .airbear-marker-container {
+          position: relative;
+          cursor: pointer;
+          filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+        .airbear-marker-outer {
+          width: 48px;
+          height: 48px;
+          border: 4px solid white;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .airbear-available {
+          background: linear-gradient(135deg, #10b981, #059669);
+          box-shadow:
+            0 6px 18px rgba(0, 0, 0, 0.35),
+            0 0 0 4px rgba(16, 185, 129, 0.25);
+          animation: pulse-glow 2s ease-in-out infinite;
+        }
+        .airbear-busy {
+          background: linear-gradient(135deg, #6b7280, #4b5563);
+          box-shadow:
+            0 6px 18px rgba(0, 0, 0, 0.35),
+            0 0 0 4px rgba(107, 114, 128, 0.25);
+        }
+        .airbear-hover {
+          transform: scale(1.2);
+          box-shadow:
+            0 8px 25px rgba(0, 0, 0, 0.4),
+            0 0 0 6px rgba(16, 185, 129, 0.4) !important;
+        }
+        .airbear-marker-image {
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+        .airbear-charging-badge {
+          position: absolute;
+          top: -8px;
+          right: -8px;
+          background: linear-gradient(135deg, #fbbf24, #f59e0b);
+          border-radius: 50%;
+          width: 22px;
+          height: 22px;
+          border: 3px solid white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 12px;
+          box-shadow: 0 4px 12px rgba(251, 191, 36, 0.6);
+          animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+          0%,
+          100% {
+            transform: scale(1);
+            opacity: 1;
           }
           50% {
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3), 0 0 0 5px rgba(16, 185, 129, 0.6), 0 0 30px rgba(16, 185, 129, 0.8);
+            transform: scale(1.1);
+            opacity: 0.9;
           }
+        }
+        @keyframes pulse-glow {
+          0%,
+          100% {
+            box-shadow:
+              0 6px 20px rgba(0, 0, 0, 0.3),
+              0 0 0 3px rgba(16, 185, 129, 0.3),
+              0 0 20px rgba(16, 185, 129, 0.4);
+          }
+          50% {
+            box-shadow:
+              0 6px 20px rgba(0, 0, 0, 0.3),
+              0 0 0 5px rgba(16, 185, 129, 0.6),
+              0 0 30px rgba(16, 185, 129, 0.8);
+          }
+        }
+
+        .map-popup-content {
+          min-width: 240px;
+          padding: 12px;
+          font-family:
+            system-ui,
+            -apple-system,
+            sans-serif;
+        }
+        .map-popup-title {
+          font-size: 20px;
+          font-weight: bold;
+          margin-bottom: 10px;
+          color: #1f2937;
+          background: linear-gradient(135deg, #10b981, #059669);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+        .map-popup-description {
+          margin-bottom: 12px;
+          color: #6b7280;
+          font-size: 14px;
+          line-height: 1.5;
+        }
+        .map-popup-status-row {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-bottom: 12px;
+          padding: 10px;
+          border-radius: 10px;
+          border: 2px solid;
+        }
+        .status-available {
+          background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+          border-color: #10b981;
+        }
+        .status-empty {
+          background: #f3f4f6;
+          border-color: #9ca3af;
+        }
+        .status-indicator {
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+        }
+        .indicator-available {
+          background: #10b981;
+          box-shadow: 0 0 12px #10b981;
+          animation: pulse 2s ease-in-out infinite;
+        }
+        .indicator-empty {
+          background: #9ca3af;
+        }
+        .status-text {
+          font-weight: 700;
+          font-size: 15px;
+        }
+        .status-available .status-text {
+          color: #047857;
+        }
+        .status-empty .status-text {
+          color: #4b5563;
+        }
+        .map-popup-amenities {
+          font-size: 13px;
+          color: #6b7280;
+          background: linear-gradient(135deg, #f9fafb, #f3f4f6);
+          padding: 8px 12px;
+          border-radius: 8px;
+          border-left: 4px solid #10b981;
+        }
+        .map-booking-button {
+          width: 100%;
+          margin-top: 12px;
+          padding: 10px 16px;
+          background: linear-gradient(135deg, #10b981, #059669);
+          color: white;
+          border: none;
+          border-radius: 8px;
+          font-weight: 600;
+          font-size: 14px;
+          cursor: pointer;
+          transition: all 0.2s;
+          box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+        }
+        .map-booking-button:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.5);
+        }
+
+        .airbear-title {
+          font-size: 18px;
+        }
+        .airbear-details {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          font-size: 14px;
+        }
+        .detail-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 8px;
+          background: linear-gradient(135deg, #f9fafb, #f3f4f6);
+          border-radius: 8px;
+        }
+        .detail-label {
+          color: #6b7280;
+          font-weight: 600;
+        }
+        .battery-container {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .battery-bar-bg {
+          width: 70px;
+          height: 12px;
+          background: #e5e7eb;
+          border-radius: 6px;
+          overflow: hidden;
+          box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .battery-bar-fill {
+          height: 100%;
+          transition: width 0.3s;
+        }
+        .battery-percent {
+          font-weight: 700;
+          font-size: 15px;
+        }
+        .status-value {
+          font-weight: 700;
+        }
+        .last-updated {
+          font-size: 12px;
+          color: #9ca3af;
+          text-align: center;
+          margin-top: 4px;
+          padding-top: 8px;
+          border-top: 1px solid #e5e7eb;
         }
       `}</style>
       <div
@@ -613,17 +697,13 @@ const MapView = memo(({
                 : "Loading beautiful Binghamton map..."}
             </p>
             {mapError && (
-              <p className="mt-2 text-sm text-emerald-200/80">
-                {mapError}
-              </p>
+              <p className="mt-2 text-sm text-emerald-200/80">{mapError}</p>
             )}
           </div>
         </div>
       )}
     </div>
   );
-});
+}
 
-MapView.displayName = "MapView";
-
-export default MapView;
+export default memo(MapView);

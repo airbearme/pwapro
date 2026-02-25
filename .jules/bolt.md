@@ -1,3 +1,3 @@
-## 2026-02-25 - Leaflet Marker Optimization
-**Learning:** Calling Leaflet's `setIcon` on every real-time update is extremely expensive as it triggers DOM re-renders. Separating "icon visual state" from "popup data state" allows skipping `setIcon` when only metadata (like battery percentage) changes, while still keeping the UI reactive.
-**Action:** Always implement multi-tier dirty checking for map markers: one for the icon/visual representation and one for the popup/metadata content.
+## 2026-01-09 - Optimized MapView Real-time Updates
+**Learning:** Leaflet's `setIcon` is significantly more expensive than `setLatLng` or `setPopupContent` because it frequently triggers DOM re-renders of the marker element. Multi-tier dirty checking (separating visual state from data state) allows skipping `setIcon` while still updating popups.
+**Action:** Use a `markersRef` Map for marker recycling and implement dirty checking for `iconState` and `dataHash` in all high-frequency map components.

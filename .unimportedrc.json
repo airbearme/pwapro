@@ -1,0 +1,18 @@
+{
+  "entry": [
+    "app/**/*.{ts,tsx}",
+    "components/**/*.{ts,tsx}",
+    "lib/**/*.{ts,tsx}",
+    "middleware.ts"
+  ],
+  "extensions": [".ts", ".tsx", ".js", ".jsx"],
+  "ignorePatterns": [
+    "node_modules/**",
+    ".next/**",
+    "public/**",
+    "dist/**",
+    "**/__tests__/**",
+    "**/tests/**",
+    "scripts/**"
+  ]
+}

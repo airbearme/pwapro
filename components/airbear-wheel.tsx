@@ -33,6 +33,7 @@ const AirbearWheel = memo(
 
   return (
     <div
+      aria-hidden="true"
       className={cn(
         "airbear-wheel relative",
         sizeClasses[size],

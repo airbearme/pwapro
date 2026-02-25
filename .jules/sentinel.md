@@ -1,0 +1,4 @@
+## 2026-02-25 - Unprotected Administrative Endpoints and Middleware Misconfiguration
+**Vulnerability:** Critical administrative endpoints (/api/setup/*, /api/spots/update) were completely unprotected, allowing unauthorized data modification or deletion. Additionally, the security middleware was misconfigured (named proxy.ts instead of middleware.ts), preventing session refresh and sitewide security headers.
+**Learning:** Next.js middleware MUST be named middleware.ts in the root or src directory to be correctly identified and executed by the framework. Administrative protection should be centralized in middleware using timing-safe comparisons of a shared secret (ADMIN_SECRET) to prevent side-channel attacks.
+**Prevention:** Always verify middleware naming and execution. Centralize authentication checks for sensitive API routes in middleware and use robust environment variable validation (e.g., Zod) for all security-critical configurations.

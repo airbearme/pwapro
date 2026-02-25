@@ -1,6 +1,10 @@
 {
   "entry": [
-    "app/**/*.{ts,tsx}",
+    "app/**/page.{ts,tsx}",
+    "app/**/route.{ts,tsx}",
+    "app/**/layout.{ts,tsx}",
+    "app/**/error.{ts,tsx}",
+    "app/**/not-found.{ts,tsx}",
     "components/**/*.{ts,tsx}",
     "lib/**/*.{ts,tsx}",
     "middleware.ts"
@@ -13,6 +17,14 @@
     "dist/**",
     "**/__tests__/**",
     "**/tests/**",
-    "scripts/**"
+    "scripts/**",
+    "app.layout.analytics.tsx",
+    "app/layout.original.tsx",
+    "eslint.config.js",
+    "observability/logger.ts",
+    "postcss.config.js",
+    "proxy.ts",
+    "supabase/functions/**",
+    "tailwind.config.ts"
   ]
 }

@@ -26,5 +26,19 @@
     "proxy.ts",
     "supabase/functions/**",
     "tailwind.config.ts"
+  ],
+  "ignoreUnused": [
+    "@tailwindcss/postcss",
+    "@tanstack/react-query",
+    "@types/use-sync-external-store",
+    "date-fns",
+    "drizzle-zod",
+    "framer-motion",
+    "nanoid",
+    "react-leaflet",
+    "recharts",
+    "ssh2",
+    "ssh2-sftp-client",
+    "tailwindcss-animate"
   ]
 }

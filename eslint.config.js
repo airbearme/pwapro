@@ -1,4 +1,13 @@
+import { createRequire } from "module"
+const require = createRequire(import.meta.url)
+const importPlugin = require("eslint-plugin-import")
+
 export default [
+  {
+    plugins: {
+      import: importPlugin,
+    },
+  },
   {
     ignores: [
       "**/.next/**",

@@ -1,3 +1,10 @@
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+
+// Load plugins and parsers using createRequire for robust ESM support
+const importPlugin = require("eslint-plugin-import");
+const tseslintParser = require("@typescript-eslint/parser");
+
 export default [
   {
     ignores: [
@@ -18,6 +25,32 @@ export default [
       "**/observability/**",
       "**/supabase/functions/**",
     ],
+  },
+  {
+    files: ["**/*.{ts,tsx,js,jsx}"],
+    languageOptions: {
+      parser: tseslintParser,
+    },
+    plugins: {
+      import: importPlugin,
+    },
+    rules: {
+      "import/order": [
+        "warn",
+        {
+          groups: [
+            "builtin",
+            "external",
+            "internal",
+            "parent",
+            "sibling",
+            "index",
+          ],
+          "newlines-between": "always",
+          alphabetize: { order: "asc", caseInsensitive: true },
+        },
+      ],
+    },
   },
   {
     files: ["**/*.{js,jsx}"],

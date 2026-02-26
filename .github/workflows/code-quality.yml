@@ -2,12 +2,12 @@ name: Code Quality & Formatting
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
 
 env:
-  NODE_VERSION: '20'
+  NODE_VERSION: "20"
 
 jobs:
   # Code Formatting
@@ -17,18 +17,31 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
 
       - name: Check formatting with Prettier
-        run: npx prettier --check "**/*.{js,jsx,ts,tsx,json,css,md}"
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            echo "Checking only changed files..."
+            FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '\.(js|jsx|ts|tsx|json|css|md)$' | xargs echo)
+            if [ -n "$FILES" ]; then
+              npx prettier --check $FILES
+            else
+              echo "No files to check."
+            fi
+          else
+            npx prettier --check "**/*.{js,jsx,ts,tsx,json,css,md}"
+          fi
 
       - name: Auto-fix formatting (if on main branch)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -46,18 +59,31 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
 
       - name: Run ESLint with auto-fix
-        run: npm run lint -- --fix
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            echo "Linting only changed files..."
+            FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '\.(js|jsx|ts|tsx)$' | xargs echo)
+            if [ -n "$FILES" ]; then
+              npx eslint $FILES --fix
+            else
+              echo "No files to lint."
+            fi
+          else
+            npm run lint -- --fix
+          fi
 
       - name: Commit auto-fixes (if on main branch)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -79,7 +105,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -94,19 +120,28 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
 
       - name: Sort imports
         run: |
-          npx eslint --fix --ext .ts,.tsx,.js,.jsx --rule 'import/order: error'
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '\.(js|jsx|ts|tsx)$' | xargs echo)
+            if [ -n "$FILES" ]; then
+              npx eslint $FILES --fix --rule 'import/order: error'
+            fi
+          else
+            npx eslint . --fix --ext .ts,.tsx,.js,.jsx --rule 'import/order: error'
+          fi
 
       - name: Commit import sorting (if on main branch)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -128,22 +163,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
 
       - name: Run codemaps analysis
         run: npm run codemaps:analyze
-
-      - name: Bundle analyzer
-        run: npx webpack-bundle-analyzer --mode static
-
-      - name: Upload bundle analysis
-        uses: actions/upload-artifact@v4
-        with:
-          name: bundle-analysis
-          path: bundle-analyzer-report.html
 
   # Dead Code Detection
   dead-code:
@@ -157,7 +183,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci

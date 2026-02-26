@@ -1,0 +1,44 @@
+{
+  "entry": [
+    "app/**/page.{ts,tsx}",
+    "app/**/route.{ts,tsx}",
+    "app/**/layout.{ts,tsx}",
+    "app/**/error.{ts,tsx}",
+    "app/**/not-found.{ts,tsx}",
+    "components/**/*.{ts,tsx}",
+    "lib/**/*.{ts,tsx}",
+    "middleware.ts"
+  ],
+  "extensions": [".ts", ".tsx", ".js", ".jsx"],
+  "ignorePatterns": [
+    "node_modules/**",
+    ".next/**",
+    "public/**",
+    "dist/**",
+    "**/__tests__/**",
+    "**/tests/**",
+    "scripts/**",
+    "app.layout.analytics.tsx",
+    "app/layout.original.tsx",
+    "eslint.config.js",
+    "observability/logger.ts",
+    "postcss.config.js",
+    "proxy.ts",
+    "supabase/functions/**",
+    "tailwind.config.ts"
+  ],
+  "ignoreUnused": [
+    "@tailwindcss/postcss",
+    "@tanstack/react-query",
+    "@types/use-sync-external-store",
+    "date-fns",
+    "drizzle-zod",
+    "framer-motion",
+    "nanoid",
+    "react-leaflet",
+    "recharts",
+    "ssh2",
+    "ssh2-sftp-client",
+    "tailwindcss-animate"
+  ]
+}

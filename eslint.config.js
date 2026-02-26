@@ -1,4 +1,28 @@
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
+const importPlugin = require("eslint-plugin-import");
+const tsParser = require("@typescript-eslint/parser");
+const tsPlugin = require("@typescript-eslint/eslint-plugin");
+
 export default [
+  {
+    files: ["**/*.{ts,tsx,js,jsx}"],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: "latest",
+        sourceType: "module",
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+    plugins: {
+      import: importPlugin,
+      "@typescript-eslint": tsPlugin,
+    },
+  },
   {
     ignores: [
       "**/.next/**",

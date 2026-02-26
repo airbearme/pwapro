@@ -2,9 +2,11 @@ import { z } from "zod"
 
 const envSchema = z.object({
   // Supabase PWA4
-  NEXT_PUBLIC_SUPABASE_PWA4_URL: z.string().url(),
-  NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY: z.string().min(1),
-  SUPABASE_PWA4_SERVICE_ROLE_KEY: z.string().min(1),
+  NEXT_PUBLIC_SUPABASE_URL: z.string().url().optional(),
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1).optional(),
+  NEXT_PUBLIC_SUPABASE_PWA4_URL: z.string().url().optional(),
+  NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY: z.string().min(1).optional(),
+  SUPABASE_PWA4_SERVICE_ROLE_KEY: z.string().min(1).optional(),
 
   // Stripe
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().startsWith("pk_"),
@@ -17,6 +19,8 @@ const envSchema = z.object({
 })
 
 export const env = envSchema.parse({
+  NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co",
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJplaceholder",
   NEXT_PUBLIC_SUPABASE_PWA4_URL: process.env.NEXT_PUBLIC_SUPABASE_PWA4_URL,
   NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY,
   SUPABASE_PWA4_SERVICE_ROLE_KEY: process.env.SUPABASE_PWA4_SERVICE_ROLE_KEY,

@@ -1,9 +1,9 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { useState, useEffect } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import {
   CheckCircle,
   Download,
@@ -14,20 +14,17 @@ import {
   CreditCard,
   MapPin,
   Users,
-} from "lucide-react";
+} from "lucide-react"
 
 export default function InstallPage() {
-  const [step, setStep] = useState(1);
-  const [installing, setInstalling] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [logs, setLogs] = useState<string[]>([]);
+  const [step, setStep] = useState(1)
+  const [installing, setInstalling] = useState(false)
+  const [progress, setProgress] = useState(0)
+  const [logs, setLogs] = useState<string[]>([])
 
   const addLog = (message: string) => {
-    setLogs((prev) => [
-      ...prev,
-      `[${new Date().toLocaleTimeString()}] ${message}`,
-    ]);
-  };
+    setLogs((prev) => [...prev, `[${new Date().toLocaleTimeString()}] ${message}`])
+  }
 
   const installSteps = [
     {
@@ -65,88 +62,88 @@ export default function InstallPage() {
       icon: <Users className="w-5 h-5" />,
       status: "pending",
     },
-  ];
+  ]
 
   const performInstallation = async () => {
-    setInstalling(true);
-    setProgress(0);
-    setLogs([]);
+    setInstalling(true)
+    setProgress(0)
+    setLogs([])
 
-    addLog("🚀 Starting AirBear PWA Installation...");
+    addLog("🚀 Starting AirBear PWA Installation...")
 
     // Step 1: Environment Setup
-    addLog("📋 Setting up environment variables...");
-    setProgress(20);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    addLog("📋 Setting up environment variables...")
+    setProgress(20)
+    await new Promise((resolve) => setTimeout(resolve, 1000))
 
-    addLog("✅ Environment configured successfully");
-    setProgress(40);
+    addLog("✅ Environment configured successfully")
+    setProgress(40)
 
     // Step 2: Database Setup
-    addLog("🗄️ Initializing Supabase database...");
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    addLog("🗄️ Initializing Supabase database...")
+    await new Promise((resolve) => setTimeout(resolve, 1500))
 
-    addLog("✅ Database tables created and populated");
-    addLog("✅ 16 pickup spots configured");
-    addLog("✅ 3 bodega items added");
-    addLog("✅ User roles and permissions set");
-    setProgress(60);
+    addLog("✅ Database tables created and populated")
+    addLog("✅ 16 pickup spots configured")
+    addLog("✅ 3 bodega items added")
+    addLog("✅ User roles and permissions set")
+    setProgress(60)
 
     // Step 3: Payment Integration
-    addLog("💳 Configuring Stripe payment system...");
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    addLog("💳 Configuring Stripe payment system...")
+    await new Promise((resolve) => setTimeout(resolve, 1000))
 
-    addLog("✅ Stripe integration complete");
-    addLog("✅ Payment methods: Card, Apple Pay, Google Pay, Cash");
-    addLog("✅ $4.00 flat fare configured");
-    setProgress(80);
+    addLog("✅ Stripe integration complete")
+    addLog("✅ Payment methods: Card, Apple Pay, Google Pay, Cash")
+    addLog("✅ $4.00 flat fare configured")
+    setProgress(80)
 
     // Step 4: Real-time Features
-    addLog("🔄 Setting up real-time tracking...");
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    addLog("🔄 Setting up real-time tracking...")
+    await new Promise((resolve) => setTimeout(resolve, 1500))
 
-    addLog("✅ WebSocket connections enabled");
-    addLog("✅ AirBear location tracking active");
-    addLog("✅ Real-time ride status updates");
-    setProgress(100);
+    addLog("✅ WebSocket connections enabled")
+    addLog("✅ AirBear location tracking active")
+    addLog("✅ Real-time ride status updates")
+    setProgress(100)
 
     // Step 5: User Management
-    addLog("👤 Configuring user management...");
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    addLog("👤 Configuring user management...")
+    await new Promise((resolve) => setTimeout(resolve, 1000))
 
-    addLog("✅ Authentication system ready");
-    addLog("✅ User roles: rider, driver, admin");
-    addLog("✅ Registration and login flows configured");
+    addLog("✅ Authentication system ready")
+    addLog("✅ User roles: rider, driver, admin")
+    addLog("✅ Registration and login flows configured")
 
     // Final
-    addLog("🎉 AirBear PWA Installation Complete!");
-    addLog("🌐 Ready for deployment at: https://pwapro.vercel.app");
-    addLog("📱 PWA features: Offline support, install prompt");
-    addLog("🚗 Real-time: Live tracking and notifications");
-    addLog("🛍️ Bodega: Mobile commerce integration");
-    addLog("💰 Payments: Secure Stripe processing");
+    addLog("🎉 AirBear PWA Installation Complete!")
+    addLog("🌐 Ready for deployment at: https://pwapro.vercel.app")
+    addLog("📱 PWA features: Offline support, install prompt")
+    addLog("🚗 Real-time: Live tracking and notifications")
+    addLog("🛍️ Bodega: Mobile commerce integration")
+    addLog("💰 Payments: Secure Stripe processing")
 
     // Update all steps to completed
-    setStep(6);
-    setInstalling(false);
-  };
+    setStep(6)
+    setInstalling(false)
+  }
 
   const quickInstall = async () => {
-    setInstalling(true);
-    addLog("⚡ Quick Install: Setting up production environment...");
+    setInstalling(true)
+    addLog("⚡ Quick Install: Setting up production environment...")
 
     // Simulate quick setup
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000))
 
-    addLog("✅ Production environment ready");
-    addLog("✅ All services configured");
-    addLog("✅ Database connected");
-    addLog("✅ Payment system active");
-    addLog("✅ Real-time features enabled");
+    addLog("✅ Production environment ready")
+    addLog("✅ All services configured")
+    addLog("✅ Database connected")
+    addLog("✅ Payment system active")
+    addLog("✅ Real-time features enabled")
 
-    setProgress(100);
-    setInstalling(false);
-  };
+    setProgress(100)
+    setInstalling(false)
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-950 via-lime-950 to-amber-950 p-4">
@@ -157,8 +154,8 @@ export default function InstallPage() {
             🚀 One-Click AirBear PWA Installation
           </h1>
           <p className="text-lg text-muted-foreground">
-            Complete setup of your solar-powered rideshare system with real-time
-            tracking and mobile bodega
+            Complete setup of your solar-powered rideshare system with real-time tracking and mobile
+            bodega
           </p>
         </div>
 
@@ -184,14 +181,10 @@ export default function InstallPage() {
                       </div>
                       <div>
                         <h3 className="font-semibold">{installStep.title}</h3>
-                        <p className="text-sm text-muted-foreground">
-                          {installStep.description}
-                        </p>
+                        <p className="text-sm text-muted-foreground">{installStep.description}</p>
                       </div>
                     </div>
-                    <Badge
-                      variant={step > installStep.id ? "default" : "secondary"}
-                    >
+                    <Badge variant={step > installStep.id ? "default" : "secondary"}>
                       {step > installStep.id ? "Completed" : "Pending"}
                     </Badge>
                   </div>
@@ -309,8 +302,8 @@ export default function InstallPage() {
                   🎉 AirBear PWA is Ready!
                 </h3>
                 <p className="text-muted-foreground mb-4">
-                  Your solar-powered rideshare system is now fully configured
-                  and ready for production use.
+                  Your solar-powered rideshare system is now fully configured and ready for
+                  production use.
                 </p>
               </div>
 
@@ -352,5 +345,5 @@ export default function InstallPage() {
         )}
       </div>
     </div>
-  );
+  )
 }

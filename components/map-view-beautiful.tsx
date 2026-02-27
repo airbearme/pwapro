@@ -1,200 +1,183 @@
-"use client";
+"use client"
 
-import { useEffect, useRef, useState } from "react";
-import type { AirbearLocation } from "@/lib/supabase/realtime";
-import type { Database } from "@/lib/types/database";
+import { useEffect, useRef, useState } from "react"
+import type { AirbearLocation } from "@/lib/supabase/realtime"
+import type { Database } from "@/lib/types/database"
 
-export type Spot = Database["public"]["Tables"]["spots"]["Row"];
+export type Spot = Database["public"]["Tables"]["spots"]["Row"]
 
 interface MapViewProps {
-  spots: Spot[];
-  airbears: AirbearLocation[];
-  onSpotSelect?: (spot: Spot) => void;
+  spots: Spot[]
+  airbears: AirbearLocation[]
+  onSpotSelect?: (spot: Spot) => void
 }
 
-export default function MapView({
-  spots,
-  airbears,
-  onSpotSelect,
-}: MapViewProps) {
-  const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<any>(null);
-  const markersRef = useRef<Map<string, any>>(new Map());
-  const LeafletRef = useRef<any>(null);
-  const spotsRef = useRef(spots);
-  const onSpotSelectRef = useRef(onSpotSelect);
-  const [mapLoaded, setMapLoaded] = useState(false);
-  const [mapError, setMapError] = useState<string | null>(null);
+export default function MapView({ spots, airbears, onSpotSelect }: MapViewProps) {
+  const mapRef = useRef<HTMLDivElement>(null)
+  const mapInstanceRef = useRef<any>(null)
+  const markersRef = useRef<Map<string, any>>(new Map())
+  const LeafletRef = useRef<any>(null)
+  const spotsRef = useRef(spots)
+  const onSpotSelectRef = useRef(onSpotSelect)
+  const [mapLoaded, setMapLoaded] = useState(false)
+  const [mapError, setMapError] = useState<string | null>(null)
 
   useEffect(() => {
-    spotsRef.current = spots;
-  }, [spots]);
+    spotsRef.current = spots
+  }, [spots])
 
   useEffect(() => {
-    onSpotSelectRef.current = onSpotSelect;
-  }, [onSpotSelect]);
+    onSpotSelectRef.current = onSpotSelect
+  }, [onSpotSelect])
 
   useEffect(() => {
     if (!mapRef.current || mapInstanceRef.current) {
-      return;
+      return
     }
 
     const initMap = async () => {
       try {
-        setMapError(null);
+        setMapError(null)
 
         const waitForContainer = async () => {
-          let attempts = 0;
+          let attempts = 0
           return new Promise<boolean>((resolve) => {
             const check = () => {
               if (!mapRef.current) {
-                resolve(false);
-                return;
+                resolve(false)
+                return
               }
-              const { offsetHeight, offsetWidth } = mapRef.current;
+              const { offsetHeight, offsetWidth } = mapRef.current
               if (offsetHeight > 0 && offsetWidth > 0) {
-                resolve(true);
-                return;
+                resolve(true)
+                return
               }
               if (attempts > 30) {
-                resolve(false);
-                return;
+                resolve(false)
+                return
               }
-              attempts += 1;
-              requestAnimationFrame(check);
-            };
-            check();
-          });
-        };
+              attempts += 1
+              requestAnimationFrame(check)
+            }
+            check()
+          })
+        }
 
-        const containerReady = await waitForContainer();
+        const containerReady = await waitForContainer()
         if (!containerReady) {
-          throw new Error("Map container is not visible yet");
+          throw new Error("Map container is not visible yet")
         }
 
         // Dynamically import Leaflet
-        const L = (await import("leaflet")).default;
-        
+        const L = (await import("leaflet")).default
+
         if (!L || !L.map) {
-          throw new Error("Leaflet failed to load");
+          throw new Error("Leaflet failed to load")
         }
-        LeafletRef.current = L;
+        LeafletRef.current = L
 
         // Fix default marker icons
-        delete (L.Icon.Default.prototype as any)._getIconUrl;
+        delete (L.Icon.Default.prototype as any)._getIconUrl
         L.Icon.Default.mergeOptions({
-          iconRetinaUrl:
-            "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
-          iconUrl:
-            "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-          shadowUrl:
-            "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-        });
+          iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+          iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+          shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+        })
 
         // Create map centered on Binghamton, NY
-        const binghamtonCenter: [number, number] = [42.0987, -75.9179];
+        const binghamtonCenter: [number, number] = [42.0987, -75.9179]
         const map = L.map(mapRef.current!, {
           center: binghamtonCenter,
           zoom: 13,
           zoomControl: true,
           preferCanvas: true,
-        });
-        
+        })
+
         // Invalidate size to ensure map renders
-        map.invalidateSize();
-        let resizeObserver: ResizeObserver | null = null;
-        let resizeHandler: (() => void) | null = null;
+        map.invalidateSize()
+        let resizeObserver: ResizeObserver | null = null
+        let resizeHandler: (() => void) | null = null
         if (typeof ResizeObserver !== "undefined") {
           resizeObserver = new ResizeObserver(() => {
-            map.invalidateSize();
-          });
-          resizeObserver.observe(mapRef.current!);
+            map.invalidateSize()
+          })
+          resizeObserver.observe(mapRef.current!)
         } else if (typeof window !== "undefined") {
-          resizeHandler = () => map.invalidateSize();
-          window.addEventListener("resize", resizeHandler);
+          resizeHandler = () => map.invalidateSize()
+          window.addEventListener("resize", resizeHandler)
         }
 
         // Use beautiful CartoDB Positron tiles (free, beautiful, no API key needed)
-        L.tileLayer(
-          "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-          {
-            attribution:
-              '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-            subdomains: "abcd",
-            maxZoom: 19,
-            tileSize: 256,
-            zoomOffset: 0,
-          }
-        ).addTo(map);
+        L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+          attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+          subdomains: "abcd",
+          maxZoom: 19,
+          tileSize: 256,
+          zoomOffset: 0,
+        }).addTo(map)
 
         // Add custom styling for Binghamton
         map.on("load", () => {
-          setMapLoaded(true);
-        });
+          setMapLoaded(true)
+        })
 
-        mapInstanceRef.current = map;
-        mapInstanceRef.current.__resizeObserver = resizeObserver;
-        mapInstanceRef.current.__resizeHandler = resizeHandler;
-        setMapLoaded(true);
-        
+        mapInstanceRef.current = map
+        mapInstanceRef.current.__resizeObserver = resizeObserver
+        mapInstanceRef.current.__resizeHandler = resizeHandler
+        setMapLoaded(true)
+
         // Setup global booking function
-        const handleSpotSelect = onSpotSelectRef.current;
+        const handleSpotSelect = onSpotSelectRef.current
         if (typeof window !== "undefined" && handleSpotSelect) {
-          (window as any).selectSpotForBooking = (spotId: string) => {
-            const spot = spotsRef.current.find((s) => s.id === spotId);
+          ;(window as any).selectSpotForBooking = (spotId: string) => {
+            const spot = spotsRef.current.find((s) => s.id === spotId)
             if (spot) {
-              handleSpotSelect(spot);
+              handleSpotSelect(spot)
             }
-          };
+          }
         }
       } catch (error) {
-        console.error("❌ Error initializing map:", error);
-        setMapLoaded(false);
-        setMapError(
-          error instanceof Error ? error.message : "Map failed to load"
-        );
+        console.error("❌ Error initializing map:", error)
+        setMapLoaded(false)
+        setMapError(error instanceof Error ? error.message : "Map failed to load")
       }
-    };
+    }
 
-    initMap();
+    initMap()
 
     return () => {
       if (mapInstanceRef.current) {
         if (mapInstanceRef.current.__resizeObserver) {
-          mapInstanceRef.current.__resizeObserver.disconnect();
+          mapInstanceRef.current.__resizeObserver.disconnect()
         }
         if (mapInstanceRef.current.__resizeHandler) {
-          window.removeEventListener(
-            "resize",
-            mapInstanceRef.current.__resizeHandler
-          );
+          window.removeEventListener("resize", mapInstanceRef.current.__resizeHandler)
         }
-        mapInstanceRef.current.remove();
-        mapInstanceRef.current = null;
+        mapInstanceRef.current.remove()
+        mapInstanceRef.current = null
       }
-    };
-  }, []);
+    }
+  }, [])
 
   useEffect(() => {
-    if (!mapInstanceRef.current || !LeafletRef.current || !mapLoaded) return;
+    if (!mapInstanceRef.current || !LeafletRef.current || !mapLoaded) return
 
-    const map = mapInstanceRef.current;
-    const L = LeafletRef.current;
+    const map = mapInstanceRef.current
+    const L = LeafletRef.current
 
     // Remove old spot markers
     markersRef.current.forEach((marker, id) => {
       if (id.startsWith("spot-")) {
-        marker.remove();
-        markersRef.current.delete(id);
+        marker.remove()
+        markersRef.current.delete(id)
       }
-    });
+    })
 
     // Add spot markers with beautiful styling
     spots.forEach((spot) => {
-      const airbearsAtSpot = airbears.filter(
-        (a) => a.current_spot_id === spot.id && a.is_available
-      );
-      const hasAvailableAirbears = airbearsAtSpot.length > 0;
+      const airbearsAtSpot = airbears.filter((a) => a.current_spot_id === spot.id && a.is_available)
+      const hasAvailableAirbears = airbearsAtSpot.length > 0
 
       const icon = L.divIcon({
         html: `
@@ -221,22 +204,14 @@ export default function MapView({
               justify-content: center;
               font-size: 28px;
               transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-              animation: ${
-                hasAvailableAirbears
-                  ? "pulse-glow 2s ease-in-out infinite"
-                  : "none"
-              };
+              animation: ${hasAvailableAirbears ? "pulse-glow 2s ease-in-out infinite" : "none"};
               overflow: hidden;
             " 
             onmouseover="this.style.transform='scale(1.15)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.4), 0 0 0 5px ${
-              hasAvailableAirbears
-                ? "rgba(16, 185, 129, 0.5)"
-                : "rgba(107, 114, 128, 0.5)"
+              hasAvailableAirbears ? "rgba(16, 185, 129, 0.5)" : "rgba(107, 114, 128, 0.5)"
             }'" 
             onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 6px 20px rgba(0,0,0,0.3), 0 0 0 3px ${
-              hasAvailableAirbears
-                ? "rgba(16, 185, 129, 0.3)"
-                : "rgba(107, 114, 128, 0.3)"
+              hasAvailableAirbears ? "rgba(16, 185, 129, 0.3)" : "rgba(107, 114, 128, 0.3)"
             }'">
               <img src="/airbear-mascot.png" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;" alt="AirBear" />
             </div>
@@ -284,11 +259,9 @@ export default function MapView({
         iconSize: [56, 56],
         iconAnchor: [28, 56],
         popupAnchor: [0, -56],
-      });
+      })
 
-      const marker = L.marker([spot.latitude, spot.longitude], { icon }).addTo(
-        map
-      );
+      const marker = L.marker([spot.latitude, spot.longitude], { icon }).addTo(map)
 
       const popupContent = `
         <div style="min-width: 240px; padding: 12px; font-family: system-ui, -apple-system, sans-serif;">
@@ -301,38 +274,34 @@ export default function MapView({
               : ""
           }
           <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px; padding: 10px; background: ${
-            hasAvailableAirbears
-              ? "linear-gradient(135deg, #ecfdf5, #d1fae5)"
-              : "#f3f4f6"
+            hasAvailableAirbears ? "linear-gradient(135deg, #ecfdf5, #d1fae5)" : "#f3f4f6"
           }; border-radius: 10px; border: 2px solid ${
-        hasAvailableAirbears ? "#10b981" : "#9ca3af"
-      };">
+            hasAvailableAirbears ? "#10b981" : "#9ca3af"
+          };">
             <div style="width: 20px; height: 20px; background: ${
               hasAvailableAirbears ? "#10b981" : "#9ca3af"
             }; border-radius: 50%; box-shadow: 0 0 12px ${
-        hasAvailableAirbears ? "#10b981" : "#9ca3af"
-      }; animation: ${
-        hasAvailableAirbears ? "pulse 2s ease-in-out infinite" : "none"
-      };"></div>
+              hasAvailableAirbears ? "#10b981" : "#9ca3af"
+            }; animation: ${
+              hasAvailableAirbears ? "pulse 2s ease-in-out infinite" : "none"
+            };"></div>
             <span style="font-weight: 700; color: ${
               hasAvailableAirbears ? "#047857" : "#4b5563"
             }; font-size: 15px;">${airbearsAtSpot.length} AirBear${
-        airbearsAtSpot.length !== 1 ? "s" : ""
-      } available</span>
+              airbearsAtSpot.length !== 1 ? "s" : ""
+            } available</span>
           </div>
           ${
             spot.amenities && spot.amenities.length > 0
               ? `
             <div style="font-size: 13px; color: #6b7280; background: linear-gradient(135deg, #f9fafb, #f3f4f6); padding: 8px 12px; border-radius: 8px; border-left: 4px solid #10b981;">
-              <strong style="color: #1f2937;">✨ Amenities:</strong> ${spot.amenities.join(
-                ", "
-              )}
+              <strong style="color: #1f2937;">✨ Amenities:</strong> ${spot.amenities.join(", ")}
             </div>
           `
               : ""
           }
         </div>
-      `;
+      `
 
       // Add booking button to popup
       const bookingButton = `
@@ -358,34 +327,34 @@ export default function MapView({
             📍 Book from Here
           </button>
         </div>
-      `;
+      `
 
       marker.bindPopup(popupContent + bookingButton, {
         maxWidth: 300,
         className: "beautiful-popup",
-      });
+      })
 
       // Setup click handler for booking
       marker.on("click", () => {
         if (onSpotSelect) {
-          onSpotSelect(spot);
+          onSpotSelect(spot)
         }
-      });
+      })
 
-      markersRef.current.set(`spot-${spot.id}`, marker);
-    });
-  }, [spots, airbears, onSpotSelect, mapLoaded]);
+      markersRef.current.set(`spot-${spot.id}`, marker)
+    })
+  }, [spots, airbears, onSpotSelect, mapLoaded])
 
   useEffect(() => {
-    if (!mapInstanceRef.current || !LeafletRef.current || !mapLoaded) return;
+    if (!mapInstanceRef.current || !LeafletRef.current || !mapLoaded) return
 
-    const map = mapInstanceRef.current;
-    const L = LeafletRef.current;
+    const map = mapInstanceRef.current
+    const L = LeafletRef.current
 
     // Update airbear markers
     airbears.forEach((airbear) => {
-      const markerId = `airbear-${airbear.id}`;
-      let marker = markersRef.current.get(markerId);
+      const markerId = `airbear-${airbear.id}`
+      let marker = markersRef.current.get(markerId)
 
       const icon = L.divIcon({
         html: `
@@ -409,22 +378,14 @@ export default function MapView({
               align-items: center;
               justify-content: center;
               font-size: 24px;
-              animation: ${
-                airbear.is_available
-                  ? "pulse-glow 2s ease-in-out infinite"
-                  : "none"
-              };
+              animation: ${airbear.is_available ? "pulse-glow 2s ease-in-out infinite" : "none"};
               transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             " 
             onmouseover="this.style.transform='scale(1.2)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.4), 0 0 0 6px ${
-              airbear.is_available
-                ? "rgba(16, 185, 129, 0.4)"
-                : "rgba(107, 114, 128, 0.4)"
+              airbear.is_available ? "rgba(16, 185, 129, 0.4)" : "rgba(107, 114, 128, 0.4)"
             }'" 
             onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 6px 18px rgba(0,0,0,0.35), 0 0 0 4px ${
-              airbear.is_available
-                ? "rgba(16, 185, 129, 0.25)"
-                : "rgba(107, 114, 128, 0.25)"
+              airbear.is_available ? "rgba(16, 185, 129, 0.25)" : "rgba(107, 114, 128, 0.25)"
             }'">
               <img src="/airbear-mascot.png" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover;" alt="AirBear" />
             </div>
@@ -470,22 +431,22 @@ export default function MapView({
         iconSize: [48, 48],
         iconAnchor: [24, 24],
         popupAnchor: [0, -24],
-      });
+      })
 
       if (marker) {
-        marker.setLatLng([airbear.latitude, airbear.longitude]);
-        marker.setIcon(icon);
+        marker.setLatLng([airbear.latitude, airbear.longitude])
+        marker.setIcon(icon)
       } else {
         marker = L.marker([airbear.latitude, airbear.longitude], {
           icon,
-        }).addTo(map);
+        }).addTo(map)
 
         const batteryColor =
           airbear.battery_level > 50
             ? "#10b981"
             : airbear.battery_level > 20
-            ? "#f59e0b"
-            : "#ef4444";
+              ? "#f59e0b"
+              : "#ef4444"
 
         const popupContent = `
           <div style="min-width: 220px; padding: 12px; font-family: system-ui, -apple-system, sans-serif;">
@@ -502,8 +463,8 @@ export default function MapView({
                     }%; height: 100%; background: linear-gradient(90deg, ${batteryColor}, ${batteryColor}dd); transition: width 0.3s; box-shadow: 0 0 8px ${batteryColor}80;"></div>
                   </div>
                   <span style="font-weight: 700; color: ${batteryColor}; font-size: 15px;">${
-          airbear.battery_level
-        }%</span>
+                    airbear.battery_level
+                  }%</span>
                 </div>
               </div>
               <div style="display: flex; justify-content: space-between; padding: 8px; background: linear-gradient(135deg, #f9fafb, #f3f4f6); border-radius: 8px; border-left: 4px solid ${
@@ -517,39 +478,37 @@ export default function MapView({
                     airbear.is_charging
                       ? "⚡ Charging"
                       : airbear.is_available
-                      ? "✓ Available"
-                      : "🚴 In Use"
+                        ? "✓ Available"
+                        : "🚴 In Use"
                   }
                 </span>
               </div>
               <div style="font-size: 12px; color: #9ca3af; text-align: center; margin-top: 4px; padding-top: 8px; border-top: 1px solid #e5e7eb;">
-                🕐 Last updated: ${new Date(
-                  airbear.updated_at
-                ).toLocaleTimeString()}
+                🕐 Last updated: ${new Date(airbear.updated_at).toLocaleTimeString()}
               </div>
             </div>
           </div>
-        `;
+        `
 
         marker.bindPopup(popupContent, {
           maxWidth: 280,
           className: "beautiful-popup",
-        });
-        markersRef.current.set(markerId, marker);
+        })
+        markersRef.current.set(markerId, marker)
       }
-    });
+    })
 
     // Remove markers for airbears that no longer exist
     markersRef.current.forEach((marker, id) => {
       if (id.startsWith("airbear-")) {
-        const airbearId = id.replace("airbear-", "");
+        const airbearId = id.replace("airbear-", "")
         if (!airbears.find((a) => a.id === airbearId)) {
-          marker.remove();
-          markersRef.current.delete(id);
+          marker.remove()
+          markersRef.current.delete(id)
         }
       }
-    });
-  }, [airbears, mapLoaded]);
+    })
+  }, [airbears, mapLoaded])
 
   return (
     <div className="relative">
@@ -570,18 +529,12 @@ export default function MapView({
               </div>
             </div>
             <p className="text-lg font-semibold text-emerald-400 dark:text-emerald-300 animate-pulse">
-              {mapError
-                ? "Map failed to load."
-                : "Loading beautiful Binghamton map..."}
+              {mapError ? "Map failed to load." : "Loading beautiful Binghamton map..."}
             </p>
-            {mapError && (
-              <p className="mt-2 text-sm text-emerald-200/80">
-                {mapError}
-              </p>
-            )}
+            {mapError && <p className="mt-2 text-sm text-emerald-200/80">{mapError}</p>}
           </div>
         </div>
       )}
     </div>
-  );
+  )
 }

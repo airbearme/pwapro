@@ -1,7 +1,7 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic"
 
 export default function NotFound() {
   return (
@@ -22,13 +22,10 @@ export default function NotFound() {
         <p className="text-muted-foreground">
           The page you&apos;re looking for doesn&apos;t exist.
         </p>
-        <Button
-          asChild
-          className="bg-gradient-to-r from-orange-500 to-orange-600"
-        >
+        <Button asChild className="bg-gradient-to-r from-orange-500 to-orange-600">
           <Link href="/">Go Home</Link>
         </Button>
       </div>
     </div>
-  );
+  )
 }

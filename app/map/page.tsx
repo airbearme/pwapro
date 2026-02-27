@@ -1,85 +1,85 @@
-"use client";
+"use client"
 
-import { useEffect, useState, useMemo } from "react";
-import { useAuthContext } from "@/components/auth-provider";
-import { getSupabaseClient } from "@/lib/supabase/client";
-import { subscribeToAirbearLocations } from "@/lib/supabase/realtime";
-import { useAirbearNotifications } from "@/lib/hooks/use-airbear-notifications";
-import { Card } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
-import { Battery, MapPin, Navigation, Moon, Sun } from "lucide-react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { useTheme } from "next-themes";
-import MapComponent, { type Spot } from "@/components/map-view-beautiful";
-import type { AirbearLocation } from "@/lib/supabase/realtime";
+import { useEffect, useState, useMemo } from "react"
+import { useAuthContext } from "@/components/auth-provider"
+import { getSupabaseClient } from "@/lib/supabase/client"
+import { subscribeToAirbearLocations } from "@/lib/supabase/realtime"
+import { useAirbearNotifications } from "@/lib/hooks/use-airbear-notifications"
+import { Card } from "@/components/ui/card"
+import { useToast } from "@/hooks/use-toast"
+import { Battery, MapPin, Navigation, Moon, Sun } from "lucide-react"
+import { useRouter } from "next/navigation"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { useTheme } from "next-themes"
+import MapComponent, { type Spot } from "@/components/map-view-beautiful"
+import type { AirbearLocation } from "@/lib/supabase/realtime"
 
 export default function MapPage() {
-  const { loading: authLoading } = useAuthContext();
-  const { toast } = useToast();
-  const { theme, setTheme } = useTheme();
-  const router = useRouter();
-  const [spots, setSpots] = useState<Spot[]>([]);
-  const [airbears, setAirbears] = useState<AirbearLocation[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { loading: authLoading } = useAuthContext()
+  const { toast } = useToast()
+  const { theme, setTheme } = useTheme()
+  const router = useRouter()
+  const [spots, setSpots] = useState<Spot[]>([])
+  const [airbears, setAirbears] = useState<AirbearLocation[]>([])
+  const [loading, setLoading] = useState(true)
 
   // Load initial data
   useEffect(() => {
     const loadData = async () => {
       try {
         // Load regular spots for now (until numbered spots are set up)
-        const spotsResponse = await fetch("/api/spots");
-        if (!spotsResponse.ok) throw new Error("Failed to fetch spots");
+        const spotsResponse = await fetch("/api/spots")
+        if (!spotsResponse.ok) throw new Error("Failed to fetch spots")
 
-        const spotsData = await spotsResponse.json();
-        setSpots(spotsData.spots || []);
+        const spotsData = await spotsResponse.json()
+        setSpots(spotsData.spots || [])
 
         // Load airbears
-        const airbearsResponse = await fetch("/api/airbear/locations");
+        const airbearsResponse = await fetch("/api/airbear/locations")
         if (airbearsResponse.ok) {
-          const airbearsData = await airbearsResponse.json();
-          setAirbears(airbearsData.data || []);
+          const airbearsData = await airbearsResponse.json()
+          setAirbears(airbearsData.data || [])
         }
 
-        setLoading(false);
+        setLoading(false)
       } catch (err) {
-        console.error("Error loading map data:", err);
+        console.error("Error loading map data:", err)
         toast({
           title: "Error loading map",
           description: "Failed to load locations. Please try again.",
           variant: "destructive",
-        });
-        setLoading(false);
+        })
+        setLoading(false)
       }
-    };
+    }
 
-    loadData();
-  }, [toast]);
+    loadData()
+  }, [toast])
 
   // Subscribe to real-time airbear location updates
   useEffect(() => {
     const unsubscribe = subscribeToAirbearLocations((updatedAirbear) => {
       setAirbears((prev) => {
-        const existingIndex = prev.findIndex((a) => a.id === updatedAirbear.id);
+        const existingIndex = prev.findIndex((a) => a.id === updatedAirbear.id)
         if (existingIndex >= 0) {
-          const updated = [...prev];
-          updated[existingIndex] = updatedAirbear;
-          return updated;
+          const updated = [...prev]
+          updated[existingIndex] = updatedAirbear
+          return updated
         }
-        return [...prev, updatedAirbear];
-      });
-    });
+        return [...prev, updatedAirbear]
+      })
+    })
 
-    return unsubscribe;
-  }, []);
+    return unsubscribe
+  }, [])
 
   const availableAirbears = useMemo(() => {
-    return airbears.filter((a) => a.is_available && !a.is_charging);
-  }, [airbears]);
+    return airbears.filter((a) => a.is_available && !a.is_charging)
+  }, [airbears])
 
   // Enable push notifications for airbear availability
-  useAirbearNotifications(airbears);
+  useAirbearNotifications(airbears)
 
   if (loading || authLoading) {
     return (
@@ -94,12 +94,10 @@ export default function MapPage() {
               />
             </div>
           </div>
-          <p className="text-xl text-muted-foreground animate-pulse">
-            Loading AirBear map...
-          </p>
+          <p className="text-xl text-muted-foreground animate-pulse">Loading AirBear map...</p>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -142,12 +140,8 @@ export default function MapPage() {
                 <Navigation className="w-6 h-6 text-green-600" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">
-                  Available AirBears
-                </p>
-                <p className="text-2xl font-bold text-green-600">
-                  {availableAirbears.length}
-                </p>
+                <p className="text-sm text-muted-foreground">Available AirBears</p>
+                <p className="text-2xl font-bold text-green-600">{availableAirbears.length}</p>
               </div>
             </div>
           </Card>
@@ -159,9 +153,7 @@ export default function MapPage() {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Active Spots</p>
-                <p className="text-2xl font-bold text-orange-600">
-                  {spots.length}
-                </p>
+                <p className="text-2xl font-bold text-orange-600">{spots.length}</p>
               </div>
             </div>
           </Card>
@@ -176,8 +168,7 @@ export default function MapPage() {
                 <p className="text-2xl font-bold text-blue-600">
                   {airbears.length > 0
                     ? Math.round(
-                        airbears.reduce((sum, a) => sum + a.battery_level, 0) /
-                          airbears.length
+                        airbears.reduce((sum, a) => sum + a.battery_level, 0) / airbears.length
                       )
                     : 0}
                   %
@@ -193,7 +184,7 @@ export default function MapPage() {
             spots={spots}
             airbears={airbears}
             onSpotSelect={(spot) => {
-              router.push(`/book?pickup=${spot.id}`);
+              router.push(`/book?pickup=${spot.id}`)
             }}
           />
         </Card>
@@ -229,5 +220,5 @@ export default function MapPage() {
         </Card>
       </div>
     </div>
-  );
+  )
 }

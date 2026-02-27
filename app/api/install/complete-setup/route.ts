@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
-  const { setupType } = await request.json();
+  const { setupType } = await request.json()
 
   // Simulate complete installation setup
   const setupResponses = {
@@ -51,12 +51,12 @@ export async function POST(request: Request) {
         "PWA offline capabilities",
       ],
     },
-  };
+  }
 
   const response = setupResponses[setupType as keyof typeof setupResponses] || {
     error: "Invalid setup type",
     available_types: Object.keys(setupResponses),
-  };
+  }
 
-  return NextResponse.json(response);
+  return NextResponse.json(response)
 }

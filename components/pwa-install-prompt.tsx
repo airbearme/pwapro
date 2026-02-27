@@ -1,33 +1,32 @@
-"use client";
+"use client"
 
-import { useEffect, useState, useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { X, Download, Smartphone } from "lucide-react";
-import AirbearWheel from "@/components/airbear-wheel";
+import { useEffect, useState, useRef } from "react"
+import { Button } from "@/components/ui/button"
+import { X, Download, Smartphone } from "lucide-react"
+import AirbearWheel from "@/components/airbear-wheel"
 
 interface BeforeInstallPromptEvent extends Event {
-  prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
+  prompt: () => Promise<void>
+  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>
 }
 
 export default function PWAInstallPrompt() {
-  const [deferredPrompt, setDeferredPrompt] =
-    useState<BeforeInstallPromptEvent | null>(null);
-  const [showPrompt, setShowPrompt] = useState(false);
-  const [isInstalled, setIsInstalled] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
+  const [showPrompt, setShowPrompt] = useState(false)
+  const [isInstalled, setIsInstalled] = useState(false)
 
   // Use refs to track state without causing re-renders
-  const deferredPromptRef = useRef<BeforeInstallPromptEvent | null>(null);
-  const isInstalledRef = useRef(false);
+  const deferredPromptRef = useRef<BeforeInstallPromptEvent | null>(null)
+  const isInstalledRef = useRef(false)
 
   // Update refs when state changes
   useEffect(() => {
-    deferredPromptRef.current = deferredPrompt;
-  }, [deferredPrompt]);
+    deferredPromptRef.current = deferredPrompt
+  }, [deferredPrompt])
 
   useEffect(() => {
-    isInstalledRef.current = isInstalled;
-  }, [isInstalled]);
+    isInstalledRef.current = isInstalled
+  }, [isInstalled])
 
   useEffect(() => {
     // Check if already installed
@@ -35,57 +34,54 @@ export default function PWAInstallPrompt() {
       window.matchMedia("(display-mode: standalone)").matches ||
       (window.navigator as any).standalone === true
     ) {
-      setIsInstalled(true);
-      isInstalledRef.current = true;
-      return;
+      setIsInstalled(true)
+      isInstalledRef.current = true
+      return
     }
 
     // Check if user has dismissed before (localStorage)
-    const dismissed = localStorage.getItem("pwa-install-dismissed");
+    const dismissed = localStorage.getItem("pwa-install-dismissed")
     if (dismissed) {
-      return;
+      return
     }
 
     // Listen for beforeinstallprompt event
     const handleBeforeInstallPrompt = (e: Event) => {
-      e.preventDefault();
-      const promptEvent = e as BeforeInstallPromptEvent;
-      setDeferredPrompt(promptEvent);
-      deferredPromptRef.current = promptEvent;
+      e.preventDefault()
+      const promptEvent = e as BeforeInstallPromptEvent
+      setDeferredPrompt(promptEvent)
+      deferredPromptRef.current = promptEvent
       // Show prompt after a short delay for better UX
       setTimeout(() => {
-        setShowPrompt(true);
-      }, 2000);
-    };
+        setShowPrompt(true)
+      }, 2000)
+    }
 
-    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt)
 
     // Also show prompt if no event fires (for iOS/Safari)
     // Use refs in closure to avoid dependency issues
     const timer = setTimeout(() => {
       if (!deferredPromptRef.current && !isInstalledRef.current) {
-        setShowPrompt(true);
+        setShowPrompt(true)
       }
-    }, 3000);
+    }, 3000)
 
     return () => {
-      window.removeEventListener(
-        "beforeinstallprompt",
-        handleBeforeInstallPrompt
-      );
-      clearTimeout(timer);
-    };
-  }, []); // Empty dependency array - only run once on mount
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt)
+      clearTimeout(timer)
+    }
+  }, []) // Empty dependency array - only run once on mount
 
   const handleInstall = async () => {
     if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
+      deferredPrompt.prompt()
+      const { outcome } = await deferredPrompt.userChoice
       if (outcome === "accepted") {
-        setShowPrompt(false);
-        setIsInstalled(true);
+        setShowPrompt(false)
+        setIsInstalled(true)
       }
-      setDeferredPrompt(null);
+      setDeferredPrompt(null)
     } else {
       // Fallback for iOS/Safari
       // Show instructions
@@ -94,17 +90,17 @@ export default function PWAInstallPrompt() {
           "iOS Safari: Tap Share → Add to Home Screen\n\n" +
           "Android Chrome: Tap Menu → Install App\n\n" +
           "Desktop: Look for install icon in address bar"
-      );
+      )
     }
-  };
+  }
 
   const handleDismiss = () => {
-    setShowPrompt(false);
-    localStorage.setItem("pwa-install-dismissed", "true");
-  };
+    setShowPrompt(false)
+    localStorage.setItem("pwa-install-dismissed", "true")
+  }
 
   if (!showPrompt || isInstalled) {
-    return null;
+    return null
   }
 
   return (
@@ -134,12 +130,9 @@ export default function PWAInstallPrompt() {
               <Smartphone className="h-6 w-6 text-white" />
             </div>
             <div className="flex-1">
-              <h3 className="text-lg font-bold text-foreground mb-1">
-                Install AirBear
-              </h3>
+              <h3 className="text-lg font-bold text-foreground mb-1">Install AirBear</h3>
               <p className="text-sm text-muted-foreground">
-                Get the full app experience with offline access and faster
-                loading!
+                Get the full app experience with offline access and faster loading!
               </p>
             </div>
           </div>
@@ -163,5 +156,5 @@ export default function PWAInstallPrompt() {
         </div>
       </div>
     </div>
-  );
+  )
 }

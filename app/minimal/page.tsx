@@ -12,5 +12,5 @@ export default function MinimalHomePage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

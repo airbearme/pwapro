@@ -1,9 +1,9 @@
-import { getSupabaseServer } from "@/lib/supabase/server";
-import { NextResponse } from "next/server";
+import { getSupabaseServer } from "@/lib/supabase/server"
+import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
   try {
-    const { email, password } = await request.json();
+    const { email, password } = await request.json()
 
     if (!email || !password) {
       return NextResponse.json(
@@ -11,10 +11,10 @@ export async function POST(request: Request) {
           error: "Email and password are required",
         },
         { status: 400 }
-      );
+      )
     }
 
-    const supabase = await getSupabaseServer();
+    const supabase = await getSupabaseServer()
 
     // Authenticate user
     const {
@@ -23,16 +23,16 @@ export async function POST(request: Request) {
     } = await supabase.auth.signInWithPassword({
       email,
       password,
-    });
+    })
 
     if (error) {
-      console.error("Login error:", error);
+      console.error("Login error:", error)
       return NextResponse.json(
         {
           error: "Invalid email or password",
         },
         { status: 401 }
-      );
+      )
     }
 
     // Check if user profile exists
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
       .from("users")
       .select("role, full_name, eco_points, total_rides")
       .eq("id", user?.id)
-      .single();
+      .single()
 
     return NextResponse.json({
       success: true,
@@ -49,14 +49,14 @@ export async function POST(request: Request) {
         email: user?.email,
         ...profile,
       },
-    });
+    })
   } catch (error: any) {
-    console.error("Login API error:", error);
+    console.error("Login API error:", error)
     return NextResponse.json(
       {
         error: error.message || "Login failed",
       },
       { status: 500 }
-    );
+    )
   }
 }

@@ -1,34 +1,34 @@
-"use client";
+"use client"
 
-import { useEffect, useState, Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { CheckCircle, ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { useEffect, useState, Suspense } from "react"
+import { useSearchParams, useRouter } from "next/navigation"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { CheckCircle, ArrowRight } from "lucide-react"
+import Link from "next/link"
 
 function OrderSuccessPageContent() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [loading, setLoading] = useState(true);
-  const [ride, setRide] = useState<any>(null);
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [loading, setLoading] = useState(true)
+  const [ride, setRide] = useState<any>(null)
 
   useEffect(() => {
-    const sessionId = searchParams.get("session_id");
+    const sessionId = searchParams.get("session_id")
 
     if (sessionId) {
       // In a real app, you'd verify the session with Stripe
       // For now, we'll show a success message
-      setLoading(false);
+      setLoading(false)
 
       // You could fetch ride details using the session metadata
       // const response = await fetch(`/api/rides/session/${sessionId}`);
       // const rideData = await response.json();
       // setRide(rideData);
     } else {
-      setLoading(false);
+      setLoading(false)
     }
-  }, [searchParams]);
+  }, [searchParams])
 
   if (loading) {
     return (
@@ -41,12 +41,10 @@ function OrderSuccessPageContent() {
               className="w-full h-full object-cover rounded-full animate-pulse-glow"
             />
           </div>
-          <p className="text-xl text-muted-foreground animate-pulse">
-            Processing your payment...
-          </p>
+          <p className="text-xl text-muted-foreground animate-pulse">Processing your payment...</p>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -94,8 +92,8 @@ function OrderSuccessPageContent() {
             <div className="space-y-2">
               <h3 className="font-semibold">What&apos;s Next?</h3>
               <p className="text-muted-foreground">
-                Your AirBear driver will arrive at your pickup location. You can
-                track your ride in real-time on the map.
+                Your AirBear driver will arrive at your pickup location. You can track your ride in
+                real-time on the map.
               </p>
               <div className="flex gap-4 mt-4">
                 <Button asChild className="flex-1">
@@ -120,13 +118,19 @@ function OrderSuccessPageContent() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 export default function OrderSuccessPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-black text-white flex items-center justify-center">Loading success page...</div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-black text-white flex items-center justify-center">
+          Loading success page...
+        </div>
+      }
+    >
       <OrderSuccessPageContent />
     </Suspense>
-  );
+  )
 }

@@ -1,20 +1,14 @@
-"use client";
+"use client"
 
-import { useState, useEffect, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useAuthContext } from "@/components/auth-provider";
-import { getSupabaseClient } from "@/lib/supabase/client";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
+import { useState, useEffect, Suspense } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { useAuthContext } from "@/components/auth-provider"
+import { getSupabaseClient } from "@/lib/supabase/client"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { useToast } from "@/hooks/use-toast"
 import {
   MapPin,
   Navigation,
@@ -25,124 +19,119 @@ import {
   Map,
   Eye,
   EyeOff,
-} from "lucide-react";
-import Link from "next/link";
-import MapComponent, { type Spot } from "@/components/map-view-beautiful";
-import type { AirbearLocation } from "@/lib/supabase/realtime";
-import { RidePayment } from "@/components/ride-payment";
+} from "lucide-react"
+import Link from "next/link"
+import MapComponent, { type Spot } from "@/components/map-view-beautiful"
+import type { AirbearLocation } from "@/lib/supabase/realtime"
+import { RidePayment } from "@/components/ride-payment"
 
 function BookRidePageContent() {
-  const { user, loading: authLoading } = useAuthContext();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const { toast } = useToast();
-  const [spots, setSpots] = useState<Spot[]>([]);
-  const [airbears, setAirbears] = useState<AirbearLocation[]>([]);
-  const [pickupSpot, setPickupSpot] = useState<Spot | null>(null);
-  const [destinationSpot, setDestinationSpot] = useState<Spot | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [booking, setBooking] = useState(false);
-  const [bookingSuccess, setBookingSuccess] = useState(false);
-  const [confirmedRide, setConfirmedRide] = useState<any>(null);
-  const [showMap, setShowMap] = useState(false);
-  const [selectingMode, setSelectingMode] = useState<
-    "pickup" | "destination" | null
-  >(null);
+  const { user, loading: authLoading } = useAuthContext()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const { toast } = useToast()
+  const [spots, setSpots] = useState<Spot[]>([])
+  const [airbears, setAirbears] = useState<AirbearLocation[]>([])
+  const [pickupSpot, setPickupSpot] = useState<Spot | null>(null)
+  const [destinationSpot, setDestinationSpot] = useState<Spot | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [booking, setBooking] = useState(false)
+  const [bookingSuccess, setBookingSuccess] = useState(false)
+  const [confirmedRide, setConfirmedRide] = useState<any>(null)
+  const [showMap, setShowMap] = useState(false)
+  const [selectingMode, setSelectingMode] = useState<"pickup" | "destination" | null>(null)
 
   useEffect(() => {
     if (!authLoading && !user) {
-      router.push("/auth/login");
+      router.push("/auth/login")
     }
-  }, [user, authLoading, router]);
+  }, [user, authLoading, router])
 
   useEffect(() => {
     const loadSpots = async () => {
       try {
         // Use regular spots API for now (until numbered spots are set up)
-        const response = await fetch("/api/spots");
-        if (!response.ok) throw new Error("Failed to fetch spots");
+        const response = await fetch("/api/spots")
+        if (!response.ok) throw new Error("Failed to fetch spots")
 
-        const { spots } = await response.json();
-        setSpots(spots || []);
+        const { spots } = await response.json()
+        setSpots(spots || [])
 
         // Load AirBears for map display
-        const airbearsResponse = await fetch("/api/airbear/locations");
+        const airbearsResponse = await fetch("/api/airbear/locations")
         if (airbearsResponse.ok) {
-          const airbearsData = await airbearsResponse.json();
-          setAirbears(airbearsData.data || []);
-          
+          const airbearsData = await airbearsResponse.json()
+          setAirbears(airbearsData.data || [])
+
           // Show driver-specific message if applicable
           if (airbearsData.isDriverView) {
-            console.log("Driver view: Showing only assigned AirBear");
+            console.log("Driver view: Showing only assigned AirBear")
           }
         }
 
         // Check for pickup spot from URL
-        const pickupId = searchParams.get("pickup");
+        const pickupId = searchParams.get("pickup")
         if (pickupId && spots) {
-          const spot = spots.find((s: any) => s.id === pickupId);
-          if (spot) setPickupSpot(spot);
+          const spot = spots.find((s: any) => s.id === pickupId)
+          if (spot) setPickupSpot(spot)
         }
       } catch (error) {
-        console.error("Error loading spots:", error);
+        console.error("Error loading spots:", error)
         toast({
           title: "Error",
           description: "Failed to load locations",
           variant: "destructive",
-        });
+        })
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    loadSpots();
-  }, [searchParams, toast]);
+    loadSpots()
+  }, [searchParams, toast])
 
   const calculateDistance = (spot1: Spot, spot2: Spot): number => {
-    const R = 6371; // Earth's radius in km
-    const lat1 = spot1.latitude * (Math.PI / 180);
-    const lat2 = spot2.latitude * (Math.PI / 180);
-    const deltaLat = (spot2.latitude - spot1.latitude) * (Math.PI / 180);
-    const deltaLon = (spot2.longitude - spot1.longitude) * (Math.PI / 180);
+    const R = 6371 // Earth's radius in km
+    const lat1 = spot1.latitude * (Math.PI / 180)
+    const lat2 = spot2.latitude * (Math.PI / 180)
+    const deltaLat = (spot2.latitude - spot1.latitude) * (Math.PI / 180)
+    const deltaLon = (spot2.longitude - spot1.longitude) * (Math.PI / 180)
 
     const a =
       Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
-      Math.cos(lat1) *
-        Math.cos(lat2) *
-        Math.sin(deltaLon / 2) *
-        Math.sin(deltaLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      Math.cos(lat1) * Math.cos(lat2) * Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2)
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 
-    return R * c;
-  };
+    return R * c
+  }
 
   const estimateFare = (distance: number): number => {
     // Flat rate $4.00 for all rides
-    return 4.0;
-  };
+    return 4.0
+  }
 
   const handleSpotSelect = (spot: Spot) => {
     if (selectingMode === "pickup") {
-      setPickupSpot(spot);
-      setSelectingMode(null);
+      setPickupSpot(spot)
+      setSelectingMode(null)
       toast({
         title: "Pickup Selected",
         description: `Pickup location set to ${spot.name}`,
-      });
+      })
     } else if (selectingMode === "destination") {
-      setDestinationSpot(spot);
-      setSelectingMode(null);
+      setDestinationSpot(spot)
+      setSelectingMode(null)
       toast({
         title: "Destination Selected",
         description: `Destination set to ${spot.name}`,
-      });
+      })
     }
-  };
+  }
 
   const startMapSelection = (mode: "pickup" | "destination") => {
-    setSelectingMode(mode);
-    setShowMap(true);
-  };
+    setSelectingMode(mode)
+    setShowMap(true)
+  }
 
   const handleBookRide = async () => {
     if (!pickupSpot || !destinationSpot || !user) {
@@ -150,15 +139,15 @@ function BookRidePageContent() {
         title: "Missing Information",
         description: "Please select both pickup and destination locations",
         variant: "destructive",
-      });
-      return;
+      })
+      return
     }
 
-    setBooking(true);
+    setBooking(true)
 
     try {
-      const distance = calculateDistance(pickupSpot, destinationSpot);
-      const fare = estimateFare(distance);
+      const distance = calculateDistance(pickupSpot, destinationSpot)
+      const fare = estimateFare(distance)
 
       // Create ride booking via API
       const response = await fetch("/api/rides/create", {
@@ -170,56 +159,54 @@ function BookRidePageContent() {
           fare,
           distance,
         }),
-      });
+      })
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to create ride");
+        const error = await response.json()
+        throw new Error(error.error || "Failed to create ride")
       }
 
-      const { ride } = await response.json();
+      const { ride } = await response.json()
 
-      setConfirmedRide(ride);
-      setBookingSuccess(true);
+      setConfirmedRide(ride)
+      setBookingSuccess(true)
 
       toast({
         title: "Ride Booked!",
         description: `Your ride from ${pickupSpot.name} to ${destinationSpot.name} has been booked.`,
-      });
+      })
     } catch (error: any) {
-      console.error("Booking error:", error);
+      console.error("Booking error:", error)
       toast({
         title: "Booking Failed",
         description: error.message || "Failed to book ride. Please try again.",
         variant: "destructive",
-      });
+      })
     } finally {
-      setBooking(false);
+      setBooking(false)
     }
-  };
+  }
 
   const handlePaymentComplete = () => {
     // Payment is complete, ride is confirmed
-    console.log("Payment completed");
-  };
+    console.log("Payment completed")
+  }
 
   const handleRideComplete = () => {
     // Reset the booking flow for a new ride
-    setConfirmedRide(null);
-    setBookingSuccess(false);
-    setPickupSpot(null);
-    setDestinationSpot(null);
+    setConfirmedRide(null)
+    setBookingSuccess(false)
+    setPickupSpot(null)
+    setDestinationSpot(null)
     toast({
       title: "Ready for Next Ride",
       description: "Book your next AirBear ride!",
-    });
-  };
+    })
+  }
 
   const distance =
-    pickupSpot && destinationSpot
-      ? calculateDistance(pickupSpot, destinationSpot)
-      : 0;
-  const fare = estimateFare(distance);
+    pickupSpot && destinationSpot ? calculateDistance(pickupSpot, destinationSpot) : 0
+  const fare = estimateFare(distance)
 
   if (authLoading || loading) {
     return (
@@ -234,12 +221,10 @@ function BookRidePageContent() {
               />
             </div>
           </div>
-          <p className="text-xl text-muted-foreground animate-pulse">
-            Loading booking...
-          </p>
+          <p className="text-xl text-muted-foreground animate-pulse">Loading booking...</p>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -274,8 +259,7 @@ function BookRidePageContent() {
                   Visual Location Selection
                 </CardTitle>
                 <CardDescription>
-                  Click on the map to select your pickup and destination
-                  locations
+                  Click on the map to select your pickup and destination locations
                 </CardDescription>
               </div>
               <Button
@@ -283,11 +267,7 @@ function BookRidePageContent() {
                 onClick={() => setShowMap(!showMap)}
                 className="flex items-center gap-2"
               >
-                {showMap ? (
-                  <EyeOff className="w-4 h-4" />
-                ) : (
-                  <Eye className="w-4 h-4" />
-                )}
+                {showMap ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 {showMap ? "Hide Map" : "Show Map"}
               </Button>
             </div>
@@ -313,31 +293,21 @@ function BookRidePageContent() {
                   disabled={selectingMode === "destination"}
                 >
                   <MapPin className="w-4 h-4" />
-                  {pickupSpot
-                    ? `📍 ${pickupSpot.name}`
-                    : "Select Pickup on Map"}
+                  {pickupSpot ? `📍 ${pickupSpot.name}` : "Select Pickup on Map"}
                 </Button>
                 <Button
                   onClick={() => startMapSelection("destination")}
-                  variant={
-                    selectingMode === "destination" ? "default" : "outline"
-                  }
+                  variant={selectingMode === "destination" ? "default" : "outline"}
                   className="flex items-center gap-2"
                   disabled={selectingMode === "pickup"}
                 >
                   <Navigation className="w-4 h-4" />
-                  {destinationSpot
-                    ? `📍 ${destinationSpot.name}`
-                    : "Select Destination on Map"}
+                  {destinationSpot ? `📍 ${destinationSpot.name}` : "Select Destination on Map"}
                 </Button>
               </div>
 
               <div className="h-96 rounded-lg overflow-hidden border-2 border-muted">
-                <MapComponent
-                  spots={spots}
-                  airbears={airbears}
-                  onSpotSelect={handleSpotSelect}
-                />
+                <MapComponent spots={spots} airbears={airbears} onSpotSelect={handleSpotSelect} />
               </div>
             </CardContent>
           )}
@@ -360,9 +330,7 @@ function BookRidePageContent() {
                     {pickupSpot.name}
                   </p>
                   {pickupSpot.description && (
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {pickupSpot.description}
-                    </p>
+                    <p className="text-sm text-muted-foreground mt-1">{pickupSpot.description}</p>
                   )}
                   <Button
                     variant="outline"
@@ -391,9 +359,7 @@ function BookRidePageContent() {
                     >
                       <p className="font-medium">{spot.name}</p>
                       {spot.description && (
-                        <p className="text-sm text-muted-foreground">
-                          {spot.description}
-                        </p>
+                        <p className="text-sm text-muted-foreground">{spot.description}</p>
                       )}
                     </div>
                   ))}
@@ -451,9 +417,7 @@ function BookRidePageContent() {
                       >
                         <p className="font-medium">{spot.name}</p>
                         {spot.description && (
-                          <p className="text-sm text-muted-foreground">
-                            {spot.description}
-                          </p>
+                          <p className="text-sm text-muted-foreground">{spot.description}</p>
                         )}
                       </div>
                     ))}
@@ -500,9 +464,7 @@ function BookRidePageContent() {
                   <Clock className="w-5 h-5 text-purple-600" />
                   <div>
                     <p className="text-sm text-muted-foreground">Est. Time</p>
-                    <p className="font-semibold">
-                      {Math.round(distance * 3)} min
-                    </p>
+                    <p className="font-semibold">{Math.round(distance * 3)} min</p>
                   </div>
                 </div>
               </div>
@@ -512,12 +474,8 @@ function BookRidePageContent() {
                   <div className="flex items-center gap-3">
                     <DollarSign className="w-6 h-6 text-emerald-600" />
                     <div>
-                      <p className="text-sm text-muted-foreground">
-                        Total Fare
-                      </p>
-                      <p className="text-2xl font-bold text-emerald-600">
-                        ${fare.toFixed(2)}
-                      </p>
+                      <p className="text-sm text-muted-foreground">Total Fare</p>
+                      <p className="text-2xl font-bold text-emerald-600">${fare.toFixed(2)}</p>
                     </div>
                   </div>
                 </div>
@@ -560,13 +518,19 @@ function BookRidePageContent() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 export default function BookRidePage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-black text-white flex items-center justify-center">Loading booking...</div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-black text-white flex items-center justify-center">
+          Loading booking...
+        </div>
+      }
+    >
       <BookRidePageContent />
     </Suspense>
-  );
+  )
 }

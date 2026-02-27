@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 export default function TestPage() {
   return (
@@ -13,5 +13,5 @@ export default function TestPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -1,12 +1,12 @@
-import { getSupabaseServer } from "@/lib/supabase/server";
-import { NextResponse } from "next/server";
+import { getSupabaseServer } from "@/lib/supabase/server"
+import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
   try {
-    const supabase = await getSupabaseServer();
+    const supabase = await getSupabaseServer()
 
     // Clear existing spots
-    await supabase.from("spots").delete().neq("id", "dummy");
+    await supabase.from("spots").delete().neq("id", "dummy")
 
     // Insert 16 numbered ride spots using user's exact data
     const spotsData = [
@@ -163,16 +163,16 @@ export async function POST(request: Request) {
         amenities: ["indoor-shopping", "fitting-rooms", "parking", "atm"],
         is_active: true,
       },
-    ];
+    ]
 
     const { data: spots, error: spotsError } = await supabase
       .from("spots")
       .insert(spotsData)
-      .select();
+      .select()
 
     if (spotsError) {
-      console.error("Error creating spots:", spotsError);
-      return NextResponse.json({ error: spotsError.message }, { status: 500 });
+      console.error("Error creating spots:", spotsError)
+      return NextResponse.json({ error: spotsError.message }, { status: 500 })
     }
 
     // Update AirBears to use new spot IDs
@@ -185,22 +185,22 @@ export async function POST(request: Request) {
       { id: "airbear-006", current_spot_id: "spot-06" },
       { id: "airbear-007", current_spot_id: "spot-07" },
       { id: "airbear-008", current_spot_id: "spot-08" },
-    ];
+    ]
 
     for (const airbear of airbearUpdates) {
       await supabase
         .from("airbears")
         .update({ current_spot_id: airbear.current_spot_id })
-        .eq("id", airbear.id);
+        .eq("id", airbear.id)
     }
 
     return NextResponse.json({
       success: true,
       message: "Numbered spots setup completed successfully!",
       spotsCreated: spots?.length || 0,
-    });
+    })
   } catch (error: any) {
-    console.error("Setup error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error("Setup error:", error)
+    return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }

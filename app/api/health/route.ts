@@ -1,15 +1,12 @@
-import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { NextResponse } from "next/server"
+import { createClient } from "@/lib/supabase/server"
 
 export async function GET() {
   try {
-    const supabase = await createClient();
+    const supabase = await createClient()
 
     // Check database connectivity
-    const { error: dbError } = await supabase
-      .from("spots")
-      .select("id")
-      .limit(1);
+    const { error: dbError } = await supabase.from("spots").select("id").limit(1)
 
     const health = {
       status: dbError ? "unhealthy" : "healthy",
@@ -20,11 +17,11 @@ export async function GET() {
       },
       version: process.env.NEXT_PUBLIC_APP_VERSION || "1.0.0",
       ...(dbError && { error: dbError.message }),
-    };
+    }
 
-    const statusCode = dbError ? 503 : 200;
+    const statusCode = dbError ? 503 : 200
 
-    return NextResponse.json(health, { status: statusCode });
+    return NextResponse.json(health, { status: statusCode })
   } catch (error: any) {
     return NextResponse.json(
       {
@@ -33,6 +30,6 @@ export async function GET() {
         error: error.message,
       },
       { status: 503 }
-    );
+    )
   }
 }

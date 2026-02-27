@@ -1,9 +1,9 @@
-import { getSupabaseServer } from "@/lib/supabase/server";
-import { NextResponse } from "next/server";
+import { getSupabaseServer } from "@/lib/supabase/server"
+import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
   try {
-    const supabase = await getSupabaseServer();
+    const supabase = await getSupabaseServer()
 
     // Update existing spots with user's exact data
     const spotsUpdates = [
@@ -119,11 +119,11 @@ export async function POST(request: Request) {
         longitude: -75.972315,
         description: "BU Science Building",
       },
-    ];
+    ]
 
-    let successCount = 0;
-    let errorCount = 0;
-    const errors = [];
+    let successCount = 0
+    let errorCount = 0
+    const errors = []
 
     for (const spot of spotsUpdates) {
       try {
@@ -136,19 +136,19 @@ export async function POST(request: Request) {
             description: spot.description,
             is_active: true,
           })
-          .eq("id", spot.id);
+          .eq("id", spot.id)
 
         if (error) {
-          console.error(`Error updating ${spot.id}:`, error);
-          errors.push(`${spot.id}: ${error.message}`);
-          errorCount++;
+          console.error(`Error updating ${spot.id}:`, error)
+          errors.push(`${spot.id}: ${error.message}`)
+          errorCount++
         } else {
-          successCount++;
+          successCount++
         }
       } catch (err: any) {
-        console.error(`Error updating ${spot.id}:`, err);
-        errors.push(`${spot.id}: ${err.message}`);
-        errorCount++;
+        console.error(`Error updating ${spot.id}:`, err)
+        errors.push(`${spot.id}: ${err.message}`)
+        errorCount++
       }
     }
 
@@ -158,9 +158,9 @@ export async function POST(request: Request) {
       successCount,
       errorCount,
       errors,
-    });
+    })
   } catch (error: any) {
-    console.error("Setup error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error("Setup error:", error)
+    return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }

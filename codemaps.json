@@ -5,13 +5,7 @@
   "enabled": true,
   "sourceMaps": true,
   "inlineSources": true,
-  "exclude": [
-    "node_modules/**",
-    ".next/**",
-    "out/**",
-    "coverage/**",
-    "dist/**"
-  ],
+  "exclude": ["node_modules/**", ".next/**", "out/**", "coverage/**", "dist/**"],
   "include": [
     "app/**/*.{ts,tsx,js,jsx}",
     "components/**/*.{ts,tsx,js,jsx}",

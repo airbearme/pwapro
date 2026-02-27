@@ -14,9 +14,9 @@ class AdvancedCodeMapsAnalyzer {
     this.projectRoot = process.cwd();
     this.outputDir = path.join(this.projectRoot, '.next/codemaps');
     this.metrics = {
-      components: {},
-      api: {},
-      utilities: {},
+      components: [],
+      api: [],
+      utilities: [],
       dependencies: {},
       performance: {},
       security: {},
@@ -131,7 +131,7 @@ class AdvancedCodeMapsAnalyzer {
       }
     }
 
-    complexityReport.average = complexityReport.total / this.metrics.components.length;
+    complexityReport.average = complexityReport.total / (this.metrics.components.length || 1);
 
     // Calculate averages by type
     for (const [type, data] of Object.entries(complexityReport.byType)) {
@@ -650,6 +650,10 @@ class AdvancedCodeMapsAnalyzer {
    */
   async createAdvancedReports() {
     console.log('📊 Creating advanced reports...');
+
+    if (!fs.existsSync(this.outputDir)) {
+      fs.mkdirSync(this.outputDir, { recursive: true });
+    }
 
     const reports = {
       timestamp: new Date().toISOString(),

@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
   try {
     // Manual update for spots with numbered IDs
-    const { action } = await request.json();
+    const { action } = await request.json()
 
     if (action === "update_spots") {
       // Return the numbered spots data for manual database update
@@ -161,7 +161,7 @@ export async function POST(request: Request) {
           amenities: ["Charging", "Maintenance", "Office"],
           is_active: true,
         },
-      ];
+      ]
 
       return NextResponse.json({
         success: true,
@@ -175,17 +175,17 @@ export async function POST(request: Request) {
           "5. Paste this JSON and run update",
           "6. This will bypass RLS policy",
         ],
-      });
+      })
     } else {
       return NextResponse.json(
         {
           error: "Invalid action. Available actions: update_spots",
         },
         { status: 400 }
-      );
+      )
     }
   } catch (error: any) {
-    console.error("API error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error("API error:", error)
+    return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }

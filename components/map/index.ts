@@ -1,2 +1,2 @@
 // map components
-export {};
+export {}

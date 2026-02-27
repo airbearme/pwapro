@@ -1,9 +1,9 @@
-import { getSupabaseServer } from "@/lib/supabase/server";
-import { NextResponse } from "next/server";
+import { getSupabaseServer } from "@/lib/supabase/server"
+import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
   try {
-    const { email, password, full_name } = await request.json();
+    const { email, password, full_name } = await request.json()
 
     if (!email || !password || !full_name) {
       return NextResponse.json(
@@ -11,10 +11,10 @@ export async function POST(request: Request) {
           error: "Email, password, and full name are required",
         },
         { status: 400 }
-      );
+      )
     }
 
-    const supabase = await getSupabaseServer();
+    const supabase = await getSupabaseServer()
 
     // Create user account
     const {
@@ -28,16 +28,16 @@ export async function POST(request: Request) {
           full_name,
         },
       },
-    });
+    })
 
     if (error) {
-      console.error("Signup error:", error);
+      console.error("Signup error:", error)
       return NextResponse.json(
         {
           error: error.message || "Registration failed",
         },
         { status: 400 }
-      );
+      )
     }
 
     // Create user profile
@@ -53,16 +53,16 @@ export async function POST(request: Request) {
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       })
-      .select();
+      .select()
 
     if (profileError) {
-      console.error("Profile creation error:", profileError);
+      console.error("Profile creation error:", profileError)
       return NextResponse.json(
         {
           error: "Failed to create user profile",
         },
         { status: 500 }
-      );
+      )
     }
 
     return NextResponse.json({
@@ -72,14 +72,14 @@ export async function POST(request: Request) {
         email: user?.email,
         full_name,
       },
-    });
+    })
   } catch (error: any) {
-    console.error("Signup API error:", error);
+    console.error("Signup API error:", error)
     return NextResponse.json(
       {
         error: error.message || "Registration failed",
       },
       { status: 500 }
-    );
+    )
   }
 }

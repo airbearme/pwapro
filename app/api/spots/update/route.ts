@@ -1,5 +1,5 @@
-import { getSupabaseServer } from "@/lib/supabase/server";
-import { NextResponse } from "next/server";
+import { getSupabaseServer } from "@/lib/supabase/server"
+import { NextResponse } from "next/server"
 
 const numberedSpots = [
   {
@@ -155,33 +155,30 @@ const numberedSpots = [
     amenities: ["Charging", "Maintenance", "Office"],
     is_active: true,
   },
-];
+]
 
 export async function POST(request: Request) {
   try {
-    const supabase = await getSupabaseServer();
+    const supabase = await getSupabaseServer()
 
     // Delete existing spots
-    await supabase.from("spots").delete().neq("id", null);
+    await supabase.from("spots").delete().neq("id", null)
 
     // Insert new numbered spots
-    const { data: spots, error } = await supabase
-      .from("spots")
-      .insert(numberedSpots)
-      .select();
+    const { data: spots, error } = await supabase.from("spots").insert(numberedSpots).select()
 
     if (error) {
-      console.error("Error updating spots:", error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      console.error("Error updating spots:", error)
+      return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
     return NextResponse.json({
       success: true,
       message: `Updated ${spots?.length || 0} spots with numbered IDs (1-17)`,
       spots: spots || [],
-    });
+    })
   } catch (error: any) {
-    console.error("API error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error("API error:", error)
+    return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }

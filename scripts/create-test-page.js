@@ -1,35 +1,35 @@
 #!/usr/bin/env node
 
-import dotenv from "dotenv";
-import SftpClient from "ssh2-sftp-client";
+import dotenv from "dotenv"
+import SftpClient from "ssh2-sftp-client"
 
 // Load environment variables
-dotenv.config();
+dotenv.config()
 
 const IONOS_CONFIG = {
-	host: process.env.IONOS_SFTP_HOST || "access-5018328928.webspace-host.com",
-	username: process.env.IONOS_SFTP_USER || "a2096159",
-	password: process.env.IONOS_SFTP_PASSWORD || "Yaa7Rih^_gpej+-",
-	port: 22,
-};
+  host: process.env.IONOS_SFTP_HOST || "access-5018328928.webspace-host.com",
+  username: process.env.IONOS_SFTP_USER || "a2096159",
+  password: process.env.IONOS_SFTP_PASSWORD || "Yaa7Rih^_gpej+-",
+  port: 22,
+}
 
-console.log("🧪 Creating test page on IONOS...");
+console.log("🧪 Creating test page on IONOS...")
 
 async function createTestPage() {
-	try {
-		const sftp = new SftpClient();
+  try {
+    const sftp = new SftpClient()
 
-		await sftp.connect({
-			host: IONOS_CONFIG.host,
-			username: IONOS_CONFIG.username,
-			password: IONOS_CONFIG.password,
-			port: IONOS_CONFIG.port,
-		});
+    await sftp.connect({
+      host: IONOS_CONFIG.host,
+      username: IONOS_CONFIG.username,
+      password: IONOS_CONFIG.password,
+      port: IONOS_CONFIG.port,
+    })
 
-		console.log("📡 Connected to IONOS SFTP");
+    console.log("📡 Connected to IONOS SFTP")
 
-		// Create a simple test HTML page
-		const testContent = `<!DOCTYPE html>
+    // Create a simple test HTML page
+    const testContent = `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -88,30 +88,28 @@ async function createTestPage() {
         </div>
     </div>
 </body>
-</html>`;
+</html>`
 
-		// Upload to multiple locations for testing
-		const locations = ["/", "/httpdocs", "/public_html"];
+    // Upload to multiple locations for testing
+    const locations = ["/", "/httpdocs", "/public_html"]
 
-		for (const location of locations) {
-			const testFilePath = `${location}/test.html`;
-			try {
-				await sftp.put(Buffer.from(testContent), testFilePath);
-				console.log(`✅ Created test page at: ${testFilePath}`);
-				console.log(`🌐 Try accessing: https://airbear.me/test.html`);
-			} catch (err) {
-				console.log(
-					`❌ Failed to create test page at ${testFilePath}: ${err.message}`,
-				);
-			}
-		}
+    for (const location of locations) {
+      const testFilePath = `${location}/test.html`
+      try {
+        await sftp.put(Buffer.from(testContent), testFilePath)
+        console.log(`✅ Created test page at: ${testFilePath}`)
+        console.log(`🌐 Try accessing: https://airbear.me/test.html`)
+      } catch (err) {
+        console.log(`❌ Failed to create test page at ${testFilePath}: ${err.message}`)
+      }
+    }
 
-		await sftp.end();
-		console.log("\n🎯 Test page creation completed!");
-		console.log("🔗 Try accessing: https://airbear.me/test.html");
-	} catch (error) {
-		console.error("❌ Test page creation failed:", error.message);
-	}
+    await sftp.end()
+    console.log("\n🎯 Test page creation completed!")
+    console.log("🔗 Try accessing: https://airbear.me/test.html")
+  } catch (error) {
+    console.error("❌ Test page creation failed:", error.message)
+  }
 }
 
-createTestPage();
+createTestPage()

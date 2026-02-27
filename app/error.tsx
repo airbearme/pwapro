@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic"
 
 export default function Error() {
   return (
@@ -10,7 +10,5 @@ export default function Error() {
         <p>Please try again later.</p>
       </div>
     </div>
-  );
+  )
 }
-
-

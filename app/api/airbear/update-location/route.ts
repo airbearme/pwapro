@@ -1,27 +1,20 @@
-import { getSupabaseServer } from "@/lib/supabase/server";
-import { NextResponse } from "next/server";
+import { getSupabaseServer } from "@/lib/supabase/server"
+import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
   try {
-    const supabase = await getSupabaseServer();
-    const body = await request.json();
+    const supabase = await getSupabaseServer()
+    const body = await request.json()
 
-    const {
-      airbear_id,
-      latitude,
-      longitude,
-      battery_level,
-      is_available,
-      is_charging,
-      heading,
-    } = body;
+    const { airbear_id, latitude, longitude, battery_level, is_available, is_charging, heading } =
+      body
 
     // Validate required fields
     if (!airbear_id || !latitude || !longitude) {
       return NextResponse.json(
         { error: "Missing required fields: airbear_id, latitude, longitude" },
         { status: 400 }
-      );
+      )
     }
 
     // Validate coordinates
@@ -33,10 +26,7 @@ export async function POST(request: Request) {
       longitude < -180 ||
       longitude > 180
     ) {
-      return NextResponse.json(
-        { error: "Invalid coordinates" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Invalid coordinates" }, { status: 400 })
     }
 
     // Update AirBear location and status
@@ -44,7 +34,7 @@ export async function POST(request: Request) {
       latitude,
       longitude,
       updated_at: new Date().toISOString(),
-    };
+    }
 
     // Add optional fields if provided
     if (battery_level !== undefined) {
@@ -52,21 +42,21 @@ export async function POST(request: Request) {
         return NextResponse.json(
           { error: "Battery level must be between 0 and 100" },
           { status: 400 }
-        );
+        )
       }
-      updateData.battery_level = battery_level;
+      updateData.battery_level = battery_level
     }
 
     if (is_available !== undefined) {
-      updateData.is_available = is_available;
+      updateData.is_available = is_available
     }
 
     if (is_charging !== undefined) {
-      updateData.is_charging = is_charging;
+      updateData.is_charging = is_charging
     }
 
     if (heading !== undefined) {
-      updateData.heading = heading;
+      updateData.heading = heading
     }
 
     const { data: airbear, error } = await supabase
@@ -74,24 +64,24 @@ export async function POST(request: Request) {
       .update(updateData)
       .eq("id", airbear_id)
       .select()
-      .single();
+      .single()
 
     if (error) {
-      console.error("Error updating AirBear location:", error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      console.error("Error updating AirBear location:", error)
+      return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
     if (!airbear) {
-      return NextResponse.json({ error: "AirBear not found" }, { status: 404 });
+      return NextResponse.json({ error: "AirBear not found" }, { status: 404 })
     }
 
     return NextResponse.json({
       success: true,
       message: "AirBear location updated successfully",
       airbear: airbear,
-    });
+    })
   } catch (error: any) {
-    console.error("API error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error("API error:", error)
+    return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }

@@ -1,2 +1,2 @@
 // layout components
-export {};
+export {}

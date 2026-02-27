@@ -7,15 +7,13 @@ export const getStripe = () => {
 
   if (!publishableKey) {
     console.error("❌ Stripe configuration error: Missing NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY")
-    throw new Error(
-      "Missing Stripe publishable key. Please set NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
-    )
+    throw new Error("Missing Stripe publishable key. Please set NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY")
   }
 
   // Validate key format
   if (!publishableKey.startsWith("pk_")) {
     throw new Error(
-      `Invalid Stripe publishable key format. Expected key starting with 'pk_', got: ${publishableKey.substring(0, 10)}...`,
+      `Invalid Stripe publishable key format. Expected key starting with 'pk_', got: ${publishableKey.substring(0, 10)}...`
     )
   }
 

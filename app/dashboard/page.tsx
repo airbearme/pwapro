@@ -1,45 +1,45 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useAuthContext } from "@/components/auth-provider";
-import { getSupabaseClient } from "@/lib/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Calendar, MapPin, Leaf, Award, Navigation, Clock, CheckCircle } from "lucide-react";
-import Link from "next/link";
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+import { useAuthContext } from "@/components/auth-provider"
+import { getSupabaseClient } from "@/lib/supabase/client"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Calendar, MapPin, Leaf, Award, Navigation, Clock, CheckCircle } from "lucide-react"
+import Link from "next/link"
 
 interface Ride {
-  id: string;
-  pickup_spot_id: string;
-  dropoff_spot_id: string;
-  status: string;
-  fare: number;
-  distance: number;
-  created_at: string;
-  completed_at?: string;
+  id: string
+  pickup_spot_id: string
+  dropoff_spot_id: string
+  status: string
+  fare: number
+  distance: number
+  created_at: string
+  completed_at?: string
 }
 
 export default function DashboardPage() {
-  const { user, loading: authLoading } = useAuthContext();
-  const router = useRouter();
-  const [rides, setRides] = useState<Ride[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [spots, setSpots] = useState<Record<string, { name: string }>>({});
+  const { user, loading: authLoading } = useAuthContext()
+  const router = useRouter()
+  const [rides, setRides] = useState<Ride[]>([])
+  const [loading, setLoading] = useState(true)
+  const [spots, setSpots] = useState<Record<string, { name: string }>>({})
 
   useEffect(() => {
     if (!authLoading && !user) {
-      router.push("/auth/login");
+      router.push("/auth/login")
     }
-  }, [user, authLoading, router]);
+  }, [user, authLoading, router])
 
   useEffect(() => {
     const loadData = async () => {
-      if (!user) return;
+      if (!user) return
 
       try {
-        const supabase = getSupabaseClient();
+        const supabase = getSupabaseClient()
 
         // Load user rides
         const { data: ridesData, error: ridesError } = await supabase
@@ -47,32 +47,30 @@ export default function DashboardPage() {
           .select("*")
           .eq("user_id", user.id)
           .order("created_at", { ascending: false })
-          .limit(10);
+          .limit(10)
 
-        if (ridesError) throw ridesError;
-        setRides(ridesData || []);
+        if (ridesError) throw ridesError
+        setRides(ridesData || [])
 
         // Load spots for display
-        const { data: spotsData } = await supabase
-          .from("spots")
-          .select("id, name");
+        const { data: spotsData } = await supabase.from("spots").select("id, name")
 
         if (spotsData) {
-          const spotsMap: Record<string, { name: string }> = {};
+          const spotsMap: Record<string, { name: string }> = {}
           spotsData.forEach((spot: any) => {
-            spotsMap[spot.id] = { name: spot.name };
-          });
-          setSpots(spotsMap);
+            spotsMap[spot.id] = { name: spot.name }
+          })
+          setSpots(spotsMap)
         }
       } catch (error) {
-        console.error("Error loading dashboard data:", error);
+        console.error("Error loading dashboard data:", error)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    loadData();
-  }, [user]);
+    loadData()
+  }, [user])
 
   if (authLoading || loading) {
     return (
@@ -87,26 +85,24 @@ export default function DashboardPage() {
               />
             </div>
           </div>
-          <p className="text-xl text-muted-foreground animate-pulse">
-            Loading dashboard...
-          </p>
+          <p className="text-xl text-muted-foreground animate-pulse">Loading dashboard...</p>
         </div>
       </div>
-    );
+    )
   }
 
   if (!user) {
-    return null;
+    return null
   }
 
-  const totalRides = rides.length;
-  const completedRides = rides.filter((r) => r.status === "completed").length;
+  const totalRides = rides.length
+  const completedRides = rides.filter((r) => r.status === "completed").length
   const totalSpent = rides
     .filter((r) => r.status === "completed")
-    .reduce((sum, r) => sum + (r.fare || 0), 0);
+    .reduce((sum, r) => sum + (r.fare || 0), 0)
   const co2Saved = rides
     .filter((r) => r.status === "completed")
-    .reduce((sum, r) => sum + (r.distance || 0) * 0.2, 0); // ~0.2kg CO2 per km saved
+    .reduce((sum, r) => sum + (r.distance || 0) * 0.2, 0) // ~0.2kg CO2 per km saved
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-950 via-lime-950 to-amber-950 dark:from-emerald-950 dark:via-lime-950 dark:to-amber-950">
@@ -125,9 +121,7 @@ export default function DashboardPage() {
           <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-emerald-600 via-lime-500 to-amber-500 bg-clip-text text-transparent animate-pulse-glow">
             Welcome back, {user.email?.split("@")[0] || "User"}!
           </h1>
-          <p className="text-lg text-muted-foreground">
-            Your AirBear journey dashboard
-          </p>
+          <p className="text-lg text-muted-foreground">Your AirBear journey dashboard</p>
         </div>
 
         {/* Stats */}
@@ -139,9 +133,7 @@ export default function DashboardPage() {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Total Rides</p>
-                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                  {totalRides}
-                </p>
+                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{totalRides}</p>
               </div>
             </div>
           </Card>
@@ -197,9 +189,7 @@ export default function DashboardPage() {
                 <Navigation className="w-5 h-5" />
                 Book a Ride
               </CardTitle>
-              <CardDescription>
-                Find available AirBears and book your next ride
-              </CardDescription>
+              <CardDescription>Find available AirBears and book your next ride</CardDescription>
             </CardHeader>
             <CardContent>
               <Button asChild className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600">
@@ -214,9 +204,7 @@ export default function DashboardPage() {
                 <MapPin className="w-5 h-5" />
                 Ride History
               </CardTitle>
-              <CardDescription>
-                View all your past and upcoming rides
-              </CardDescription>
+              <CardDescription>View all your past and upcoming rides</CardDescription>
             </CardHeader>
             <CardContent>
               <Button asChild variant="outline" className="w-full">
@@ -247,15 +235,18 @@ export default function DashboardPage() {
             ) : (
               <div className="space-y-4">
                 {rides.map((ride) => {
-                  const pickupSpot = spots[ride.pickup_spot_id];
-                  const dropoffSpot = spots[ride.dropoff_spot_id];
+                  const pickupSpot = spots[ride.pickup_spot_id]
+                  const dropoffSpot = spots[ride.dropoff_spot_id]
                   const statusColors: Record<string, string> = {
-                    pending: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
+                    pending:
+                      "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
                     accepted: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
-                    in_progress: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400",
-                    completed: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
+                    in_progress:
+                      "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400",
+                    completed:
+                      "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
                     cancelled: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
-                  };
+                  }
 
                   return (
                     <div
@@ -302,7 +293,7 @@ export default function DashboardPage() {
                         </div>
                       </div>
                     </div>
-                  );
+                  )
                 })}
               </div>
             )}
@@ -310,9 +301,5 @@ export default function DashboardPage() {
         </Card>
       </div>
     </div>
-  );
+  )
 }
-
-
-
-

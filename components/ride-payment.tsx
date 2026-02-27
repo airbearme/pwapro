@@ -1,27 +1,27 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { useToast } from "@/hooks/use-toast";
-import { MapPin, Clock, DollarSign, CreditCard, Smartphone, QrCode, Banknote } from "lucide-react";
+import { useState } from "react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
+import { useToast } from "@/hooks/use-toast"
+import { MapPin, Clock, DollarSign, CreditCard, Smartphone, QrCode, Banknote } from "lucide-react"
 
 interface RidePaymentProps {
   ride: {
-    id: string;
-    pickup_spot_id: string;
-    dropoff_spot_id: string;
-    fare: number;
-    distance: number;
-    status: string;
-    created_at: string;
-  };
-  pickupSpot: { name: string; address?: string };
-  destinationSpot: { name: string; address?: string };
-  estimatedArrival: string;
-  onPaymentComplete?: () => void;
+    id: string
+    pickup_spot_id: string
+    dropoff_spot_id: string
+    fare: number
+    distance: number
+    status: string
+    created_at: string
+  }
+  pickupSpot: { name: string; address?: string }
+  destinationSpot: { name: string; address?: string }
+  estimatedArrival: string
+  onPaymentComplete?: () => void
 }
 
 export function RidePayment({
@@ -31,12 +31,12 @@ export function RidePayment({
   estimatedArrival,
   onPaymentComplete,
 }: RidePaymentProps) {
-  const [paymentMethod, setPaymentMethod] = useState<"card" | "digital" | "cash">("card");
-  const [processing, setProcessing] = useState(false);
-  const { toast } = useToast();
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "digital" | "cash">("card")
+  const [processing, setProcessing] = useState(false)
+  const { toast } = useToast()
 
   const handleCardPayment = async () => {
-    setProcessing(true);
+    setProcessing(true)
     try {
       // Navigate to checkout with ride information
       const params = new URLSearchParams({
@@ -44,52 +44,52 @@ export function RidePayment({
         amount: ride.fare.toString(),
         pickupSpot: pickupSpot.name,
         destinationSpot: destinationSpot.name,
-      });
-      
+      })
+
       // This will be handled by redirecting to checkout page
-      window.location.href = `/checkout?${params.toString()}`;
+      window.location.href = `/checkout?${params.toString()}`
     } catch (error) {
-      console.error("Payment navigation error:", error);
+      console.error("Payment navigation error:", error)
       toast({
         title: "Payment Error",
         description: "Failed to proceed to payment. Please try again.",
         variant: "destructive",
-      });
+      })
     } finally {
-      setProcessing(false);
+      setProcessing(false)
     }
-  };
+  }
 
   const handleCashPayment = async () => {
-    setProcessing(true);
+    setProcessing(true)
     try {
       // Update ride status to confirmed for cash payment
       const response = await fetch(`/api/rides/${ride.id}/confirm`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ paymentMethod: 'cash' })
-      });
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ paymentMethod: "cash" }),
+      })
 
       if (response.ok) {
         toast({
           title: "Cash Payment Confirmed",
           description: `Please pay $${ride.fare.toFixed(2)} to your AirBear driver when they arrive.`,
-        });
-        onPaymentComplete?.();
+        })
+        onPaymentComplete?.()
       } else {
-        throw new Error("Failed to confirm ride");
+        throw new Error("Failed to confirm ride")
       }
     } catch (error) {
-      console.error("Cash payment error:", error);
+      console.error("Cash payment error:", error)
       toast({
         title: "Payment Error",
         description: "Failed to confirm cash payment. Please try again.",
         variant: "destructive",
-      });
+      })
     } finally {
-      setProcessing(false);
+      setProcessing(false)
     }
-  };
+  }
 
   return (
     <div className="max-w-md mx-auto space-y-4">
@@ -100,9 +100,7 @@ export function RidePayment({
             <CardTitle className="text-lg">Ride Summary</CardTitle>
             <Badge variant="outline">#{ride.id.slice(-8).toUpperCase()}</Badge>
           </div>
-          <CardDescription>
-            Complete payment to confirm your AirBear ride
-          </CardDescription>
+          <CardDescription>Complete payment to confirm your AirBear ride</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Route */}
@@ -113,9 +111,9 @@ export function RidePayment({
                 <p className="font-medium text-sm">{pickupSpot.name}</p>
               </div>
             </div>
-            
+
             <div className="border-l-2 border-dashed border-muted-foreground ml-1.5 h-4" />
-            
+
             <div className="flex items-start space-x-3">
               <div className="w-3 h-3 rounded-full bg-red-500 mt-1 flex-shrink-0" />
               <div className="flex-1">
@@ -133,7 +131,9 @@ export function RidePayment({
               <span>$4.00</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Distance ({ride.distance.toFixed(1)} km)</span>
+              <span className="text-muted-foreground">
+                Distance ({ride.distance.toFixed(1)} km)
+              </span>
               <span>Included</span>
             </div>
             <Separator />
@@ -160,9 +160,7 @@ export function RidePayment({
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">Choose Payment Method</CardTitle>
-          <CardDescription>
-            Select how you&apos;d like to pay for your ride
-          </CardDescription>
+          <CardDescription>Select how you&apos;d like to pay for your ride</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-3">
@@ -209,8 +207,8 @@ export function RidePayment({
           {/* Payment Action */}
           <div className="pt-4 border-t">
             {paymentMethod === "card" && (
-              <Button 
-                onClick={handleCardPayment} 
+              <Button
+                onClick={handleCardPayment}
                 disabled={processing}
                 className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 h-12 text-lg"
               >
@@ -229,8 +227,8 @@ export function RidePayment({
             )}
 
             {paymentMethod === "digital" && (
-              <Button 
-                onClick={handleCardPayment} 
+              <Button
+                onClick={handleCardPayment}
                 disabled={processing}
                 className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 h-12 text-lg"
               >
@@ -249,8 +247,8 @@ export function RidePayment({
             )}
 
             {paymentMethod === "cash" && (
-              <Button 
-                onClick={handleCashPayment} 
+              <Button
+                onClick={handleCashPayment}
                 disabled={processing}
                 className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 h-12 text-lg"
               >
@@ -271,5 +269,5 @@ export function RidePayment({
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

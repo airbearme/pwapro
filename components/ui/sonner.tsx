@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 // Temporary fallback component for toast notifications
 // Replace with proper toast library when available

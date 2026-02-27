@@ -1,9 +1,9 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import RealtimeDemo from "@/components/realtime-demo";
+import Link from "next/link"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import RealtimeDemo from "@/components/realtime-demo"
 
 export default function DemoPage() {
   return (
@@ -14,8 +14,8 @@ export default function DemoPage() {
             🚗 AirBear Real-Time System Demo
           </h1>
           <p className="text-lg text-muted-foreground mb-4">
-            Experience the live tracking system that powers AirBear&apos;s
-            solar-powered rideshare service
+            Experience the live tracking system that powers AirBear&apos;s solar-powered rideshare
+            service
           </p>
         </div>
 
@@ -68,5 +68,5 @@ export default function DemoPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

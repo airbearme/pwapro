@@ -1,23 +1,23 @@
-import type React from "react";
-import type { Metadata, Viewport } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
-import { Analytics } from "@vercel/analytics/react";
-import { AuthProvider } from "@/components/auth-provider";
-import { ThemeProvider } from "@/components/theme-provider";
-import ClientErrorLogger from "@/components/client-error-logger";
-import "leaflet/dist/leaflet.css";
-import "./globals.css";
+import type React from "react"
+import type { Metadata, Viewport } from "next"
+import { Inter, Space_Grotesk } from "next/font/google"
+import { Analytics } from "@vercel/analytics/react"
+import { AuthProvider } from "@/components/auth-provider"
+import { ThemeProvider } from "@/components/theme-provider"
+import ClientErrorLogger from "@/components/client-error-logger"
+import "leaflet/dist/leaflet.css"
+import "./globals.css"
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
-});
+})
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-space-grotesk",
   display: "swap",
-});
+})
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -25,7 +25,7 @@ export const viewport: Viewport = {
   maximumScale: 5,
   userScalable: true,
   themeColor: "#0a0a0a",
-};
+}
 
 export const metadata: Metadata = {
   title: {
@@ -82,13 +82,9 @@ export const metadata: Metadata = {
     shortcut: "/icon.svg",
     apple: "/apple-touch-icon.png",
   },
-};
+}
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -103,13 +99,10 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased relative overflow-x-hidden`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
+      <body
+        className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased relative overflow-x-hidden`}
+      >
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
             <div className="absolute -top-24 left-1/2 h-72 w-[140%] -translate-x-1/2 rotate-6 bg-gradient-to-r from-cyan-400/10 via-fuchsia-400/25 to-amber-400/10 blur-3xl animate-float"></div>
             <div className="absolute top-1/4 -left-10 h-56 w-[120%] rotate-[-8deg] bg-gradient-to-r from-emerald-400/10 via-lime-300/20 to-sky-400/10 blur-3xl animate-float"></div>
@@ -120,13 +113,11 @@ export default function RootLayout({
           </div>
           <div className="relative z-10 min-h-screen">
             <ClientErrorLogger />
-            <AuthProvider>
-              {children}
-            </AuthProvider>
+            <AuthProvider>{children}</AuthProvider>
           </div>
         </ThemeProvider>
         <Analytics />
       </body>
     </html>
-  );
+  )
 }

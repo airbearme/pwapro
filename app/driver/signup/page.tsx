@@ -1,49 +1,43 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useAuthContext } from "@/components/auth-provider";
-import { getSupabaseClient } from "@/lib/supabase/client";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
-import { User, Mail, Lock, Car } from "lucide-react";
-import Link from "next/link";
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { useAuthContext } from "@/components/auth-provider"
+import { getSupabaseClient } from "@/lib/supabase/client"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { useToast } from "@/hooks/use-toast"
+import { User, Mail, Lock, Car } from "lucide-react"
+import Link from "next/link"
 
 export default function DriverSignupPage() {
-  const { user } = useAuthContext();
-  const router = useRouter();
-  const { toast } = useToast();
-  const [loading, setLoading] = useState(false);
+  const { user } = useAuthContext()
+  const router = useRouter()
+  const { toast } = useToast()
+  const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     username: "",
     full_name: "",
     airbear_id: "",
-  });
+  })
 
   // If already logged in, redirect to dashboard
   if (user) {
-    router.push("/driver");
-    return null;
+    router.push("/driver")
+    return null
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+    e.preventDefault()
+    setLoading(true)
 
     try {
-      const supabase = getSupabaseClient();
+      const supabase = getSupabaseClient()
 
       // First, sign up the user with a temporary password
-      const tempPassword = Math.random().toString(36).slice(-8);
+      const tempPassword = Math.random().toString(36).slice(-8)
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: `${formData.username}@airbear.me`,
         password: tempPassword,
@@ -54,29 +48,26 @@ export default function DriverSignupPage() {
             role: "driver",
           },
         },
-      });
+      })
 
       if (authError) {
         // User might already exist, try to sign them in
         if (authError.message.includes("already registered")) {
-          const { data: signInData, error: signInError } =
-            await supabase.auth.signInWithPassword({
-              email: `${formData.username}@airbear.me`,
-              password: tempPassword,
-            });
+          const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+            email: `${formData.username}@airbear.me`,
+            password: tempPassword,
+          })
 
           if (signInError) {
-            throw new Error(
-              "Account exists but sign-in failed. Please contact support."
-            );
+            throw new Error("Account exists but sign-in failed. Please contact support.")
           }
         } else {
-          throw authError;
+          throw authError
         }
       }
 
       // Create user profile
-      const userId = (authData as any)?.user?.id || (user as any)?.id || '';
+      const userId = (authData as any)?.user?.id || (user as any)?.id || ""
       const { error: profileError } = await supabase.from("users").upsert({
         id: userId,
         email: `${formData.username}@airbear.me`,
@@ -84,37 +75,37 @@ export default function DriverSignupPage() {
         full_name: formData.full_name,
         role: "driver",
         assigned_airbear_id: formData.airbear_id,
-      });
+      })
 
       if (profileError) {
-        console.error("Profile creation error:", profileError);
+        console.error("Profile creation error:", profileError)
         // Don't throw error, user might already have profile
       }
 
       toast({
         title: "Driver Account Created!",
         description: `Your driver account has been created. Email: ${formData.username}@airbear.me`,
-      });
+      })
 
       // Redirect to driver dashboard
-      router.push("/driver");
+      router.push("/driver")
     } catch (error: any) {
       toast({
         title: "Error",
         description: error.message || "Failed to create driver account",
         variant: "destructive",
-      });
+      })
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-    });
-  };
+    })
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-950 via-lime-950 to-amber-950">
@@ -198,8 +189,7 @@ export default function DriverSignupPage() {
                   />
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Available IDs: airbear-001, airbear-002, airbear-005,
-                  airbear-006, airbear-007
+                  Available IDs: airbear-001, airbear-002, airbear-005, airbear-006, airbear-007
                 </p>
               </div>
 
@@ -215,10 +205,7 @@ export default function DriverSignupPage() {
             <div className="mt-6 text-center">
               <p className="text-sm text-muted-foreground">
                 Already have an account?{" "}
-                <Link
-                  href="/auth/login"
-                  className="text-emerald-600 hover:underline"
-                >
+                <Link href="/auth/login" className="text-emerald-600 hover:underline">
                   Sign in
                 </Link>
               </p>
@@ -227,5 +214,5 @@ export default function DriverSignupPage() {
         </Card>
       </div>
     </div>
-  );
+  )
 }

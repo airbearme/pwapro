@@ -3,20 +3,24 @@ import { cookies } from "next/headers"
 import { z } from "zod"
 
 const supabaseEnvSchema = z.object({
-  NEXT_PUBLIC_SUPABASE_URL: z.string()
+  NEXT_PUBLIC_SUPABASE_URL: z
+    .string()
     .url("Invalid Supabase URL format")
     .refine((url) => url.includes("supabase.co"), "URL must be a valid Supabase URL"),
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string()
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: z
+    .string()
     .min(1, "Supabase anon key is required")
     .regex(/^eyJ/, "Invalid Supabase anon key format"),
 })
 
 const resolvedSupabaseUrl =
   process.env.NEXT_PUBLIC_SUPABASE_URL ||
-  process.env.NEXT_PUBLIC_SUPABASE_PWA4_URL
+  process.env.NEXT_PUBLIC_SUPABASE_PWA4_URL ||
+  "https://placeholder.supabase.co"
 const resolvedSupabaseAnonKey =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-  process.env.NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY
+  process.env.NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder"
 
 const env = supabaseEnvSchema.parse({
   NEXT_PUBLIC_SUPABASE_URL: resolvedSupabaseUrl,
@@ -31,7 +35,9 @@ export async function getSupabaseServer() {
       getAll() {
         return cookieStore.getAll()
       },
-      setAll(cookiesToSet: Array<{ name: string; value: string; options?: Record<string, unknown> }>) {
+      setAll(
+        cookiesToSet: Array<{ name: string; value: string; options?: Record<string, unknown> }>
+      ) {
         try {
           cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options))
         } catch {

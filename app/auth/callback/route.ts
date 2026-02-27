@@ -12,7 +12,9 @@ export async function GET(request: Request) {
   // Handle OAuth errors
   if (error) {
     console.error("OAuth error:", error, errorDescription)
-    return NextResponse.redirect(`${origin}/auth/login?error=${encodeURIComponent(errorDescription || error)}`)
+    return NextResponse.redirect(
+      `${origin}/auth/login?error=${encodeURIComponent(errorDescription || error)}`
+    )
   }
 
   if (!code) {
@@ -21,13 +23,15 @@ export async function GET(request: Request) {
 
   try {
     const supabase = await createClient()
-    
+
     // Exchange code for session
     const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
 
     if (exchangeError) {
       console.error("Session exchange error:", exchangeError)
-      return NextResponse.redirect(`${origin}/auth/login?error=${encodeURIComponent(exchangeError.message)}`)
+      return NextResponse.redirect(
+        `${origin}/auth/login?error=${encodeURIComponent(exchangeError.message)}`
+      )
     }
 
     // Get user after successful exchange
@@ -72,8 +76,7 @@ export async function GET(request: Request) {
         .eq("id", user.id)
         .single()
 
-      const effectiveRole =
-        profile?.role ?? user.user_metadata?.role ?? "user"
+      const effectiveRole = profile?.role ?? user.user_metadata?.role ?? "user"
 
       if (effectiveRole !== requestedRole) {
         await supabase.auth.signOut()
@@ -82,20 +85,14 @@ export async function GET(request: Request) {
     }
 
     const redirectPath =
-      requestedRole === "admin"
-        ? "/admin"
-        : requestedRole === "driver"
-          ? "/driver"
-          : "/dashboard"
+      requestedRole === "admin" ? "/admin" : requestedRole === "driver" ? "/driver" : "/dashboard"
 
     // Redirect to dashboard on success
     return NextResponse.redirect(`${origin}${redirectPath}`)
   } catch (err: any) {
     console.error("Unexpected callback error:", err)
-    return NextResponse.redirect(`${origin}/auth/login?error=${encodeURIComponent(err.message || "oauth_failed")}`)
+    return NextResponse.redirect(
+      `${origin}/auth/login?error=${encodeURIComponent(err.message || "oauth_failed")}`
+    )
   }
 }
-
-
-
-

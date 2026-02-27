@@ -153,7 +153,7 @@ const spots = [
     amenities: ["Charging", "Maintenance", "Office"],
     is_active: true,
   },
-];
+]
 
-console.log("Updated spots data:", JSON.stringify(spots, null, 2));
-console.log("Copy this data to update your database");
+console.log("Updated spots data:", JSON.stringify(spots, null, 2))
+console.log("Copy this data to update your database")

@@ -1,32 +1,32 @@
-"use client";
+"use client"
 
-import { useEffect } from "react";
+import { useEffect } from "react"
 
 type ClientErrorPayload = {
-  type: "error" | "unhandledrejection";
-  message: string;
-  source?: string;
-  lineno?: number;
-  colno?: number;
-  stack?: string;
-  url?: string;
-  userAgent?: string;
-  timestamp: string;
-};
+  type: "error" | "unhandledrejection"
+  message: string
+  source?: string
+  lineno?: number
+  colno?: number
+  stack?: string
+  url?: string
+  userAgent?: string
+  timestamp: string
+}
 
 function sendClientError(payload: ClientErrorPayload) {
   try {
-    const body = JSON.stringify(payload);
+    const body = JSON.stringify(payload)
     if (navigator.sendBeacon) {
-      navigator.sendBeacon("/api/client-logs", body);
-      return;
+      navigator.sendBeacon("/api/client-logs", body)
+      return
     }
     fetch("/api/client-logs", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body,
       keepalive: true,
-    }).catch(() => undefined);
+    }).catch(() => undefined)
   } catch {
     // Best-effort logging only.
   }
@@ -34,7 +34,7 @@ function sendClientError(payload: ClientErrorPayload) {
 
 export default function ClientErrorLogger() {
   useEffect(() => {
-    if (typeof window === "undefined") return undefined;
+    if (typeof window === "undefined") return undefined
 
     const handleError = (event: ErrorEvent) => {
       sendClientError({
@@ -47,34 +47,34 @@ export default function ClientErrorLogger() {
         url: window.location.href,
         userAgent: navigator.userAgent,
         timestamp: new Date().toISOString(),
-      });
-    };
+      })
+    }
 
     const handleRejection = (event: PromiseRejectionEvent) => {
-      const reason = event.reason;
+      const reason = event.reason
       sendClientError({
         type: "unhandledrejection",
         message:
           reason instanceof Error
             ? reason.message
             : typeof reason === "string"
-            ? reason
-            : "Unhandled promise rejection",
+              ? reason
+              : "Unhandled promise rejection",
         stack: reason instanceof Error ? reason.stack : undefined,
         url: window.location.href,
         userAgent: navigator.userAgent,
         timestamp: new Date().toISOString(),
-      });
-    };
+      })
+    }
 
-    window.addEventListener("error", handleError);
-    window.addEventListener("unhandledrejection", handleRejection);
+    window.addEventListener("error", handleError)
+    window.addEventListener("unhandledrejection", handleRejection)
 
     return () => {
-      window.removeEventListener("error", handleError);
-      window.removeEventListener("unhandledrejection", handleRejection);
-    };
-  }, []);
+      window.removeEventListener("error", handleError)
+      window.removeEventListener("unhandledrejection", handleRejection)
+    }
+  }, [])
 
-  return null;
+  return null
 }

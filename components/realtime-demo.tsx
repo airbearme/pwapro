@@ -1,28 +1,21 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-  MapPin,
-  Navigation,
-  Users,
-  Battery,
-  Wifi,
-  Activity,
-} from "lucide-react";
+import { useState, useEffect } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { MapPin, Navigation, Users, Battery, Wifi, Activity } from "lucide-react"
 
 interface RealtimeEvent {
-  type: "user_booking" | "driver_location" | "ride_status";
-  timestamp: string;
-  data: any;
+  type: "user_booking" | "driver_location" | "ride_status"
+  timestamp: string
+  data: any
 }
 
 export default function RealtimeDemo() {
-  const [events, setEvents] = useState<RealtimeEvent[]>([]);
-  const [isConnected, setIsConnected] = useState(false);
-  const [simulation, setSimulation] = useState<"user" | "driver">("user");
+  const [events, setEvents] = useState<RealtimeEvent[]>([])
+  const [isConnected, setIsConnected] = useState(false)
+  const [simulation, setSimulation] = useState<"user" | "driver">("user")
 
   // Simulate receiving real-time events
   useEffect(() => {
@@ -50,14 +43,14 @@ export default function RealtimeDemo() {
                     longitude: -75.917538 + (Math.random() - 0.5) * 0.02,
                   },
                 },
-        };
+        }
 
-        setEvents((prev) => [mockEvent, ...prev].slice(-4)); // Keep last 4 events
-      }, 2000);
+        setEvents((prev) => [mockEvent, ...prev].slice(-4)) // Keep last 4 events
+      }, 2000)
 
-      return () => clearInterval(interval);
+      return () => clearInterval(interval)
     }
-  }, [isConnected]);
+  }, [isConnected])
 
   const simulateEvent = async (type: string) => {
     try {
@@ -65,18 +58,18 @@ export default function RealtimeDemo() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: type }),
-      });
+      })
 
-      const event = await response.json();
-      setEvents((prev) => [event, ...prev].slice(-4));
+      const event = await response.json()
+      setEvents((prev) => [event, ...prev].slice(-4))
     } catch (error) {
-      console.error("Simulation error:", error);
+      console.error("Simulation error:", error)
     }
-  };
+  }
 
   const clearEvents = () => {
-    setEvents([]);
-  };
+    setEvents([])
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-950 via-lime-950 to-amber-950 p-4">
@@ -151,9 +144,7 @@ export default function RealtimeDemo() {
             <CardContent>
               <div className="space-y-3">
                 <div className="flex items-center justify-between p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
-                  <span className="text-sm text-muted-foreground">
-                    Last Action:
-                  </span>
+                  <span className="text-sm text-muted-foreground">Last Action:</span>
                   <Badge variant="secondary">
                     {events.find((e) => e.type === "user_booking")
                       ? "Booked Ride"
@@ -162,9 +153,7 @@ export default function RealtimeDemo() {
                 </div>
                 <div className="text-center">
                   <h3 className="text-lg font-semibold">
-                    {simulation === "user"
-                      ? "👤 User Perspective"
-                      : "🚗 Driver Perspective"}
+                    {simulation === "user" ? "👤 User Perspective" : "🚗 Driver Perspective"}
                   </h3>
                   <p className="text-sm text-muted-foreground">
                     {simulation === "user"
@@ -190,21 +179,15 @@ export default function RealtimeDemo() {
                   <span className="text-sm text-muted-foreground">Status:</span>
                   <Badge
                     variant={
-                      events.find((e) => e.type === "driver_location")
-                        ? "default"
-                        : "secondary"
+                      events.find((e) => e.type === "driver_location") ? "default" : "secondary"
                     }
                   >
-                    {events.find((e) => e.type === "driver_location")
-                      ? "Active"
-                      : "Inactive"}
+                    {events.find((e) => e.type === "driver_location") ? "Active" : "Inactive"}
                   </Badge>
                 </div>
                 <div className="text-center">
                   <h3 className="text-lg font-semibold">
-                    {simulation === "driver"
-                      ? "🚗 Driver View"
-                      : "👤 User View"}
+                    {simulation === "driver" ? "🚗 Driver View" : "👤 User View"}
                   </h3>
                   <p className="text-sm text-muted-foreground">
                     {simulation === "driver"
@@ -227,42 +210,33 @@ export default function RealtimeDemo() {
             <CardContent>
               <div className="space-y-3">
                 <div className="flex items-center justify-between p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
-                  <span className="text-sm text-muted-foreground">
-                    Current Ride:
-                  </span>
+                  <span className="text-sm text-muted-foreground">Current Ride:</span>
                   <Badge
                     variant={
-                      events.find((e) => e.type === "ride_status")?.data
-                        ?.status === "in_progress"
+                      events.find((e) => e.type === "ride_status")?.data?.status === "in_progress"
                         ? "default"
-                        : events.find((e) => e.type === "ride_status")?.data
-                            ?.status === "completed"
-                        ? "secondary"
-                        : "outline"
+                        : events.find((e) => e.type === "ride_status")?.data?.status === "completed"
+                          ? "secondary"
+                          : "outline"
                     }
                   >
-                    {events.find((e) => e.type === "ride_status")?.data
-                      ?.status || "No active rides"}
+                    {events.find((e) => e.type === "ride_status")?.data?.status ||
+                      "No active rides"}
                   </Badge>
                 </div>
                 <div className="text-center">
                   <h3 className="text-lg font-semibold">
-                    {events.find((e) => e.type === "ride_status")?.data
-                      ?.status === "in_progress"
+                    {events.find((e) => e.type === "ride_status")?.data?.status === "in_progress"
                       ? "🚗 Ride In Progress"
-                      : events.find((e) => e.type === "ride_status")?.data
-                          ?.status === "completed"
-                      ? "✅ Ride Completed"
-                      : "No Active Rides"}
+                      : events.find((e) => e.type === "ride_status")?.data?.status === "completed"
+                        ? "✅ Ride Completed"
+                        : "No Active Rides"}
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    {events.find((e) => e.type === "ride_status")?.data
-                      ?.status === "in_progress"
+                    {events.find((e) => e.type === "ride_status")?.data?.status === "in_progress"
                       ? `Driver is en route to ${events
                           .find((e) => e.type === "ride_status")
-                          ?.data?.current_location?.latitude?.toFixed(
-                            4
-                          )}, ${events
+                          ?.data?.current_location?.latitude?.toFixed(4)}, ${events
                           .find((e) => e.type === "ride_status")
                           ?.data?.current_location?.longitude?.toFixed(4)}`
                       : "Waiting for ride assignments"}
@@ -285,10 +259,7 @@ export default function RealtimeDemo() {
             <div className="space-y-2 max-h-96 overflow-y-auto">
               {events.length === 0 ? (
                 <div className="text-center text-muted-foreground py-8">
-                  <p>
-                    No events yet. Connect to real-time simulation to see
-                    updates.
-                  </p>
+                  <p>No events yet. Connect to real-time simulation to see updates.</p>
                 </div>
               ) : (
                 events.map((event, index) => (
@@ -302,10 +273,10 @@ export default function RealtimeDemo() {
                           event.type === "user_booking"
                             ? "default"
                             : event.type === "driver_location"
-                            ? "secondary"
-                            : event.type === "ride_status"
-                            ? "outline"
-                            : "secondary"
+                              ? "secondary"
+                              : event.type === "ride_status"
+                                ? "outline"
+                                : "secondary"
                         }
                       >
                         {event.type.replace("_", " ").toUpperCase()}
@@ -314,23 +285,19 @@ export default function RealtimeDemo() {
                     <div className="text-sm">
                       {event.type === "user_booking" && (
                         <div>
-                          <strong>User Booking:</strong>{" "}
-                          {event.data.pickup_spot} →{" "}
+                          <strong>User Booking:</strong> {event.data.pickup_spot} →{" "}
                           {event.data.destination_spot}
                           <div className="text-xs text-muted-foreground mt-1">
-                            Fare: ${event.data.fare} | Status:{" "}
-                            {event.data.status}
+                            Fare: ${event.data.fare} | Status: {event.data.status}
                           </div>
                         </div>
                       )}
                       {event.type === "driver_location" && (
                         <div>
-                          <strong>Driver Location:</strong> AirBear{" "}
-                          {event.data.airbear_id}
+                          <strong>Driver Location:</strong> AirBear {event.data.airbear_id}
                           <div className="text-xs text-muted-foreground mt-1">
-                            GPS: {event.data.latitude.toFixed(4)},{" "}
-                            {event.data.longitude.toFixed(4)} | Battery:{" "}
-                            {event.data.battery_level}%
+                            GPS: {event.data.latitude.toFixed(4)}, {event.data.longitude.toFixed(4)}{" "}
+                            | Battery: {event.data.battery_level}%
                           </div>
                         </div>
                       )}
@@ -340,9 +307,7 @@ export default function RealtimeDemo() {
                           {event.data.current_location
                             ? `Location: ${event.data.current_location.latitude.toFixed(
                                 4
-                              )}, ${event.data.current_location.longitude.toFixed(
-                                4
-                              )}`
+                              )}, ${event.data.current_location.longitude.toFixed(4)}`
                             : "No location data"}
                         </div>
                       )}
@@ -355,5 +320,5 @@ export default function RealtimeDemo() {
         </Card>
       </div>
     </div>
-  );
+  )
 }

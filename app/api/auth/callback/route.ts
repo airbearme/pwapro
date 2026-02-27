@@ -16,7 +16,11 @@ export async function GET(request: Request) {
       } = await supabase.auth.getUser()
 
       if (user) {
-        const { data: existingProfile } = await supabase.from("users").select("id").eq("id", user.id).single()
+        const { data: existingProfile } = await supabase
+          .from("users")
+          .select("id")
+          .eq("id", user.id)
+          .single()
 
         if (!existingProfile) {
           const username = user.email?.split("@")[0] || `user_${user.id.slice(0, 8)}`

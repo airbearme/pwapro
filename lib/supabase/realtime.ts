@@ -33,7 +33,7 @@ export function subscribeToAirbearLocations(callback: (payload: AirbearLocation)
         if (payload.new) {
           callback(payload.new as AirbearLocation)
         }
-      },
+      }
     )
     .subscribe()
 
@@ -42,7 +42,12 @@ export function subscribeToAirbearLocations(callback: (payload: AirbearLocation)
   }
 }
 
-export async function updateAirbearLocation(airbearId: string, latitude: number, longitude: number, heading?: number) {
+export async function updateAirbearLocation(
+  airbearId: string,
+  latitude: number,
+  longitude: number,
+  heading?: number
+) {
   const supabase = getSupabaseClient()
 
   const { data, error } = await supabase

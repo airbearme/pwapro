@@ -1,37 +1,31 @@
-"use client";
+"use client"
 
-import type React from "react";
+import type React from "react"
 
-import { useState } from "react";
-import { getSupabaseClient } from "@/lib/supabase/client";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useRouter } from "next/navigation";
-import { Apple, Chrome, Car } from "lucide-react";
+import { useState } from "react"
+import { getSupabaseClient } from "@/lib/supabase/client"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { useRouter } from "next/navigation"
+import { Apple, Chrome, Car } from "lucide-react"
 
-const ENABLE_APPLE_SIGN_IN = false;
-const EXPECTED_ROLE = "driver";
+const ENABLE_APPLE_SIGN_IN = false
+const EXPECTED_ROLE = "driver"
 
 export default function DriverLoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
-  const supabase = getSupabaseClient();
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
+  const supabase = getSupabaseClient()
 
   const handleGoogleSignIn = async () => {
     try {
-      setLoading(true);
-      setError(null);
+      setLoading(true)
+      setError(null)
 
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
@@ -42,93 +36,88 @@ export default function DriverLoginPage() {
             prompt: "consent",
           },
         },
-      });
+      })
 
       if (error) {
-        console.error("Google OAuth error:", error);
-        setError(
-          error.message || "Failed to sign in with Google. Please try again."
-        );
-        setLoading(false);
+        console.error("Google OAuth error:", error)
+        setError(error.message || "Failed to sign in with Google. Please try again.")
+        setLoading(false)
       } else if (data?.url) {
-        window.location.href = data.url;
+        window.location.href = data.url
       }
     } catch (err: any) {
-      console.error("Unexpected error during Google sign in:", err);
-      setError("An unexpected error occurred. Please try again.");
-      setLoading(false);
+      console.error("Unexpected error during Google sign in:", err)
+      setError("An unexpected error occurred. Please try again.")
+      setLoading(false)
     }
-  };
+  }
 
   const handleAppleSignIn = async () => {
     try {
-      setLoading(true);
-      setError(null);
+      setLoading(true)
+      setError(null)
 
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "apple",
         options: {
           redirectTo: `${window.location.origin}/auth/callback?role=driver`,
         },
-      });
+      })
 
       if (error) {
-        console.error("Apple OAuth error:", error);
-        setError(
-          error.message || "Failed to sign in with Apple. Please try again."
-        );
-        setLoading(false);
+        console.error("Apple OAuth error:", error)
+        setError(error.message || "Failed to sign in with Apple. Please try again.")
+        setLoading(false)
       } else if (data?.url) {
-        window.location.href = data.url;
+        window.location.href = data.url
       }
     } catch (err: any) {
-      console.error("Unexpected error during Apple sign in:", err);
-      setError("An unexpected error occurred. Please try again.");
-      setLoading(false);
+      console.error("Unexpected error during Apple sign in:", err)
+      setError("An unexpected error occurred. Please try again.")
+      setLoading(false)
     }
-  };
+  }
 
   const handleEmailSignIn = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
 
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
-    });
+    })
 
     if (error) {
-      setError(error.message);
-      setLoading(false);
-      return;
+      setError(error.message)
+      setLoading(false)
+      return
     }
 
-    const { data: userData, error: userError } = await supabase.auth.getUser();
+    const { data: userData, error: userError } = await supabase.auth.getUser()
     if (userError || !userData.user) {
-      setError("Unable to verify your account. Please try again.");
-      setLoading(false);
-      return;
+      setError("Unable to verify your account. Please try again.")
+      setLoading(false)
+      return
     }
 
     const { data: profile } = await supabase
       .from("users")
       .select("role")
       .eq("id", userData.user.id)
-      .single();
+      .single()
 
-    const effectiveRole =
-      profile?.role ?? userData.user.user_metadata?.role ?? "user";
+    const effectiveRole = profile?.role ?? userData.user.user_metadata?.role ?? "user"
 
     if (effectiveRole !== EXPECTED_ROLE) {
-      await supabase.auth.signOut();
-      setError("This account is not a driver.");
-      setLoading(false);
-      return;
+      await supabase.auth.signOut()
+      setError("This account is not a driver.")
+      setLoading(false)
+      return
     }
 
-    router.push("/driver");
-  };
+    router.push("/driver")
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-950 via-lime-950 to-amber-950 dark:from-emerald-950 dark:via-lime-950 dark:to-amber-950 p-4">
@@ -189,9 +178,7 @@ export default function DriverLoginPage() {
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-white px-2 text-muted-foreground">
-                Or continue with email
-              </span>
+              <span className="bg-white px-2 text-muted-foreground">Or continue with email</span>
             </div>
           </div>
 
@@ -244,15 +231,12 @@ export default function DriverLoginPage() {
           </div>
           <div className="text-center text-sm text-muted-foreground">
             Not a driver?{" "}
-            <a
-              href="/auth/login"
-              className="text-orange-600 hover:text-orange-700 font-medium"
-            >
+            <a href="/auth/login" className="text-orange-600 hover:text-orange-700 font-medium">
               Rider login
             </a>
           </div>
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 export default function DebugHomePage() {
   return (
@@ -19,11 +19,13 @@ export default function DebugHomePage() {
             </div>
           </div>
           <div className="mt-8 p-4 border border-yellow-500 rounded-lg bg-yellow-500/10">
-            <p className="text-yellow-300">If this page stays visible, Analytics is not the issue</p>
+            <p className="text-yellow-300">
+              If this page stays visible, Analytics is not the issue
+            </p>
             <p className="text-yellow-300">Next: Add ThemeProvider</p>
           </div>
         </div>
       </div>
     </main>
-  );
+  )
 }

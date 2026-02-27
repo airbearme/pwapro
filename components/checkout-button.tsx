@@ -5,13 +5,7 @@ import { Button } from "@/components/ui/button"
 import { getStripe } from "@/lib/stripe/client"
 import { useToast } from "@/hooks/use-toast"
 import { CreditCard, QrCode, Apple, Wallet } from "lucide-react"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Spinner } from "@/components/ui/spinner"
 
@@ -302,11 +296,7 @@ export function CheckoutButton({ items, onSuccess }: CheckoutButtonProps) {
               </div>
             </div>
 
-            <Button
-              onClick={handleStripeCheckout}
-              disabled={loading}
-              className="w-full"
-            >
+            <Button onClick={handleStripeCheckout} disabled={loading} className="w-full">
               {loading ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
@@ -325,7 +315,8 @@ export function CheckoutButton({ items, onSuccess }: CheckoutButtonProps) {
             <div className="text-center p-6 border rounded-lg bg-muted/50">
               <QrCode className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
               <p className="text-sm text-muted-foreground mb-4">
-                Pay with cash when you receive your order. A QR code will be provided for order verification.
+                Pay with cash when you receive your order. A QR code will be provided for order
+                verification.
               </p>
               <Button
                 onClick={handleCashPayment}
@@ -356,4 +347,3 @@ export function CheckoutButton({ items, onSuccess }: CheckoutButtonProps) {
     </Card>
   )
 }
-

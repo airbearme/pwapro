@@ -131,7 +131,7 @@ class AdvancedCodeMapsAnalyzer {
       }
     }
 
-    complexityReport.average = complexityReport.total / this.metrics.components.length;
+    complexityReport.average = complexityReport.total / (this.metrics.components.length || 1);
 
     // Calculate averages by type
     for (const [type, data] of Object.entries(complexityReport.byType)) {

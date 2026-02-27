@@ -106,7 +106,7 @@ jobs:
 
       - name: Sort imports
         run: |
-          npx eslint --fix --ext .ts,.tsx,.js,.jsx --rule 'import/order: error'
+          npx eslint . --fix --rule 'import/order: error'
 
       - name: Commit import sorting (if on main branch)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -136,8 +136,20 @@ jobs:
       - name: Run codemaps analysis
         run: npm run codemaps:analyze
 
+      - name: Generate build stats
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder
+          NEXT_PUBLIC_SUPABASE_PWA4_URL: https://placeholder.supabase.co
+          NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder
+          SUPABASE_PWA4_SERVICE_ROLE_KEY: placeholder
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: pk_test_placeholder
+          STRIPE_SECRET_KEY: sk_test_placeholder
+          NEXT_PUBLIC_SITE_URL: https://airbear.me
+
       - name: Bundle analyzer
-        run: npx webpack-bundle-analyzer --mode static
+        run: npx webpack-bundle-analyzer .next/stats.json --mode static
 
       - name: Upload bundle analysis
         uses: actions/upload-artifact@v4
@@ -163,7 +175,7 @@ jobs:
         run: npm ci
 
       - name: Detect dead code
-        run: npx unimported
+        run: npx unimported --no-cache
 
       - name: Upload dead code report
         uses: actions/upload-artifact@v4

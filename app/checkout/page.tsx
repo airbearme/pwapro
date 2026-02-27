@@ -1,48 +1,41 @@
-"use client";
+"use client"
 
-import { useState, useEffect, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useAuthContext } from "@/components/auth-provider";
-import { getSupabaseClient } from "@/lib/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
-import { loadStripe } from "@stripe/stripe-js";
-import {
-  Elements,
-  PaymentElement,
-  useStripe,
-  useElements,
-} from "@stripe/react-stripe-js";
-import { CreditCard, Smartphone, QrCode, CheckCircle, Apple, Wallet, MapPin } from "lucide-react";
-import Link from "next/link";
+import { useState, useEffect, Suspense } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { useAuthContext } from "@/components/auth-provider"
+import { getSupabaseClient } from "@/lib/supabase/client"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { useToast } from "@/hooks/use-toast"
+import { loadStripe } from "@stripe/stripe-js"
+import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js"
+import { CreditCard, Smartphone, QrCode, CheckCircle, Apple, Wallet, MapPin } from "lucide-react"
+import Link from "next/link"
 
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""
-);
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "")
 
 interface CheckoutFormProps {
-  clientSecret: string;
-  rideId: string;
-  amount: number;
-  onSuccess: () => void;
+  clientSecret: string
+  rideId: string
+  amount: number
+  onSuccess: () => void
 }
 
 function CheckoutForm({ clientSecret, rideId, amount, onSuccess }: CheckoutFormProps) {
-  const stripe = useStripe();
-  const elements = useElements();
-  const { toast } = useToast();
-  const [processing, setProcessing] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<string>("card");
+  const stripe = useStripe()
+  const elements = useElements()
+  const { toast } = useToast()
+  const [processing, setProcessing] = useState(false)
+  const [paymentMethod, setPaymentMethod] = useState<string>("card")
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (!stripe || !elements) {
-      return;
+      return
     }
 
-    setProcessing(true);
+    setProcessing(true)
 
     try {
       const { error, paymentIntent } = await stripe.confirmPayment({
@@ -51,50 +44,50 @@ function CheckoutForm({ clientSecret, rideId, amount, onSuccess }: CheckoutFormP
           return_url: `${window.location.origin}/dashboard`,
         },
         redirect: "if_required",
-      });
+      })
 
       if (error) {
         toast({
           title: "Payment Failed",
           description: error.message,
           variant: "destructive",
-        });
+        })
       } else if (paymentIntent && paymentIntent.status === "succeeded") {
         // Update ride status to confirmed
-        const supabase = getSupabaseClient();
+        const supabase = getSupabaseClient()
         const { error } = await supabase
           .from("rides")
-          .update({ 
+          .update({
             status: "confirmed",
             payment_method: "card",
-            paid_at: new Date().toISOString()
+            paid_at: new Date().toISOString(),
           })
-          .eq("id", rideId);
+          .eq("id", rideId)
 
         if (error) {
-          console.error("Error updating ride status:", error);
+          console.error("Error updating ride status:", error)
         }
 
         toast({
           title: "Payment Successful!",
           description: "Your ride has been confirmed and paid for.",
-        });
+        })
 
         // Redirect to success page
         setTimeout(() => {
-          window.location.href = `/order/success?session_id=${paymentIntent.id}`;
-        }, 2000);
+          window.location.href = `/order/success?session_id=${paymentIntent.id}`
+        }, 2000)
       }
     } catch (error: any) {
       toast({
         title: "Error",
         description: error.message || "Payment processing failed",
         variant: "destructive",
-      });
+      })
     } finally {
-      setProcessing(false);
+      setProcessing(false)
     }
-  };
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -107,54 +100,54 @@ function CheckoutForm({ clientSecret, rideId, amount, onSuccess }: CheckoutFormP
         {processing ? "Processing..." : `Pay $${amount.toFixed(2)}`}
       </Button>
     </form>
-  );
+  )
 }
 
 function CheckoutPageContent() {
-  const { user, loading: authLoading } = useAuthContext();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const { toast } = useToast();
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [rideId, setRideId] = useState<string>("");
-  const [amount, setAmount] = useState<number>(0);
-  const [rideDetails, setRideDetails] = useState<any>(null);
+  const { user, loading: authLoading } = useAuthContext()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const { toast } = useToast()
+  const [clientSecret, setClientSecret] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [rideId, setRideId] = useState<string>("")
+  const [amount, setAmount] = useState<number>(0)
+  const [rideDetails, setRideDetails] = useState<any>(null)
 
   useEffect(() => {
     if (!authLoading && !user) {
-      router.push("/auth/login");
+      router.push("/auth/login")
     }
-  }, [user, authLoading, router]);
+  }, [user, authLoading, router])
 
   useEffect(() => {
     const setupPayment = async () => {
-      const rideIdParam = searchParams.get("rideId");
-      const amountParam = searchParams.get("amount");
+      const rideIdParam = searchParams.get("rideId")
+      const amountParam = searchParams.get("amount")
 
       if (!rideIdParam || !amountParam || !user) {
         toast({
           title: "Invalid Request",
           description: "Missing ride or payment information",
           variant: "destructive",
-        });
-        router.push("/map");
-        return;
+        })
+        router.push("/map")
+        return
       }
 
-      setRideId(rideIdParam);
-      setAmount(parseFloat(amountParam));
+      setRideId(rideIdParam)
+      setAmount(parseFloat(amountParam))
 
       try {
         // Load ride details
-        const supabase = getSupabaseClient();
+        const supabase = getSupabaseClient()
         const { data: ride } = await supabase
           .from("rides")
           .select("*, pickup_spot:spots!pickup_spot_id(*), dropoff_spot:spots!dropoff_spot_id(*)")
           .eq("id", rideIdParam)
-          .single();
+          .single()
 
-        setRideDetails(ride);
+        setRideDetails(ride)
 
         // Create payment intent
         const response = await fetch("/api/stripe/create-payment-intent", {
@@ -168,28 +161,28 @@ function CheckoutPageContent() {
               userId: user.id,
             },
           }),
-        });
+        })
 
         if (!response.ok) {
-          throw new Error("Failed to create payment intent");
+          throw new Error("Failed to create payment intent")
         }
 
-        const { clientSecret: secret } = await response.json();
-        setClientSecret(secret);
+        const { clientSecret: secret } = await response.json()
+        setClientSecret(secret)
       } catch (error: any) {
-        console.error("Payment setup error:", error);
+        console.error("Payment setup error:", error)
         toast({
           title: "Error",
           description: error.message || "Failed to setup payment",
           variant: "destructive",
-        });
+        })
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    setupPayment();
-  }, [searchParams, user, router, toast]);
+    setupPayment()
+  }, [searchParams, user, router, toast])
 
   if (authLoading || loading || !clientSecret) {
     return (
@@ -207,9 +200,11 @@ function CheckoutPageContent() {
           <div className="space-y-2">
             <div className="w-8 h-8 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin mx-auto"></div>
             <p className="text-xl text-muted-foreground animate-pulse">
-              {authLoading ? "Authenticating..." : 
-               loading ? "Setting up payment..." : 
-               "Initializing payment form..."}
+              {authLoading
+                ? "Authenticating..."
+                : loading
+                  ? "Setting up payment..."
+                  : "Initializing payment form..."}
             </p>
             <p className="text-sm text-muted-foreground">
               {loading && "Securing your payment session"}
@@ -217,7 +212,7 @@ function CheckoutPageContent() {
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -237,9 +232,7 @@ function CheckoutPageContent() {
           <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-emerald-600 via-lime-500 to-amber-500 bg-clip-text text-transparent animate-pulse-glow">
             Complete Your Payment
           </h1>
-          <p className="text-lg text-muted-foreground">
-            Secure payment powered by Stripe
-          </p>
+          <p className="text-lg text-muted-foreground">Secure payment powered by Stripe</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -248,9 +241,7 @@ function CheckoutPageContent() {
             <Card className="p-6 hover-lift">
               <CardHeader>
                 <CardTitle>Payment Method</CardTitle>
-                <CardDescription>
-                  Choose your preferred payment method
-                </CardDescription>
+                <CardDescription>Choose your preferred payment method</CardDescription>
               </CardHeader>
               <CardContent>
                 <Elements
@@ -308,17 +299,13 @@ function CheckoutPageContent() {
                       )}
                       <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground">Fare</span>
-                        <span className="font-semibold">
-                          ${amount.toFixed(2)}
-                        </span>
+                        <span className="font-semibold">${amount.toFixed(2)}</span>
                       </div>
                     </div>
                     <div className="border-t pt-4">
                       <div className="flex justify-between text-lg font-bold">
                         <span>Total</span>
-                        <span className="text-emerald-600">
-                          ${amount.toFixed(2)}
-                        </span>
+                        <span className="text-emerald-600">${amount.toFixed(2)}</span>
                       </div>
                     </div>
                   </>
@@ -336,14 +323,19 @@ function CheckoutPageContent() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 export default function CheckoutPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-black text-white flex items-center justify-center">Loading checkout...</div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-black text-white flex items-center justify-center">
+          Loading checkout...
+        </div>
+      }
+    >
       <CheckoutPageContent />
     </Suspense>
-  );
+  )
 }
-

@@ -2,7 +2,8 @@ import Stripe from "stripe"
 import { z } from "zod"
 
 const stripeEnvSchema = z.object({
-  STRIPE_SECRET_KEY: z.string()
+  STRIPE_SECRET_KEY: z
+    .string()
     .min(1, "STRIPE_SECRET_KEY is required")
     .regex(/^sk_(test_|live_)/, "Invalid Stripe secret key format"),
   NODE_ENV: z.enum(["development", "production", "test"]).optional(),

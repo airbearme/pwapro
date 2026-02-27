@@ -27,7 +27,7 @@ async function timingSafeEqual(a: string, b: string): Promise<boolean> {
     result |= aView[i] ^ bView[i]
   }
 
-  // Also verify original lengths to handle hash collisions (extremely unlikely with SHA-256 but good practice)
+  // Also verify original lengths to handle hash collisions
   return result === 0 && a.length === b.length
 }
 
@@ -39,8 +39,10 @@ async function timingSafeEqual(a: string, b: string): Promise<boolean> {
  * - Secure cookie handling
  */
 export async function middleware(request: NextRequest) {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_PWA4_URL
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY
+  const supabaseUrl =
+    process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_PWA4_URL
+  const supabaseAnonKey =
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY
   const adminSecret = process.env.ADMIN_SECRET
 
   if (!supabaseUrl || !supabaseAnonKey) {
@@ -57,7 +59,9 @@ export async function middleware(request: NextRequest) {
       getAll() {
         return request.cookies.getAll()
       },
-      setAll(cookiesToSet: Array<{ name: string; value: string; options?: Record<string, unknown> }>) {
+      setAll(
+        cookiesToSet: Array<{ name: string; value: string; options?: Record<string, unknown> }>
+      ) {
         cookiesToSet.forEach(({ name, value }) => {
           request.cookies.set(name, value)
         })
@@ -66,7 +70,11 @@ export async function middleware(request: NextRequest) {
         })
         cookiesToSet.forEach(({ name, value, options }) => {
           if (options) {
-            supabaseResponse.cookies.set(name, value, options as Parameters<typeof supabaseResponse.cookies.set>[2])
+            supabaseResponse.cookies.set(
+              name,
+              value,
+              options as Parameters<typeof supabaseResponse.cookies.set>[2]
+            )
           } else {
             supabaseResponse.cookies.set(name, value)
           }
@@ -90,7 +98,8 @@ export async function middleware(request: NextRequest) {
     const providedSecret = request.headers.get("X-Admin-Secret")
 
     // Deny access if admin secret is not configured or doesn't match
-    const isSecretValid = (adminSecret && providedSecret) ? await timingSafeEqual(providedSecret, adminSecret) : false
+    const isSecretValid =
+      adminSecret && providedSecret ? await timingSafeEqual(providedSecret, adminSecret) : false
 
     if (!isSecretValid) {
       return NextResponse.json(
@@ -104,7 +113,7 @@ export async function middleware(request: NextRequest) {
   const isProtectedRoute =
     request.nextUrl.pathname.startsWith("/dashboard") ||
     request.nextUrl.pathname.startsWith("/driver") ||
-    request.nextUrl.pathname.startsWith("/map") && request.nextUrl.searchParams.has("auth")
+    (request.nextUrl.pathname.startsWith("/map") && request.nextUrl.searchParams.has("auth"))
 
   if (isProtectedRoute && !user) {
     const url = request.nextUrl.clone()

@@ -1,16 +1,10 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { useAuthContext } from "@/components/auth-provider";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
+import { useState, useEffect } from "react"
+import { useAuthContext } from "@/components/auth-provider"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { useToast } from "@/hooks/use-toast"
 import {
   ShoppingCart,
   Star,
@@ -23,23 +17,23 @@ import {
   Clock,
   Truck,
   ShoppingBag,
-} from "lucide-react";
-import Link from "next/link";
+} from "lucide-react"
+import Link from "next/link"
 
 interface MerchandiseItem {
-  id: string;
-  name: string;
-  price: number;
-  description: string;
-  category: string;
-  icon: React.ReactNode;
-  inStock: boolean;
+  id: string
+  name: string
+  price: number
+  description: string
+  category: string
+  icon: React.ReactNode
+  inStock: boolean
 }
 
 export default function MerchandisePage() {
-  const { user, loading: authLoading } = useAuthContext();
-  const { toast } = useToast();
-  const [loading, setLoading] = useState(true);
+  const { user, loading: authLoading } = useAuthContext()
+  const { toast } = useToast()
+  const [loading, setLoading] = useState(true)
 
   const merchandiseItems: MerchandiseItem[] = [
     {
@@ -78,11 +72,11 @@ export default function MerchandisePage() {
       icon: <Package className="w-6 h-6" />,
       inStock: true,
     },
-  ];
+  ]
 
   useEffect(() => {
-    setLoading(false);
-  }, []);
+    setLoading(false)
+  }, [])
 
   if (authLoading || loading) {
     return (
@@ -97,12 +91,10 @@ export default function MerchandisePage() {
               />
             </div>
           </div>
-          <p className="text-xl text-muted-foreground animate-pulse">
-            Loading merchandise...
-          </p>
+          <p className="text-xl text-muted-foreground animate-pulse">Loading merchandise...</p>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -144,27 +136,21 @@ export default function MerchandisePage() {
                 <MapPin className="w-5 h-5 text-emerald-600" />
                 <div>
                   <p className="font-semibold">Downtown Location</p>
-                  <p className="text-sm text-muted-foreground">
-                    42.098700, -75.917000
-                  </p>
+                  <p className="text-sm text-muted-foreground">42.098700, -75.917000</p>
                 </div>
               </div>
               <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
                 <Clock className="w-5 h-5 text-blue-600" />
                 <div>
                   <p className="font-semibold">Hours</p>
-                  <p className="text-sm text-muted-foreground">
-                    9 AM - 8 PM Daily
-                  </p>
+                  <p className="text-sm text-muted-foreground">9 AM - 8 PM Daily</p>
                 </div>
               </div>
               <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
                 <Truck className="w-5 h-5 text-purple-600" />
                 <div>
                   <p className="font-semibold">Shipping</p>
-                  <p className="text-sm text-muted-foreground">
-                    Free delivery over $50
-                  </p>
+                  <p className="text-sm text-muted-foreground">Free delivery over $50</p>
                 </div>
               </div>
             </div>
@@ -183,15 +169,11 @@ export default function MerchandisePage() {
                     </div>
                     <div>
                       <CardTitle className="text-lg">{item.name}</CardTitle>
-                      <p className="text-sm text-muted-foreground">
-                        {item.category}
-                      </p>
+                      <p className="text-sm text-muted-foreground">{item.category}</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-2xl font-bold text-emerald-600">
-                      ${item.price}
-                    </p>
+                    <p className="text-2xl font-bold text-emerald-600">${item.price}</p>
                     {item.inStock ? (
                       <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
                         In Stock
@@ -230,9 +212,7 @@ export default function MerchandisePage() {
               <Star className="w-5 h-5 text-amber-600" />
               Special Offers
             </CardTitle>
-            <CardDescription>
-              Limited time deals for AirBear riders
-            </CardDescription>
+            <CardDescription>Limited time deals for AirBear riders</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -241,8 +221,7 @@ export default function MerchandisePage() {
                   🎉 Rider Discount
                 </h4>
                 <p className="text-sm text-muted-foreground mb-2">
-                  Get 15% off any merchandise when you show your recent ride
-                  receipt!
+                  Get 15% off any merchandise when you show your recent ride receipt!
                 </p>
                 <Button variant="outline" size="sm">
                   Claim Discount
@@ -271,5 +250,5 @@ export default function MerchandisePage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

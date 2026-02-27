@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
-  const { action } = await request.json();
+  const { action } = await request.json()
 
   // Simulate real-time updates for demonstration
   const simulations = {
@@ -36,26 +36,25 @@ export async function POST(request: Request) {
         longitude: -75.918762,
       },
     },
-  };
+  }
 
   // Return the appropriate simulation based on action
   switch (action) {
     case "user_booking":
-      return NextResponse.json(simulations.user_booking);
+      return NextResponse.json(simulations.user_booking)
 
     case "driver_location":
-      return NextResponse.json(simulations.driver_location);
+      return NextResponse.json(simulations.driver_location)
 
     case "ride_status":
-      return NextResponse.json(simulations.ride_status);
+      return NextResponse.json(simulations.ride_status)
 
     default:
       return NextResponse.json(
         {
-          error:
-            "Invalid action. Available actions: user_booking, driver_location, ride_status",
+          error: "Invalid action. Available actions: user_booking, driver_location, ride_status",
         },
         { status: 400 }
-      );
+      )
   }
 }

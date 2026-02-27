@@ -7,13 +7,13 @@
  * See: CORE_UI_FOUNDATION.md for documentation
  */
 
-"use client";
+"use client"
 
-import React, { useMemo } from "react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { MapPin, ShoppingBag, Leaf, Zap, Crown } from "lucide-react";
-import AirbearWheel from "@/components/airbear-wheel";
+import React, { useMemo } from "react"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { MapPin, ShoppingBag, Leaf, Zap, Crown } from "lucide-react"
+import AirbearWheel from "@/components/airbear-wheel"
 
 export default function HomePage() {
   // ⚡ Bolt: Memoize particle effects to prevent re-calculation on every render.
@@ -37,8 +37,8 @@ export default function HomePage() {
                 : "rgb(251, 191, 36)",
         }}
       />
-    ));
-  }, []);
+    ))
+  }, [])
 
   const sparkleRings = useMemo(() => {
     return Array.from({ length: 10 }, (_, i) => (
@@ -53,8 +53,8 @@ export default function HomePage() {
           animationDelay: `${i * 0.4}s`,
         }}
       />
-    ));
-  }, []);
+    ))
+  }, [])
 
   const holographicOverlays = useMemo(() => {
     return Array.from({ length: 8 }, (_, i) => (
@@ -67,8 +67,8 @@ export default function HomePage() {
           animationDelay: `${i * 0.3}s`,
         }}
       />
-    ));
-  }, []);
+    ))
+  }, [])
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-emerald-950 via-lime-950 to-amber-950 dark:from-emerald-950 dark:via-lime-950 dark:to-amber-950 bg-[radial-gradient(1200px_circle_at_20%_10%,rgba(34,197,94,0.28),transparent_55%),radial-gradient(900px_circle_at_80%_20%,rgba(56,189,248,0.22),transparent_55%),radial-gradient(700px_circle_at_50%_90%,rgba(236,72,153,0.2),transparent_60%)] relative overflow-hidden">
@@ -87,25 +87,13 @@ export default function HomePage() {
 
         {/* Spinning AirBear Wheels in Background */}
         <div className="absolute top-1/4 left-1/6 animate-float">
-          <AirbearWheel
-            size="lg"
-            glowing
-            animated
-            effectType="solar"
-            className="opacity-30"
-          />
+          <AirbearWheel size="lg" glowing animated effectType="solar" className="opacity-30" />
         </div>
         <div
           className="absolute top-1/3 right-1/5 animate-float"
           style={{ animationDelay: "1.5s" }}
         >
-          <AirbearWheel
-            size="xl"
-            glowing
-            animated
-            effectType="eco"
-            className="opacity-20"
-          />
+          <AirbearWheel size="xl" glowing animated effectType="eco" className="opacity-20" />
         </div>
         <div
           className="absolute bottom-1/4 left-1/3 animate-float"
@@ -117,13 +105,7 @@ export default function HomePage() {
           className="absolute bottom-1/3 right-1/6 animate-float"
           style={{ animationDelay: "3s" }}
         >
-          <AirbearWheel
-            size="lg"
-            glowing
-            animated
-            effectType="solar"
-            className="opacity-20"
-          />
+          <AirbearWheel size="lg" glowing animated effectType="solar" className="opacity-20" />
         </div>
       </div>
 
@@ -135,14 +117,10 @@ export default function HomePage() {
       </div>
 
       {/* Enhanced Particle effects background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {particleEffects}
-      </div>
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">{particleEffects}</div>
 
       {/* Sparkle rings */}
-      <div className="absolute inset-0 pointer-events-none">
-        {sparkleRings}
-      </div>
+      <div className="absolute inset-0 pointer-events-none">{sparkleRings}</div>
 
       <div className="container mx-auto px-4 py-16 relative z-10">
         <div className="flex flex-col items-center justify-center text-center space-y-8">
@@ -172,9 +150,7 @@ export default function HomePage() {
               <div className="mt-4 mx-auto h-1 w-48 rounded-full bg-gradient-to-r from-cyan-400 via-emerald-400 to-amber-400 animate-shimmer"></div>
 
               {/* Holographic overlay effect */}
-              <div className="absolute inset-0 pointer-events-none">
-                {holographicOverlays}
-              </div>
+              <div className="absolute inset-0 pointer-events-none">{holographicOverlays}</div>
             </h1>
 
             <p className="text-xl md:text-2xl text-muted-foreground text-pretty max-w-3xl mx-auto leading-relaxed airbear-eco-breeze">
@@ -188,10 +164,7 @@ export default function HomePage() {
                 zero emissions
               </span>
               , and
-              <span className="text-amber-500 font-semibold">
-                {" "}
-                revolutionary eco-mobility!
-              </span>
+              <span className="text-amber-500 font-semibold"> revolutionary eco-mobility!</span>
             </p>
           </div>
 
@@ -243,9 +216,7 @@ export default function HomePage() {
               <div className="text-3xl sm:text-4xl font-bold text-emerald-600 animate-pulse-glow relative z-10">
                 5
               </div>
-              <div className="text-sm text-muted-foreground relative z-10">
-                Active AirBears
-              </div>
+              <div className="text-sm text-muted-foreground relative z-10">Active AirBears</div>
             </div>
             <div className="text-center hover-lift p-4 rounded-lg glass-morphism relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-lime-400/10 via-sky-400/10 to-transparent opacity-70"></div>
@@ -256,9 +227,7 @@ export default function HomePage() {
             </div>
             <div className="text-center hover-lift p-4 rounded-lg glass-morphism relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-amber-400/10 via-rose-400/10 to-transparent opacity-70"></div>
-              <div className="text-3xl sm:text-4xl font-bold text-amber-500 relative z-10">
-                16
-              </div>
+              <div className="text-3xl sm:text-4xl font-bold text-amber-500 relative z-10">16</div>
               <div className="text-sm text-muted-foreground relative z-10">Active Spots</div>
             </div>
             <div className="text-center hover-lift p-4 rounded-lg glass-morphism relative overflow-hidden">
@@ -281,8 +250,8 @@ export default function HomePage() {
                 100% Eco-Friendly
               </h3>
               <p className="text-muted-foreground text-center leading-relaxed relative z-10">
-                Solar-powered rickshaws that produce zero emissions while
-                reducing your carbon footprint
+                Solar-powered rickshaws that produce zero emissions while reducing your carbon
+                footprint
               </p>
             </div>
 
@@ -298,8 +267,7 @@ export default function HomePage() {
                 Mobile Bodega
               </h3>
               <p className="text-muted-foreground text-center leading-relaxed relative z-10">
-                Shop local products during your ride with our onboard
-                convenience store
+                Shop local products during your ride with our onboard convenience store
               </p>
             </div>
 
@@ -315,8 +283,7 @@ export default function HomePage() {
                 Smart Routing
               </h3>
               <p className="text-muted-foreground text-center leading-relaxed relative z-10">
-                AI-powered AirBear routing across 16 Binghamton locations with
-                real-time tracking
+                AI-powered AirBear routing across 16 Binghamton locations with real-time tracking
               </p>
             </div>
           </div>
@@ -335,8 +302,8 @@ export default function HomePage() {
                   Ready to Start Your Eco Journey?
                 </h2>
                 <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-                  Join thousands of Binghamton residents who are making a
-                  difference, one ride at a time
+                  Join thousands of Binghamton residents who are making a difference, one ride at a
+                  time
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button
@@ -365,5 +332,5 @@ export default function HomePage() {
         </div>
       </div>
     </main>
-  );
+  )
 }

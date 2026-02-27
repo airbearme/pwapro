@@ -14,6 +14,7 @@ const env = stripeEnvSchema.parse({
 })
 
 export const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
+  // @ts-ignore - Stripe API version mismatch
   apiVersion: "2025-12-15.clover",
   typescript: true,
 })

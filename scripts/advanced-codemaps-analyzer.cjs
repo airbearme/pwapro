@@ -14,9 +14,9 @@ class AdvancedCodeMapsAnalyzer {
     this.projectRoot = process.cwd();
     this.outputDir = path.join(this.projectRoot, '.next/codemaps');
     this.metrics = {
-      components: {},
-      api: {},
-      utilities: {},
+      components: [],
+      api: [],
+      utilities: [],
       dependencies: {},
       performance: {},
       security: {},
@@ -659,6 +659,11 @@ class AdvancedCodeMapsAnalyzer {
       insights: this.generateInsights(),
       trends: this.generateTrends()
     };
+
+    // Ensure output directory exists
+    if (!fs.existsSync(this.outputDir)) {
+      fs.mkdirSync(this.outputDir, { recursive: true });
+    }
 
     // Write comprehensive report
     const reportPath = path.join(this.outputDir, 'advanced-analysis.json');

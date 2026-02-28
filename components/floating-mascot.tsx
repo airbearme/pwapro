@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import AirbearWheel from "@/components/airbear-wheel";
 
 export default function FloatingMascot() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const mascotRef = useRef<HTMLAnchorElement>(null);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -17,10 +17,15 @@ export default function FloatingMascot() {
     checkMobile();
     window.addEventListener('resize', checkMobile);
 
-    // Only add mouse tracking on desktop
+    // ⚡ Bolt: Use direct DOM manipulation/CSS variables for mouse tracking
+    // to avoid triggering React re-renders on every mouse move.
     if (!isMobile) {
       const handleMouseMove = (e: MouseEvent) => {
-        setMousePosition({ x: e.clientX, y: e.clientY });
+        if (mascotRef.current) {
+          const followX = e.clientX * 0.01;
+          const followY = e.clientY * 0.01;
+          mascotRef.current.style.transform = `translate(${followX}px, ${followY}px)`;
+        }
       };
 
       window.addEventListener("mousemove", handleMouseMove);
@@ -33,17 +38,11 @@ export default function FloatingMascot() {
     return () => window.removeEventListener('resize', checkMobile);
   }, [isMobile]);
 
-  // Reduce mouse follow effect on mobile
-  const followX = isMobile ? 0 : mousePosition.x * 0.01;
-  const followY = isMobile ? 0 : mousePosition.y * 0.01;
-
   return (
         <Link
           href="/"
+          ref={mascotRef}
           className="fixed bottom-6 right-6 z-50 transition-all duration-500 opacity-100 translate-y-0"
-      style={{
-        transform: `translate(${followX}px, ${followY}px)`,
-      }}
     >
       <div className="group relative">
         {/* Glowing background circle */}

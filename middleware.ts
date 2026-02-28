@@ -3,12 +3,38 @@ import { NextResponse, type NextRequest } from "next/server"
 import { SECURITY_HEADERS } from "./lib/security-headers"
 
 /**
+ * Timing-safe comparison using SHA-256 hashing to prevent side-channel attacks.
+ * In Edge Runtime, we use SubtleCrypto.
+ */
+async function timingSafeEqual(input: string, secret: string) {
+  const encoder = new TextEncoder();
+  const inputData = encoder.encode(input);
+  const secretData = encoder.encode(secret);
+
+  const [inputHash, secretHash] = await Promise.all([
+    crypto.subtle.digest("SHA-256", inputData),
+    crypto.subtle.digest("SHA-256", secretData),
+  ]);
+
+  const inputArr = new Uint8Array(inputHash);
+  const secretArr = new Uint8Array(secretHash);
+
+  if (inputArr.length !== secretArr.length) return false;
+
+  let result = 0;
+  for (let i = 0; i < inputArr.length; i++) {
+    result |= inputArr[i] ^ secretArr[i];
+  }
+  return result === 0;
+}
+
+/**
  * Production-grade middleware for:
  * - Supabase session refresh (automatic token refresh)
  * - Protected route authentication
  * - Secure cookie handling
  */
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
@@ -43,6 +69,21 @@ export async function proxy(request: NextRequest) {
       },
     },
   })
+
+  // Protect Admin/Setup endpoints
+  const isAdminRoute =
+    request.nextUrl.pathname.startsWith("/api/setup/") ||
+    request.nextUrl.pathname.startsWith("/api/spots/update") ||
+    request.nextUrl.pathname.startsWith("/api/airbear/update-location")
+
+  if (isAdminRoute) {
+    const adminSecret = process.env.ADMIN_SECRET;
+    const providedSecret = request.headers.get("X-Admin-Secret");
+
+    if (!adminSecret || !providedSecret || !(await timingSafeEqual(providedSecret, adminSecret))) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+  }
 
   // Refresh session if needed (automatic token refresh)
   await supabase.auth.getUser()

@@ -4,7 +4,9 @@ import { Inter, Space_Grotesk } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { AuthProvider } from "@/components/auth-provider";
 import { ThemeProvider } from "@/components/theme-provider";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import ClientErrorLogger from "@/components/client-error-logger";
+import FloatingMascot from "@/components/floating-mascot";
 import "leaflet/dist/leaflet.css";
 import "./globals.css";
 
@@ -120,9 +122,12 @@ export default function RootLayout({
           </div>
           <div className="relative z-10 min-h-screen">
             <ClientErrorLogger />
-            <AuthProvider>
-              {children}
-            </AuthProvider>
+            <TooltipProvider>
+              <AuthProvider>
+                {children}
+                <FloatingMascot />
+              </AuthProvider>
+            </TooltipProvider>
           </div>
         </ThemeProvider>
         <Analytics />

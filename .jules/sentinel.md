@@ -1,0 +1,4 @@
+## 2025-05-15 - [Hardcoded Secrets and Insecure Webhook Verification]
+**Vulnerability:** Hardcoded Supabase Service Role keys and Stripe secret keys in `add-vercel-env-vars.sh`. Naive Stripe signature verification in `lib/stripe-verify.ts` using `.includes()` and omitting the timestamp from the HMAC payload.
+**Learning:** Legacy setup scripts often contain "temporary" secrets that remain in the codebase. Webhook verification logic is frequently oversimplified, leading to timing attacks and replay vulnerabilities if not following the provider's exact specification.
+**Prevention:** Use placeholder environment variables in all scripts and documentation. Always use `crypto.timingSafeEqual` for signature comparisons and include the provider-supplied timestamp in the HMAC calculation to prevent replay attacks.

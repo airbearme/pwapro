@@ -1,0 +1,3 @@
+## 2025-05-15 - Standardizing Tooltips and Global Mascot
+**Learning:** Standardizing on Radix UI Tooltip primitives instead of manual CSS solutions ensures built-in keyboard accessibility (ESC to close) and ARIA support. Moving the FloatingMascot to the global layout ensures consistent brand presence and fixes accessibility gaps (missing aria-labels, focus states) across the entire application.
+**Action:** Always use Radix UI primitives for tooltips and interactive overlays to leverage their robust accessibility features. Ensure global UI elements are placed in the root layout and wrapped in necessary providers like TooltipProvider.

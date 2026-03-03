@@ -1,3 +1,6 @@
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+
 export default [
   {
     ignores: [
@@ -20,7 +23,14 @@ export default [
     ],
   },
   {
-    files: ["**/*.{js,jsx}"],
+    files: ["**/*.{js,jsx,ts,tsx}"],
+    plugins: {
+      import: require("eslint-plugin-import"),
+      "@typescript-eslint": require("@typescript-eslint/eslint-plugin"),
+    },
+    languageOptions: {
+      parser: require("@typescript-eslint/parser"),
+    },
     rules: {
       "no-unused-vars": "off",
       "no-console": "off",

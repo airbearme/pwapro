@@ -1,0 +1,3 @@
+## 2025-05-15 - [Mascot Accessibility and Global Provider Restoration]
+**Learning:** Fixed-position navigational elements like a FloatingMascot are easily overlooked during layout refactors but are critical for user guidance. Standardizing these with the project's Radix UI Tooltip system ensures consistent keyboard behavior and ARIA support that manual CSS solutions often lack.
+**Action:** Always wrap the root application content in `TooltipProvider` to support accessible tooltips sitewide. Ensure all floating icon-links have explicit `aria-label` and `focus-visible` styles to maintain accessibility for non-mouse users.

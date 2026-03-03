@@ -5,6 +5,10 @@ import { Analytics } from "@vercel/analytics/react";
 import { AuthProvider } from "@/components/auth-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import ClientErrorLogger from "@/components/client-error-logger";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/toaster";
+import PWAInstallPrompt from "@/components/pwa-install-prompt";
+import FloatingMascot from "@/components/floating-mascot";
 import "leaflet/dist/leaflet.css";
 import "./globals.css";
 
@@ -103,7 +107,9 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased relative overflow-x-hidden`}>
+      <body
+        className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased relative overflow-x-hidden`}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -121,7 +127,12 @@ export default function RootLayout({
           <div className="relative z-10 min-h-screen">
             <ClientErrorLogger />
             <AuthProvider>
-              {children}
+              <TooltipProvider>
+                {children}
+                <FloatingMascot />
+                <PWAInstallPrompt />
+                <Toaster />
+              </TooltipProvider>
             </AuthProvider>
           </div>
         </ThemeProvider>

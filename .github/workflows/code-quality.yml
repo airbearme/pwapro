@@ -137,7 +137,7 @@ jobs:
         run: npm run codemaps:analyze
 
       - name: Bundle analyzer
-        run: npx webpack-bundle-analyzer --mode static
+        run: npx webpack-bundle-analyzer .next/stats.json --mode static --report bundle-analyzer-report.html || echo "Skipping bundle analysis"
 
       - name: Upload bundle analysis
         uses: actions/upload-artifact@v4

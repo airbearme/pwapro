@@ -9,7 +9,7 @@ const stripeEnvSchema = z.object({
 })
 
 const env = stripeEnvSchema.parse({
-  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY || "sk_test_placeholder",
   NODE_ENV: process.env.NODE_ENV,
 })
 

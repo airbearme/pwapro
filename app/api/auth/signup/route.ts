@@ -1,8 +1,20 @@
 import { getSupabaseServer } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import { rateLimit } from "@/lib/rate-limit";
 
 export async function POST(request: Request) {
   try {
+    const forwarded = request.headers.get("x-forwarded-for");
+    const ip = forwarded ? forwarded.split(",")[0].trim() : "unknown";
+
+    // Security: Rate limiting to prevent signup spam
+    if (!rateLimit(ip)) {
+      return NextResponse.json(
+        { error: "Too many signup attempts. Please try again later." },
+        { status: 429 }
+      );
+    }
+
     const { email, password, full_name } = await request.json();
 
     if (!email || !password || !full_name) {

@@ -31,6 +31,11 @@ class AdvancedCodeMapsAnalyzer {
     console.log("🔬 Running Advanced CodeMaps Analysis...\n");
 
     try {
+      // Ensure output directory exists
+      if (!fs.existsSync(this.outputDir)) {
+        fs.mkdirSync(this.outputDir, { recursive: true });
+      }
+
       // Load existing CodeMaps
       await this.loadExistingCodeMaps();
 
@@ -133,13 +138,17 @@ class AdvancedCodeMapsAnalyzer {
     }
 
     complexityReport.average =
-      complexityReport.total / this.metrics.components.length;
+      this.metrics.components.length > 0
+        ? complexityReport.total / this.metrics.components.length
+        : 0;
 
     // Calculate averages by type
     for (const [type, data] of Object.entries(complexityReport.byType)) {
-      if (data.complexity.length > 0) {
+      if (data.complexity && data.complexity.length > 0) {
         data.average =
           data.complexity.reduce((a, b) => a + b, 0) / data.complexity.length;
+      } else {
+        data.average = 0;
       }
     }
 

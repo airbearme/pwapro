@@ -1,4 +1,15 @@
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+
 export default [
+  {
+    plugins: {
+      import: require("eslint-plugin-import"),
+    },
+    languageOptions: {
+      parser: require("@typescript-eslint/parser"),
+    },
+  },
   {
     ignores: [
       "**/.next/**",

@@ -715,6 +715,11 @@ class AdvancedCodeMapsAnalyzer {
   async createAdvancedReports() {
     console.log("📊 Creating advanced reports...");
 
+    // Ensure output directory exists
+    if (!fs.existsSync(this.outputDir)) {
+      fs.mkdirSync(this.outputDir, { recursive: true });
+    }
+
     const reports = {
       timestamp: new Date().toISOString(),
       project: "airbear-pwa",

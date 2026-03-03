@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
-
-import { scrub } from "@/lib/pii";
 import { rateLimit } from "@/lib/rate-limit";
+import { scrub } from "@/lib/pii";
 export async function POST(req:Request){
   const ip=req.headers.get("x-forwarded-for")||"u";
   if(!rateLimit(ip)) return NextResponse.json({}, {status:429});

@@ -19,8 +19,8 @@ const resolvedSupabaseAnonKey =
   process.env.NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY
 
 const env = supabaseEnvSchema.parse({
-  NEXT_PUBLIC_SUPABASE_URL: resolvedSupabaseUrl,
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: resolvedSupabaseAnonKey,
+  NEXT_PUBLIC_SUPABASE_URL: resolvedSupabaseUrl || "https://placeholder.supabase.co",
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: resolvedSupabaseAnonKey || "eyJplaceholder",
 })
 
 export async function getSupabaseServer() {

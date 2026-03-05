@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { useAuthContext } from "@/components/auth-provider";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import { subscribeToAirbearLocations } from "@/lib/supabase/realtime";
@@ -12,7 +12,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
-import MapComponent, { type Spot } from "@/components/map-view-beautiful";
+import MapComponent from "@/components/map-view-beautiful";
+import type { Spot } from "@/components/map-view-beautiful";
 import type { AirbearLocation } from "@/lib/supabase/realtime";
 
 export default function MapPage() {
@@ -192,9 +193,9 @@ export default function MapPage() {
           <MapComponent
             spots={spots}
             airbears={airbears}
-            onSpotSelect={(spot) => {
+            onSpotSelect={useCallback((spot: Spot) => {
               router.push(`/book?pickup=${spot.id}`);
-            }}
+            }, [router])}
           />
         </Card>
 

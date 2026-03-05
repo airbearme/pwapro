@@ -1,0 +1,3 @@
+## 2026-03-05 - Optimize MapView performance
+**Learning:** Leaflet's `setIcon` is an expensive operation that triggers DOM updates and style recalculations. Consolidating marker animations into a single global `<style>` block and implementing "dirty checking" for markers (using `__iconState` and `__dataHash`) significantly reduces DOM thrashing and CPU usage during high-frequency data updates (like real-time vehicle tracking).
+**Action:** Use `React.memo` for map components, wrap callbacks in `useCallback` at the parent level, and implement in-place marker updates with dirty checking to skip redundant `setIcon` and `setContent` calls.

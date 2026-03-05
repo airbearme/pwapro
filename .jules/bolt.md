@@ -1,3 +1,4 @@
 ## 2025-03-05 - Map Marker Performance Optimization
+
 **Learning:** Leaflet's `setIcon` and `bindPopup` are significantly more expensive than `setLatLng` or `popup.setContent`. Recreating markers on every data update (common in real-time apps) causes massive DOM churn and jank. Additionally, injecting `<style>` blocks into `divIcon` HTML leads to redundant style parsing.
 **Action:** Implement O(1) marker updates using a `Map` ref and 'dirty checking' (`__iconState`, `__dataHash`) to skip redundant Leaflet API calls. Consolidate animations into a single document-level `<style>` block. Use `isAborted` flags for dynamic imports to prevent memory leaks/DOM pollution on unmount.

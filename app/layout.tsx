@@ -1,11 +1,10 @@
-import { Analytics } from "@vercel/analytics/react";
+import type React from "react";
 import type { Metadata, Viewport } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
-import type React from "react";
-
+import { Analytics } from "@vercel/analytics/react";
 import { AuthProvider } from "@/components/auth-provider";
-import ClientErrorLogger from "@/components/client-error-logger";
 import { ThemeProvider } from "@/components/theme-provider";
+import ClientErrorLogger from "@/components/client-error-logger";
 import "leaflet/dist/leaflet.css";
 import "./globals.css";
 

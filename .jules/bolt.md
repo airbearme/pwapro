@@ -1,4 +1,4 @@
-## 2025-03-05 - Map Marker Performance Optimization
+## 2025-03-05 - Map Performance & CI Hardening
 
-**Learning:** Leaflet's `setIcon` and `bindPopup` are significantly more expensive than `setLatLng` or `popup.setContent`. Recreating markers on every data update (common in real-time apps) causes massive DOM churn and jank. Additionally, injecting `<style>` blocks into `divIcon` HTML leads to redundant style parsing.
-**Action:** Implement O(1) marker updates using a `Map` ref and 'dirty checking' (`__iconState`, `__dataHash`) to skip redundant Leaflet API calls. Consolidate animations into a single document-level `<style>` block. Use `isAborted` flags for dynamic imports to prevent memory leaks/DOM pollution on unmount.
+**Learning:** Leaflet marker re-creation is expensive. Dirty checking with \_\_dataHash and Map refs prevents DOM churn. Next.js static builds in CI fail on Zod schemas without defaults if secrets are missing.
+**Action:** Use O(1) marker updates. Add safe defaults to Zod schemas. Guard custom scripts against empty data/missing directories.

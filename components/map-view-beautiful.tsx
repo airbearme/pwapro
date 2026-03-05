@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, memo } from "react";
+
 import type { AirbearLocation } from "@/lib/supabase/realtime";
 import type { Database } from "@/lib/types/database";
 
@@ -19,6 +20,7 @@ const MapView = memo(function MapView({
 }: MapViewProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
+  const isInitializingRef = useRef(false);
   const markersRef = useRef<Map<string, any>>(new Map());
   const styleRef = useRef<HTMLStyleElement | null>(null);
   const LeafletRef = useRef<any>(null);
@@ -36,12 +38,13 @@ const MapView = memo(function MapView({
   }, [onSpotSelect]);
 
   useEffect(() => {
-    if (!mapRef.current || mapInstanceRef.current) {
+    if (!mapRef.current || mapInstanceRef.current || isInitializingRef.current) {
       return;
     }
 
     let isAborted = false;
     const initMap = async () => {
+      isInitializingRef.current = true;
       try {
         setMapError(null);
 
@@ -100,6 +103,7 @@ const MapView = memo(function MapView({
 
         // ⚡ Bolt: Use a ref to track if we're currently initializing to prevent StrictMode double-init
         if (mapInstanceRef.current || (mapRef.current as any)?._leaflet_id) {
+          isInitializingRef.current = false;
           return;
         }
 
@@ -186,6 +190,7 @@ const MapView = memo(function MapView({
           };
         }
       } catch (error) {
+        isInitializingRef.current = false;
         console.error("❌ Error initializing map:", error);
         setMapLoaded(false);
         setMapError(

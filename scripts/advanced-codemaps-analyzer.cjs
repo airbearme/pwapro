@@ -806,9 +806,7 @@ Version: ${reports.version}
 ## 🎯 Key Insights
 
 ${reports.insights
-  .map(
-    (insight) => `- **${insight.type}**: ${insight.message} (${insight.level})`,
-  )
+  .map((insight) => `- **${insight.type}**: ${insight.message} (${insight.level})`)
   .join("\n")}
 
 ## 📈 Recommendations
@@ -816,8 +814,7 @@ ${reports.insights
 ${
   reports.metrics.performance.overall?.recommendations
     ?.map(
-      (rec) =>
-        `### ${rec.type} (${rec.priority})
+      (rec) => `### ${rec.type} (${rec.priority})
 - **Issue**: ${rec.message}
 - **Action**: ${rec.action}`,
     )

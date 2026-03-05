@@ -8,13 +8,13 @@ Complete reference for all environment variables used in production.
 
 \`\`\`bash
 # Public Supabase URL (PWA4 instance)
-NEXT_PUBLIC_SUPABASE_PWA4_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_PWA4_URL=YOUR_SUPABASE_URL
 
 # Public Anonymous Key (safe to expose to client)
-NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY=YOUR_SUPABASE_ANON_KEY
 
 # Service Role Key (KEEP SECRET - server-side only)
-SUPABASE_PWA4_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+SUPABASE_PWA4_SERVICE_ROLE_KEY=YOUR_SUPABASE_SERVICE_ROLE_KEY
 \`\`\`
 
 **Where to find:**

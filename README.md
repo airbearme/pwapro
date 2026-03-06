@@ -48,28 +48,33 @@ Production-ready Next.js PWA for sustainable rideshare services with integrated 
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/airbearme/pwapro.git
    cd pwapro
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Set up environment variables**
+
    ```bash
    cp .env.example .env.local
    # Fill in your environment variables
    ```
 
 4. **Validate environment variables**
+
    ```bash
    npm run validate:env
    ```
 
 5. **Start development server**
+
    ```bash
    npm run dev
    ```
@@ -169,6 +174,7 @@ This project includes a **comprehensive testing suite** covering all aspects:
 - ✅ **Real-time Tests** - Supabase subscriptions
 
 **Run ultimate validation:**
+
 ```bash
 npm run test:validate
 ```
@@ -228,6 +234,7 @@ MIT License - see LICENSE file for details
 ## Support
 
 For issues and questions:
+
 - GitHub Issues: https://github.com/airbearme/pwapro/issues
 - Documentation: See `docs/` directory
 

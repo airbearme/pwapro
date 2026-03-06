@@ -2,12 +2,12 @@ name: Code Quality & Formatting
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
 
 env:
-  NODE_VERSION: '20'
+  NODE_VERSION: "20"
 
 jobs:
   # Code Formatting
@@ -22,22 +22,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
 
       - name: Check formatting with Prettier
         run: npx prettier --check "**/*.{js,jsx,ts,tsx,json,css,md}"
-
-      - name: Auto-fix formatting (if on main branch)
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: |
-          npx prettier --write "**/*.{js,jsx,ts,tsx,json,css,md}"
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add .
-          git commit -m "style: auto-format code" || echo "No formatting changes to commit"
 
   # Lint and Fix
   lint-fix:
@@ -51,21 +42,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
 
       - name: Run ESLint with auto-fix
         run: npm run lint -- --fix
-
-      - name: Commit auto-fixes (if on main branch)
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add .
-          git commit -m "fix: auto-fix linting issues" || echo "No linting fixes to commit"
 
   # TypeScript Strict Mode Check
   typescript-strict:
@@ -79,7 +62,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -99,22 +82,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
 
       - name: Sort imports
         run: |
-          npx eslint --fix --ext .ts,.tsx,.js,.jsx --rule 'import/order: error'
-
-      - name: Commit import sorting (if on main branch)
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add .
-          git commit -m "refactor: sort imports" || echo "No import changes to commit"
+          npm run lint -- --fix
 
   # Code Analysis
   analyze:
@@ -128,22 +103,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
 
       - name: Run codemaps analysis
         run: npm run codemaps:analyze
-
-      - name: Bundle analyzer
-        run: npx webpack-bundle-analyzer --mode static
-
-      - name: Upload bundle analysis
-        uses: actions/upload-artifact@v4
-        with:
-          name: bundle-analysis
-          path: bundle-analyzer-report.html
 
   # Dead Code Detection
   dead-code:
@@ -157,7 +123,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci

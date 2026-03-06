@@ -1,21 +1,27 @@
 # 🔧 Fix Production UI/UX Special Effects
 
 ## Problem
+
 The beautiful UI/UX with special effects is not displaying on `airbear.me` in production.
 
 ## Root Cause
+
 The CSS animation utility classes were defined but some keyframes were missing, causing animations to fail silently in production builds.
 
 ## Fixes Applied
 
 ### 1. ✅ Added Missing Keyframes
+
 Added missing `@keyframes` definitions for:
+
 - `shimmer` - Text shimmer effect
 - `particle` - Particle animation
 - `rickshaw-bounce` - Bounce animation
 
 ### 2. ✅ Added All Animation Utility Classes
+
 Added explicit CSS utility classes for all animations:
+
 - `.animate-pulse-glow`
 - `.animate-float`
 - `.animate-shimmer`
@@ -30,9 +36,11 @@ Added explicit CSS utility classes for all animations:
 - `.animate-god-rays`
 
 ### 3. ✅ Ensured Tailwind Safelist
+
 All animation classes are in Tailwind's `safelist` to prevent purging in production.
 
 ## Files Changed
+
 - `app/globals.css` - Added missing keyframes and utility classes
 
 ## Next Steps
@@ -46,6 +54,7 @@ git push origin main
 ```
 
 The GitHub Actions workflow will automatically:
+
 1. ✅ Build the application
 2. ✅ Deploy to Vercel
 3. ✅ Verify deployment
@@ -64,6 +73,7 @@ The GitHub Actions workflow will automatically:
 ## Expected Result
 
 After deployment, all special effects should be visible:
+
 - ✨ Floating animations
 - ✨ Pulse glow effects
 - ✨ Particle systems
@@ -76,7 +86,3 @@ After deployment, all special effects should be visible:
 ---
 
 **Status:** ✅ Fixed - Ready to deploy!
-
-
-
-

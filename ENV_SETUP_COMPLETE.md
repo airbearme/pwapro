@@ -64,4 +64,3 @@ See `docs/ENVIRONMENT_VARIABLES.md` for complete documentation on all environmen
 ---
 
 **Status**: ✅ All environment variables validated and ready to use!
-

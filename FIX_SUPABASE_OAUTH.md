@@ -1,10 +1,13 @@
 # 🔧 Fix Supabase OAuth Redirecting to Demo URL
 
 ## Problem
+
 When clicking "Sign in with Google", it redirects to a demo Supabase URL instead of your actual project.
 
 ## Root Cause
+
 The Supabase environment variables are either:
+
 1. ❌ Not set in Vercel
 2. ❌ Pointing to a demo/test project
 3. ❌ Using incorrect variable names
@@ -14,11 +17,13 @@ The Supabase environment variables are either:
 ### Step 1: Check Current Configuration
 
 Run this diagnostic script:
+
 ```bash
 npm run check:supabase
 ```
 
 This will show you:
+
 - Which environment variables are set/missing
 - If URLs look like demo/test URLs
 - What needs to be fixed
@@ -47,6 +52,7 @@ SUPABASE_PWA4_SERVICE_ROLE_KEY
 ```
 
 **Important:**
+
 - Variable names must match **exactly** (case-sensitive)
 - Use the values from **your actual Supabase project**
 - Set for **Production**, **Preview**, and **Development** environments
@@ -54,6 +60,7 @@ SUPABASE_PWA4_SERVICE_ROLE_KEY
 ### Step 4: Verify Variable Names Match Code
 
 The code expects these **exact** names:
+
 - `NEXT_PUBLIC_SUPABASE_PWA4_URL` (not `NEXT_PUBLIC_SUPABASE_URL`)
 - `NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY` (not `NEXT_PUBLIC_SUPABASE_ANON_KEY`)
 - `SUPABASE_PWA4_SERVICE_ROLE_KEY` (not `SUPABASE_SERVICE_ROLE_KEY`)
@@ -63,10 +70,12 @@ The code expects these **exact** names:
 After adding variables, redeploy:
 
 **Option A: Via Vercel Dashboard**
+
 1. Go to **Deployments**
 2. Click **Redeploy** on the latest deployment
 
 **Option B: Via Git**
+
 ```bash
 git commit --allow-empty -m "Redeploy with Supabase config"
 git push origin main
@@ -82,20 +91,26 @@ git push origin main
 ## Common Issues
 
 ### Issue: Still redirecting to demo URL
-**Fix:** 
+
+**Fix:**
+
 - Double-check environment variable names match exactly
 - Verify you're using credentials from your **actual** project, not a demo
 - Make sure variables are set for **Production** environment in Vercel
 - Redeploy after adding variables
 
 ### Issue: "Missing Supabase environment variables" error
+
 **Fix:**
+
 - Variables aren't set in Vercel
 - Variable names don't match exactly
 - Variables aren't set for the correct environment (Production)
 
 ### Issue: OAuth works locally but not in production
+
 **Fix:**
+
 - Environment variables are set locally (`.env.local`) but not in Vercel
 - Add variables to Vercel Dashboard → Environment Variables → Production
 
@@ -122,7 +137,3 @@ git push origin main
 ---
 
 **After fixing, OAuth should redirect to your Supabase project, not a demo URL!** ✅
-
-
-
-

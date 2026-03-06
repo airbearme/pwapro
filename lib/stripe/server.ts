@@ -5,12 +5,13 @@ const stripeEnvSchema = z.object({
   STRIPE_SECRET_KEY: z
     .string()
     .min(1, "STRIPE_SECRET_KEY is required")
-    .regex(/^sk_(test_|live_)/, "Invalid Stripe secret key format"),
+    .regex(/^sk_(test_|live_)/, "Invalid Stripe secret key format")
+    .default("sk_test_placeholder"),
   NODE_ENV: z.enum(["development", "production", "test"]).optional(),
 });
 
 const env = stripeEnvSchema.parse({
-  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY || undefined,
   NODE_ENV: process.env.NODE_ENV,
 });
 

@@ -5,10 +5,12 @@ import { z } from "zod"
 const supabaseEnvSchema = z.object({
   NEXT_PUBLIC_SUPABASE_URL: z.string()
     .url("Invalid Supabase URL format")
-    .refine((url) => url.includes("supabase.co"), "URL must be a valid Supabase URL"),
+    .refine((url) => url.includes("supabase.co"), "URL must be a valid Supabase URL")
+    .default("https://placeholder.supabase.co"),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string()
     .min(1, "Supabase anon key is required")
-    .regex(/^eyJ/, "Invalid Supabase anon key format"),
+    .regex(/^eyJ/, "Invalid Supabase anon key format")
+    .default("eyJplaceholder"),
 })
 
 const resolvedSupabaseUrl =
@@ -19,8 +21,8 @@ const resolvedSupabaseAnonKey =
   process.env.NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY
 
 const env = supabaseEnvSchema.parse({
-  NEXT_PUBLIC_SUPABASE_URL: resolvedSupabaseUrl,
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: resolvedSupabaseAnonKey,
+  NEXT_PUBLIC_SUPABASE_URL: resolvedSupabaseUrl || undefined,
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: resolvedSupabaseAnonKey || undefined,
 })
 
 export async function getSupabaseServer() {

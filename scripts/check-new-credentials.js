@@ -3,17 +3,17 @@ import { createClient } from "@supabase/supabase-js";
 const credentials = [
 	{
 		name: "archon-chatty",
-		url: "YOUR_SUPABASE_URL",
+		url: "https://etzsxcurkrjfmanhrgou.supabase.co",
 		key: "YOUR_SUPABASE_SERVICE_ROLE_KEY",
 	},
 	{
 		name: "supabase-purple-zebra",
-		url: "YOUR_SUPABASE_URL",
+		url: "https://gtomvmymfcjswvxuclii.supabase.co",
 		key: "YOUR_SUPABASE_SERVICE_ROLE_KEY",
 	},
 	{
 		name: "airbearme-project",
-		url: "YOUR_SUPABASE_URL",
+		url: "https://xckggdmqfqajatytmiko.supabase.co",
 		key: "YOUR_SUPABASE_SERVICE_ROLE_KEY",
 	},
 ];

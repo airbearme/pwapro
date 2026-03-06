@@ -1,7 +1,8 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.SUPABASE_URL || "YOUR_SUPABASE_URL";
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "YOUR_SUPABASE_SERVICE_ROLE_KEY";
+const supabaseUrl = "https://fkpvmefbckpyprdgmozj.supabase.co";
+const supabaseKey = "YOUR_SUPABASE_SERVICE_ROLE_KEY";
+	"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZrcHZtZWZiY2tweXByZGdtb3pqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MDIzMjA1MywiZXhwIjoyMDc1ODA4MDUzfQ.kFtaA-NX0fiqQ6GzejEhEsZvi8ze5fopd-2kAnBfzMI";
 
 console.log("Testing connection to:", supabaseUrl);
 

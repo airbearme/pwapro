@@ -106,7 +106,7 @@ jobs:
 
       - name: Sort imports
         run: |
-          npx eslint --fix --ext .ts,.tsx,.js,.jsx --rule 'import/order: error'
+          npm run lint -- --fix
 
       - name: Commit import sorting (if on main branch)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -136,19 +136,6 @@ jobs:
       - name: Run codemaps analysis
         run: npm run codemaps:analyze
 
-      - name: Bundle analyzer
-        run: npx webpack-bundle-analyzer --mode static
-
-      - name: Upload bundle analysis
-        uses: actions/upload-artifact@v4
-        with:
-          name: bundle-analysis
-          path: bundle-analyzer-report.html
-
-  # Dead Code Detection
-  dead-code:
-    name: Dead Code Detection
-    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

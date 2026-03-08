@@ -1,12 +1,13 @@
-import type React from "react";
+import { Analytics } from "@vercel/analytics/react";
 import type { Metadata, Viewport } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
-import { Analytics } from "@vercel/analytics/react";
+import type React from "react";
+
 import { AuthProvider } from "@/components/auth-provider";
+import ClientErrorLogger from "@/components/client-error-logger";
+import FloatingMascot from "@/components/floating-mascot";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import FloatingMascot from "@/components/floating-mascot";
-import ClientErrorLogger from "@/components/client-error-logger";
 import "leaflet/dist/leaflet.css";
 import "./globals.css";
 
@@ -105,7 +106,9 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased relative overflow-x-hidden`}>
+      <body
+        className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased relative overflow-x-hidden`}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

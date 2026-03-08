@@ -15,6 +15,7 @@ Your AirBear PWA is ready for deployment with CI/CD!
 ### 1. Create GitHub Repository
 
 **Option A: Using GitHub Web Interface**
+
 1. Go to https://github.com/new
 2. Owner: `airbearme`
 3. Repository name: `pwapro`
@@ -24,11 +25,13 @@ Your AirBear PWA is ready for deployment with CI/CD!
 7. Click "Create repository"
 
 **Option B: Using GitHub CLI** (if installed)
+
 ```bash
 gh repo create airbearme/pwapro --public --description "AirBear PWA - Solar-Powered Rideshare & Mobile Bodega" --source=. --remote=origin --push
 ```
 
 **Option C: Using API Script**
+
 ```bash
 export GITHUB_TOKEN=your_github_token
 bash scripts/create-github-repo.sh
@@ -47,11 +50,13 @@ Go to: https://github.com/airbearme/pwapro/settings/secrets/actions
 Add these secrets:
 
 **Vercel Secrets:**
+
 - `VERCEL_TOKEN` - Get from Vercel Dashboard > Settings > Tokens
 - `VERCEL_ORG_ID` - Get from Vercel project settings
 - `VERCEL_PROJECT_ID` - Get from Vercel project settings
 
 **Environment Variables:**
+
 - `NEXT_PUBLIC_SUPABASE_PWA4_URL`
 - `NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY`
 - `SUPABASE_PWA4_SERVICE_ROLE_KEY`
@@ -70,6 +75,7 @@ Add these secrets:
 ### 5. Verify CI/CD
 
 After pushing to `main` branch:
+
 - GitHub Actions will automatically run
 - Code will be validated (type-check, lint, build)
 - If successful, it will deploy to Vercel
@@ -109,16 +115,19 @@ npm run build
 ## 🆘 Troubleshooting
 
 ### Build Errors
+
 - Check GitHub Actions logs
 - Run `npm run validate:env` locally
 - Verify all environment variables are set
 
 ### Deployment Fails
+
 - Check Vercel logs
 - Verify Vercel secrets in GitHub
 - Ensure domain is configured
 
 ### CI/CD Not Running
+
 - Check GitHub Actions tab
 - Verify workflow file is in `.github/workflows/`
 - Ensure secrets are set correctly

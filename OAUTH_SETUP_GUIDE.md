@@ -1,22 +1,26 @@
 # OAuth Setup Guide for AirBear PWA
 
 ## Overview
+
 This guide walks you through setting up Google and Apple OAuth for your AirBear PWA at airbear.me.
 
 ## Google OAuth Setup
 
 ### Step 1: Create Google Cloud Project
+
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
 2. Click "Select a project" → "New Project"
 3. Name: `AirBear PWA`
 4. Click "Create"
 
 ### Step 2: Enable Google+ API
+
 1. In your project, go to "APIs & Services" → "Library"
 2. Search for "Google+ API"
 3. Click "Enable"
 
 ### Step 3: Create OAuth Credentials
+
 1. Go to "APIs & Services" → "Credentials"
 2. Click "Create Credentials" → "OAuth client ID"
 3. If prompted, configure OAuth consent screen:
@@ -43,6 +47,7 @@ This guide walks you through setting up Google and Apple OAuth for your AirBear 
 5. **Copy the Client ID and Client Secret** (you'll need these next)
 
 ### Step 4: Configure in Supabase
+
 1. Go to: https://supabase.com/dashboard/project/fofmrqgcidfenbevayrg/auth/providers
 2. Find "Google" provider
 3. Enable it
@@ -51,6 +56,7 @@ This guide walks you through setting up Google and Apple OAuth for your AirBear 
 6. Click "Save"
 
 ### Step 5: Test Google Login
+
 1. Go to https://airbear.me/auth
 2. Click "Sign in with Google"
 3. Authorize the app
@@ -61,10 +67,12 @@ This guide walks you through setting up Google and Apple OAuth for your AirBear 
 ## Apple Sign In Setup
 
 ### Prerequisites
+
 - Apple Developer Account ($99/year)
 - Access to https://developer.apple.com
 
 ### Step 1: Create App ID
+
 1. Go to [Apple Developer Portal](https://developer.apple.com/account)
 2. Navigate to "Certificates, Identifiers & Profiles"
 3. Click "Identifiers" → "+" button
@@ -76,6 +84,7 @@ This guide walks you through setting up Google and Apple OAuth for your AirBear 
 9. Click "Continue" → "Register"
 
 ### Step 2: Create Services ID
+
 1. In "Identifiers", click "+" again
 2. Select "Services IDs" → Continue
 3. Description: `AirBear Web Service`
@@ -95,6 +104,7 @@ This guide walks you through setting up Google and Apple OAuth for your AirBear 
 10. Click "Save" → "Continue" → "Register"
 
 ### Step 3: Create Private Key
+
 1. Go to "Keys" → "+" button
 2. Key Name: `AirBear Sign In Key`
 3. Check "Sign In with Apple"
@@ -105,10 +115,12 @@ This guide walks you through setting up Google and Apple OAuth for your AirBear 
 8. Note the **Key ID** shown
 
 ### Step 4: Get Team ID
+
 1. Go to "Membership" in the sidebar
 2. Copy your **Team ID** (10 characters)
 
 ### Step 5: Configure in Supabase
+
 1. Go to: https://supabase.com/dashboard/project/fofmrqgcidfenbevayrg/auth/providers
 2. Find "Apple" provider
 3. Enable it
@@ -120,6 +132,7 @@ This guide walks you through setting up Google and Apple OAuth for your AirBear 
 5. Click "Save"
 
 ### Step 6: Test Apple Sign In
+
 1. Go to https://airbear.me/auth
 2. Click "Sign in with Apple"
 3. Authorize the app
@@ -132,31 +145,37 @@ This guide walks you through setting up Google and Apple OAuth for your AirBear 
 ### Google OAuth Issues
 
 **Error: "redirect_uri_mismatch"**
+
 - Check that `https://fofmrqgcidfenbevayrg.supabase.co/auth/v1/callback` is in your authorized redirect URIs
 - Make sure there are no trailing slashes
 
 **Error: "Access blocked: This app's request is invalid"**
+
 - Complete the OAuth consent screen configuration
 - Add test users if app is in testing mode
 
 ### Apple Sign In Issues
 
 **Error: "invalid_client"**
+
 - Verify Services ID matches exactly
 - Check that domains are configured correctly
 - Ensure .p8 key is copied completely (including BEGIN/END lines)
 
 **Error: "unauthorized_client"**
+
 - Make sure Sign In with Apple is enabled for both App ID and Services ID
 - Verify return URLs match exactly
 
 ### General Issues
 
 **Users not appearing in Supabase**
+
 - Check Authentication → Users in Supabase dashboard
 - Verify email confirmation is not required (or is handled)
 
 **Redirect not working**
+
 - Clear browser cache
 - Try incognito/private mode
 - Check browser console for errors
@@ -221,16 +240,19 @@ Once OAuth is configured:
 ## Quick Reference
 
 ### Supabase Auth Providers URL
+
 \`\`\`
 https://supabase.com/dashboard/project/fofmrqgcidfenbevayrg/auth/providers
 \`\`\`
 
 ### Redirect URI (for all providers)
+
 \`\`\`
 https://fofmrqgcidfenbevayrg.supabase.co/auth/v1/callback
 \`\`\`
 
 ### Authorized Origins
+
 \`\`\`
 https://airbear.me
 https://fofmrqgcidfenbevayrg.supabase.co

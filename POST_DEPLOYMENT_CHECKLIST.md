@@ -7,15 +7,18 @@ Your AirBear PWA is now live at **https://airbear.me**
 ## 📋 Immediate Verification Steps
 
 ### 1. ✅ Check Site is Live
+
 - [ ] Visit: https://airbear.me
 - [ ] Verify homepage loads
 - [ ] Check UI looks correct (gradients, animations)
 - [ ] Test responsive design (mobile/desktop)
 
 ### 2. ✅ Verify Environment Variables
+
 Go to Vercel Dashboard → Settings → Environment Variables
 
 **Required Variables:**
+
 - [ ] `NEXT_PUBLIC_SUPABASE_PWA4_URL`
 - [ ] `NEXT_PUBLIC_SUPABASE_PWA4_ANON_KEY`
 - [ ] `SUPABASE_PWA4_SERVICE_ROLE_KEY`
@@ -26,11 +29,13 @@ Go to Vercel Dashboard → Settings → Environment Variables
 - [ ] `NODE_ENV=production`
 
 **After adding variables:**
+
 - [ ] Redeploy (or wait for auto-redeploy)
 
 ### 3. ✅ Test Core Features
 
 #### Authentication
+
 - [ ] Visit: https://airbear.me/auth/login
 - [ ] Test Google sign-in
 - [ ] Test Apple sign-in
@@ -38,12 +43,14 @@ Go to Vercel Dashboard → Settings → Environment Variables
 - [ ] Verify redirect after login
 
 #### Map
+
 - [ ] Visit: https://airbear.me/map
 - [ ] Verify map loads (Binghamton centered)
 - [ ] Check for AirBear markers
 - [ ] Test real-time updates (if AirBears in DB)
 
 #### Payments
+
 - [ ] Visit: https://airbear.me/products
 - [ ] Add items to cart
 - [ ] Test checkout flow
@@ -52,6 +59,7 @@ Go to Vercel Dashboard → Settings → Environment Variables
 ### 4. ✅ Configure Services
 
 #### Supabase
+
 - [ ] Go to: https://supabase.com/dashboard
 - [ ] Select your project
 - [ ] Authentication → URL Configuration
@@ -61,6 +69,7 @@ Go to Vercel Dashboard → Settings → Environment Variables
 - [ ] Enable replication for `airbears` table
 
 #### Stripe
+
 - [ ] Go to: https://dashboard.stripe.com/webhooks
 - [ ] Add endpoint: `https://airbear.me/api/stripe/webhook`
 - [ ] Select events:
@@ -74,11 +83,13 @@ Go to Vercel Dashboard → Settings → Environment Variables
 ### 5. ✅ Domain Configuration
 
 #### Vercel Domain
+
 - [ ] Vercel → Settings → Domains
 - [ ] Verify `airbear.me` is added
 - [ ] Check SSL certificate (auto-generated)
 
 #### IONOS DNS (if not done)
+
 - [ ] Log into IONOS
 - [ ] DNS settings for `airbear.me`
 - [ ] Add CNAME: `@` → `cname.vercel-dns.com`
@@ -104,21 +115,25 @@ Go to Vercel Dashboard → Settings → Environment Variables
 ## 🐛 Troubleshooting
 
 ### Site Not Loading
+
 - Check Vercel deployment logs
 - Verify domain DNS settings
 - Check SSL certificate status
 
 ### Authentication Not Working
+
 - Verify Supabase redirect URLs
 - Check environment variables in Vercel
 - Test in incognito mode
 
 ### Payments Not Working
+
 - Verify Stripe keys in Vercel
 - Check webhook endpoint
 - Test with Stripe test mode first
 
 ### Map Not Loading
+
 - Check Supabase connection
 - Verify real-time subscriptions enabled
 - Check browser console for errors
@@ -126,16 +141,19 @@ Go to Vercel Dashboard → Settings → Environment Variables
 ## 📊 Monitoring
 
 ### Vercel Analytics
+
 - Check deployment logs
 - Monitor function execution
 - Check error rates
 
 ### Supabase Dashboard
+
 - Monitor database queries
 - Check real-time subscriptions
 - Review auth logs
 
 ### Stripe Dashboard
+
 - Monitor payment intents
 - Check webhook deliveries
 - Review payment logs
@@ -143,6 +161,7 @@ Go to Vercel Dashboard → Settings → Environment Variables
 ## ✅ Success Criteria
 
 Your deployment is successful when:
+
 - ✅ https://airbear.me loads
 - ✅ Homepage displays correctly
 - ✅ Authentication works (Google/Apple/Email)
@@ -164,4 +183,3 @@ Your deployment is successful when:
 **🎉 Congratulations! Your AirBear PWA is live!**
 
 Visit: **https://airbear.me** and start testing!
-

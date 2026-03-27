@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { AuthProvider } from "@/components/auth-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import ClientErrorLogger from "@/components/client-error-logger";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import "leaflet/dist/leaflet.css";
 import "./globals.css";
 
@@ -118,12 +119,14 @@ export default function RootLayout({
             <div className="absolute bottom-24 left-12 h-44 w-44 rounded-full border border-cyan-400/20 animate-pulse-glow"></div>
             <div className="absolute top-1/2 right-1/3 h-28 w-28 rounded-full bg-emerald-400/10 blur-2xl animate-pulse-glow"></div>
           </div>
-          <div className="relative z-10 min-h-screen">
-            <ClientErrorLogger />
-            <AuthProvider>
-              {children}
-            </AuthProvider>
-          </div>
+          <TooltipProvider>
+            <div className="relative z-10 min-h-screen">
+              <ClientErrorLogger />
+              <AuthProvider>
+                {children}
+              </AuthProvider>
+            </div>
+          </TooltipProvider>
         </ThemeProvider>
         <Analytics />
       </body>

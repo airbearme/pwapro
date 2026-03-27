@@ -1,0 +1,94 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - main [ref=e3]:
+    - generic [ref=e4]: 🌙 Dark Mode Active - v2.0.5
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - generic: 🐻
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - generic: 🐻
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - generic: 🐻
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - generic: 🐻
+    - generic [ref=e6]:
+      - img "Friendly brown bear mascot with pilot goggles representing AirBear" [ref=e8]
+      - generic [ref=e9]:
+        - heading "AirBear Mobile Bodega Solar Powered Rideshare" [level=1] [ref=e10]:
+          - text: AirBear Mobile Bodega
+          - text: Solar Powered Rideshare
+        - paragraph [ref=e11]:
+          - text: Experience the future of sustainable transportation!
+          - text: Solar-powered vehicles with onboard shopping experiences,
+          - generic [ref=e12]: zero emissions
+          - text: ", and"
+          - generic [ref=e13]: revolutionary eco-mobility!
+          - text: 🍃
+      - generic [ref=e14]:
+        - link "🐻 Book Your AirBear" [ref=e15] [cursor=pointer]:
+          - /url: /map
+          - generic [ref=e27]: 🐻
+          - img
+          - text: Book Your AirBear
+        - link "CEO T-Shirt $100" [ref=e29] [cursor=pointer]:
+          - /url: /merchandise
+          - img
+          - text: CEO T-Shirt $100
+        - link "Shop Merchandise" [ref=e30] [cursor=pointer]:
+          - /url: /merchandise
+          - img
+          - text: Shop Merchandise
+      - generic [ref=e31]:
+        - generic [ref=e32]:
+          - generic [ref=e33]: "5"
+          - generic [ref=e34]: Active AirBears
+        - generic [ref=e35]:
+          - generic [ref=e36]: 582kg
+          - generic [ref=e37]: CO₂ Saved
+        - generic [ref=e38]:
+          - generic [ref=e39]: "16"
+          - generic [ref=e40]: Active Spots
+        - generic [ref=e41]:
+          - generic [ref=e42]: 100%
+          - generic [ref=e43]: Solar Powered
+      - generic [ref=e44]:
+        - generic [ref=e45]:
+          - img [ref=e47]
+          - heading "100% Eco-Friendly" [level=3] [ref=e50]
+          - paragraph [ref=e51]: Solar-powered rickshaws that produce zero emissions while reducing your carbon footprint
+        - generic [ref=e52]:
+          - img [ref=e54]
+          - heading "Mobile Bodega" [level=3] [ref=e57]
+          - paragraph [ref=e58]: Shop local products during your ride with our onboard convenience store
+        - generic [ref=e59]:
+          - img [ref=e61]
+          - heading "Smart Routing" [level=3] [ref=e63]
+          - paragraph [ref=e64]: AI-powered AirBear routing across 16 Binghamton locations with real-time tracking
+      - generic [ref=e67]:
+        - heading "Ready to Start Your Eco Journey?" [level=2] [ref=e68]
+        - paragraph [ref=e69]: Join thousands of Binghamton residents who are making a difference, one ride at a time
+        - generic [ref=e70]:
+          - link "Get Started Today" [ref=e71] [cursor=pointer]:
+            - /url: /auth/login
+          - link "Explore Map" [ref=e72] [cursor=pointer]:
+            - /url: /map
+            - img
+            - text: Explore Map
+  - button "Open Next.js Dev Tools" [ref=e78] [cursor=pointer]:
+    - img [ref=e79]
+  - alert [ref=e82]
+```

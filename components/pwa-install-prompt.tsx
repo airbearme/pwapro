@@ -2,7 +2,14 @@
 
 import { useEffect, useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { X, Download, Smartphone } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { X, Download, Smartphone, Share, MoreVertical } from "lucide-react";
 import AirbearWheel from "@/components/airbear-wheel";
 
 interface BeforeInstallPromptEvent extends Event {
@@ -15,6 +22,7 @@ export default function PWAInstallPrompt() {
     useState<BeforeInstallPromptEvent | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
+  const [showIosFallback, setShowIosFallback] = useState(false);
 
   // Use refs to track state without causing re-renders
   const deferredPromptRef = useRef<BeforeInstallPromptEvent | null>(null);
@@ -87,14 +95,8 @@ export default function PWAInstallPrompt() {
       }
       setDeferredPrompt(null);
     } else {
-      // Fallback for iOS/Safari
-      // Show instructions
-      alert(
-        "To install AirBear:\n\n" +
-          "iOS Safari: Tap Share → Add to Home Screen\n\n" +
-          "Android Chrome: Tap Menu → Install App\n\n" +
-          "Desktop: Look for install icon in address bar"
-      );
+      // Fallback for iOS/Safari - show our custom dialog
+      setShowIosFallback(true);
     }
   };
 
@@ -108,60 +110,96 @@ export default function PWAInstallPrompt() {
   }
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 z-50 animate-in slide-in-from-bottom-5 duration-500">
-      <div className="glass-morphism border-2 border-emerald-400/50 rounded-2xl p-6 shadow-2xl relative overflow-hidden">
-        {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/20 via-lime-900/10 to-amber-900/20 pointer-events-none"></div>
+    <>
+      <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 z-50 animate-in slide-in-from-bottom-5 duration-500">
+        <div className="glass-morphism border-2 border-emerald-400/50 rounded-2xl p-6 shadow-2xl relative overflow-hidden">
+          {/* Background gradient */}
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/20 via-lime-900/10 to-amber-900/20 pointer-events-none"></div>
 
-        {/* Spinning wheel decoration */}
-        <div className="absolute top-2 right-2 opacity-20">
-          <AirbearWheel size="sm" glowing animated />
-        </div>
+          {/* Spinning wheel decoration */}
+          <div className="absolute top-2 right-2 opacity-20">
+            <AirbearWheel size="sm" glowing animated />
+          </div>
 
-        <div className="relative z-10">
-          {/* Close button */}
-          <button
-            onClick={handleDismiss}
-            className="absolute top-2 right-2 p-1 rounded-full hover:bg-white/10 transition-colors"
-            aria-label="Dismiss"
-          >
-            <X className="h-4 w-4 text-muted-foreground" />
-          </button>
+          <div className="relative z-10">
+            {/* Close button */}
+            <button
+              onClick={handleDismiss}
+              className="absolute top-2 right-2 p-1 rounded-full hover:bg-white/10 transition-colors"
+              aria-label="Dismiss"
+            >
+              <X className="h-4 w-4 text-muted-foreground" />
+            </button>
 
-          {/* Content */}
-          <div className="flex items-start gap-4 mb-4">
-            <div className="p-3 rounded-full bg-gradient-to-br from-emerald-500 to-lime-500 shadow-lg animate-pulse-glow">
-              <Smartphone className="h-6 w-6 text-white" />
+            {/* Content */}
+            <div className="flex items-start gap-4 mb-4">
+              <div className="p-3 rounded-full bg-gradient-to-br from-emerald-500 to-lime-500 shadow-lg animate-pulse-glow">
+                <Smartphone className="h-6 w-6 text-white" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-bold text-foreground mb-1">
+                  Install AirBear
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  Get the full app experience with offline access and faster
+                  loading!
+                </p>
+              </div>
             </div>
-            <div className="flex-1">
-              <h3 className="text-lg font-bold text-foreground mb-1">
-                Install AirBear
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                Get the full app experience with offline access and faster
-                loading!
+
+            {/* Install button */}
+            <Button
+              onClick={handleInstall}
+              className="w-full eco-gradient text-white hover-lift ripple-effect animate-neon-glow shadow-lg"
+            >
+              <Download className="mr-2 h-4 w-4" />
+              Install Now
+            </Button>
+
+            {/* Dismiss link */}
+            <button
+              onClick={handleDismiss}
+              className="w-full mt-2 text-xs text-center text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Maybe later
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* iOS/Safari Fallback Dialog */}
+      <Dialog open={showIosFallback} onOpenChange={setShowIosFallback}>
+        <DialogContent className="sm:max-w-[425px] glass-morphism">
+          <DialogHeader>
+            <DialogTitle>Install AirBear</DialogTitle>
+            <DialogDescription>
+              Follow these simple steps to add the app to your home screen.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4 text-sm">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="p-2 bg-blue-500/20 rounded-md">
+                <Share className="h-5 w-5 text-blue-500" />
+              </div>
+              <p>
+                1. Tap the <span className="font-bold">Share</span> button in
+                the Safari toolbar.
+              </p>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="p-2 bg-gray-500/20 rounded-md">
+                <div className="h-5 w-5 bg-white text-black rounded-sm flex items-center justify-center font-bold text-xs">
+                  +
+                </div>
+              </div>
+              <p>
+                2. Scroll down and tap{" "}
+                <span className="font-bold">Add to Home Screen</span>.
               </p>
             </div>
           </div>
-
-          {/* Install button */}
-          <Button
-            onClick={handleInstall}
-            className="w-full eco-gradient text-white hover-lift ripple-effect animate-neon-glow shadow-lg"
-          >
-            <Download className="mr-2 h-4 w-4" />
-            Install Now
-          </Button>
-
-          {/* Dismiss link */}
-          <button
-            onClick={handleDismiss}
-            className="w-full mt-2 text-xs text-center text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Maybe later
-          </button>
-        </div>
-      </div>
-    </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

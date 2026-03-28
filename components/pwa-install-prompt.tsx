@@ -154,12 +154,13 @@ export default function PWAInstallPrompt() {
           </Button>
 
           {/* Dismiss link */}
-          <button
+          <Button
+            variant="ghost"
             onClick={handleDismiss}
-            className="w-full mt-2 text-xs text-center text-muted-foreground hover:text-foreground transition-colors"
+            className="w-full mt-2 text-xs text-muted-foreground"
           >
             Maybe later
-          </button>
+          </Button>
         </div>
       </div>
     </div>

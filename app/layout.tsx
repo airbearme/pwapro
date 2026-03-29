@@ -4,6 +4,7 @@ import { Inter, Space_Grotesk } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { AuthProvider } from "@/components/auth-provider";
 import { ThemeProvider } from "@/components/theme-provider";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import ClientErrorLogger from "@/components/client-error-logger";
 import "leaflet/dist/leaflet.css";
 import "./globals.css";
@@ -110,20 +111,22 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-            <div className="absolute -top-24 left-1/2 h-72 w-[140%] -translate-x-1/2 rotate-6 bg-gradient-to-r from-cyan-400/10 via-fuchsia-400/25 to-amber-400/10 blur-3xl animate-float"></div>
-            <div className="absolute top-1/4 -left-10 h-56 w-[120%] rotate-[-8deg] bg-gradient-to-r from-emerald-400/10 via-lime-300/20 to-sky-400/10 blur-3xl animate-float"></div>
-            <div className="absolute bottom-10 left-1/2 h-48 w-[120%] -translate-x-1/2 rotate-3 bg-gradient-to-r from-amber-300/10 via-rose-400/20 to-purple-400/10 blur-3xl animate-float"></div>
-            <div className="absolute top-20 right-10 h-36 w-36 rounded-full border border-emerald-400/20 animate-pulse-glow"></div>
-            <div className="absolute bottom-24 left-12 h-44 w-44 rounded-full border border-cyan-400/20 animate-pulse-glow"></div>
-            <div className="absolute top-1/2 right-1/3 h-28 w-28 rounded-full bg-emerald-400/10 blur-2xl animate-pulse-glow"></div>
-          </div>
-          <div className="relative z-10 min-h-screen">
-            <ClientErrorLogger />
-            <AuthProvider>
-              {children}
-            </AuthProvider>
-          </div>
+          <TooltipProvider>
+            <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+              <div className="absolute -top-24 left-1/2 h-72 w-[140%] -translate-x-1/2 rotate-6 bg-gradient-to-r from-cyan-400/10 via-fuchsia-400/25 to-amber-400/10 blur-3xl animate-float"></div>
+              <div className="absolute top-1/4 -left-10 h-56 w-[120%] rotate-[-8deg] bg-gradient-to-r from-emerald-400/10 via-lime-300/20 to-sky-400/10 blur-3xl animate-float"></div>
+              <div className="absolute bottom-10 left-1/2 h-48 w-[120%] -translate-x-1/2 rotate-3 bg-gradient-to-r from-amber-300/10 via-rose-400/20 to-purple-400/10 blur-3xl animate-float"></div>
+              <div className="absolute top-20 right-10 h-36 w-36 rounded-full border border-emerald-400/20 animate-pulse-glow"></div>
+              <div className="absolute bottom-24 left-12 h-44 w-44 rounded-full border border-cyan-400/20 animate-pulse-glow"></div>
+              <div className="absolute top-1/2 right-1/3 h-28 w-28 rounded-full bg-emerald-400/10 blur-2xl animate-pulse-glow"></div>
+            </div>
+            <div className="relative z-10 min-h-screen">
+              <ClientErrorLogger />
+              <AuthProvider>
+                {children}
+              </AuthProvider>
+            </div>
+          </TooltipProvider>
         </ThemeProvider>
         <Analytics />
       </body>

@@ -11,6 +11,7 @@
 
 import React, { useMemo } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { MapPin, ShoppingBag, Leaf, Zap, Crown } from "lucide-react";
 import AirbearWheel from "@/components/airbear-wheel";
@@ -148,10 +149,13 @@ export default function HomePage() {
         <div className="flex flex-col items-center justify-center text-center space-y-8">
           {/* Mascot with enhanced animations */}
           <div className="mb-8 animate-float relative">
-            <img
+            <Image
               src="/airbear-mascot.png"
               alt="Friendly brown bear mascot with pilot goggles representing AirBear"
-              className="mx-auto rounded-full w-32 h-32 object-cover border-4 border-emerald-400/30 hover-lift animate-pulse-glow shadow-2xl"
+              width={128}
+              height={128}
+              priority
+              className="mx-auto rounded-full object-cover border-4 border-emerald-400/30 hover-lift animate-pulse-glow shadow-2xl"
             />
             <div className="absolute inset-0 pointer-events-none">
               <div className="absolute left-1/2 top-0 h-36 w-36 -translate-x-1/2 rounded-full border border-cyan-400/30 blur-sm animate-holographic"></div>

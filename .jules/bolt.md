@@ -1,0 +1,5 @@
+## 2024-07-25 - Avoid Unintended Configuration Changes in Commits
+
+**Learning:** My optimization commit for the `FloatingMascot` component accidentally included the creation of a `pnpm-lock.yaml` file and an unrelated modification to `tsconfig.json`. These changes were correctly flagged during code review as they were out-of-scope and violated my operational directives. It's a critical reminder that even small changes can have unintended side effects that impact the entire project's configuration.
+
+**Action:** Before any future submission, I will meticulously review the list of staged files using a command like `git status`. I must ensure that only files directly related to the optimization are included. I will actively unstage any automatically generated or modified configuration files (like lockfiles or `tsconfig.json`) to maintain the focus and safety of the commit.
